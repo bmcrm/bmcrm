@@ -1,13 +1,16 @@
+import styles from './ShiftsPage.module.scss';
 import { memo } from 'react';
-import Container from 'shared/ui/Container/Container';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Sidebar from 'widgets/Sidebar';
 
 const ShiftsPage = memo(() => {
 	return (
-		<section>
-			<Container>
+		<>
+			<Sidebar title={'Shifts Page Sidebar'}/>
+			<section className={classNames(styles.shifts, {}, ['section'])}>
 				<h1>Shifts Page</h1>
-			</Container>
-		</section>
+			</section>
+		</>
 	);
 });
 

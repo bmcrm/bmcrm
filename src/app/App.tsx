@@ -1,15 +1,13 @@
-import AppRouter from 'app/providers/AppRouter/ui/AppRouter';
+import { AppRouter } from 'app/providers/AppRouter';
 import Header from 'widgets/Header';
-import Sidebar from 'widgets/Sidebar';
 
 const App = () => {
 	return (
 		<div className='app'>
 			<Header/>
-			<div className='page'>
-				<Sidebar/>
+			<main className='main'>
 				<AppRouter/>
-			</div>
+			</main>
 		</div>
 	);
 };

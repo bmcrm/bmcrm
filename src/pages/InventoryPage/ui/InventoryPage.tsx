@@ -1,13 +1,16 @@
+import styles from './InventoryPage.module.scss';
 import { memo } from 'react';
-import Container from 'shared/ui/Container/Container';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Sidebar from 'widgets/Sidebar';
 
 const InventoryPage = memo(() => {
 	return (
-		<section>
-			<Container>
+		<>
+			<Sidebar title={'Inventory Page Sidebar'}/>
+			<section className={classNames(styles.inventory, {}, ['section'])}>
 				<h1>Inventory Page</h1>
-			</Container>
-		</section>
+			</section>
+		</>
 	);
 });
 

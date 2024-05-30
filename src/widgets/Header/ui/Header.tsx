@@ -1,13 +1,16 @@
 import styles from './Header.module.scss';
+import Logo from 'shared/assets/icons/logo.svg';
+import { memo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { Link } from 'react-router-dom';
-import Logo from 'shared/assets/icons/logo.svg';
+import { Nav } from 'features/Nav';
+import { ProfileHeaderAvatar } from 'entities/Profile';
 
 type HeaderProps = {
 	className?: string;
 };
 
-const Header = ({ className }: HeaderProps) => {
+const Header = memo(({ className }: HeaderProps) => {
 	return (
 		<header className={classNames(styles.header, {}, [className])}>
 			<div className={styles.header__container}>
@@ -16,9 +19,11 @@ const Header = ({ className }: HeaderProps) => {
 						<Logo/>
 					</Link>
 				</strong>
+				<Nav/>
+				<ProfileHeaderAvatar/>
 			</div>
 		</header>
 	);
-};
+});
 
 export default Header;

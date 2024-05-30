@@ -1,0 +1,10 @@
+.profile-avatar {
+	display: flex;
+	align-items: center;
+	gap: 25px;
+
+	&__name {
+		font: var(--font-l);
+		font-weight: 400;
+	}
+}

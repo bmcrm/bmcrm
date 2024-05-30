@@ -10,11 +10,14 @@ body {
   background: var(--gray);
 }
 
-.page {
+.main {
   display: flex;
   flex-grow: 1;
+  padding-top: 30px;
 }
 
-.main {
+.section {
   flex-grow: 1;
+  padding-left: 20px;
+  padding-right: 50px;
 }

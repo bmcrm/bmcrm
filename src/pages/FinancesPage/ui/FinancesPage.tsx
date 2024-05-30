@@ -1,13 +1,16 @@
+import styles from './FinancesPage.module.scss';
 import { memo } from 'react';
-import Container from 'shared/ui/Container/Container';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Sidebar from 'widgets/Sidebar';
 
 const FinancesPage = memo(() => {
 	return (
-		<section>
-			<Container>
+		<>
+			<Sidebar title={'Finances Page Sidebar'}/>
+			<section className={classNames(styles.finances, {}, ['section'])}>
 				<h1>Finances Page</h1>
-			</Container>
-		</section>
+			</section>
+		</>
 	);
 });
 
