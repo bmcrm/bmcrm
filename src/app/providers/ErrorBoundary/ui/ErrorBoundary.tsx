@@ -12,16 +12,16 @@ type ErrorBoundaryState = {
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 	static getDerivedStateFromError() {
 		return { hasError: true };
-	};
+	}
 
 	constructor(props: ErrorBoundaryProps) {
 		super(props);
 		this.state = { hasError: false };
-	};
+	}
 
 	componentDidCatch(error: Error, info: ErrorInfo) {
 		console.log(error, info.componentStack);
-	};
+	}
 
 	render() {
 		const { hasError } = this.state;
@@ -30,7 +30,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 		if (hasError) return <Suspense><PageError/></Suspense>;
 
 		return children;
-	};
+	}
 }
 
 export default ErrorBoundary;
