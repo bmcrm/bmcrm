@@ -1,23 +1,13 @@
 body {
   font: var(--font-m);
-  color: var(--primary-color);
+  color: var(--black);
 }
 
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--bg-color);
-}
-
-.storybook {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 300px;
-  background: var(--bg-color);
-  font: var(--font-m);
-  color: var(--primary-color);
+  background: var(--gray);
 }
 
 .page {
@@ -27,6 +17,4 @@ body {
 
 .main {
   flex-grow: 1;
-  padding-top: 20px;
-  padding-bottom: 20px;
 }

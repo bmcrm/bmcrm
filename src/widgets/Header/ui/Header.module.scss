@@ -1,0 +1,17 @@
+.header {
+	width: 100%;
+	background-color: tomato;
+
+	&__container {
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		max-width: var(--container-width);
+		width: calc(100% - (var(--container-gap) * 2));
+		height: 100%;
+		margin-right: auto;
+		margin-left: auto;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}

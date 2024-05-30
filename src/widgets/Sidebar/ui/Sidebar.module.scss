@@ -1,0 +1,10 @@
+.sidebar {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	width: 100%;
+	max-width: var(--sidebar-width);
+	background-color: transparent;
+	transition: max-width 0.3s;
+}
