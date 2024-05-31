@@ -7,7 +7,7 @@ const ShiftsPage = memo(() => {
 	return (
 		<>
 			<Sidebar title={'Shifts Page Sidebar'}/>
-			<section className={classNames(styles.shifts, {}, ['section'])}>
+			<section className={classNames(styles.shifts, {}, [])}>
 				<h1>Shifts Page</h1>
 			</section>
 		</>

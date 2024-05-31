@@ -1,23 +1,26 @@
 body {
   font: var(--font-m);
   color: var(--black);
+  background-color: var(--gray);
 }
 
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--gray);
 }
 
 .main {
   display: flex;
   flex-grow: 1;
+  gap: 20px;
   padding-top: 30px;
-}
 
-.section {
-  flex-grow: 1;
-  padding-left: 20px;
-  padding-right: 50px;
+  > aside + * {
+    padding-right: 50px;
+  }
+
+  > section {
+    flex-grow: 1;
+  }
 }

@@ -28,4 +28,4 @@ export default defineConfig({
 			'entities': resolve(__dirname, '/src/entities'),
 		},
 	},
-})
+});

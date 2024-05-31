@@ -8,7 +8,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'react-hooks'],
   rules: {
     indent: [2, 'tab'],
     quotes: [2, 'single'],
@@ -16,6 +16,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'react-hooks/rules-of-hooks': 'error',
     'object-curly-spacing': [2, 'always'],
     '@typescript-eslint/indent': [2, 'tab'],
     'react/react-in-jsx-scope': 0,

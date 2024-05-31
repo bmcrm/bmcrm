@@ -4,7 +4,9 @@
 	--white: #fff;
 	--black: #000;
 	--gray: #F1F1F1;
+	--gray-2: #F8F8F8;
 	--dark-ruby: #8B103E;
+	--light-yellow: #ffc750;
 
 	// fonts
 
@@ -26,10 +28,18 @@
 	--font-line-l: 24px;
 	--font-l: var(--font-size-l) / var(--font-line-l) var(--font-family-main);
 
+	--font-size-xl: 22px;
+	--font-line-xl: 28px;
+	--font-xl: var(--font-size-xl) / var(--font-line-xl) var(--font-family-main);
+
+	--font-size-xxl: 30px;
+	--font-line-xxl: 36px;
+	--font-xxl: var(--font-size-xxl) / var(--font-line-xxl) var(--font-family-main);
+
 	// container
 
-	--container-width: 980px;
-	--container-gap: 20px;
+	--container-width: 1180px;
+	--container-gap: 50px;
 
 	// sidebar
 
