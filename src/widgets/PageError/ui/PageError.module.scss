@@ -1,0 +1,9 @@
+.page-error {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 20px;
+	min-height: 100vh;
+	background-color: var(--bg-color);
+}
