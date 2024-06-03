@@ -9,7 +9,8 @@
 	box-sizing: border-box;
 	animation: rotation 1s linear infinite;
 
-	&:before, &:after {
+	&:before,
+	&:after {
 		content: '';
 		box-sizing: border-box;
 		position: absolute;

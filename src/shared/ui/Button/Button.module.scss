@@ -4,8 +4,8 @@
 	width: max-content;
 	max-width: 100%;
 	cursor: pointer;
-	border:  1px solid var(--color-ruby-dark);
-	transition: .1s ease;
+	border: 1px solid var(--color-ruby-dark);
+	transition: 0.1s ease;
 
 	// styles
 
@@ -14,7 +14,7 @@
 
 		@media (hover: hover) {
 			&:hover {
-				box-shadow: 0 0 10px 0 #5D0B2A inset;
+				box-shadow: 0 0 10px 0 #5d0b2a inset;
 			}
 		}
 	}
@@ -24,7 +24,7 @@
 		@media (hover: hover) {
 			&:hover {
 				background-color: var(--color-ruby-dark);
-				box-shadow: 0 0 10px 0 #5D0B2A inset;
+				box-shadow: 0 0 10px 0 #5d0b2a inset;
 			}
 		}
 	}
@@ -77,13 +77,14 @@
 	// active
 
 	&:active {
-		background-color: #750E34;
-		border-color: #750E34;
+		background-color: #750e34;
+		border-color: #750e34;
 	}
 
 	// disabled
 
-	&:disabled, .disabled {
+	&:disabled,
+	.disabled {
 		background-color: var(--color-neutral);
 		border-color: var(--color-neutral);
 		color: var(--color-white);

@@ -1,5 +1,4 @@
 .user-tooltip {
-
 	&:before {
 		content: '';
 		position: absolute;
@@ -20,9 +19,9 @@
 		display: flex;
 		align-items: center;
 		gap: 15px;
-		transition: .2s ease-in-out;
+		transition: 0.2s ease-in-out;
 
-		@media (hover:hover) {
+		@media (hover: hover) {
 			&:hover {
 				transform: scale(1.05);
 			}
