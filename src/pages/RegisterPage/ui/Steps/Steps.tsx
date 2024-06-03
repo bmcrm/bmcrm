@@ -3,12 +3,13 @@ import clsx from 'clsx'
 
 interface Props {
   selected: number
+  setStep: (step: number) => void
 }
-export const Steps = ({ selected }: Props) => {
+export const Steps = ({ selected, setStep }: Props) => {
   return (
     <section className={styles.wrapper}>
-      <div className={clsx(styles.active)} />
-      <div className={clsx(selected === 2 && styles.active)} />
+      <button onClick={() => setStep(1)} className={clsx(selected === 1 && styles.active)} />
+      <button onClick={() => setStep(2)} className={clsx(selected === 2 && styles.active)} />
     </section>
   )
 }

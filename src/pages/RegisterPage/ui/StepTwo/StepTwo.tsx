@@ -10,9 +10,8 @@ import { IStepTwoData } from '../RegisterPage/Step.types'
 interface Props {
   onSubmit: (values: IStepTwoData) => void
   initialValues: IStepTwoData
-  nextStep: () => void
 }
-export const StepTwo = ({ onSubmit, initialValues, nextStep }: Props) => {
+export const StepTwo = ({ onSubmit, initialValues }: Props) => {
   return (
     <Formik onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>

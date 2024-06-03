@@ -40,7 +40,7 @@ const RegisterPage = memo(() => {
             <StepTwo initialValues={formData} onSubmit={handleSubmit} nextStep={nextStep} />
           )}
         </AuthForm>
-        <Steps selected={selected} />
+        <Steps setStep={setSelected} selected={selected} />
       </Container>
     </section>
   )
