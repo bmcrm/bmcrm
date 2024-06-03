@@ -1,5 +1,6 @@
-import styles from './Steps.module.scss'
 import clsx from 'clsx'
+
+import styles from './Steps.module.scss'
 
 interface Props {
   selected: number

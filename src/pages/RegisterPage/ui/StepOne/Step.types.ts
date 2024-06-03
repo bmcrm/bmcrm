@@ -10,3 +10,12 @@ export interface IStepOneData {
   website: string
   accept: boolean
 }
+
+export interface IStepTwoData {
+  firstName: string
+  lastName: string
+  accept: boolean
+  playaName: string
+  email: string
+  password: string
+}
