@@ -12,6 +12,7 @@
     "test:unit": "jest --config ./config/jest/jest.config.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.588.0",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
     "react": "^18.2.0",
