@@ -6,6 +6,7 @@ import ShiftsPage from 'pages/ShiftsPage'
 import NotFoundPage from 'pages/NotFoundPage'
 import ProfilePage from 'pages/ProfilePage'
 import DashboardPage from 'pages/DashboardPage'
+import RegisterPage from 'pages/RegisterPage'
 
 export enum AppRoutes {
   DASHBOARD = 'dashboard',
@@ -15,6 +16,7 @@ export enum AppRoutes {
   SHIFTS = 'shifts',
   PROFILE = 'profile',
   NOT_FOUND = 'not_found',
+  REGISTER = 'register',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -24,6 +26,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.INVENTORY]: '/inventory',
   [AppRoutes.SHIFTS]: '/shifts',
   [AppRoutes.PROFILE]: '/profile',
+  [AppRoutes.REGISTER]: '/register',
   [AppRoutes.NOT_FOUND]: '*',
 }
 
@@ -51,6 +54,10 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
   [AppRoutes.PROFILE]: {
     path: RoutePath.profile,
     element: <ProfilePage />,
+  },
+  [AppRoutes.REGISTER]: {
+    path: RoutePath.register,
+    element: <RegisterPage />,
   },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,
