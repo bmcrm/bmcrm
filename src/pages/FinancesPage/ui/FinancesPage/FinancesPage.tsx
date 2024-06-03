@@ -7,7 +7,7 @@ const FinancesPage = memo(() => {
 	return (
 		<>
 			<Sidebar title={'Finances Page Sidebar'}/>
-			<section className={classNames(styles.finances, {}, ['section'])}>
+			<section className={classNames(styles.finances, {}, [])}>
 				<h1>Finances Page</h1>
 			</section>
 		</>

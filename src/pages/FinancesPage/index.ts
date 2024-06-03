@@ -1,3 +1,3 @@
-import { FinancesPage } from './ui/FinancesPage.async';
+import { FinancesPage } from './ui/FinancesPage/FinancesPage.async';
 
 export default FinancesPage;

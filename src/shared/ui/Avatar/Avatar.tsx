@@ -1,6 +1,7 @@
 import styles from './Avatar.module.scss';
 import { CSSProperties, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
+import AnonymousAvatar from 'shared/assets/images/avatars/anonymous.jpg';
 
 type AvatarProps = {
 	className?: string;
@@ -12,7 +13,7 @@ type AvatarProps = {
 const Avatar = (props: AvatarProps) => {
 	const {
 		className,
-		src,
+		src = AnonymousAvatar,
 		alt = 'img desc',
 		size = 100,
 	} = props;

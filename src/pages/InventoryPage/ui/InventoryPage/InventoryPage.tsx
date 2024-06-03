@@ -7,7 +7,7 @@ const InventoryPage = memo(() => {
 	return (
 		<>
 			<Sidebar title={'Inventory Page Sidebar'}/>
-			<section className={classNames(styles.inventory, {}, ['section'])}>
+			<section className={classNames(styles.inventory, {}, [])}>
 				<h1>Inventory Page</h1>
 			</section>
 		</>

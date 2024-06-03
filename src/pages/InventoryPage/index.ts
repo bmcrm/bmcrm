@@ -1,3 +1,3 @@
-import { InventoryPage } from './ui/InventoryPage.async';
+import { InventoryPage } from './ui/InventoryPage/InventoryPage.async';
 
 export default InventoryPage;

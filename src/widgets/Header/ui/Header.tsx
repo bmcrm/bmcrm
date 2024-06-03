@@ -1,10 +1,11 @@
 import styles from './Header.module.scss';
 import Logo from 'shared/assets/icons/logo.svg';
 import { memo } from 'react';
+import { RoutePath } from 'app/providers/AppRouter';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { Link } from 'react-router-dom';
 import { Nav } from 'features/Nav';
-import { ProfileHeaderAvatar } from 'entities/Profile';
+import { UserAvatar } from 'entities/User';
 
 type HeaderProps = {
 	className?: string;
@@ -15,12 +16,12 @@ const Header = memo(({ className }: HeaderProps) => {
 		<header className={classNames(styles.header, {}, [className])}>
 			<div className={styles.header__container}>
 				<strong className={styles.logo}>
-					<Link to="/" className={styles.logo__link}>
+					<Link to={RoutePath.dashboard} className={styles.logo__link}>
 						<Logo/>
 					</Link>
 				</strong>
 				<Nav/>
-				<ProfileHeaderAvatar/>
+				<UserAvatar/>
 			</div>
 		</header>
 	);

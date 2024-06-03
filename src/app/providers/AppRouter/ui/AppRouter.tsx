@@ -1,6 +1,7 @@
 import { memo, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { routeConfig } from '../config/routeConfig';
+import PageLoader from 'features/PageLoader';
 
 const AppRouter = memo(() => {
 	return (
@@ -11,7 +12,7 @@ const AppRouter = memo(() => {
 					path={path}
 					element={(
 						<main className='main'>
-							<Suspense fallback={'Loading...'}>
+							<Suspense fallback={<PageLoader/>}>
 								{element}
 							</Suspense>
 						</main>

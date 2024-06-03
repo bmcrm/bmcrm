@@ -1,3 +1,3 @@
-import { FunnelPage } from './ui/FunnelPage.async';
+import { FunnelPage } from './ui/FunnelPage/FunnelPage.async';
 
 export default FunnelPage;
