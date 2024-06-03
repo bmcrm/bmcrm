@@ -1,3 +1,3 @@
-import { ProfilePage } from './ui/ProfilePage.async';
+import { ProfilePage } from './ui/ProfilePage/ProfilePage.async';
 
 export default ProfilePage;

@@ -1,8 +1,9 @@
-.profile-avatar {
+.user-avatar {
 	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 25px;
+	cursor: pointer;
 
 	&__name {
 		font: var(--font-l);

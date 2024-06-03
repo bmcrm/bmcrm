@@ -1,23 +1,23 @@
-import styles from './ProfileAvatarTooltip.module.scss';
+import styles from './UserAvatarTooltip.module.scss';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { RoutePath } from 'app/providers/AppRouter';
-import { classNames } from 'shared/lib/classNames/classNames';
-import Tooltip from 'shared/ui/Tooltip/Tooltip';
-import Icon from 'shared/ui/Icon/Icon';
-import { IconSize } from 'shared/ui/Icon/IconTypes';
+import { classNames } from 'shared/lib/classNames/classNames.ts';
+import Tooltip from 'shared/ui/Tooltip/Tooltip.tsx';
+import Icon from 'shared/ui/Icon/Icon.tsx';
+import { IconSize } from 'shared/ui/Icon/IconTypes.ts';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
 
-type ProfileAvatarTooltipProps = {
+type UserAvatarTooltipProps = {
 	className?: string;
 	onClick?: () => void;
 };
 
-const ProfileAvatarTooltip = memo(({ className, onClick }: ProfileAvatarTooltipProps) => {
+const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) => {
 	return (
 		<Tooltip
-			className={classNames(styles.profileTooltip, {}, [className])}
+			className={classNames(styles.userTooltip, {}, [className])}
 			properties={{
 				top: 'calc(100% + 10px)',
 				left: '50%',
@@ -25,11 +25,11 @@ const ProfileAvatarTooltip = memo(({ className, onClick }: ProfileAvatarTooltipP
 				width: '180px',
 			}}
 		>
-			<ul className={styles.profileTooltip__list}>
+			<ul className={styles.userTooltip__list}>
 				<li>
 					<Link
 						to={RoutePath.profile}
-						className={styles.profileTooltip__link}
+						className={styles.userTooltip__link}
 						onClick={onClick}
 					>
 						<Icon icon={<SettingsIcon/>} size={IconSize.SIZE_24}/>
@@ -39,7 +39,7 @@ const ProfileAvatarTooltip = memo(({ className, onClick }: ProfileAvatarTooltipP
 				<li>
 					<Link
 						to={'/logout'}
-						className={styles.profileTooltip__link}
+						className={styles.userTooltip__link}
 						onClick={onClick}
 					>
 						<Icon icon={<LogoutIcon/>} size={IconSize.SIZE_24}/>
@@ -51,4 +51,4 @@ const ProfileAvatarTooltip = memo(({ className, onClick }: ProfileAvatarTooltipP
 	);
 });
 
-export default ProfileAvatarTooltip;
+export default UserAvatarTooltip;

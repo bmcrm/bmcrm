@@ -1,3 +1,3 @@
-import { ShiftsPage } from './ui/ShiftsPage.async';
+import { ShiftsPage } from './ui/ShiftsPage/ShiftsPage.async';
 
 export default ShiftsPage;

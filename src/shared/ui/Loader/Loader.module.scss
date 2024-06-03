@@ -5,7 +5,7 @@
 	display: inline-block;
 	position: relative;
 	border: 3px solid;
-	border-color: var(--light-yellow) var(--light-yellow) transparent transparent;
+	border-color: var(--color-orange-dark) var(--color-orange-dark) transparent transparent;
 	box-sizing: border-box;
 	animation: rotation 1s linear infinite;
 
@@ -19,7 +19,7 @@
 		bottom: 0;
 		margin: auto;
 		border: 3px solid;
-		border-color: transparent transparent var(--dark-ruby) var(--dark-ruby);
+		border-color: transparent transparent var(--color-ruby-dark) var(--color-ruby-dark);
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -30,7 +30,7 @@
 	&:before {
 		width: 32px;
 		height: 32px;
-		border-color: var(--light-yellow) var(--light-yellow) transparent transparent;
+		border-color: var(--color-orange-dark) var(--color-orange-dark) transparent transparent;
 		animation: rotation 1.5s linear infinite;
 	}
 }

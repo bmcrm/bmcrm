@@ -5,7 +5,7 @@ import { RoutePath } from 'app/providers/AppRouter';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { Link } from 'react-router-dom';
 import { Nav } from 'features/Nav';
-import { ProfileHeaderAvatar } from 'entities/Profile';
+import { UserAvatar } from 'entities/User';
 
 type HeaderProps = {
 	className?: string;
@@ -21,7 +21,7 @@ const Header = memo(({ className }: HeaderProps) => {
 					</Link>
 				</strong>
 				<Nav/>
-				<ProfileHeaderAvatar/>
+				<UserAvatar/>
 			</div>
 		</header>
 	);
