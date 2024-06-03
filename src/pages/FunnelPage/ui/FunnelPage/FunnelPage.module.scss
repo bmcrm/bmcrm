@@ -1,3 +1,22 @@
 .funnel {
 
+	&__head {
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+
+		+ .funnel__content {
+			margin-top: 40px;
+		}
+	}
+
+	&__content {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+
+		> *:nth-child(4) {
+			grid-column: span 3;
+		}
+	}
 }

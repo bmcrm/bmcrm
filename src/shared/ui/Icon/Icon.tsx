@@ -4,27 +4,27 @@ import { classNames, Mods } from 'shared/lib/classNames/classNames';
 import { IconSize } from './IconTypes';
 
 type IconProps = {
-	className?: string;
-	icon: ReactNode;
-	size?: IconSize;
+  className?: string;
+  icon: ReactNode;
+  size?: IconSize;
 };
 
 const Icon = memo((props: IconProps) => {
-	const {
-		className,
-		icon,
-		size = IconSize.SIZE_16,
-	} = props;
+  const {
+    className,
+    icon,
+    size = IconSize.SIZE_16,
+  } = props;
 
-	const mods: Mods = {
-		[styles[size]]: size,
-	};
+  const mods: Mods = {
+    [styles[size]]: size,
+  };
 
-	return (
-		<span className={classNames(styles.icon, mods, [className])}>
-			{icon}
-		</span>
-	);
+  return (
+    <span className={classNames(styles.icon, mods, [className])}>
+      {icon}
+    </span>
+  );
 });
 
 export default Icon;

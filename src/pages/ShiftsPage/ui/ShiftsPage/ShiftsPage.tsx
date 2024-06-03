@@ -4,14 +4,14 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import Sidebar from 'widgets/Sidebar';
 
 const ShiftsPage = memo(() => {
-	return (
-		<>
-			<Sidebar title={'Shifts Page Sidebar'}/>
-			<section className={classNames(styles.shifts, {}, [])}>
-				<h1>Shifts Page</h1>
-			</section>
-		</>
-	);
+  return (
+    <>
+      <Sidebar title={'Shifts Page Sidebar'}/>
+      <section className={classNames(styles.shifts, {}, [])}>
+        <h1>Shifts Page</h1>
+      </section>
+    </>
+  );
 });
 
 export default ShiftsPage;

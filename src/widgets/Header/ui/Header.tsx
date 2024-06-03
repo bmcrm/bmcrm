@@ -8,23 +8,23 @@ import { Nav } from 'features/Nav';
 import { UserAvatar } from 'entities/User';
 
 type HeaderProps = {
-	className?: string;
+  className?: string;
 };
 
 const Header = memo(({ className }: HeaderProps) => {
-	return (
-		<header className={classNames(styles.header, {}, [className])}>
-			<div className={styles.header__container}>
-				<strong className={styles.logo}>
-					<Link to={RoutePath.dashboard} className={styles.logo__link}>
-						<Logo/>
-					</Link>
-				</strong>
-				<Nav/>
-				<UserAvatar/>
-			</div>
-		</header>
-	);
+  return (
+    <header className={classNames(styles.header, {}, [className])}>
+      <div className={styles.header__container}>
+        <strong className={styles.logo}>
+          <Link to={RoutePath.dashboard} className={styles.logo__link}>
+            <Logo/>
+          </Link>
+        </strong>
+        <Nav/>
+        <UserAvatar/>
+      </div>
+    </header>
+  );
 });
 
 export default Header;
