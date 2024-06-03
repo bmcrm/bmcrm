@@ -10,36 +10,37 @@ import { StepTwo } from '../StepTwo/StepTwo'
 const RegisterPage = memo(() => {
   const [selected, setSelected] = useState(1)
 
-  const stepOneValues: IStepOneData = { campName: '', campId: '', city: '', website: '', accept: false }
-  const stepTwoValues: IStepTwoData = {
+  const [formData, setFormData] = useState({
+    campName: '',
+    campId: '',
+    city: '',
+    website: '',
+    accept: false,
     firstName: '',
     lastName: '',
-    accept: false,
     playaName: '',
     email: '',
     password: '',
-  }
+  })
+  const nextStep = () => setSelected(step => step + 1)
   const handleSubmit = (values: IStepOneData | IStepTwoData) => {
-    console.log(values)
+    setFormData({ ...formData, ...values })
+    if (selected !== 1) {
+      return console.log(values)
+    }
+    nextStep()
   }
-  const nextStep = () => setSelected(selected === 1 ? 2 : 1)
   return (
     <section>
       <Container>
         <AuthForm>
           {selected === 1 ? (
-            <StepOne initialValues={stepOneValues} onSubmit={handleSubmit} nextStep={nextStep} />
+            <StepOne initialValues={formData} onSubmit={handleSubmit} nextStep={nextStep} />
           ) : (
-            <StepTwo initialValues={stepTwoValues} onSubmit={handleSubmit} nextStep={nextStep} />
+            <StepTwo initialValues={formData} onSubmit={handleSubmit} nextStep={nextStep} />
           )}
         </AuthForm>
-        {/* {selected === 'one' ? (
-          <StepOne initialValues={stepOneValues} onSubmit={handleSubmit} />
-        ) : (
-          <AuthForm onSubmit={handleSubmit} initialValues={stepTwoValues} selected={selected} />
-        )} */}
-
-        <Steps nextStep={nextStep} selected={selected} />
+        <Steps selected={selected} />
       </Container>
     </section>
   )

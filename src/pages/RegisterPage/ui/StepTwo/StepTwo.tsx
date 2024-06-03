@@ -25,7 +25,8 @@ export const StepTwo = ({ onSubmit, initialValues, nextStep }: Props) => {
         ))}
         <label className={styles.acceptLabel}>
           <Field className={styles.checkbox} type='checkbox' name='accept' />
-          <span className={styles.checkmark}></span>I agree to the privacy policy
+          <span className={styles.checkmark} />
+          <p>I agree to the privacy policy</p>
         </label>
         <Button
           size={ButtonSize.M}

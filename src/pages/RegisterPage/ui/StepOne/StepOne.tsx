@@ -11,10 +11,9 @@ import { IStepOneData } from './Step.types'
 interface StepOneProps {
   onSubmit: (values: IStepOneData) => void
   initialValues: IStepOneData
-  nextStep: () => void
 }
 
-export const StepOne = ({ onSubmit, initialValues, nextStep }: StepOneProps) => {
+export const StepOne = ({ onSubmit, initialValues }: StepOneProps) => {
   return (
     <Formik onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
@@ -23,7 +22,8 @@ export const StepOne = ({ onSubmit, initialValues, nextStep }: StepOneProps) => 
         ))}
         <label className={styles.acceptLabel}>
           <Field className={styles.checkbox} type='checkbox' name='accept' />
-          <span className={styles.checkmark}></span>I agree to the privacy policy
+          <span className={styles.checkmark} />
+          <p>I agree to the privacy policy</p>
         </label>
         <Button
           size={ButtonSize.M}
