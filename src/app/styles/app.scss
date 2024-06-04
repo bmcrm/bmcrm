@@ -10,14 +10,6 @@ body {
   min-height: 100vh;
 }
 
-.linkWrapper {
-  font-size: var(--font-size-xs);
-  text-align: center;
-  .link {
-    color: var(--color-ruby-light);
-  }
-}
-
 .main {
   display: flex;
   flex-grow: 1;
