@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     indent: [2, 2],
     quotes: [2, 'single'],
+    semi: [2, 'always'],
     'react-refresh/only-export-components': [
       1,
       { allowConstantExport: true },

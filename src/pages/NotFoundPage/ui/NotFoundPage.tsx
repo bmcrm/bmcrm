@@ -4,18 +4,18 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import Container from 'shared/ui/Container/Container';
 
 type NotFoundPageProps = {
-	className?: string;
+  className?: string;
 };
 
 const NotFoundPage = memo(({ className }: NotFoundPageProps) => {
 
-	return (
-		<section className={classNames(styles.notFound, {}, [className])}>
-			<Container>
-				<h1>Page not found!</h1>
-			</Container>
-		</section>
-	);
+  return (
+    <section className={classNames(styles.notFound, {}, [className])}>
+      <Container>
+        <h1>Page not found!</h1>
+      </Container>
+    </section>
+  );
 });
 
 export default NotFoundPage;

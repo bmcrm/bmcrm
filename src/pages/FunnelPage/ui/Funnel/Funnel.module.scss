@@ -1,0 +1,47 @@
+.funnel {
+	position: relative;
+	width: 100%;
+	max-width: 780px;
+	display: grid;
+	gap: 15px;
+	padding-top: 50px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 20%;
+		background-image: url('shared/assets/images/funnel/funnel.png');
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 312px;
+		height: 278px;
+	}
+
+	&__item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 20px;
+
+		&:nth-child(2) {
+			padding-left: 30px;
+			padding-right: 30px;
+		}
+		&:nth-child(3) {
+			padding-left: 60px;
+			padding-right: 60px;
+		}
+		&:nth-child(4) {
+			padding-left: 90px;
+			padding-right: 90px;
+		}
+
+		.text {
+			width: 100%;
+			max-width: 250px;
+			font: var(--font-xxs);
+		}
+	}
+}
