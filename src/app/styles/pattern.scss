@@ -5,3 +5,13 @@
   font-weight: 700;
   text-align: center;
 }
+
+// links
+
+.linkWrapper {
+  font-size: var(--font-size-xs);
+  text-align: center;
+  .link {
+    color: var(--color-ruby-light);
+  }
+}
