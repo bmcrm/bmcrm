@@ -45,15 +45,27 @@ export const inputsDataCamp = [
   },
 ];
 
+// export const INPUTS_STATE = {
+//   campName: 'Maiami Playa',
+//   campId: 'MP',
+//   city: 'Miami',
+//   website: 'www.test.ua',
+//   accept: false,
+//   firstName: 'John',
+//   lastName: 'Wick',
+//   playaName: '@mail.com',
+//   email: 'john@mail.com',
+//   password: '123Qwe!a',
+// };
 export const INPUTS_STATE = {
-  campName: 'Maiami Playa',
-  campId: 'MP',
-  city: 'Miami',
-  website: 'www.test.ua',
+  campName: '',
+  campId: '',
+  city: '',
+  website: '',
   accept: false,
-  firstName: 'John',
-  lastName: 'Wick',
-  playaName: '@mail.com',
-  email: 'john@mail.com',
-  password: '123Qwe!a',
+  firstName: '',
+  lastName: '',
+  playaName: '',
+  email: '',
+  password: '',
 };

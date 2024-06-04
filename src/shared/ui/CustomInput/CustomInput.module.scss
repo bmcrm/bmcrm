@@ -11,17 +11,8 @@
   &::placeholder {
     color: var(--color-neutral);
   }
-  &:invalid {
-    border: 2px solid var(--color-ruby-light);
-  }
 }
-.error {
-  color: var(--color-ruby-dark);
-  position: absolute;
-  bottom: -25px;
-  left: 10px;
-  font-size: var(--font-size-xs);
-}
+
 .label {
   position: relative;
   color: var(--color-black);

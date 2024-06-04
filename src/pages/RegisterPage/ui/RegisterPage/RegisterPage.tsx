@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { AuthForm } from 'shared/ui/AuthForm/AuthForm';
-import Container from 'shared/ui/Container/Container';
 
 import { signUpUser } from 'shared/api/cognito';
 
 import { IInputsData } from './types';
 import { RegisterForm } from '../RegisterForm/RegisterForm';
+import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
+import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 
 const RegisterPage = memo(() => {
   const handleSubmit = (values: IInputsData) => {
@@ -22,13 +22,11 @@ const RegisterPage = memo(() => {
   };
 
   return (
-    <section>
-      <Container>
-        <AuthForm>
-          <RegisterForm handleSubmit={handleSubmit} />
-        </AuthForm>
-      </Container>
-    </section>
+    <AuthPageTemplate>
+      <AuthFormTemplate badge={'Sign in to your account'}>
+        <RegisterForm handleSubmit={handleSubmit} />
+      </AuthFormTemplate>
+    </AuthPageTemplate>
   );
 });
 

@@ -43,7 +43,7 @@ export const RegisterForm = ({ handleSubmit }: Props) => {
           </Button>
           <p className='linkWrapper'>
             Already have an account?
-            <Link className='link' to={`/${AppRoutes.LOGIN}`}>
+            <Link className='link' to={`/${AppRoutes.SIGN_IN}`}>
               Sign in
             </Link>
           </p>
