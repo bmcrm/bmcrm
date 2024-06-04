@@ -49,5 +49,5 @@ jobs:
 
       - name: Deploy
         run: |
-          aws s3 sync build/ s3://${{ env.WEBAPP_S3_BUCKET }} --delete
+          aws s3 sync dist/ s3://${{ env.WEBAPP_S3_BUCKET }} --delete
           aws cloudfront create-invalidation --distribution-id ${{ env.WEBAPP_CDN_DISTRIBUTION_ID }} --paths "/*"
