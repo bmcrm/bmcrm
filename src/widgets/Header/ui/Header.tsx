@@ -1,15 +1,15 @@
-import styles from './Header.module.scss'
-import Logo from 'shared/assets/icons/logo.svg'
-import { memo } from 'react'
-import { RoutePath } from 'app/providers/AppRouter'
-import { classNames } from 'shared/lib/classNames/classNames'
-import { Link } from 'react-router-dom'
-import { Nav } from 'features/Nav'
-import { UserAvatar } from 'entities/User'
+import styles from './Header.module.scss';
+import Logo from 'shared/assets/icons/logo.svg';
+import { memo } from 'react';
+import { RoutePath } from 'app/providers/AppRouter';
+import { classNames } from 'shared/lib/classNames/classNames';
+import { Link } from 'react-router-dom';
+import { Nav } from 'features/Nav';
+import { UserAvatar } from 'entities/User';
 
 type HeaderProps = {
-  className?: string
-}
+  className?: string;
+};
 
 const Header = memo(({ className }: HeaderProps) => {
   return (
@@ -24,7 +24,7 @@ const Header = memo(({ className }: HeaderProps) => {
         <UserAvatar />
       </div>
     </header>
-  )
-})
+  );
+});
 
-export default Header
+export default Header;

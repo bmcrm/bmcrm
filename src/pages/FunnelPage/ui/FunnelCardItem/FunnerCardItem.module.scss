@@ -1,0 +1,26 @@
+.card-item {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+
+	&:after {
+		content: '';
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-radius: 100%;
+		flex-shrink: 0;
+		margin-left: auto;
+		background-color: var(--color-neutral);
+	}
+
+	&__name {
+		font: var(--font-s);
+	}
+
+	&.online {
+		&:after {
+			background-color: #71E938;
+		}
+	}
+}

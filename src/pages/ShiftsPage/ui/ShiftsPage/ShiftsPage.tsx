@@ -1,7 +1,7 @@
-import styles from './ShiftsPage.module.scss'
-import { memo } from 'react'
-import { classNames } from 'shared/lib/classNames/classNames'
-import Sidebar from 'widgets/Sidebar'
+import styles from './ShiftsPage.module.scss';
+import { memo } from 'react';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Sidebar from 'widgets/Sidebar';
 
 const ShiftsPage = memo(() => {
   return (
@@ -11,7 +11,7 @@ const ShiftsPage = memo(() => {
         <h1>Shifts Page</h1>
       </section>
     </>
-  )
-})
+  );
+});
 
-export default ShiftsPage
+export default ShiftsPage;

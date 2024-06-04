@@ -1,11 +1,11 @@
-import styles from './NotFoundPage.module.scss'
-import { memo } from 'react'
-import { classNames } from 'shared/lib/classNames/classNames'
-import Container from 'shared/ui/Container/Container'
+import styles from './NotFoundPage.module.scss';
+import { memo } from 'react';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Container from 'shared/ui/Container/Container';
 
 type NotFoundPageProps = {
-  className?: string
-}
+  className?: string;
+};
 
 const NotFoundPage = memo(({ className }: NotFoundPageProps) => {
   return (
@@ -14,7 +14,7 @@ const NotFoundPage = memo(({ className }: NotFoundPageProps) => {
         <h1>Page not found!</h1>
       </Container>
     </section>
-  )
-})
+  );
+});
 
-export default NotFoundPage
+export default NotFoundPage;

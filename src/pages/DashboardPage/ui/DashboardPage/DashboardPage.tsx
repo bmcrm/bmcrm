@@ -1,10 +1,10 @@
-import styles from './DashboardPage.module.scss'
-import { classNames } from 'shared/lib/classNames/classNames'
-import Container from 'shared/ui/Container/Container'
+import styles from './DashboardPage.module.scss';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Container from 'shared/ui/Container/Container';
 
 type DashboardPageProps = {
-  className?: string
-}
+  className?: string;
+};
 
 const DashboardPage = ({ className }: DashboardPageProps) => {
   return (
@@ -13,7 +13,7 @@ const DashboardPage = ({ className }: DashboardPageProps) => {
         <h1>Dashboard Page</h1>
       </Container>
     </section>
-  )
-}
+  );
+};
 
-export default DashboardPage
+export default DashboardPage;

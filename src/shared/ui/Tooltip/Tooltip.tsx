@@ -1,23 +1,23 @@
-import styles from './Tooltip.module.scss'
-import { CSSProperties, ReactNode, useMemo } from 'react'
-import { classNames } from 'shared/lib/classNames/classNames'
+import styles from './Tooltip.module.scss';
+import { CSSProperties, ReactNode, useMemo } from 'react';
+import { classNames } from 'shared/lib/classNames/classNames';
 
 type TooltipProps = {
-  className?: string
-  children?: ReactNode
+  className?: string;
+  children?: ReactNode;
   properties?: {
-    top?: string | number
-    left?: string | number
-    right?: string | number
-    bottom?: string | number
-    width?: string | number
-    height?: string | number
-    transform?: string
-  }
-}
+    top?: string | number;
+    left?: string | number;
+    right?: string | number;
+    bottom?: string | number;
+    width?: string | number;
+    height?: string | number;
+    transform?: string;
+  };
+};
 
 const Tooltip = (props: TooltipProps) => {
-  const { className, children, properties } = props
+  const { className, children, properties } = props;
 
   const tooltipStyles = useMemo<CSSProperties>(
     () => ({
@@ -30,13 +30,13 @@ const Tooltip = (props: TooltipProps) => {
       transform: properties?.transform,
     }),
     [properties]
-  )
+  );
 
   return (
     <div className={classNames(styles.tooltip, {}, [className])} style={tooltipStyles}>
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default Tooltip
+export default Tooltip;

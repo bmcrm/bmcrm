@@ -1,7 +1,7 @@
-import styles from './FinancesPage.module.scss'
-import { memo } from 'react'
-import { classNames } from 'shared/lib/classNames/classNames'
-import Sidebar from 'widgets/Sidebar'
+import styles from './FinancesPage.module.scss';
+import { memo } from 'react';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Sidebar from 'widgets/Sidebar';
 
 const FinancesPage = memo(() => {
   return (
@@ -11,7 +11,7 @@ const FinancesPage = memo(() => {
         <h1>Finances Page</h1>
       </section>
     </>
-  )
-})
+  );
+});
 
-export default FinancesPage
+export default FinancesPage;

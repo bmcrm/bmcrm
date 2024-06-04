@@ -1,11 +1,11 @@
-import styles from './ProfilePage.module.scss'
-import { memo } from 'react'
-import { classNames } from 'shared/lib/classNames/classNames'
-import Container from 'shared/ui/Container/Container'
+import styles from './ProfilePage.module.scss';
+import { memo } from 'react';
+import { classNames } from 'shared/lib/classNames/classNames';
+import Container from 'shared/ui/Container/Container';
 
 type ProfilePageProps = {
-  className?: string
-}
+  className?: string;
+};
 
 const ProfilePage = memo(({ className }: ProfilePageProps) => {
   return (
@@ -14,7 +14,7 @@ const ProfilePage = memo(({ className }: ProfilePageProps) => {
         <h1>Settings Page</h1>
       </Container>
     </section>
-  )
-})
+  );
+});
 
-export default ProfilePage
+export default ProfilePage;

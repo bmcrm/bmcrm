@@ -1,12 +1,12 @@
-import styles from './NavItem.module.scss'
-import { memo } from 'react'
-import { NavLink } from 'react-router-dom'
-import { NavItemType } from '../../model/NavItems'
-import { classNames } from 'shared/lib/classNames/classNames'
+import styles from './NavItem.module.scss';
+import { memo } from 'react';
+import { NavLink } from 'react-router-dom';
+import { NavItemType } from '../../model/NavItems';
+import { classNames } from 'shared/lib/classNames/classNames';
 
 type NavItemProps = {
-  item: NavItemType
-}
+  item: NavItemType;
+};
 
 const NavItem = memo(({ item }: NavItemProps) => {
   return (
@@ -18,7 +18,7 @@ const NavItem = memo(({ item }: NavItemProps) => {
         {item.text}
       </NavLink>
     </li>
-  )
-})
+  );
+});
 
-export default NavItem
+export default NavItem;
