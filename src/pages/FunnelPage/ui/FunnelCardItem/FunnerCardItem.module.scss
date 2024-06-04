@@ -9,6 +9,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 100%;
+		flex-shrink: 0;
 		margin-left: auto;
 		background-color: var(--color-neutral);
 	}

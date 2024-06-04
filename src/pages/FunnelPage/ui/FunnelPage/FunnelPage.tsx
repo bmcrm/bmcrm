@@ -37,7 +37,7 @@ const FunnelPage = memo(() => {
           <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users}/>
           <FunnelCard title={'Qualified'} users={FUNNEL_STATIC.qualified.users}/>
           <FunnelCard title={'Intent'} users={FUNNEL_STATIC.intent.users}/>
-          <FunnelCard title={'Campers'} fluid users={FUNNEL_STATIC.campers.users}/>
+          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={FUNNEL_STATIC.campers.users}/>
         </div>
       </section>
     </>

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import svgr from 'vite-plugin-svgr';
 
@@ -27,6 +27,7 @@ export default defineConfig({
       'features': resolve(__dirname, 'src/features'),
       'entities': resolve(__dirname, 'src/entities'),
       'images': resolve(__dirname, 'src/shared/assets/images'),
+      'breakpoints': resolve(__dirname, 'src/app/styles/breakpoints.scss'),
     },
   },
 });
