@@ -1,0 +1,65 @@
+.flex {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.form {
+  width: 50%;
+  display: grid;
+  flex-direction: column;
+  gap: 20px;
+  & button {
+    width: 100%;
+  }
+  .checkbox {
+    border-radius: 4px;
+    border: 1px solid var(--color-ruby-light);
+  }
+}
+
+.acceptLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.acceptLabel input {
+  display: none;
+}
+
+.acceptLabel {
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.acceptLabel .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  border: 1px solid var(--color-ruby-light);
+  border-radius: 4px;
+}
+
+.acceptLabel .checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.acceptLabel input:checked + .checkmark:after {
+  display: block;
+}
+
+.acceptLabel .checkmark:after {
+  inset: 0;
+  width: 6px;
+  left: 4px;
+  height: 12px;
+  border: solid red;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}

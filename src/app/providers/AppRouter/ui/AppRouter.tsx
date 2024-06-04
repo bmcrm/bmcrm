@@ -10,15 +10,14 @@ const AppRouter = memo(() => {
         <Route
           key={path}
           path={path}
-          element={(
+          element={
             <main className='main'>
-              <Suspense fallback={<PageLoader/>}>
-                {element}
-              </Suspense>
+              <Suspense fallback={<PageLoader />}>{element}</Suspense>
             </main>
-          )}
+          }
         />
-      ))};
+      ))}
+      ;
     </Routes>
   );
 });

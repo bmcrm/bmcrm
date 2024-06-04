@@ -4,8 +4,8 @@ import Header from 'widgets/Header';
 const App = () => {
   return (
     <div className='app'>
-      <Header/>
-      <AppRouter/>
+      <Header />
+      <AppRouter />
     </div>
   );
 };

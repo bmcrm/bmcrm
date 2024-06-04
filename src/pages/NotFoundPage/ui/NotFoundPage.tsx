@@ -8,7 +8,6 @@ type NotFoundPageProps = {
 };
 
 const NotFoundPage = memo(({ className }: NotFoundPageProps) => {
-
   return (
     <section className={classNames(styles.notFound, {}, [className])}>
       <Container>

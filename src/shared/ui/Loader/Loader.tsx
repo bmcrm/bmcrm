@@ -7,9 +7,7 @@ type LoaderProps = {
 };
 
 const Loader = memo(({ className }: LoaderProps) => {
-  return (
-    <span className={classNames(styles.loader, {}, [className])}></span>
-  );
+  return <span className={classNames(styles.loader, {}, [className])}></span>;
 });
 
 export default Loader;

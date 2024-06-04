@@ -8,7 +8,7 @@ type PageErrorProps = {
 
 const PageError = memo(({ className }: PageErrorProps) => {
   const onReload = () => {
-    location.reload(); 
+    location.reload();
   };
 
   return (

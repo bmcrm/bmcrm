@@ -9,9 +9,7 @@ type ContainerProps = {
 
 const Container = ({ className, children, fluid }: ContainerProps) => {
   return (
-    <div className={classNames(styles.container, { [styles.containerFluid]: fluid }, [className])}>
-      {children}
-    </div>
+    <div className={classNames(styles.container, { [styles.containerFluid]: fluid }, [className])}>{children}</div>
   );
 };
 

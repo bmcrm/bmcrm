@@ -9,7 +9,7 @@ type PageLoaderProps = {
 const PageLoader = ({ className }: PageLoaderProps) => {
   return (
     <div className={classNames(styles.pageLoader, {}, [className])}>
-      <Loader/>
+      <Loader />
     </div>
   );
 };

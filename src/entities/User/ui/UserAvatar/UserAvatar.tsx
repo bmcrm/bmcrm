@@ -23,7 +23,7 @@ const UserAvatar = ({ className }: UserAvatarProps) => {
   const mouseLeaveHandler = useCallback(() => {
     setIsHovered(false);
   }, []);
-	
+
   return (
     <div
       className={classNames(styles.userAvatar, {}, [className])}
@@ -31,12 +31,8 @@ const UserAvatar = ({ className }: UserAvatarProps) => {
       onMouseLeave={mouseLeaveHandler}
     >
       <h2 className={styles.userAvatar__name}>Alex Roman</h2>
-      <Avatar
-        size={40}
-        alt={STATIC_DATA.alt}
-        src={STATIC_DATA.src}
-      />
-      {isHovered && <UserAvatarTooltip onClick={mouseLeaveHandler}/>}
+      <Avatar size={40} alt={STATIC_DATA.alt} src={STATIC_DATA.src} />
+      {isHovered && <UserAvatarTooltip onClick={mouseLeaveHandler} />}
     </div>
   );
 };

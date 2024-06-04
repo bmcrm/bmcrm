@@ -8,7 +8,6 @@ type ProfilePageProps = {
 };
 
 const ProfilePage = memo(({ className }: ProfilePageProps) => {
-
   return (
     <section className={classNames(styles.profile, {}, [className])}>
       <Container>

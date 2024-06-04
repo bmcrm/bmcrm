@@ -6,7 +6,7 @@ import Sidebar from 'widgets/Sidebar';
 const InventoryPage = memo(() => {
   return (
     <>
-      <Sidebar title={'Inventory Page Sidebar'}/>
+      <Sidebar title={'Inventory Page Sidebar'} />
       <section className={classNames(styles.inventory, {}, [])}>
         <h1>Inventory Page</h1>
       </section>

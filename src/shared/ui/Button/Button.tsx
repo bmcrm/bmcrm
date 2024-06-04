@@ -22,19 +22,10 @@ const Button = (props: ButtonProps) => {
   } = props;
 
   const mods: Mods = {};
-  const additional: Additional = [
-    className,
-    styles[theme],
-    styles[size],
-    styles[color],
-  ];
+  const additional: Additional = [className, styles[theme], styles[size], styles[color]];
 
   return (
-    <button
-      type={type}
-      className={classNames(styles.btn, mods, additional)}
-      {...otherProps}
-    >
+    <button type={type} className={classNames(styles.btn, mods, additional)} {...otherProps}>
       {children}
     </button>
   );

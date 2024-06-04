@@ -17,11 +17,11 @@ const Header = memo(({ className }: HeaderProps) => {
       <div className={styles.header__container}>
         <strong className={styles.logo}>
           <Link to={RoutePath.dashboard} className={styles.logo__link}>
-            <Logo/>
+            <Logo />
           </Link>
         </strong>
-        <Nav/>
-        <UserAvatar/>
+        <Nav />
+        <UserAvatar />
       </div>
     </header>
   );

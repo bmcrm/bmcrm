@@ -17,15 +17,17 @@ const FunnelPage = memo(() => {
 
   return (
     <>
-      <Sidebar title={'Funnel Page Sidebar'}/>
+      <Sidebar title={'Funnel Page Sidebar'} />
       <section className={classNames(styles.funnel, {}, [])}>
         <div className={styles.funnel__head}>
-          <Funnel data={{
-            leads: FUNNEL_STATIC.leads.funnel,
-            qualified: FUNNEL_STATIC.qualified.funnel,
-            intent: FUNNEL_STATIC.intent.funnel,
-            campers: FUNNEL_STATIC.campers.funnel,
-          }}/>
+          <Funnel
+            data={{
+              leads: FUNNEL_STATIC.leads.funnel,
+              qualified: FUNNEL_STATIC.qualified.funnel,
+              intent: FUNNEL_STATIC.intent.funnel,
+              campers: FUNNEL_STATIC.campers.funnel,
+            }}
+          />
           <Button onClick={onToggleInviteModal}>Invite</Button>
           {isInviteModal && (
             <Modal isOpen={isInviteModal} onClose={onToggleInviteModal}>
@@ -34,10 +36,10 @@ const FunnelPage = memo(() => {
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users}/>
-          <FunnelCard title={'Qualified'} users={FUNNEL_STATIC.qualified.users}/>
-          <FunnelCard title={'Intent'} users={FUNNEL_STATIC.intent.users}/>
-          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={FUNNEL_STATIC.campers.users}/>
+          <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users} />
+          <FunnelCard title={'Qualified'} users={FUNNEL_STATIC.qualified.users} />
+          <FunnelCard title={'Intent'} users={FUNNEL_STATIC.intent.users} />
+          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={FUNNEL_STATIC.campers.users} />
         </div>
       </section>
     </>
