@@ -1,6 +1,6 @@
 export const SignInInputs = [
   {
-    name: 'email',
+    name: 'username',
     placeholder: 'example@gmail.com',
     label: 'Email',
     type: 'email',

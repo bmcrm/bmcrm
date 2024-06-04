@@ -1,4 +1,4 @@
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 import { SignInInputs } from './SignInFormData';
 import { type SignInFormData } from './SignInForm.types';
@@ -17,32 +17,28 @@ type SignInFormProps = {
 };
 
 const SignInForm = (props: SignInFormProps) => {
-  const {
-    initialValues,
-    onSubmit,
-  } = props;
+  const { initialValues, onSubmit } = props;
 
   return (
     <Formik onSubmit={onSubmit} initialValues={initialValues}>
-      <form className={styles.form}>
+      <Form className={styles.form}>
         {SignInInputs.map(input => (
           <CustomInput key={input.name} {...input} />
         ))}
-        <Button
-          theme={ButtonTheme.CLEAR}
-          size={ButtonSize.TEXT}
-          color={ButtonColor.RUBY_LIGHT}
-        >
+        <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} color={ButtonColor.RUBY_LIGHT}>
           Forgot Password?
         </Button>
         <Button type='submit' fluid>
-          <Icon icon={<Camp/>} size={IconSize.SIZE_20}/>
+          <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           LOG IN
         </Button>
         <p className={styles.form__redirect}>
-          Don't have an account yet? <Link className={styles.link} to={RoutePath.register}>Register and create a camp</Link>
+          Don't have an account yet?{' '}
+          <Link className={styles.link} to={RoutePath.register}>
+            Register and create a camp
+          </Link>
         </p>
-      </form>
+      </Form>
     </Formik>
   );
 };

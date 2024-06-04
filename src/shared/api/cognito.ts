@@ -91,7 +91,7 @@ export const listUsers = async () => {
     throw error;
   }
 };
-export const loginUser = async (username: string, password: string): Promise<unknown> => {
+export const loginUser = async ({ username, password }: { username: string; password: string }) => {
   const params: InitiateAuthCommandInput = {
     AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: COGNITO_APP_CLIENT_ID,
@@ -103,7 +103,7 @@ export const loginUser = async (username: string, password: string): Promise<unk
 
   try {
     const data = await cognitoClient.send(new InitiateAuthCommand(params));
-    return data;
+    return data.AuthenticationResult;
   } catch (error) {
     console.error('Login failed', error);
   }
