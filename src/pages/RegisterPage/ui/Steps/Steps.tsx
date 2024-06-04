@@ -1,6 +1,6 @@
-import clsx from 'clsx'
+import clsx from 'clsx';
 
-import styles from './Steps.module.scss'
+import styles from './Steps.module.scss';
 
 interface Props {
   selected: number
@@ -12,5 +12,5 @@ export const Steps = ({ selected, setStep }: Props) => {
       <button onClick={() => setStep(1)} className={clsx(selected === 1 && styles.active)} />
       <button onClick={() => setStep(2)} className={clsx(selected === 2 && styles.active)} />
     </section>
-  )
-}
+  );
+};

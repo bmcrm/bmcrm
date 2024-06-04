@@ -17,4 +17,4 @@ export const stepTwoData = [
     label: 'Password',
     type: 'password',
   },
-]
+];

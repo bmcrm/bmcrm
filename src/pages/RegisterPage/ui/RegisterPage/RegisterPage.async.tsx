@@ -1,5 +1,5 @@
-import { lazy } from 'react'
+import { lazy } from 'react';
 
-const RegisterPageAsync = lazy(async () => import('./RegisterPage'))
+const RegisterPageAsync = lazy(async () => import('./RegisterPage'));
 
-export { RegisterPageAsync as RegisterPage }
+export { RegisterPageAsync as RegisterPage };

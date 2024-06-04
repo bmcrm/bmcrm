@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-import svgr from 'vite-plugin-svgr'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [
@@ -30,4 +30,4 @@ export default defineConfig({
       breakpoints: resolve(__dirname, 'src/app/styles/breakpoints.scss'),
     },
   },
-})
+});

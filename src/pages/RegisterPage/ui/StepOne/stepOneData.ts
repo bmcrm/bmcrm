@@ -23,4 +23,4 @@ export const stepOneCreateCamp = [
     label: 'Website',
     type: 'text',
   },
-]
+];

@@ -2,14 +2,14 @@ import {
   CognitoIdentityProviderClient,
   SignUpCommand,
   SignUpCommandInput,
-} from '@aws-sdk/client-cognito-identity-provider'
+} from '@aws-sdk/client-cognito-identity-provider';
 
-const REGION = import.meta.env.VITE_REGION
-const COGNITO_APP_CLIENT_ID = import.meta.env.VITE_COGNITO_APP_CLIENT_ID
+const REGION = import.meta.env.VITE_REGION;
+const COGNITO_APP_CLIENT_ID = import.meta.env.VITE_COGNITO_APP_CLIENT_ID;
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: REGION,
-})
+});
 interface SignUpData {
   username: string
   password: string
@@ -39,12 +39,12 @@ export const signUpUser = async (userData: SignUpData): Promise<void> => {
       { Name: 'custom:last_name', Value: userData.lastName },
       { Name: 'custom:playa_name', Value: userData.playaName },
     ],
-  }
+  };
 
   try {
-    const data = await cognitoClient.send(new SignUpCommand(params))
-    console.log('Sign up success', data)
+    const data = await cognitoClient.send(new SignUpCommand(params));
+    console.log('Sign up success', data);
   } catch (error) {
-    console.error('Sign up failed', error)
+    console.error('Sign up failed', error);
   }
-}
+};

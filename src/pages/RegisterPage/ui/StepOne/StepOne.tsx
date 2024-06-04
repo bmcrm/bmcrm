@@ -1,20 +1,20 @@
-import { Link } from 'react-router-dom'
-import { Field, Form, Formik } from 'formik'
+import { Link } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
 
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput'
-import Button from 'shared/ui/Button/Button'
-import Camp from 'shared/assets/icons/camp.svg'
-import { ButtonSize } from 'shared/ui/Button/ButtonTypes'
-import Icon from 'shared/ui/Icon/Icon'
-import { IconSize } from 'shared/ui/Icon/IconTypes'
+import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+import Button from 'shared/ui/Button/Button';
+import Camp from 'shared/assets/icons/camp.svg';
+import { ButtonSize } from 'shared/ui/Button/ButtonTypes';
+import Icon from 'shared/ui/Icon/Icon';
+import { IconSize } from 'shared/ui/Icon/IconTypes';
 
-import { IStepOneData } from './Step.types'
-import { stepOneCreateCamp } from './stepOneData'
-import styles from '../RegisterPage/RegisterPage.module.scss'
+import { IStepOneData } from './Step.types';
+import { stepOneCreateCamp } from './stepOneData';
+import styles from '../RegisterPage/RegisterPage.module.scss';
 
 interface StepOneProps {
-  onSubmit: (values: IStepOneData) => void
-  initialValues: IStepOneData
+  onSubmit: (values: IStepOneData) => void;
+  initialValues: IStepOneData;
 }
 
 export const StepOne = ({ onSubmit, initialValues }: StepOneProps) => {
@@ -45,5 +45,5 @@ export const StepOne = ({ onSubmit, initialValues }: StepOneProps) => {
         </p>
       </Form>
     </Formik>
-  )
-}
+  );
+};
