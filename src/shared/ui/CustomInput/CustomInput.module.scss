@@ -4,15 +4,23 @@
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(4px);
   padding: 10px 20px;
-  color: var(--color-neutral);
   font-family: Poppins;
   font-size: 14px;
   width: 100%;
+
+  &::placeholder {
+    color: var(--color-neutral);
+  }
+  &:invalid {
+    border: 2px solid var(--color-ruby-light);
+  }
 }
 .error {
   color: var(--color-ruby-dark);
   position: absolute;
-  bottom: 5px;
+  bottom: -25px;
+  left: 10px;
+  font-size: var(--font-size-xs);
 }
 .label {
   position: relative;

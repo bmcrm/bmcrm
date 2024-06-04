@@ -16,6 +16,7 @@ export enum AppRoutes {
   SHIFTS = 'shifts',
   PROFILE = 'profile',
   REGISTER = 'register',
+  LOGIN = 'login',
   NOT_FOUND = 'not_found',
 }
 
@@ -26,6 +27,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.INVENTORY]: '/inventory',
   [AppRoutes.SHIFTS]: '/shifts',
   [AppRoutes.PROFILE]: '/profile',
+  [AppRoutes.LOGIN]: '/login',
   [AppRoutes.REGISTER]: '/register',
   [AppRoutes.NOT_FOUND]: '*',
 };
@@ -53,6 +55,10 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
   },
   [AppRoutes.REGISTER]: {
     path: RoutePath.register,
+    element: <RegisterPage />,
+  },
+  [AppRoutes.LOGIN]: {
+    path: RoutePath.login,
     element: <RegisterPage />,
   },
   [AppRoutes.PROFILE]: {

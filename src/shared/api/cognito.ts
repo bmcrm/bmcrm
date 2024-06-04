@@ -11,16 +11,15 @@ const cognitoClient = new CognitoIdentityProviderClient({
   region: REGION,
 });
 interface SignUpData {
-  username: string
-  password: string
-  email: string
-  campName: string
-  campId: string
-  city: string
-  website: string
-  firstName: string
-  lastName: string
-  playaName: string
+  password: string;
+  email: string;
+  campName: string;
+  campId: string;
+  city: string;
+  website: string;
+  firstName: string;
+  lastName: string;
+  playaName: string;
 }
 export const signUpUser = async (userData: SignUpData): Promise<void> => {
   const params: SignUpCommandInput = {
