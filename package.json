@@ -19,7 +19,8 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.23.1",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",

@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom';
 
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
-import { ButtonSize } from 'shared/ui/Button/ButtonTypes';
 import Camp from 'shared/assets/icons/camp.svg';
 
 import { INPUTS_STATE, inputsDataCamp, inputsDataUser } from './inputsData';
 import { IInputsData } from '../RegisterPage/types';
 import styles from './RegisterForm.module.scss';
-import { AppRoutes } from 'app/providers/AppRouter/config/routeConfig';
 import { registrationSchema } from 'shared/lib/schemas/schemas';
+import { ButtonSize } from 'shared/ui/Button/Button.types';
 
 interface Props {
   handleSubmit: (values: IInputsData) => void;
