@@ -1,13 +1,20 @@
 import styles from './FunnelPage.module.scss';
-import { memo } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Sidebar from 'widgets/Sidebar';
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/FunnelCard';
-import { FUNNEL_STATIC } from './data.ts';
+import Modal from 'shared/ui/Modal/Modal';
+import { FUNNEL_STATIC } from './data';
 
 const FunnelPage = memo(() => {
+  const [isInviteModal, setIsInviteModal] = useState(false);
+
+  const onToggleInviteModal = useCallback(() => {
+    setIsInviteModal(prev => !prev);
+  }, []);
+
   return (
     <>
       <Sidebar title={'Funnel Page Sidebar'}/>
@@ -19,7 +26,12 @@ const FunnelPage = memo(() => {
             intent: FUNNEL_STATIC.intent.funnel,
             campers: FUNNEL_STATIC.campers.funnel,
           }}/>
-          <Button>Invite</Button>
+          <Button onClick={onToggleInviteModal}>Invite</Button>
+          {isInviteModal && (
+            <Modal isOpen={isInviteModal} onClose={onToggleInviteModal}>
+              <p>Share the link to invite a member</p>
+            </Modal>
+          )}
         </div>
         <div className={styles.funnel__content}>
           <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users}/>
