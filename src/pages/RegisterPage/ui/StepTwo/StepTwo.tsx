@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
-import { ButtonSize } from 'shared/ui/Button/ButtonTypes';
+import { ButtonSize } from 'shared/ui/Button/Button.types.ts';
 import Button from 'shared/ui/Button/Button';
 import Camp from 'shared/assets/icons/camp.svg';
 

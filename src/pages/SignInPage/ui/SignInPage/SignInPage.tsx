@@ -1,19 +1,25 @@
-import { classNames } from 'shared/lib/classNames/classNames';
+import { useCallback, useState } from 'react';
 
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 
-import styles from './SignInPage.module.scss';
+import SignInForm from 'pages/SignInPage/ui/SignInForm/SignInForm.tsx';
+import { type SignInFormData } from '../SignInForm/SignInForm.types';
 
-type SignInPageProps = {
-  className?: string;
-};
+const SignInPage = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
-const SignInPage = ({ className }: SignInPageProps) => {
+  const handleSubmit = useCallback((values: SignInFormData) => {
+    setFormData(prev => ({ ...prev, ...values }));
+  }, []);
+
   return (
-    <AuthPageTemplate className={classNames('', {}, [className])}>
+    <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background>
-        <div className={styles.signIn}></div>
+        <SignInForm onSubmit={handleSubmit} initialValues={formData}/>
       </AuthFormTemplate>
     </AuthPageTemplate>
   );
