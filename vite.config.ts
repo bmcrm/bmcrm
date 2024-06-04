@@ -27,6 +27,7 @@ export default defineConfig({
       features: resolve(__dirname, 'src/features'),
       entities: resolve(__dirname, 'src/entities'),
       images: resolve(__dirname, 'src/shared/assets/images'),
+      icons: resolve(__dirname, 'src/shared/assets/icons'),
       breakpoints: resolve(__dirname, 'src/app/styles/breakpoints.scss'),
     },
   },

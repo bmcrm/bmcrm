@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 
-import { AuthForm } from 'shared/ui/AuthForm/AuthForm';
+import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate.tsx';
 import Container from 'shared/ui/Container/Container';
 
 import { IStepOneData, IStepTwoData } from '../StepOne/Step.types';
@@ -52,13 +52,13 @@ const RegisterPage = memo(() => {
   return (
     <section>
       <Container>
-        <AuthForm>
+        <AuthFormTemplate>
           {selected === 1 ? (
             <StepOne initialValues={formData} onSubmit={handleSubmit} />
           ) : (
             <StepTwo initialValues={formData} onSubmit={handleSubmit} />
           )}
-        </AuthForm>
+        </AuthFormTemplate>
         <Steps setStep={setSelected} selected={selected} />
       </Container>
     </section>
