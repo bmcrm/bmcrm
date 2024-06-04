@@ -28,7 +28,6 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.INVENTORY]: '/inventory',
   [AppRoutes.SHIFTS]: '/shifts',
   [AppRoutes.PROFILE]: '/profile',
-  [AppRoutes.LOGIN]: '/login',
   [AppRoutes.REGISTER]: '/register',
   [AppRoutes.SIGN_IN]: '/signin',
   [AppRoutes.NOT_FOUND]: '*',

@@ -1,15 +1,25 @@
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
+  InitiateAuthCommand,
   SignUpCommandInput,
+  InitiateAuthCommandInput,
+  ConfirmSignUpCommand,
+  ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 const REGION = import.meta.env.VITE_REGION;
 const COGNITO_APP_CLIENT_ID = import.meta.env.VITE_COGNITO_APP_CLIENT_ID;
+const COGNITO_AWS_POOL_ID = import.meta.env.VITE_COGNITO_AWS_POOL_ID;
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: REGION,
 });
+
+interface ConfirmCode {
+  code: string;
+  username: string;
+}
 interface SignUpData {
   password: string;
   email: string;
@@ -21,7 +31,7 @@ interface SignUpData {
   lastName: string;
   playaName: string;
 }
-export const signUpUser = async (userData: SignUpData): Promise<void> => {
+export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
   const params: SignUpCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Username: userData.email,
@@ -40,10 +50,61 @@ export const signUpUser = async (userData: SignUpData): Promise<void> => {
     ],
   };
 
+  const data = await cognitoClient.send(new SignUpCommand(params));
+
+  return data;
+};
+
+export const confirmEmail = async ({ username, code }: ConfirmCode) => {
+  const client = new CognitoIdentityProviderClient({ region: REGION });
   try {
-    const data = await cognitoClient.send(new SignUpCommand(params));
-    console.log('Sign up success', data);
+    const command = new ConfirmSignUpCommand({
+      ClientId: COGNITO_APP_CLIENT_ID,
+      Username: username,
+      ConfirmationCode: code,
+    });
+
+    const response = await client.send(command);
+
+    return response;
   } catch (error) {
-    console.error('Sign up failed', error);
+    console.error('Error confirming email:', error);
+    throw error;
+  }
+};
+
+export const listUsers = async () => {
+  const client = new CognitoIdentityProviderClient({ region: REGION });
+
+  const params = {
+    UserPoolId: COGNITO_AWS_POOL_ID,
+  };
+
+  try {
+    const command = new ListUsersCommand(params);
+
+    const response = await client.send(command);
+
+    return response.Users;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+export const loginUser = async (username: string, password: string): Promise<unknown> => {
+  const params: InitiateAuthCommandInput = {
+    AuthFlow: 'USER_PASSWORD_AUTH',
+    ClientId: COGNITO_APP_CLIENT_ID,
+    AuthParameters: {
+      USERNAME: username,
+      PASSWORD: password,
+    },
+  };
+
+  try {
+    const data = await cognitoClient.send(new InitiateAuthCommand(params));
+    return data;
+  } catch (error) {
+    console.error('Login failed', error);
   }
 };
