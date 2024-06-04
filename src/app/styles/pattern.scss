@@ -9,8 +9,9 @@
 // links
 
 .linkWrapper {
-  font-size: var(--font-size-xs);
+  font: var(--font-xs);
   text-align: center;
+
   .link {
     color: var(--color-ruby-light);
   }
