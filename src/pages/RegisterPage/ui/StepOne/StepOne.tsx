@@ -1,12 +1,16 @@
+import { Link } from 'react-router-dom'
+import { Field, Form, Formik } from 'formik'
+
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput'
 import Button from 'shared/ui/Button/Button'
-import { Link } from 'react-router-dom'
 import Camp from 'shared/assets/icons/camp.svg'
 import { ButtonSize } from 'shared/ui/Button/ButtonTypes'
-import { stepOneCreateCamp } from './stepOneData'
-import { Field, Form, Formik } from 'formik'
-import styles from '../RegisterPage/RegisterPage.module.scss'
+import Icon from 'shared/ui/Icon/Icon'
+import { IconSize } from 'shared/ui/Icon/IconTypes'
+
 import { IStepOneData } from './Step.types'
+import { stepOneCreateCamp } from './stepOneData'
+import styles from '../RegisterPage/RegisterPage.module.scss'
 
 interface StepOneProps {
   onSubmit: (values: IStepOneData) => void
@@ -30,7 +34,7 @@ export const StepOne = ({ onSubmit, initialValues }: StepOneProps) => {
           type='submit'
           style={{ display: 'flex', alignItems: 'center', gap: '15px', justifyContent: 'center' }}
         >
-          <Camp />
+          <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           NEXT
         </Button>
         <p className='linkWrapper'>

@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import { Field, Form, Formik } from 'formik'
 
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput'
-import Button from 'shared/ui/Button/Button'
 import { ButtonSize } from 'shared/ui/Button/ButtonTypes'
+import Button from 'shared/ui/Button/Button'
+import Camp from 'shared/assets/icons/camp.svg'
 
 import { stepTwoData } from './stepTwoData'
 import { IStepTwoData } from '../StepOne/Step.types'
-import Camp from 'shared/assets/icons/camp.svg'
 import styles from '../RegisterPage/RegisterPage.module.scss'
 interface Props {
   onSubmit: (values: IStepTwoData) => void
