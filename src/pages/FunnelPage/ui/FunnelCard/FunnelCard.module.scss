@@ -16,6 +16,7 @@
 
 	&__content {
 		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 		gap: 15px 60px;
 		padding: 20px 20px 30px 20px;
 	}
@@ -31,8 +32,6 @@
 		}
 
 		.card__content {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
 			padding-bottom: 20px;
 		}
 	}

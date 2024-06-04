@@ -17,13 +17,13 @@ const FunnelCard = (props: FunnelCardProps) => {
     users,
   } = props;
 
-  const firstTenUsers = users.slice(0, 10);
+  const slicedUsers = fluid ? users.slice(0, 12) : users.slice(0, 9);
 
   return (
     <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
       {title && <div className={styles.card__head}><h3>{title}</h3></div>}
       <ul className={styles.card__content}>
-        {firstTenUsers.map(user => (
+        {slicedUsers.map(user => (
           <FunnerCardItem
             key={user.id}
             user={user}
