@@ -1,4 +1,4 @@
-import { loginUser } from 'shared/api/cognito';
+import { loginUser } from 'shared/api/cognito.ts';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 interface AuthState {
@@ -14,7 +14,7 @@ export interface IResponse {
   RefreshToken?: string;
 }
 
-const useAuthStore = create<AuthState>()(
+const useAuth = create<AuthState>()(
   devtools(
     persist(
       set => ({
@@ -41,4 +41,4 @@ const useAuthStore = create<AuthState>()(
   )
 );
 
-export default useAuthStore;
+export default useAuth;
