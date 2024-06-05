@@ -14,8 +14,9 @@ interface Props {
   onClose: () => void;
 }
 export const InviteMember = ({ onClose }: Props) => {
-  const handleSubmit = (values: IFormState) => {
+  const handleSubmit = (values: IFormState, { resetForm }: { resetForm: () => void }) => {
     onClose();
+    resetForm();
     toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
   };
   return (
