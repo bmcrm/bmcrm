@@ -6,7 +6,7 @@ interface CustomInputProps {
   name: string;
   placeholder: string;
   type?: string;
-  label: string;
+  label?: string;
 }
 export const CustomInput = ({ name, placeholder, type = 'text', label }: CustomInputProps) => {
   return (
