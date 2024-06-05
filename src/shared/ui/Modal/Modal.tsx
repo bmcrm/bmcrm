@@ -13,12 +13,7 @@ type ModalProps = {
 const ANIMATION_DELAY = 300;
 
 const Modal = (props: ModalProps) => {
-  const {
-    className,
-    children,
-    isOpen,
-    onClose,
-  } = props;
+  const { className, children, isOpen, onClose } = props;
   const [isClosing, setIsClosing] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const mods: Mods = {
@@ -40,9 +35,12 @@ const Modal = (props: ModalProps) => {
     e.stopPropagation();
   };
 
-  const onKeydown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') closeHandler();
-  }, [closeHandler]);
+  const onKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeHandler();
+    },
+    [closeHandler]
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -56,7 +54,6 @@ const Modal = (props: ModalProps) => {
       document.body.style.overflow = 'auto';
     };
   }, [isOpen, onKeydown]);
-
 
   return (
     <Portal>
