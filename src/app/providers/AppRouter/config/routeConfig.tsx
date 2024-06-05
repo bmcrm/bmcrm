@@ -9,6 +9,10 @@ import DashboardPage from 'pages/DashboardPage';
 import SignInPage from 'pages/SignInPage';
 import SignUpOwnerPage from 'pages/SignUpOwnerPage';
 
+export type AppRouterProps = {
+  authOnly?: boolean;
+} & RouteProps;
+
 export enum AppRoutes {
   DASHBOARD = 'dashboard',
   FINANCES = 'finances',
@@ -33,30 +37,36 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.NOT_FOUND]: '*',
 };
 
-export const routeConfig: Record<AppRoutes, RouteProps> = {
+export const routeConfig: Record<AppRoutes, AppRouterProps> = {
   [AppRoutes.DASHBOARD]: {
     path: RoutePath.dashboard,
     element: <DashboardPage />,
+    authOnly: true,
   },
   [AppRoutes.FUNNEL]: {
     path: RoutePath.funnel,
     element: <FunnelPage />,
+    authOnly: true,
   },
   [AppRoutes.FINANCES]: {
     path: RoutePath.finances,
     element: <FinancesPage />,
+    authOnly: true,
   },
   [AppRoutes.INVENTORY]: {
     path: RoutePath.inventory,
     element: <InventoryPage />,
+    authOnly: true,
   },
   [AppRoutes.SHIFTS]: {
     path: RoutePath.shifts,
     element: <ShiftsPage />,
+    authOnly: true,
   },
   [AppRoutes.PROFILE]: {
     path: RoutePath.profile,
     element: <ProfilePage />,
+    authOnly: true,
   },
   [AppRoutes.SIGN_UP]: {
     path: RoutePath.sign_up,
