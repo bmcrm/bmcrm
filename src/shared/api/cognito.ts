@@ -20,6 +20,7 @@ interface ConfirmCode {
   code: string;
   username: string;
 }
+
 interface SignUpData {
   password: string;
   email: string;
@@ -31,6 +32,7 @@ interface SignUpData {
   lastName: string;
   playaName: string;
 }
+
 export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
   const params: SignUpCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
@@ -91,12 +93,13 @@ export const listUsers = async () => {
     throw error;
   }
 };
-export const loginUser = async ({ username, password }: { username: string; password: string }) => {
+
+export const loginUser = async ({ email, password }: { email: string; password: string }) => {
   const params: InitiateAuthCommandInput = {
     AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: COGNITO_APP_CLIENT_ID,
     AuthParameters: {
-      USERNAME: username,
+      USERNAME: email,
       PASSWORD: password,
     },
   };

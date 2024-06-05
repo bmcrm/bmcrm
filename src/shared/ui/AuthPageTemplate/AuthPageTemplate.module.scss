@@ -1,23 +1,7 @@
 .auth-page {
-	position: relative;
-	z-index: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: var(--color-white);
-
-	&:before {
-		content: '';
-		position: absolute;
-		z-index: -1;
-		top: 30px;
-		right: 10px;
-		display: block;
-		width: 265px;
-		height: 355px;
-		background-image: url('images/auth/page_bg.png');
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: cover;
-	}
+	overflow: hidden;
 }
