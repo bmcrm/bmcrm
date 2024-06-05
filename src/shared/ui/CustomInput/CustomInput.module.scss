@@ -4,16 +4,15 @@
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(4px);
   padding: 10px 20px;
-  color: var(--color-neutral);
   font-family: Poppins;
   font-size: 14px;
   width: 100%;
+
+  &::placeholder {
+    color: var(--color-neutral);
+  }
 }
-.error {
-  color: var(--color-ruby-dark);
-  position: absolute;
-  bottom: 5px;
-}
+
 .label {
   position: relative;
   color: var(--color-black);

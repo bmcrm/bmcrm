@@ -1,19 +1,32 @@
-import { classNames } from 'shared/lib/classNames/classNames';
+import { useCallback, useState } from 'react';
 
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 
-import styles from './SignInPage.module.scss';
+import SignInForm from 'pages/SignInPage/ui/SignInForm/SignInForm.tsx';
+import { type SignInFormData } from '../SignInForm/SignInForm.types';
+import { loginUser } from 'shared/api/cognito';
+import useAuthStore from 'app/providers/Store/useAuthStore';
 
-type SignInPageProps = {
-  className?: string;
-};
+const SignInPage = () => {
+  const { login, isLoggedIn, accessToken } = useAuthStore(state => ({
+    login: state.login,
+    isLoggedIn: state.isLoggedIn,
+    accessToken: state.accessToken,
+  }));
+  const initialValues = {
+    username: '',
+    password: '',
+  };
 
-const SignInPage = ({ className }: SignInPageProps) => {
+  const handleSubmit = (values: SignInFormData) => {
+    login(values);
+  };
+
   return (
-    <AuthPageTemplate className={classNames('', {}, [className])}>
+    <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background>
-        <div className={styles.signIn}></div>
+        <SignInForm onSubmit={handleSubmit} initialValues={initialValues} />
       </AuthFormTemplate>
     </AuthPageTemplate>
   );

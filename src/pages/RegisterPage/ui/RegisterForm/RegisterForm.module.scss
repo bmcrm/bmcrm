@@ -4,10 +4,15 @@
   align-items: center;
 }
 .form {
-  width: 50%;
+  & section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
   display: grid;
-  flex-direction: column;
-  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 20px;
+  column-gap: 30px;
   & button {
     width: 100%;
   }
@@ -36,7 +41,7 @@
 
 .acceptLabel .checkmark {
   position: absolute;
-  top: 0;
+  top: 5px;
   left: 0;
   height: 15px;
   width: 15px;

@@ -1,0 +1,13 @@
+.error {
+  color: var(--color-ruby-dark);
+
+  font-size: var(--font-size-xs);
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  bottom: -25px;
+  left: 10px;
+}

@@ -31,6 +31,10 @@
 			}
 		}
 	}
+	&--clear {
+		background-color: transparent;
+		border: none;
+	}
 
 	// colors
 
@@ -42,6 +46,9 @@
 				color: var(--color-white);
 			}
 		}
+	}
+	&--ruby-light {
+		color: var(--color-ruby-light);
 	}
 	&--white {
 		color: var(--color-white);
@@ -58,6 +65,10 @@
 
 	// sizes
 
+	&--text {
+		padding: 0;
+		font: var(--font-xs);
+	}
 	&--small {
 		padding: 2px 20px;
 		border-radius: 50px;
@@ -75,6 +86,12 @@
 		border-radius: 100px;
 		font: var(--font-m);
 		font-weight: 700;
+	}
+
+	// fluid
+
+	&.fluid {
+		width: 100%;
 	}
 
 	// active
