@@ -18,7 +18,7 @@ const cognitoClient = new CognitoIdentityProviderClient({
 
 interface ConfirmCode {
   code: string;
-  username: string;
+  email: string;
 }
 
 interface SignUpData {
@@ -57,12 +57,12 @@ export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
   return data;
 };
 
-export const confirmEmail = async ({ username, code }: ConfirmCode) => {
+export const confirmEmail = async ({ email, code }: ConfirmCode) => {
   const client = new CognitoIdentityProviderClient({ region: REGION });
   try {
     const command = new ConfirmSignUpCommand({
       ClientId: COGNITO_APP_CLIENT_ID,
-      Username: username,
+      Username: email,
       ConfirmationCode: code,
     });
 
@@ -108,6 +108,7 @@ export const loginUser = async ({ email, password }: { email: string; password: 
     const data = await cognitoClient.send(new InitiateAuthCommand(params));
     return data.AuthenticationResult;
   } catch (error) {
-    console.error('Login failed', error);
+    console.error('User not confirmed', error);
+    throw error;
   }
 };

@@ -13,7 +13,7 @@ import { IconSize } from 'shared/ui/Icon/IconTypes';
 import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import styles from './UserSignInForm.module.scss';
-import { registrationSchema } from 'shared/lib/schemas/schemas.ts';
+import { signInSchema } from 'shared/lib/schemas/schemas';
 
 type SignInFormProps = {
   onSubmit: (values: SignInFormData) => void;
@@ -21,7 +21,7 @@ type SignInFormProps = {
 
 const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
   return (
-    <Formik validationSchema={registrationSchema} onSubmit={onSubmit} initialValues={initialValues}>
+    <Formik validationSchema={signInSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
         {SignInInputs.map(input => (
           <CustomInput key={input.name} {...input} />
