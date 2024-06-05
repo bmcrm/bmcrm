@@ -8,11 +8,27 @@
 
 // links
 
-.linkWrapper {
+.redirect-link {
   font: var(--font-xs);
   text-align: center;
 
+  &.redirect-link--ruby {
+    .link {
+      color: var(--color-ruby-light);
+    }
+  }
+  &.redirect-link--orange {
+    .link {
+      color: var(--color-orange-dark);
+    }
+  }
+
   .link {
-    color: var(--color-ruby-light);
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+    }
   }
 }

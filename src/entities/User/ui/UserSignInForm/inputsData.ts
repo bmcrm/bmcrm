@@ -1,6 +1,6 @@
 export const SignInInputs = [
   {
-    name: 'username',
+    name: 'email',
     placeholder: 'example@gmail.com',
     label: 'Email',
     type: 'email',
@@ -12,3 +12,8 @@ export const SignInInputs = [
     type: 'password',
   },
 ];
+
+export const initialValues = {
+  email: '',
+  password: '',
+};

@@ -1,15 +1,13 @@
-import { memo } from 'react';
-
+import { memo, useCallback } from 'react';
+import toast from 'react-hot-toast';
 import { signUpUser } from 'shared/api/cognito';
 
-import { IInputsData } from './types';
-import { RegisterForm } from '../RegisterForm/RegisterForm';
+import { type IInputsData, OwnerSignUpForm } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
-import toast from 'react-hot-toast';
 
-const RegisterPage = memo(() => {
-  const handleSubmit = (values: IInputsData) => {
+const SignUpOwnerPage = memo(() => {
+  const handleSubmit = useCallback((values: IInputsData) => {
     const credentials = {
       ...values,
     };
@@ -21,15 +19,15 @@ const RegisterPage = memo(() => {
         toast.error('User already exist!', { duration: 2000, position: 'top-right' });
         console.error('Sign-up failed:', error);
       });
-  };
+  }, []);
 
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Create a camp and account'}>
-        <RegisterForm handleSubmit={handleSubmit} />
+        <OwnerSignUpForm handleSubmit={handleSubmit} />
       </AuthFormTemplate>
     </AuthPageTemplate>
   );
 });
 
-export default RegisterPage;
+export default SignUpOwnerPage;

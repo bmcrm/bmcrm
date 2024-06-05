@@ -1,4 +1,4 @@
 export type SignInFormData = {
-  username: string;
+  email: string;
   password: string;
 };

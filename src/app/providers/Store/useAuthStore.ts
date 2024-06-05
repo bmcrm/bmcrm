@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 interface AuthState {
   isLoggedIn: boolean;
-  login: (values: { username: string; password: string }) => void;
+  login: (values: { email: string; password: string }) => void;
   accessToken: string;
   idToken: string;
   refreshToken: string;
