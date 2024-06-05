@@ -8,6 +8,7 @@ import Icon from 'shared/ui/Icon/Icon.tsx';
 import { IconSize } from 'shared/ui/Icon/IconTypes.ts';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
+import useAuth from 'entities/User/model/services/useAuth/useAuth';
 
 type UserAvatarTooltipProps = {
   className?: string;
@@ -15,6 +16,12 @@ type UserAvatarTooltipProps = {
 };
 
 const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) => {
+  const logout = useAuth(state => state.logout);
+
+  const handleLogout = () => {
+    onClick?.();
+    logout();
+  };
   return (
     <Tooltip
       className={classNames(styles.userTooltip, {}, [className])}
@@ -33,10 +40,10 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
           </Link>
         </li>
         <li>
-          <Link to={'/logout'} className={styles.userTooltip__link} onClick={onClick}>
+          <button className={styles.userTooltip__link} onClick={handleLogout}>
             <Icon icon={<LogoutIcon />} size={IconSize.SIZE_24} />
             <span className={styles.text}>Log out</span>
-          </Link>
+          </button>
         </li>
       </ul>
     </Tooltip>

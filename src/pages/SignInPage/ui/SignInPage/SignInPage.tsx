@@ -15,17 +15,21 @@ const SignInPage = memo(() => {
     login: state.login,
   }));
 
-  const handleSubmit = useCallback(async (values: SignInFormData) => {
-    try {
-      await login(values);
-      navigate(RoutePath.funnel);
-    } catch (error) {
-      if (error instanceof Error && error.name === 'UserNotConfirmedException') {
-        setUserEmail(values.email);
-        setIsConfirmedModal(true);
+  const handleSubmit = useCallback(
+    async (values: SignInFormData, { resetForm }: { resetForm: () => void }) => {
+      try {
+        await login(values);
+        resetForm();
+        navigate(RoutePath.funnel, { replace: true });
+      } catch (error) {
+        if (error instanceof Error && error.name === 'UserNotConfirmedException') {
+          setUserEmail(values.email);
+          setIsConfirmedModal(true);
+        }
       }
-    }
-  }, [login, navigate]);
+    },
+    [login, navigate]
+  );
 
   const closeConfirmModal = useCallback(() => {
     setIsConfirmedModal(false);
@@ -34,8 +38,10 @@ const SignInPage = memo(() => {
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background>
-        <UserSignInForm onSubmit={handleSubmit}/>
-        {isConfirmedModal && <UserConfirmModal isOpen={isConfirmedModal} email={userEmail} onClose={closeConfirmModal}/>}
+        <UserSignInForm onSubmit={handleSubmit} />
+        {isConfirmedModal && (
+          <UserConfirmModal isOpen={isConfirmedModal} email={userEmail} onClose={closeConfirmModal} />
+        )}
       </AuthFormTemplate>
     </AuthPageTemplate>
   );

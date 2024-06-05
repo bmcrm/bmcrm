@@ -6,6 +6,7 @@ interface AuthState {
   isLoggedIn: boolean;
   login: (values: { email: string; password: string }) => Promise<void>;
   accessToken: string;
+  logout: () => void;
   idToken: string;
   refreshToken: string;
 }
@@ -36,6 +37,8 @@ const useAuth = create<AuthState>()(
             refreshToken: user.RefreshToken,
           });
         },
+
+        logout: () => set({ isLoggedIn: false, accessToken: '', idToken: '', refreshToken: '' }),
       }),
       {
         name: 'auth',
