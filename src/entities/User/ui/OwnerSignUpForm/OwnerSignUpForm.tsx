@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Link } from 'react-router-dom';
 
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
@@ -12,6 +12,7 @@ import { registrationSchema } from 'shared/lib/schemas/schemas';
 import { ButtonSize } from 'shared/ui/Button/Button.types';
 import { IInputsData } from './OwnerSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
+import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 
 interface Props {
   handleSubmit: (values: IInputsData, { resetForm }: { resetForm: () => void }) => void;
@@ -35,6 +36,8 @@ const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
           ))}
           <label className={styles.acceptLabel}>
             <Field className={styles.checkbox} type='checkbox' name='accept' />
+            <ErrorMessage className={styles.error} name='accept' render={msg => <CustomErrorMessage message={msg} />} />
+
             <span className={styles.checkmark} />
             <p>I agree to the privacy policy</p>
           </label>
