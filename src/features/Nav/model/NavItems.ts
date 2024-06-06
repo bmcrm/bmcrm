@@ -6,24 +6,24 @@ export type NavItemType = {
 };
 
 export const NavItemsList: NavItemType[] = [
-  {
-    path: RoutePath.dashboard,
-    text: 'Dashboard',
-  },
+  // {
+  //   path: RoutePath.dashboard,
+  //   text: 'Dashboard',
+  // },
   {
     path: RoutePath.funnel,
     text: 'Funnel',
   },
-  {
-    path: RoutePath.finances,
-    text: 'Finances',
-  },
-  {
-    path: RoutePath.shifts,
-    text: 'Shifts',
-  },
-  {
-    path: RoutePath.inventory,
-    text: 'Inventory',
-  },
+  // {
+  //   path: RoutePath.finances,
+  //   text: 'Finances',
+  // },
+  // {
+  //   path: RoutePath.shifts,
+  //   text: 'Shifts',
+  // },
+  // {
+  //   path: RoutePath.inventory,
+  //   text: 'Inventory',
+  // },
 ];
