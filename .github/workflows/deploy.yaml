@@ -39,6 +39,7 @@ jobs:
         run: |
           echo "VITE_COGNITO_APP_CLIENT_ID=$(aws ssm get-parameter --name /campers/cognito_client_pool_id | jq '.Parameter.Value' -r)" >> .env
           echo "VITE_COGNITO_AWS_POOL_ID=$(aws ssm get-parameter --name /campers/cognito_user_pool_id | jq '.Parameter.Value' -r)" >> .env
+          cat .env
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -54,5 +55,6 @@ jobs:
 
       - name: Deploy
         run: |
+          cp .env dist/
           aws s3 sync dist/ s3://${{ env.WEBAPP_S3_BUCKET }} --delete
           aws cloudfront create-invalidation --distribution-id ${{ env.WEBAPP_CDN_DISTRIBUTION_ID }} --paths "/*"
