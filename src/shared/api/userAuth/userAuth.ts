@@ -106,6 +106,9 @@ export const loginUser = async ({ email, password }: { email: string; password: 
     return data.AuthenticationResult;
   } catch (error) {
     console.error('User not confirmed', error);
+    console.log('COGNITO_APP_CLIENT_ID >>>>>', EnvConfigs.COGNITO_APP_CLIENT_ID);
+    console.log('COGNITO_AWS_POOL_ID >>>>>>>', EnvConfigs.COGNITO_AWS_POOL_ID);
+
     throw error;
   }
 };
