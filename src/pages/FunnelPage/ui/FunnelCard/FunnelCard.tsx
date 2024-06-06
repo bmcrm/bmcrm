@@ -1,6 +1,10 @@
 import styles from './FunnelCard.module.scss';
 import { classNames } from 'shared/lib/classNames/classNames';
 import FunnerCardItem, { type User } from '../FunnelCardItem/FunnerCardItem';
+import { useToggle } from 'shared/hooks/useToggle';
+import Modal from 'shared/ui/Modal/Modal';
+import { MemberDetails } from '../MemberDetails/MemberDetails';
+import { useState } from 'react';
 
 type FunnelCardProps = {
   className?: string;
@@ -9,25 +13,35 @@ type FunnelCardProps = {
   users: User[];
 };
 
-const FunnelCard = (props: FunnelCardProps) => {
-  const {
-    className,
-    title,
-    fluid,
-    users,
-  } = props;
+export interface UserInformation {
+  name: string;
+}
 
+const FunnelCard = (props: FunnelCardProps) => {
+  const { className, title, fluid, users } = props;
+  const [userDetails, setUserDetails] = useState<UserInformation | null>(null);
+  const { isOpen, toggle } = useToggle();
+  const toggleDetails = (data: UserInformation) => {
+    toggle();
+    setUserDetails(data);
+  };
   const slicedUsers = fluid ? users.slice(0, 12) : users.slice(0, 9);
 
   return (
     <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
-      {title && <div className={styles.card__head}><h3>{title}</h3></div>}
+      {title && (
+        <div className={styles.card__head}>
+          <h3>{title}</h3>
+        </div>
+      )}
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={toggle}>
+          <MemberDetails userDetails={userDetails} />
+        </Modal>
+      )}
       <ul className={styles.card__content}>
         {slicedUsers.map(user => (
-          <FunnerCardItem
-            key={user.id}
-            user={user}
-          />
+          <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user} />
         ))}
       </ul>
     </div>

@@ -19,6 +19,11 @@ export const registrationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
+
+export const inviteMemberSchema = yup.object().shape({
+  email: yup.string().email('Invalid email address').required('Email is required'),
+  type: yup.string().required('Type is required'),
+
 export const signInSchema = yup.object().shape({
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup
@@ -32,6 +37,7 @@ export const signInSchema = yup.object().shape({
 
 export const confirmUserSchema = yup.object().shape({
   code: yup.string().required('Code is required'),
-});
+
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
+export type InviteMemberFormData = yup.InferType<typeof inviteMemberSchema>;
