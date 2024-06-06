@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.588.0",
+    "@aws-sdk/client-ssm": "^3.592.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
