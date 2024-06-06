@@ -16,7 +16,7 @@ const Header = memo(({ className }: HeaderProps) => {
     <header className={classNames(styles.header, {}, [className])}>
       <div className={styles.header__container}>
         <strong className={styles.logo}>
-          <Link to={RoutePath.dashboard} className={styles.logo__link}>
+          <Link to={RoutePath.funnel} className={styles.logo__link}>
             <Logo />
           </Link>
         </strong>

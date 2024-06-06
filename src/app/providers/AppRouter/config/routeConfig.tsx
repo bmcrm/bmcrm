@@ -33,7 +33,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.SHIFTS]: '/shifts',
   [AppRoutes.PROFILE]: '/profile',
   [AppRoutes.SIGN_UP]: '/signup',
-  [AppRoutes.SIGN_IN]: '/signin',
+  [AppRoutes.SIGN_IN]: '/login',
   [AppRoutes.NOT_FOUND]: '*',
 };
 
