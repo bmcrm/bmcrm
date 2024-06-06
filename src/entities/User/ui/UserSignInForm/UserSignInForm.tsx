@@ -16,7 +16,7 @@ import styles from './UserSignInForm.module.scss';
 import { signInSchema } from 'shared/lib/schemas/schemas';
 
 type SignInFormProps = {
-  onSubmit: (values: SignInFormData) => void;
+  onSubmit: (values: SignInFormData, { resetForm }: { resetForm: () => void }) => void;
 };
 
 const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
@@ -34,7 +34,10 @@ const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
           LOG IN
         </Button>
         <p className='redirect-link redirect-link--orange'>
-          Don't have an account yet? <Link className='link' to={RoutePath.sign_up}>Register and create a camp</Link>
+          Don't have an account yet?{' '}
+          <Link className='link' to={RoutePath.sign_up}>
+            Register and create a camp
+          </Link>
         </p>
       </Form>
     </Formik>

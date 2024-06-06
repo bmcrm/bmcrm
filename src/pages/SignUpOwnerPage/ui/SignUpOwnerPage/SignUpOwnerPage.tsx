@@ -5,21 +5,29 @@ import { signUpUser } from 'shared/api/cognito';
 import { type IInputsData, OwnerSignUpForm } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
+import { useNavigate } from 'react-router-dom';
+import { RoutePath } from 'app/providers/AppRouter';
 
 const SignUpOwnerPage = memo(() => {
-  const handleSubmit = useCallback((values: IInputsData) => {
-    const credentials = {
-      ...values,
-    };
-    signUpUser(credentials)
-      .then(response => {
-        console.log('Sign-up successful:', response);
-      })
-      .catch(error => {
-        toast.error('User already exist!', { duration: 2000, position: 'top-right' });
-        console.error('Sign-up failed:', error);
-      });
-  }, []);
+  const navigate = useNavigate();
+  const handleSubmit = useCallback(
+    (values: IInputsData, { resetForm }: { resetForm: () => void }) => {
+      const credentials = {
+        ...values,
+      };
+      signUpUser(credentials)
+        .then(() => {
+          toast.success('Sign-up successful!', { duration: 2000, position: 'top-right' });
+          resetForm();
+          navigate(RoutePath.sign_in, { replace: true });
+        })
+        .catch(error => {
+          toast.error('User already exist!', { duration: 2000, position: 'top-right' });
+          console.error('Sign-up failed:', error);
+        });
+    },
+    [navigate]
+  );
 
   return (
     <AuthPageTemplate>

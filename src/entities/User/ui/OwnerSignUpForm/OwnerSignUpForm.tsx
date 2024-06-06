@@ -14,7 +14,7 @@ import { IInputsData } from './OwnerSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
 
 interface Props {
-  handleSubmit: (values: IInputsData) => void;
+  handleSubmit: (values: IInputsData, { resetForm }: { resetForm: () => void }) => void;
 }
 const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
   return (
@@ -43,7 +43,10 @@ const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
             SIGN UP
           </Button>
           <p className='redirect-link redirect-link--ruby'>
-            Already have an account? <Link className='link' to={RoutePath.sign_in}>Sign in</Link>
+            Already have an account?{' '}
+            <Link className='link' to={RoutePath.sign_in}>
+              Sign in
+            </Link>
           </p>
         </section>
       </Form>
