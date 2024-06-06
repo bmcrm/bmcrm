@@ -34,12 +34,8 @@ jobs:
         run: |
           echo "WEBAPP_S3_BUCKET=$(aws ssm get-parameter --name /webapp/s3/bucket_name | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
           echo "WEBAPP_CDN_DISTRIBUTION_ID=$(aws ssm get-parameter --name /webapp/cdn/distribution_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
-
-      - name: Get SSM Parameters as .env variables (for vite/dotenv)
-        run: |
-          echo "VITE_COGNITO_APP_CLIENT_ID=$(aws ssm get-parameter --name /campers/cognito_client_pool_id | jq '.Parameter.Value' -r)" >> .env
-          echo "VITE_COGNITO_AWS_POOL_ID=$(aws ssm get-parameter --name /campers/cognito_user_pool_id | jq '.Parameter.Value' -r)" >> .env
-          cat .env
+          echo "VITE_COGNITO_APP_CLIENT_ID=$(aws ssm get-parameter --name /campers/cognito_client_pool_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_AWS_POOL_ID=$(aws ssm get-parameter --name /campers/cognito_user_pool_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -55,6 +51,5 @@ jobs:
 
       - name: Deploy
         run: |
-          cp .env dist/
           aws s3 sync dist/ s3://${{ env.WEBAPP_S3_BUCKET }} --delete
           aws cloudfront create-invalidation --distribution-id ${{ env.WEBAPP_CDN_DISTRIBUTION_ID }} --paths "/*"
