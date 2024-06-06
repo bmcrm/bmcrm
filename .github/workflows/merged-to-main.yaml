@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
-      - run: echo "ADD SMOKE TESTS (PLAYWRITE)"
+      - run: npx playwright test
 
   # deploy-to-prod:
   #   needs: [smoke-tests-dev]
