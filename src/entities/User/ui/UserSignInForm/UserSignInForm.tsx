@@ -29,12 +29,12 @@ const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
         <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} color={ButtonColor.RUBY_LIGHT}>
           Forgot Password?
         </Button>
-        <Button type='submit' fluid>
+        <Button type='submit' className={styles.btn} fluid>
           <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           LOG IN
         </Button>
         <p className='redirect-link redirect-link--orange'>
-          Don't have an account yet?{' '}
+          Don't have an account yet? <br className='br-md'/>
           <Link className='link' to={RoutePath.sign_up}>
             Register and create a camp
           </Link>

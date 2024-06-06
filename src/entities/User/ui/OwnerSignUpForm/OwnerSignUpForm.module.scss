@@ -1,3 +1,4 @@
+@import 'breakpoints';
 .flex {
   display: flex;
   gap: 20px;
@@ -16,6 +17,9 @@
   .checkbox {
     border-radius: 4px;
     border: 1px solid var(--color-ruby-light);
+  }
+  @media (width < $md) {
+    grid-template-columns: 1fr;
   }
 }
 
