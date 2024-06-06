@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 // titles
 
 .section-title {
@@ -30,5 +32,22 @@
         text-underline-offset: 2px;
       }
     }
+  }
+}
+
+// br
+
+.br-lg {
+  display: block;
+
+  @media (width < $md) {
+    display: none;
+  }
+}
+.br-md {
+  display: none;
+
+  @media (width < $md) {
+    display: block;
   }
 }
