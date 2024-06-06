@@ -35,7 +35,7 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
     >
       <ul className={styles.userTooltip__list}>
         <li>
-          <Link to={RoutePath.profile} className={styles.userTooltip__link} onClick={onClick}>
+          <Link to={RoutePath.profile} className={classNames(styles.userTooltip__link, {}, [styles.disabled])} onClick={onClick}>
             <Icon icon={<SettingsIcon />} size={IconSize.SIZE_24} />
             <span className={styles.text}>Setting</span>
           </Link>

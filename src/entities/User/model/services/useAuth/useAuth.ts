@@ -1,4 +1,4 @@
-import { confirmEmail, loginUser } from 'shared/api/cognito.ts';
+import { confirmEmail, loginUser } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { ConfirmSignUpCommandOutput } from '@aws-sdk/client-cognito-identity-provider';

@@ -7,13 +7,10 @@ import {
   ConfirmSignUpCommand,
   ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
-
-const REGION = import.meta.env.VITE_REGION;
-const COGNITO_APP_CLIENT_ID = import.meta.env.VITE_COGNITO_APP_CLIENT_ID;
-const COGNITO_AWS_POOL_ID = import.meta.env.VITE_COGNITO_AWS_POOL_ID;
+import { EnvConfigs } from 'shared/config/env/env';
 
 const cognitoClient = new CognitoIdentityProviderClient({
-  region: REGION,
+  region: EnvConfigs.AWS_REGION,
 });
 
 interface ConfirmCode {
@@ -35,7 +32,7 @@ interface SignUpData {
 
 export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
   const params: SignUpCommandInput = {
-    ClientId: COGNITO_APP_CLIENT_ID,
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: userData.email,
     Password: userData.password,
     UserAttributes: [
@@ -58,10 +55,10 @@ export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
 };
 
 export const confirmEmail = async ({ email, code }: ConfirmCode) => {
-  const client = new CognitoIdentityProviderClient({ region: REGION });
+  const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
   try {
     const command = new ConfirmSignUpCommand({
-      ClientId: COGNITO_APP_CLIENT_ID,
+      ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
       Username: email,
       ConfirmationCode: code,
     });
@@ -76,10 +73,10 @@ export const confirmEmail = async ({ email, code }: ConfirmCode) => {
 };
 
 export const listUsers = async () => {
-  const client = new CognitoIdentityProviderClient({ region: REGION });
+  const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
 
   const params = {
-    UserPoolId: COGNITO_AWS_POOL_ID,
+    UserPoolId: EnvConfigs.COGNITO_AWS_POOL_ID,
   };
 
   try {
@@ -97,7 +94,7 @@ export const listUsers = async () => {
 export const loginUser = async ({ email, password }: { email: string; password: string }) => {
   const params: InitiateAuthCommandInput = {
     AuthFlow: 'USER_PASSWORD_AUTH',
-    ClientId: COGNITO_APP_CLIENT_ID,
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     AuthParameters: {
       USERNAME: email,
       PASSWORD: password,
