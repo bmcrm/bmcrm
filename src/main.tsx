@@ -7,7 +7,8 @@ import 'app/styles/index.scss';
 import loadEnvFromSSM from './loadEnvFromSSM';
 
 async function startApp() {
-  const env = await loadEnvFromSSM();
+  const paths = ['/webapp/test/tco_email', '/webapp/test/tco_password'];
+  const env = await loadEnvFromSSM(paths);
   console.log(env);
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

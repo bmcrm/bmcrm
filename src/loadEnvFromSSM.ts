@@ -1,33 +1,35 @@
 import { SSMClient, GetParametersByPathCommand } from '@aws-sdk/client-ssm';
 
-async function loadEnvFromSSM() {
+async function loadEnvFromSSM(paths: string[]) {
   const client = new SSMClient({ region: 'us-east-1' });
 
-  const command = new GetParametersByPathCommand({
-    Path: '/webapp/test/tco_email',
-    Recursive: true,
-    WithDecryption: true,
-  });
+  const env: Record<string, string> = {};
 
-  try {
-    const response = await client.send(command);
-    const parameters = response.Parameters;
+  for (const path of paths) {
+    const command = new GetParametersByPathCommand({
+      Path: path,
+      Recursive: true,
+      WithDecryption: true,
+    });
 
-    const env: Record<string, string> = {};
-    for (const param of parameters || []) {
-      const paramName = param.Name?.split('/').pop();
-      const paramValue = param.Value;
+    try {
+      const response = await client.send(command);
+      const parameters = response.Parameters;
 
-      if (paramName && paramValue) {
-        env[paramName] = paramValue;
+      for (const param of parameters || []) {
+        const paramName = param.Name?.split('/').pop();
+        const paramValue = param.Value;
+
+        if (paramName && paramValue) {
+          env[paramName] = paramValue;
+        }
       }
+    } catch (error) {
+      console.error(`Error loading environment variables from SSM for path ${path}:`, error);
     }
-
-    return env;
-  } catch (error) {
-    console.error('Error loading environment variables from SSM:', error);
-    return {};
   }
+
+  return env;
 }
 
 export default loadEnvFromSSM;
