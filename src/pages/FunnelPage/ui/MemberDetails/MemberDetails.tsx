@@ -8,7 +8,7 @@ import Instagram from 'icons/inst_icon.svg';
 import mockImage from 'images/avatars/photoMock.png';
 import styles from './MemberDetails.module.scss';
 interface Props {
-  userDetails: UserInformation;
+  userDetails: UserInformation | null;
 }
 export const MemberDetails = ({ userDetails }: Props) => {
   return (
@@ -19,7 +19,7 @@ export const MemberDetails = ({ userDetails }: Props) => {
         </picture>
         <div className={styles.firstBlock__infoWrapper}>
           <div className={styles.firstBlock__info}>
-            <h2>{userDetails.name}</h2>
+            <h2>{userDetails?.name}</h2>
             <div>
               <div className={styles.firstBlock__socials}>
                 <Icon icon={<X />} size={IconSize.SIZE_24} />
