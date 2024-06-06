@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 :root {
   // colors
 
@@ -56,4 +58,22 @@
   // sidebar
 
   --sidebar-width: 230px;
+
+  // tablet
+
+  @media (width < $lg) {
+
+    // container
+
+    --container-gap: 35px;
+  }
+
+  // mobile
+
+  @media (width < $md) {
+
+    // container
+
+    --container-gap: 20px;
+  }
 }

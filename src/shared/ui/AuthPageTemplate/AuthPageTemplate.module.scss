@@ -1,8 +1,16 @@
+@import 'breakpoints';
+
 .auth-page {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-grow: 1;
+	padding-top: 70px;
+	padding-bottom: 70px;
 	background-color: var(--color-white);
 	overflow: hidden;
+
+	@media (width < $md) {
+		align-items: flex-start;
+	}
 }
