@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
 export const registrationSchema = yup.object().shape({
   campName: yup.string().required('Camp name is required'),
   campId: yup.string().required('Camp ID is required'),
@@ -19,11 +20,6 @@ export const registrationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-
-export const inviteMemberSchema = yup.object().shape({
-  email: yup.string().email('Invalid email address').required('Email is required'),
-  type: yup.string().required('Type is required'),
-
 export const signInSchema = yup.object().shape({
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup
@@ -35,9 +31,14 @@ export const signInSchema = yup.object().shape({
     .required('Password is required'),
 });
 
+export const inviteMemberSchema = yup.object().shape({
+  email: yup.string().email('Invalid email address').required('Email is required'),
+  type: yup.string().required('Type is required'),
+});
+
 export const confirmUserSchema = yup.object().shape({
   code: yup.string().required('Code is required'),
-
+});
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
 export type InviteMemberFormData = yup.InferType<typeof inviteMemberSchema>;

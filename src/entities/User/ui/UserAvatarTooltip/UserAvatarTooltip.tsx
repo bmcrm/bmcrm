@@ -22,6 +22,7 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
     onClick?.();
     logout();
   };
+
   return (
     <Tooltip
       className={classNames(styles.userTooltip, {}, [className])}

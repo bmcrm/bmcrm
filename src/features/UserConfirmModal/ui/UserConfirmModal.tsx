@@ -5,13 +5,14 @@ import Modal from 'shared/ui/Modal/Modal';
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
+import FormLoader from 'features/FormLoader';
 
 import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/IconTypes';
 import { confirmUserSchema } from 'shared/lib/schemas/schemas';
-import { confirmEmail } from 'shared/api/cognito';
 import toast from 'react-hot-toast';
+import { useAuth } from 'entities/User';
 
 type UserConfirmModalProps = {
   isOpen: boolean;
@@ -29,6 +30,10 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
     onClose,
     email,
   } = props;
+  const { confirm, isLoading } = useAuth(state => ({
+    confirm: state.confirm,
+    isLoading: state.isLoading,
+  }));
 
   const onSubmit = async (values: valuesType) => {
     const data = {
@@ -37,7 +42,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
     };
 
     try {
-      const response = await confirmEmail(data);
+      const response = await confirm(data);
 
       if (response.$metadata.httpStatusCode === 200) {
         onClose();
@@ -65,6 +70,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
           </Button>
         </Form>
       </Formik>
+      {isLoading && <FormLoader/>}
     </Modal>
   );
 };

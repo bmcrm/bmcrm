@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Avatar from 'shared/ui/Avatar/Avatar';
 import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
-import useAuth from 'entities/User/model/services/useAuth/useAuth';
 
 const STATIC_DATA = {
   alt: 'Alex Roman',

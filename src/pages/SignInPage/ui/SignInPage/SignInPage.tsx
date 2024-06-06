@@ -5,14 +5,17 @@ import { type SignInFormData, useAuth, UserSignInForm } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 import { UserConfirmModal } from 'features/UserConfirmModal';
+import FormLoader from 'features/FormLoader';
 import { RoutePath } from 'app/providers/AppRouter';
+import toast from 'react-hot-toast';
 
 const SignInPage = memo(() => {
   const [isConfirmedModal, setIsConfirmedModal] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth(state => ({
+  const { login, isLoading } = useAuth(state => ({
     login: state.login,
+    isLoading: state.isLoading,
   }));
 
   const handleSubmit = useCallback(
@@ -25,6 +28,9 @@ const SignInPage = memo(() => {
         if (error instanceof Error && error.name === 'UserNotConfirmedException') {
           setUserEmail(values.email);
           setIsConfirmedModal(true);
+        }
+        if (error instanceof Error && error.name === 'NotAuthorizedException') {
+          toast.error('Incorrect username or password!', { duration: 4000, position: 'top-center' });
         }
       }
     },
@@ -39,8 +45,13 @@ const SignInPage = memo(() => {
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background>
         <UserSignInForm onSubmit={handleSubmit} />
+        {isLoading && <FormLoader/>}
         {isConfirmedModal && (
-          <UserConfirmModal isOpen={isConfirmedModal} email={userEmail} onClose={closeConfirmModal} />
+          <UserConfirmModal
+            isOpen={isConfirmedModal}
+            email={userEmail}
+            onClose={closeConfirmModal}
+          />
         )}
       </AuthFormTemplate>
     </AuthPageTemplate>
