@@ -34,6 +34,8 @@ jobs:
         run: |
           echo "WEBAPP_S3_BUCKET=$(aws ssm get-parameter --name /webapp/s3/bucket_name | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
           echo "WEBAPP_CDN_DISTRIBUTION_ID=$(aws ssm get-parameter --name /webapp/cdn/distribution_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_APP_CLIENT_ID=$(aws ssm get-parameter --name /campers/cognito_client_pool_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_AWS_POOL_ID=$(aws ssm get-parameter --name /campers/cognito_user_pool_id | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
 
       - name: Setup Node
         uses: actions/setup-node@v4

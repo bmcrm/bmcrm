@@ -1,7 +1,7 @@
 import styles from './Progress.module.scss';
 import { CSSProperties, memo, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import { ProgressColors } from 'shared/ui/Progress/ProgressTypes';
+import { ProgressColors } from 'shared/ui/Progress/Progress.types';
 
 type ProgressProps = {
   className?: string;
