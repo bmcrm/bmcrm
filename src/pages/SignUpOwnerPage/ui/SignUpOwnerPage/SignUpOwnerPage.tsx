@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
 import toast from 'react-hot-toast';
-import { signUpUser } from 'shared/api/cognito';
+import { signUpUser } from 'shared/api/userAuth/userAuth.ts';
 
 import { type IInputsData, OwnerSignUpForm } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';

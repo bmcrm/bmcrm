@@ -2,7 +2,7 @@ import styles from './Funnel.module.scss';
 import { memo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Progress from 'shared/ui/Progress/Progress';
-import { ProgressColors } from 'shared/ui/Progress/ProgressTypes';
+import { ProgressColors } from 'shared/ui/Progress/Progress.types';
 
 type FunnelStage = {
   count: string;
