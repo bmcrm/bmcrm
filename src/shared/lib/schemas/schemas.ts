@@ -7,8 +7,8 @@ export const registrationSchema = yup.object().shape({
   city: yup.string().required('City is required'),
   website: yup.string().matches(urlRegex, 'Invalid website address'),
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
-  firstName: yup.string().required('First name is required').max(32, 'First name must be less than 32 characters'),
-  lastName: yup.string().required('Last name is required').max(32, 'Last name must be less than 32 characters'),
+  firstName: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
+  lastName: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
   playaName: yup.string(),
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup

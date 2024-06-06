@@ -1,3 +1,4 @@
+@import 'breakpoints';
 .error {
   color: var(--color-ruby-dark);
 
@@ -10,4 +11,8 @@
   position: absolute;
   bottom: -25px;
   left: 10px;
+  @media (width < $md) {
+    bottom: -25px;
+    left: 0px;
+  }
 }
