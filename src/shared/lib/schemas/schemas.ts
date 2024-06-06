@@ -2,14 +2,14 @@ import * as yup from 'yup';
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
 
 export const registrationSchema = yup.object().shape({
-  campName: yup.string().required('Camp name is required'),
+  campName: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
   campId: yup.string().required('Camp ID is required'),
   city: yup.string().required('City is required'),
-  website: yup.string().matches(urlRegex, 'Invalid website address').required('Website is required'),
+  website: yup.string().matches(urlRegex, 'Invalid website address'),
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  playaName: yup.string().required('Playa name is required'),
+  firstName: yup.string().required('First name is required').max(32, 'First name must be less than 32 characters'),
+  lastName: yup.string().required('Last name is required').max(32, 'Last name must be less than 32 characters'),
+  playaName: yup.string(),
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup
     .string()

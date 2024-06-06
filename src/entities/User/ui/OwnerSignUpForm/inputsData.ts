@@ -1,7 +1,7 @@
 export const inputsDataUser = [
   {
     name: 'playaName',
-    placeholder: 'Email',
+    placeholder: 'Playa Name',
     label: 'Playa Name',
     type: 'text',
   },
