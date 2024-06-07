@@ -19,7 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
-      - run: npx playwright test src/tests
+      - run: |
+          npx playwright install
+          npx playwright test src/tests
 
   # deploy-to-prod:
   #   needs: [smoke-tests-dev]
