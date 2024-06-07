@@ -10,7 +10,6 @@ import { SignInInputs, initialValues } from './inputsData';
 import Camp from 'shared/assets/icons/camp.svg';
 import { type SignInFormData } from './UserSignInForm.types';
 import { IconSize } from 'shared/ui/Icon/IconTypes';
-import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import styles from './UserSignInForm.module.scss';
 import { signInSchema } from 'shared/lib/schemas/schemas';
@@ -26,9 +25,7 @@ const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
         {SignInInputs.map(input => (
           <CustomInput key={input.name} {...input} />
         ))}
-        <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} color={ButtonColor.RUBY_LIGHT}>
-          Forgot Password?
-        </Button>
+        <Link to={RoutePath.reset_pass} className={styles.link}>Forgot Password?</Link>
         <Button type='submit' className={styles.btn} fluid>
           <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           LOG IN
