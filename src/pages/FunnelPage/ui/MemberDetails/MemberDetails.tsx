@@ -1,4 +1,4 @@
-import { IconSize } from 'shared/ui/Icon/IconTypes';
+import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 import { UserInformation } from '../FunnelCard/FunnelCard';
 
 import Icon from 'shared/ui/Icon/Icon';

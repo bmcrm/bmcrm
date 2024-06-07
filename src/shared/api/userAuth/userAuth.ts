@@ -6,6 +6,8 @@ import {
   InitiateAuthCommandInput,
   ConfirmSignUpCommand,
   ListUsersCommand,
+  ForgotPasswordCommandInput,
+  ForgotPasswordCommand, ConfirmForgotPasswordCommandInput, ConfirmForgotPasswordCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
 
@@ -28,6 +30,12 @@ interface SignUpData {
   firstName: string;
   lastName: string;
   playaName: string;
+}
+
+interface IConfirmResetPassword {
+  email: string;
+  confirmCode: string;
+  newPassword: string;
 }
 
 export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
@@ -109,6 +117,38 @@ export const loginUser = async ({ email, password }: { email: string; password: 
     console.log('COGNITO_APP_CLIENT_ID >>>>>', EnvConfigs.COGNITO_APP_CLIENT_ID);
     console.log('COGNITO_AWS_POOL_ID >>>>>>>', EnvConfigs.COGNITO_AWS_POOL_ID);
 
+    throw error;
+  }
+};
+
+export const initResetPassword = async ({ email }: { email: string }): Promise<unknown> => {
+  const params: ForgotPasswordCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: email,
+  };
+
+  try {
+    const data = await cognitoClient.send(new ForgotPasswordCommand(params));
+    return data;
+  } catch (error) {
+    console.error('Error initiating forgot password:', error);
+    throw error;
+  }
+};
+
+export const confirmResetPassword = async ({ email, confirmCode, newPassword }: IConfirmResetPassword): Promise<unknown> => {
+  const params: ConfirmForgotPasswordCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: email,
+    ConfirmationCode: confirmCode,
+    Password: newPassword,
+  };
+
+  try {
+    const data = await cognitoClient.send(new ConfirmForgotPasswordCommand(params));
+    return data;
+  } catch (error) {
+    console.error('Error confirming forgot password:', error);
     throw error;
   }
 };

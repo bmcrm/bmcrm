@@ -22,3 +22,15 @@
 	}
 }
 
+.link {
+	font: var(--font-xs);
+	color: var(--color-ruby-light);
+
+	@media (hover:hover) {
+		&:hover {
+			text-decoration: underline;
+			text-underline-offset: 2px;
+		}
+	}
+}
+

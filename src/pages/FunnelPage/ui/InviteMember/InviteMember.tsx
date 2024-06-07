@@ -2,7 +2,7 @@ import { Field, Form, Formik } from 'formik';
 import Button from 'shared/ui/Button/Button';
 import styles from './InviteMember.module.scss';
 import toast from 'react-hot-toast';
-import { inviteMemberSchema } from 'shared/lib/schemas/schemas';
+import { inviteMemberSchema } from 'shared/lib/schemas/validations.ts';
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 
 interface IFormState {
