@@ -23,7 +23,7 @@ const FunnelPage = memo(() => {
 
   return (
     <>
-      <Sidebar title={'Funnel Page Sidebar'} />
+      <Sidebar title={'Funnel Page Sidebar'} datalist={['Leads', 'Qualified', 'Intent', 'Campers']} />
       <section className={classNames(styles.funnel, {}, [])}>
         <div className={styles.funnel__head}>
           <Funnel
