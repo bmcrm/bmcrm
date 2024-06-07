@@ -1,12 +1,20 @@
 .sidebar {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	flex-shrink: 0;
-	width: 100%;
-	max-width: var(--sidebar-width);
-	padding-left: 50px;
-	background-color: transparent;
-	transition: max-width 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: var(--sidebar-width);
+  padding-left: 50px;
+  background-color: transparent;
+  transition: max-width 0.3s;
+  &__item {
+    padding: 15px;
+    font-size: var(--font-size-m);
+  }
+  &__item:not(:last-child) {
+    border-radius: 1px;
+    border-bottom: 1px solid rgba(139, 16, 62, 0.3);
+  }
 }

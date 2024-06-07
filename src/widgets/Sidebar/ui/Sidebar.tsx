@@ -5,12 +5,19 @@ import { classNames } from 'shared/lib/classNames/classNames';
 type SidebarProps = {
   className?: string;
   title?: string;
+  datalist: string[];
 };
 
-const Sidebar = memo(({ className, title }: SidebarProps) => {
+const Sidebar = memo(({ className, title, datalist }: SidebarProps) => {
   return (
     <aside className={classNames(styles.sidebar, {}, [className])}>
-      <h2>{title}</h2>
+      <ul>
+        {datalist.map(item => (
+          <li key={item} className={styles.sidebar__item}>
+            {item}
+          </li>
+        ))}
+      </ul>
     </aside>
   );
 });
