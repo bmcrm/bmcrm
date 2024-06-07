@@ -1,7 +1,7 @@
 import styles from './Icon.module.scss';
 import { memo, ReactNode } from 'react';
 import { classNames, Mods } from 'shared/lib/classNames/classNames';
-import { IconSize } from './IconTypes';
+import { IconSize } from './Icon.types.ts';
 
 type IconProps = {
   className?: string;
