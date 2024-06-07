@@ -10,7 +10,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'react-hooks'],
   rules: {
-    indent: [2, 2],
+    indent: [2, 2, { "SwitchCase": 1 }],
     quotes: [2, 'single'],
     semi: [2, 'always'],
     'react-refresh/only-export-components': [

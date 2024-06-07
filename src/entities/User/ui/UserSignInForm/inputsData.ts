@@ -7,7 +7,7 @@ export const SignInInputs = [
   },
   {
     name: 'password',
-    placeholder: '********',
+    placeholder: '∗∗∗∗∗∗∗∗',
     label: 'Password',
     type: 'password',
   },

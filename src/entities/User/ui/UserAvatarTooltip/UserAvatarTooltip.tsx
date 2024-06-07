@@ -5,7 +5,7 @@ import { RoutePath } from 'app/providers/AppRouter';
 import { classNames } from 'shared/lib/classNames/classNames.ts';
 import Tooltip from 'shared/ui/Tooltip/Tooltip.tsx';
 import Icon from 'shared/ui/Icon/Icon.tsx';
-import { IconSize } from 'shared/ui/Icon/IconTypes.ts';
+import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
 import useAuth from 'entities/User/model/services/useAuth/useAuth';
