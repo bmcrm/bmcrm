@@ -11,8 +11,14 @@ import styles from './ResetPassStepTwo.module.scss';
 import { confirmResetPassSchema } from 'shared/lib/schemas/validations';
 import { confirmationInputs, initialValues } from './inputsData';
 
+export type ResetPassStepTwoTypes = {
+  confirmCode: string,
+  newPassword: string,
+  password_confirm: string,
+};
+
 type ResetPassStepTwoProps = {
-  onSubmit: (values: { confirmCode: string, newPassword: string, password_confirm: string }, { resetForm }: { resetForm: () => void }) => void;
+  onSubmit: (values: ResetPassStepTwoTypes, { resetForm }: { resetForm: () => void }) => void;
 };
 
 const ResetPassStepTwo = memo(({ onSubmit }: ResetPassStepTwoProps) => {

@@ -1,12 +1,14 @@
 import { memo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import ResetPassFormTemplate from 'shared/ui/ResetPassFormTemplate/ResetPassFormTemplate';
-import { ResetPassStepOne, ResetPassStepTwo } from 'features/ResetPassForm';
+import { ResetPassStepOne, ResetPassStepTwo, type ResetPassStepTwoTypes } from 'features/ResetPassForm';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 import FormLoader from 'features/FormLoader';
+import toast from 'react-hot-toast';
 
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
@@ -46,17 +48,35 @@ const ResetPassPage = memo(() => {
     isLoading: state.isLoading,
   }));
 
-  const handleStepOneSubmit = useCallback(async (values: { email: string }) => {
+  const errorHandler = (error: CognitoIdentityProviderServiceException) => {
+    switch (error.name) {
+      case 'UserNotFoundException': {
+        toast.error('This email was not found!', { duration: 4000, position: 'top-center' });
+        break;
+      }
+      case 'CodeMismatchException': {
+        toast.error('Invalid verification code provided, please try again!', { duration: 4000, position: 'top-center' });
+        break;
+      }
+      default: {
+        toast.error('Oops, something wrong! Try again later!', { duration: 4000, position: 'top-center' });
+        break;
+      }
+    }
+  };
+
+  const handleStepOneSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
     try {
       await initResetPass(values);
       setEmail(values.email);
+      resetForm();
       setStep(2);
     } catch (error) {
-      console.log(error);
+      errorHandler(error as CognitoIdentityProviderServiceException);
     }
   }, [initResetPass]);
 
-  const handleStepTwoSubmit = useCallback(async (values: { confirmCode: string, newPassword: string, password_confirm: string }) => {
+  const handleStepTwoSubmit = useCallback(async (values: ResetPassStepTwoTypes, { resetForm }: { resetForm: () => void }) => {
     const data = {
       confirmCode: values.confirmCode,
       newPassword: values.newPassword,
@@ -65,11 +85,12 @@ const ResetPassPage = memo(() => {
 
     try {
       await confirmResetPass(data);
+      resetForm();
       setStep(3);
     } catch (error) {
-      console.log(error);
+      errorHandler(error as CognitoIdentityProviderServiceException);
     }
-  }, []);
+  }, [confirmResetPass, email]);
 
   const btnStepThreeHandler = useCallback(() => {
     navigate(RoutePath.sign_in, { replace: true });
@@ -80,6 +101,7 @@ const ResetPassPage = memo(() => {
   return (
     <AuthPageTemplate>
       <ResetPassFormTemplate badge={badgeLabel} desc={descLabel} background={bg}>
+        {isLoading && <FormLoader/>}
         {
           step === 1
             ? <ResetPassStepOne onSubmit={handleStepOneSubmit}/>
@@ -93,7 +115,6 @@ const ResetPassPage = memo(() => {
               )
         }
       </ResetPassFormTemplate>
-      {isLoading && <FormLoader/>}
     </AuthPageTemplate>
   );
 });

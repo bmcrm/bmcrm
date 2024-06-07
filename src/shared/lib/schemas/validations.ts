@@ -45,8 +45,8 @@ export const initResetPassSchema = yup.object().shape({
 });
 
 export const confirmResetPassSchema = yup.object().shape({
-  code: yup.string().required('Code is required'),
-  password: yup
+  confirmCode: yup.string().required('Code is required'),
+  newPassword: yup
     .string()
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -54,7 +54,7 @@ export const confirmResetPassSchema = yup.object().shape({
     .matches(/[0-9]/, 'Password must contain at least one numeric character')
     .required('Password is required'),
   password_confirm: yup.string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
+    .oneOf([yup.ref('newPassword')], 'Passwords must match')
     .required('Password confirmation is required'),
 });
 

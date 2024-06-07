@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik';
+import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 
 import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 import Modal from 'shared/ui/Modal/Modal';
@@ -10,7 +11,7 @@ import FormLoader from 'features/FormLoader';
 import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
-import { confirmUserSchema } from 'shared/lib/schemas/validations.ts';
+import { confirmUserSchema } from 'shared/lib/schemas/validations';
 import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
 
@@ -35,11 +36,21 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
     isLoading: state.isLoading,
   }));
 
+  const errorHandler = (error: CognitoIdentityProviderServiceException) => {
+    switch (error.name) {
+      case 'CodeMismatchException': {
+        toast.error('Invalid verification code provided, please try again!', { duration: 4000, position: 'top-center' });
+        break;
+      }
+      default: {
+        toast.error('Oops, something wrong! Try again later!', { duration: 4000, position: 'top-center' });
+        break;
+      }
+    }
+  };
+
   const onSubmit = async (values: valuesType) => {
-    const data = {
-      email: email,
-      ...values,
-    };
+    const data = { email, ...values };
 
     try {
       const response = await confirm(data);
@@ -49,9 +60,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
       }
 
     } catch (error) {
-      if (error instanceof Error && error.name === 'CodeMismatchException') {
-        toast.error('Invalid verification code provided, please try again!', { duration: 4000, position: 'top-center' });
-      }
+      errorHandler(error as CognitoIdentityProviderServiceException);
     }
   };
 
