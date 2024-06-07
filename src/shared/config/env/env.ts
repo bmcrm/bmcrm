@@ -4,4 +4,5 @@ export const EnvConfigs = {
   COGNITO_AWS_POOL_ID: import.meta.env.VITE_COGNITO_AWS_POOL_ID || '',
   TEST_ACCOUNT_TCO_EMAIL: import.meta.env.VITE_TEST_ACCOUNT_TCO_EMAIL || '',
   TEST_ACCOUNT_TCO_PASSWORD: import.meta.env.VITE_TEST_ACCOUNT_TCO_PASSWORD || '',
+  CAMPERS_API_URL: import.meta.env.VITE_CAMPERS_API_URL || '',
 };

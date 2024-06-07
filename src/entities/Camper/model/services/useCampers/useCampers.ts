@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { ICamper } from '../../type';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
+import { EnvConfigs } from 'shared/config/env/env';
 
 interface CamperState {
   isLoading: boolean;
@@ -20,7 +21,7 @@ const useCampers = create<CamperState>()(
     getCampers: async () => {
       try {
         set({ isLoading: true });
-        const response = await axios.get<ICamper[]>('https://6645accbb8925626f892a498.mockapi.io/campers');
+        const response = await axios.get<ICamper[]>(EnvConfigs.CAMPERS_API_URL);
         const data = response.data.filter(camper => camper.campId === 'DO12345');
         set({ isLoading: false, campers: data });
       } catch (error) {
@@ -32,7 +33,7 @@ const useCampers = create<CamperState>()(
     getCamperById: async (id: string) => {
       try {
         set({ isLoading: true });
-        const { data } = await axios.get<ICamper>(`https://6645accbb8925626f892a498.mockapi.io/campers/${id}`);
+        const { data } = await axios.get<ICamper>(EnvConfigs.CAMPERS_API_URL + '/' + id);
         return data;
       } catch (error) {
         throw new Error('Error fetching campers: ' + error);
