@@ -11,7 +11,8 @@
     "lint:fix": "eslint **/*.{js,jsx,ts,tsx} --fix",
     "test:unit": "jest --config ./config/jest/jest.config.ts",
     "test-ct": "playwright test -c playwright-ct.config.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e-coverage": "nyc --reporter=lcov playwright test"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.588.0",

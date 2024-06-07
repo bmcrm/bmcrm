@@ -7,7 +7,9 @@ import {
   ConfirmSignUpCommand,
   ListUsersCommand,
   ForgotPasswordCommandInput,
-  ForgotPasswordCommand, ConfirmForgotPasswordCommandInput, ConfirmForgotPasswordCommand,
+  ForgotPasswordCommand,
+  ConfirmForgotPasswordCommandInput,
+  ConfirmForgotPasswordCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
 
@@ -80,25 +82,6 @@ export const confirmEmail = async ({ email, code }: ConfirmCode) => {
   }
 };
 
-export const listUsers = async () => {
-  const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
-
-  const params = {
-    UserPoolId: EnvConfigs.COGNITO_AWS_POOL_ID,
-  };
-
-  try {
-    const command = new ListUsersCommand(params);
-
-    const response = await client.send(command);
-
-    return response.Users;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-};
-
 export const loginUser = async ({ email, password }: { email: string; password: string }) => {
   const params: InitiateAuthCommandInput = {
     AuthFlow: 'USER_PASSWORD_AUTH',
@@ -136,7 +119,11 @@ export const initResetPassword = async ({ email }: { email: string }): Promise<u
   }
 };
 
-export const confirmResetPassword = async ({ email, confirmCode, newPassword }: IConfirmResetPassword): Promise<unknown> => {
+export const confirmResetPassword = async ({
+  email,
+  confirmCode,
+  newPassword,
+}: IConfirmResetPassword): Promise<unknown> => {
   const params: ConfirmForgotPasswordCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,

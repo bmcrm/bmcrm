@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import svgr from 'vite-plugin-svgr';
-
+import istanbul from 'vite-plugin-istanbul';
 export default defineConfig({
   plugins: [
     react(),
@@ -11,6 +11,11 @@ export default defineConfig({
       svgrOptions: {
         exportType: 'default',
       },
+    }),
+    istanbul({
+      include: ['src/**/*'], // files to track coverage on
+      exclude: ['node_modules'], // files to NOT track coverage on
+      requireEnv: false,
     }),
   ],
   css: {
