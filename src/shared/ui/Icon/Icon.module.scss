@@ -1,5 +1,6 @@
 .icon {
 	display: block;
+	flex-shrink: 0;
 
 	&.icon-12 {
 		width: 12px;
