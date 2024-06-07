@@ -1,5 +1,5 @@
 import styles from './FunnelPage.module.scss';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Sidebar from 'widgets/Sidebar';
 import Button from 'shared/ui/Button/Button';
@@ -9,9 +9,17 @@ import Modal from 'shared/ui/Modal/Modal';
 import { FUNNEL_STATIC } from './data';
 import { InviteMember } from '../InviteMember/InviteMember';
 import { useToggle } from 'shared/hooks/useToggle';
+import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
 const FunnelPage = memo(() => {
   const { toggle, isOpen } = useToggle();
+  const { getCampers, campers } = useCampers(state => ({
+    getCampers: state.getCampers,
+    campers: state.campers,
+  }));
+  useEffect(() => {
+    getCampers();
+  }, [getCampers]);
 
   return (
     <>
@@ -34,10 +42,14 @@ const FunnelPage = memo(() => {
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users} />
-          <FunnelCard title={'Qualified'} users={FUNNEL_STATIC.qualified.users} />
-          <FunnelCard title={'Intent'} users={FUNNEL_STATIC.intent.users} />
-          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={FUNNEL_STATIC.campers.users} />
+          <FunnelCard title={'Leads'} users={campers.filter(camper => camper.role === 'lead')} />
+          <FunnelCard title={'Qualified'} users={campers.filter(camper => camper.role === 'qualified')} />
+          <FunnelCard title={'Intent'} users={campers.filter(camper => camper.role === 'intent')} />
+          <FunnelCard
+            title={'Campers'}
+            fluid={window.innerWidth >= 1024}
+            users={campers.filter(camper => camper.role === 'camper')}
+          />
         </div>
       </section>
     </>

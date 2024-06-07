@@ -1,7 +1,7 @@
 import styles from './FunnerCardItem.module.scss';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Avatar from 'shared/ui/Avatar/Avatar';
-import { UserInformation } from '../FunnelCard/FunnelCard';
+import { ICamper } from 'entities/Camper/model/type';
 
 export type User = {
   id: string;
@@ -11,16 +11,19 @@ export type User = {
 
 type FunnerCardItemProps = {
   className?: string;
-  user: User;
-  openDetails: (data: UserInformation) => void;
+  user: ICamper;
+  openDetails: (id: string) => void;
 };
 
 const FunnerCardItem = ({ className, user, openDetails }: FunnerCardItemProps) => {
   return (
-    <li className={classNames(styles.cardItem, { [styles.online]: user.online }, [className])}>
-      <Avatar alt={user.name} size={30} />
-      <p onClick={() => openDetails({ name: user.name })} className={styles.cardItem__name}>
-        {user.name}
+    <li
+      onClick={() => openDetails(user.id)}
+      className={classNames(styles.cardItem, { [styles.online]: user.id }, [className])}
+    >
+      <Avatar alt={user.avatar} size={30} />
+      <p className={styles.cardItem__name}>
+        {user.firstName} {user.lastName}
       </p>
     </li>
   );
