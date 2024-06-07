@@ -1,3 +1,4 @@
+
 import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 import { UserInformation } from '../FunnelCard/FunnelCard';
 
@@ -7,10 +8,24 @@ import Facebook from 'icons/fb_icon.svg';
 import Instagram from 'icons/inst_icon.svg';
 import mockImage from 'images/avatars/photoMock.png';
 import styles from './MemberDetails.module.scss';
+import { useEffect, useState } from 'react';
+import { ICamper } from 'entities/Camper/model/type';
+import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
+import Loader from 'shared/ui/Loader/Loader';
+
 interface Props {
-  userDetails: UserInformation | null;
+  camperId: string;
 }
-export const MemberDetails = ({ userDetails }: Props) => {
+
+export const MemberDetails = ({ camperId }: Props) => {
+  const [camper, setCamper] = useState<ICamper | null>(null);
+  const { getCamperById, isLoading } = useCampers(state => ({
+    getCamperById: state.getCamperById,
+    isLoading: state.isLoading,
+  }));
+  useEffect(() => {
+    getCamperById(camperId).then(data => setCamper(data));
+  }, [camperId, getCamperById]);
   return (
     <article className={styles.wrapper}>
       <section className={styles.firstBlock}>
@@ -19,7 +34,9 @@ export const MemberDetails = ({ userDetails }: Props) => {
         </picture>
         <div className={styles.firstBlock__infoWrapper}>
           <div className={styles.firstBlock__info}>
-            <h2>{userDetails?.name}</h2>
+            <h2>
+              {camper?.firstName} {camper?.lastName}
+            </h2>
             <div>
               <div className={styles.firstBlock__socials}>
                 <Icon icon={<X />} size={IconSize.SIZE_24} />
@@ -43,33 +60,21 @@ export const MemberDetails = ({ userDetails }: Props) => {
       <section className={styles.summaryBlock}>
         <h2>Summary</h2>
         <div className={styles.separator} />
-        <p>
-          Real Estate Agent in FL. Beloved wife of Alex Roman. Occasionally DJing. Passionate about interior design.
-          Good leadership skills and communication. Responsible and gets shit done.
-        </p>
+        {isLoading && <Loader />}
+        <p>{camper?.summary}</p>
       </section>
       <section className={styles.historyBlock}>
         <h2>History</h2>
         <div className={styles.separator} />
         <ul>
-          <li>
-            <span>2024</span>
-            <p>
-              Planning to build their own camp Hakuna Matata with the Miami Group. Need WAP anyways. Sync Up in April.
-            </p>
-          </li>
-          <li>
-            <span>2023</span>
-            <p>
-              Came as a Crew with WAP. Helped with the lounge, kitchen, and the art. Organized the ambient lights and
-              shit. Voulonteered. Camp fee paid in full in April. Brought food, water, drinks. Stayed in an RV with Alex
-              Roman. Part of the Miami Group.
-            </p>
-          </li>
-          <li>
-            <span>2022</span>
-            <p>Stayed with differen camp</p>
-          </li>
+          {isLoading && <Loader />}
+
+          {camper?.history.map((item, index) => (
+            <li key={index}>
+              <span>{item.year}</span>
+              <p>{item.text}</p>
+            </li>
+          ))}
         </ul>
       </section>
     </article>
