@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint **/*.{js,jsx,ts,tsx}",
     "lint:fix": "eslint **/*.{js,jsx,ts,tsx} --fix",
-    "test:unit": "jest --config ./config/jest/jest.config.ts"
+    "test:unit": "jest --config ./config/jest/jest.config.ts",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.588.0",
@@ -26,11 +27,13 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@playwright/experimental-ct-react": "^1.44.1",
     "@playwright/test": "^1.44.1",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
