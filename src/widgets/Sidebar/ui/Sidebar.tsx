@@ -8,7 +8,7 @@ type SidebarProps = {
   datalist: string[];
 };
 
-const Sidebar = memo(({ className, title, datalist }: SidebarProps) => {
+const Sidebar = memo(({ className, datalist }: SidebarProps) => {
   return (
     <aside className={classNames(styles.sidebar, {}, [className])}>
       <ul>
