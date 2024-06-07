@@ -19,9 +19,16 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
-      - run: |
-          npx playwright install
-          npx playwright test src/tests
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
 
   # deploy-to-prod:
   #   needs: [smoke-tests-dev]
