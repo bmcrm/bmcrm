@@ -8,7 +8,7 @@ function getParameter(name: string): Promise<string> {
   return resp.then(r => r.Parameter?.Value || '');
 }
 
-const LOGIN_URL = 'https://app.dev.bmcrm.camp/login';
+const LOGIN_URL = 'https://app.dev.bmcrm.camp/funnel';
 const RESET_URL = 'https://app.dev.bmcrm.camp/reset-password';
 
 // we have separate test account for a TCO persona and a Camper persona
