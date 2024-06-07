@@ -6,6 +6,7 @@ import axios from 'axios';
 interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
+  isError: string | null;
   getCampers(): Promise<void>;
   getCamperById(id: string): Promise<ICamper>;
 }
@@ -13,18 +14,31 @@ interface CamperState {
 const useCampers = create<CamperState>()(
   devtools(set => ({
     isLoading: false,
+    isError: null,
     campers: [],
 
     getCampers: async () => {
-      set({ isLoading: true });
-      const response = await axios.get<ICamper[]>('https://6645accbb8925626f892a498.mockapi.io/campers');
-      const data = response.data.filter(camper => camper.campId === 'DO12345');
-      set({ isLoading: false, campers: data });
+      try {
+        set({ isLoading: true });
+        const response = await axios.get<ICamper[]>('https://6645accbb8925626f892a498.mockapi.io/campers');
+        const data = response.data.filter(camper => camper.campId === 'DO12345');
+        set({ isLoading: false, campers: data });
+      } catch (error) {
+        throw new Error('Error fetching campers: ' + error);
+      } finally {
+        set({ isLoading: false });
+      }
     },
     getCamperById: async (id: string) => {
-      set({ isLoading: true });
-      const { data } = await axios.get<ICamper>(`https://6645accbb8925626f892a498.mockapi.io/campers/${id}`);
-      return data;
+      try {
+        set({ isLoading: true });
+        const { data } = await axios.get<ICamper>(`https://6645accbb8925626f892a498.mockapi.io/campers/${id}`);
+        return data;
+      } catch (error) {
+        throw new Error('Error fetching campers: ' + error);
+      } finally {
+        set({ isLoading: false });
+      }
     },
   }))
 );

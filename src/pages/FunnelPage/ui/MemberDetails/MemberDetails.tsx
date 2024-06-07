@@ -16,7 +16,10 @@ interface Props {
 
 export const MemberDetails = ({ camperId }: Props) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
-  const getCamperById = useCampers(state => state.getCamperById);
+  const { getCamperById, isLoading } = useCampers(state => ({
+    getCamperById: state.getCamperById,
+    isLoading: state.isLoading,
+  }));
   useEffect(() => {
     getCamperById(camperId).then(data => setCamper(data));
   }, [camperId, getCamperById]);
@@ -54,22 +57,21 @@ export const MemberDetails = ({ camperId }: Props) => {
       <section className={styles.summaryBlock}>
         <h2>Summary</h2>
         <div className={styles.separator} />
-        <p>{camper?.summary ? camper?.summary : <Loader />}</p>
+        {isLoading && <Loader />}
+        <p>{camper?.summary}</p>
       </section>
       <section className={styles.historyBlock}>
         <h2>History</h2>
         <div className={styles.separator} />
         <ul>
-          {camper?.history ? (
-            camper?.history.map((item, index) => (
-              <li key={index}>
-                <span>{item.year}</span>
-                <p>{item.text}</p>
-              </li>
-            ))
-          ) : (
-            <Loader />
-          )}
+          {isLoading && <Loader />}
+
+          {camper?.history.map((item, index) => (
+            <li key={index}>
+              <span>{item.year}</span>
+              <p>{item.text}</p>
+            </li>
+          ))}
         </ul>
       </section>
     </article>

@@ -7,6 +7,7 @@ import { MemberDetails } from '../MemberDetails/MemberDetails';
 import { useState } from 'react';
 import { ICamper } from 'entities/Camper/model/type';
 import Loader from 'shared/ui/Loader/Loader';
+import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
 type FunnelCardProps = {
   className?: string;
@@ -24,6 +25,7 @@ const FunnelCard = (props: FunnelCardProps) => {
   const { className, title, fluid, users } = props;
   const [userDetails, setUserDetails] = useState<string>('');
   const { isOpen, toggle } = useToggle();
+  const isLoading = useCampers(state => state.isLoading);
   const toggleDetails = (id: string) => {
     toggle();
     setUserDetails(id);
@@ -43,7 +45,7 @@ const FunnelCard = (props: FunnelCardProps) => {
         </Modal>
       )}
       <ul className={styles.card__content}>
-        {users.length === 0 && <Loader />}
+        {isLoading && <Loader />}
         {slicedUsers.map(user => (
           <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user} />
         ))}
