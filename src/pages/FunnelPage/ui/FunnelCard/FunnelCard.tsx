@@ -45,7 +45,7 @@ const FunnelCard = (props: FunnelCardProps) => {
         </Modal>
       )}
       <ul className={styles.card__content}>
-        {isLoading && <Loader />}
+        {isLoading && !slicedUsers.length && <Loader />}
         {slicedUsers.map(user => (
           <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user} />
         ))}
