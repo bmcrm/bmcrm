@@ -8,6 +8,7 @@ import styles from './MemberDetails.module.scss';
 import { useEffect, useState } from 'react';
 import { ICamper } from 'entities/Camper/model/type';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
+import Loader from 'shared/ui/Loader/Loader';
 
 interface Props {
   camperId: string;
@@ -17,7 +18,6 @@ export const MemberDetails = ({ camperId }: Props) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
   const getCamperById = useCampers(state => state.getCamperById);
   useEffect(() => {
-    // Your code here
     getCamperById(camperId).then(data => setCamper(data));
   }, [camperId, getCamperById]);
   return (
@@ -54,18 +54,22 @@ export const MemberDetails = ({ camperId }: Props) => {
       <section className={styles.summaryBlock}>
         <h2>Summary</h2>
         <div className={styles.separator} />
-        <p>{camper?.summary}</p>
+        <p>{camper?.summary ? camper?.summary : <Loader />}</p>
       </section>
       <section className={styles.historyBlock}>
         <h2>History</h2>
         <div className={styles.separator} />
         <ul>
-          {camper?.history.map((item, index) => (
-            <li key={index}>
-              <span>{item.year}</span>
-              <p>{item.text}</p>
-            </li>
-          ))}
+          {camper?.history ? (
+            camper?.history.map((item, index) => (
+              <li key={index}>
+                <span>{item.year}</span>
+                <p>{item.text}</p>
+              </li>
+            ))
+          ) : (
+            <Loader />
+          )}
         </ul>
       </section>
     </article>

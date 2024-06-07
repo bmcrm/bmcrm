@@ -6,6 +6,7 @@ import Modal from 'shared/ui/Modal/Modal';
 import { MemberDetails } from '../MemberDetails/MemberDetails';
 import { useState } from 'react';
 import { ICamper } from 'entities/Camper/model/type';
+import Loader from 'shared/ui/Loader/Loader';
 
 type FunnelCardProps = {
   className?: string;
@@ -42,6 +43,7 @@ const FunnelCard = (props: FunnelCardProps) => {
         </Modal>
       )}
       <ul className={styles.card__content}>
+        {users.length === 0 && <Loader />}
         {slicedUsers.map(user => (
           <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user} />
         ))}
