@@ -6,20 +6,22 @@ import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 
 import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/IconTypes';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 import styles from './ResetPassStepTwo.module.scss';
+import { confirmResetPassSchema } from 'shared/lib/schemas/validations';
+import { confirmationInputs, initialValues } from './inputsData';
 
 type ResetPassStepTwoProps = {
-  // onSubmit: (values: SignInFormData, { resetForm }: { resetForm: () => void }) => void;
-  onSubmit: () => void;
+  onSubmit: (values: { confirmCode: string, newPassword: string, password_confirm: string }, { resetForm }: { resetForm: () => void }) => void;
 };
 
 const ResetPassStepTwo = memo(({ onSubmit }: ResetPassStepTwoProps) => {
   return (
-    <Formik onSubmit={onSubmit} initialValues={{ password: '', confirm_password: '' }}>
+    <Formik validationSchema={confirmResetPassSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
-        <CustomInput name={'password'} type={'password'} label={'New Password'} placeholder={'********'}/>
-        <CustomInput name={'confirm_password'} type={'password'} label={'Confirm Password'} placeholder={'********'}/>
+        {confirmationInputs.map(input => (
+          <CustomInput key={input.name} {...input} />
+        ))}
         <Button type='submit' className={styles.btn} fluid>
           <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           RESET PASSWORD

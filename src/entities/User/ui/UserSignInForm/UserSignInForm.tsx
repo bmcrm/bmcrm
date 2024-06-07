@@ -9,10 +9,10 @@ import Icon from 'shared/ui/Icon/Icon';
 import { SignInInputs, initialValues } from './inputsData';
 import Camp from 'shared/assets/icons/camp.svg';
 import { type SignInFormData } from './UserSignInForm.types';
-import { IconSize } from 'shared/ui/Icon/IconTypes';
+import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 import { RoutePath } from 'app/providers/AppRouter';
 import styles from './UserSignInForm.module.scss';
-import { signInSchema } from 'shared/lib/schemas/schemas';
+import { signInSchema } from 'shared/lib/schemas/validations.ts';
 
 type SignInFormProps = {
   onSubmit: (values: SignInFormData, { resetForm }: { resetForm: () => void }) => void;

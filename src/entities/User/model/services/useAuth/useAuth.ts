@@ -1,4 +1,10 @@
-import { confirmEmail, loginUser, signUpUser } from 'shared/api/userAuth/userAuth';
+import {
+  confirmEmail,
+  confirmResetPassword,
+  initResetPassword,
+  loginUser,
+  signUpUser
+} from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { ConfirmSignUpCommandOutput } from '@aws-sdk/client-cognito-identity-provider';
@@ -14,6 +20,8 @@ interface AuthState {
   confirm: (data: ConfirmTypes) => Promise<ConfirmSignUpCommandOutput>;
   register: (credentials: IInputsData) => Promise<void>;
   logout: () => void;
+  initResetPass: (values: InitResetType) => Promise<unknown>;
+  confirmResetPass: (values: ConfirmResetType) => Promise<unknown>;
 }
 
 export interface IResponse {
@@ -25,6 +33,16 @@ export interface IResponse {
 type ConfirmTypes = {
   code: string;
   email: string;
+};
+
+type InitResetType = {
+  email: string;
+};
+
+type ConfirmResetType = {
+  confirmCode: string;
+  email: string;
+  newPassword: string;
 };
 
 const useAuth = create<AuthState>()(
@@ -72,6 +90,32 @@ const useAuth = create<AuthState>()(
           try {
             set({ isLoading: true });
             const response = await confirmEmail(data);
+
+            return response;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+        initResetPass: async (values) => {
+          try {
+            set({ isLoading: true });
+            const response = await initResetPassword(values);
+
+            return response;
+          } catch (error) {
+            console.error(error);
+            throw error;
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+        confirmResetPass: async (values) => {
+          try {
+            set({ isLoading: true });
+            const response = await confirmResetPassword(values);
 
             return response;
           } catch (error) {

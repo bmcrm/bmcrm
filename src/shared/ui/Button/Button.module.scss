@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 .btn {
 	position: relative;
 	display: flex;
@@ -80,6 +82,11 @@
 		border-radius: 50px;
 		font: var(--font-l);
 		font-weight: 700;
+
+		@media (width < $md) {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
 	}
 	&--large {
 		padding: 10px 70px;

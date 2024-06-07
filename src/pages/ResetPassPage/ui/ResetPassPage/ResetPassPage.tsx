@@ -6,11 +6,13 @@ import ResetPassFormTemplate from 'shared/ui/ResetPassFormTemplate/ResetPassForm
 import { ResetPassStepOne, ResetPassStepTwo } from 'features/ResetPassForm';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
+import FormLoader from 'features/FormLoader';
 
 import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/IconTypes';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import { ResetFormBg } from 'shared/ui/ResetPassFormTemplate/ReserPassFormTemplate.types';
+import { useAuth } from 'entities/User';
 
 type Step = 1 | 2 | 3;
 
@@ -34,16 +36,39 @@ const textData: ITextData = {
 
 const ResetPassPage = memo(() => {
   const [step, setStep] = useState<Step>(1);
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const badgeLabel = textData.badge[step];
   const descLabel = textData.desc[step];
+  const { initResetPass, confirmResetPass, isLoading } = useAuth(state => ({
+    initResetPass: state.initResetPass,
+    confirmResetPass: state.confirmResetPass,
+    isLoading: state.isLoading,
+  }));
 
-  const toStepTwo = useCallback(() => {
-    setStep(2);
-  }, []);
+  const handleStepOneSubmit = useCallback(async (values: { email: string }) => {
+    try {
+      await initResetPass(values);
+      setEmail(values.email);
+      setStep(2);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [initResetPass]);
 
-  const toStepThree = useCallback(() => {
-    setStep(3);
+  const handleStepTwoSubmit = useCallback(async (values: { confirmCode: string, newPassword: string, password_confirm: string }) => {
+    const data = {
+      confirmCode: values.confirmCode,
+      newPassword: values.newPassword,
+      email: email,
+    };
+
+    try {
+      await confirmResetPass(data);
+      setStep(3);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const btnStepThreeHandler = useCallback(() => {
@@ -57,9 +82,9 @@ const ResetPassPage = memo(() => {
       <ResetPassFormTemplate badge={badgeLabel} desc={descLabel} background={bg}>
         {
           step === 1
-            ? <ResetPassStepOne onSubmit={toStepTwo}/>
+            ? <ResetPassStepOne onSubmit={handleStepOneSubmit}/>
             : step === 2
-              ? <ResetPassStepTwo onSubmit={toStepThree}/>
+              ? <ResetPassStepTwo onSubmit={handleStepTwoSubmit}/>
               : (
                 <Button onClick={btnStepThreeHandler} fluid>
                   <Icon icon={<Camp />} size={IconSize.SIZE_20} />
@@ -68,6 +93,7 @@ const ResetPassPage = memo(() => {
               )
         }
       </ResetPassFormTemplate>
+      {isLoading && <FormLoader/>}
     </AuthPageTemplate>
   );
 });

@@ -9,8 +9,8 @@ import FormLoader from 'features/FormLoader';
 
 import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/IconTypes';
-import { confirmUserSchema } from 'shared/lib/schemas/schemas';
+import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
+import { confirmUserSchema } from 'shared/lib/schemas/validations.ts';
 import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
 

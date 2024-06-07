@@ -1,4 +1,8 @@
+@import 'breakpoints';
+
 .wrapper {
+	position: relative;
+	z-index: 1;
 	display: grid;
 	gap: 20px;
 	width: 100%;
@@ -8,6 +12,11 @@
 	padding: 30px;
 	border-radius: 30px;
 	box-shadow: 0 5px 60px 0 rgba(0, 0, 0, .2);
+	overflow: hidden;
+
+	@media (width < $md) {
+		max-width: max-content;
+	}
 
 	&__inner {
 		display: grid;
@@ -17,16 +26,51 @@
 	}
 
 	&.bg-key {
-		background-image: url('images/auth/key_bg.png');
-		background-size: 285px 267px;
-		background-position: calc(100% - 67px) 50%;
-		background-repeat: no-repeat;
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			top: 50%;
+			right: 67px;
+			transform: translateY(-50%);
+			display: block;
+			width: 285px;
+			height: 267px;
+			background-image: url('images/auth/key_bg.png');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+
+			@media (width < $lg) {
+				right: 0;
+			}
+			@media (width < $md) {
+				display: none;
+			}
+		}
 	}
 	&.bg-sun {
-		background-image: url('images/auth/sun_bg.png');
-		background-size: 514px 350px;
-		background-position: calc(100% + 40px) -70px;
-		background-repeat: no-repeat;
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			right: -40px;
+			bottom: -50px;
+			display: block;
+			width: 514px;
+			height: 350px;
+			background-image: url('images/auth/sun_bg.png');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+
+			@media (width < $lg) {
+				opacity: .5;
+			}
+			@media (width < $md) {
+				display: none;
+			}
+		}
 	}
 
 	.desc {
