@@ -38,30 +38,18 @@ export const inputsDataCamp = [
     type: 'text',
   },
   {
-    name: 'website',
+    name: 'camp_website',
     placeholder: 'www.sparkle-unicorns.org',
     label: 'Website',
     type: 'text',
   },
 ];
 
-// export const INPUTS_STATE = {
-//   campName: 'Maiami Playa',
-//   campId: 'MP',
-//   city: 'Miami',
-//   website: 'www.test.ua',
-//   accept: false,
-//   firstName: 'John',
-//   lastName: 'Wick',
-//   playaName: '@mail.com',
-//   email: 'john@mail.com',
-//   password: '123Qwe!a',
-// };
 export const INPUTS_STATE = {
   campName: '',
   campId: '',
   city: '',
-  website: '',
+  camp_website: '',
   accept: false,
   firstName: '',
   lastName: '',
