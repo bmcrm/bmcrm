@@ -8,5 +8,9 @@
 	&__name {
 		font: var(--font-l);
 		font-weight: 400;
+		max-width: 220px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
