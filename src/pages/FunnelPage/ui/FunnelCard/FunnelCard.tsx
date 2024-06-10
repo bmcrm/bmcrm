@@ -13,7 +13,7 @@ type FunnelCardProps = {
   className?: string;
   title?: string;
   fluid?: boolean;
-  users: ICamper[];
+  users: ICamper[] | Partial<ICamper>[];
 };
 
 export interface UserInformation {

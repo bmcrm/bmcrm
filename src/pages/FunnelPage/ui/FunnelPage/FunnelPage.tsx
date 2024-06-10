@@ -17,6 +17,7 @@ const FunnelPage = memo(() => {
     getCampers: state.getCampers,
     campers: state.campers,
   }));
+
   useEffect(() => {
     getCampers();
   }, [getCampers]);
@@ -42,14 +43,10 @@ const FunnelPage = memo(() => {
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={campers.filter(camper => camper.role === 'lead')} />
-          <FunnelCard title={'Qualified'} users={campers.filter(camper => camper.role === 'qualified')} />
-          <FunnelCard title={'Intent'} users={campers.filter(camper => camper.role === 'intent')} />
-          <FunnelCard
-            title={'Campers'}
-            fluid={window.innerWidth >= 1024}
-            users={campers.filter(camper => camper.role === 'camper')}
-          />
+          <FunnelCard title={'Leads'} users={campers} />
+          <FunnelCard title={'Qualified'} users={campers} />
+          <FunnelCard title={'Intent'} users={campers} />
+          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={campers} />
         </div>
       </section>
     </>

@@ -33,7 +33,7 @@ export const MemberDetails = ({ camperId }: Props) => {
         <div className={styles.firstBlock__infoWrapper}>
           <div className={styles.firstBlock__info}>
             <h2>
-              {camper?.firstName} {camper?.lastName}
+              {camper?.first_name} {camper?.last_name}
             </h2>
             <div>
               <div className={styles.firstBlock__socials}>
@@ -67,7 +67,7 @@ export const MemberDetails = ({ camperId }: Props) => {
         <ul>
           {isLoading && <Loader />}
 
-          {camper?.history.map((item, index) => (
+          {camper?.history?.map((item, index) => (
             <li key={index}>
               <span>{item.year}</span>
               <p>{item.text}</p>
