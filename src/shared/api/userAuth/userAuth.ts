@@ -7,7 +7,9 @@ import {
   ConfirmSignUpCommand,
   ListUsersCommand,
   ForgotPasswordCommandInput,
-  ForgotPasswordCommand, ConfirmForgotPasswordCommandInput, ConfirmForgotPasswordCommand,
+  ForgotPasswordCommand,
+  ConfirmForgotPasswordCommandInput,
+  ConfirmForgotPasswordCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
 
@@ -26,7 +28,7 @@ interface SignUpData {
   campName: string;
   campId: string;
   city: string;
-  website: string;
+  camp_website: string;
   firstName: string;
   lastName: string;
   playaName: string;
@@ -45,7 +47,7 @@ export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
     Password: userData.password,
     UserAttributes: [
       { Name: 'email', Value: userData.email },
-      { Name: 'website', Value: userData.website },
+      { Name: 'custom:camp_website', Value: userData.camp_website },
       { Name: 'custom:created_at', Value: new Date().getTime().toString() },
       { Name: 'updated_at', Value: new Date().getTime().toString() },
       { Name: 'custom:camp_name', Value: userData.campName },
@@ -136,7 +138,11 @@ export const initResetPassword = async ({ email }: { email: string }): Promise<u
   }
 };
 
-export const confirmResetPassword = async ({ email, confirmCode, newPassword }: IConfirmResetPassword): Promise<unknown> => {
+export const confirmResetPassword = async ({
+  email,
+  confirmCode,
+  newPassword,
+}: IConfirmResetPassword): Promise<unknown> => {
   const params: ConfirmForgotPasswordCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,
