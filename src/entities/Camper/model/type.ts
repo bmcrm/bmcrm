@@ -4,7 +4,7 @@ export interface ICamper {
   campName: string;
   campId: string;
   city: string;
-  website: string;
+  camp_website: string;
   firstName: string;
   lastName: string;
   playaName: string;

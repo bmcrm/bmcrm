@@ -2,7 +2,7 @@ export interface IInputsData {
   campName: string;
   campId: string;
   city: string;
-  website: string;
+  camp_website: string;
   accept: boolean;
   firstName: string;
   lastName: string;

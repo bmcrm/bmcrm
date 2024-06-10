@@ -1,6 +1,6 @@
 import styles from './FunnelCard.module.scss';
 import { classNames } from 'shared/lib/classNames/classNames';
-import FunnerCardItem, { type User } from '../FunnelCardItem/FunnerCardItem';
+import FunnerCardItem from '../FunnelCardItem/FunnerCardItem';
 import { useToggle } from 'shared/hooks/useToggle';
 import Modal from 'shared/ui/Modal/Modal';
 import { MemberDetails } from '../MemberDetails/MemberDetails';

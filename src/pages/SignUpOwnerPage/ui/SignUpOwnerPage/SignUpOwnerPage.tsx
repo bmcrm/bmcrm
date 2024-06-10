@@ -1,33 +1,39 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import errorHandler from 'shared/lib/authErrorHandler/authErrorHandler';
 
 import { type IInputsData, OwnerSignUpForm, useAuth } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
-import { useNavigate } from 'react-router-dom';
 import { RoutePath } from 'app/providers/AppRouter';
 import FormLoader from 'features/FormLoader';
 
 const SignUpOwnerPage = memo(() => {
-  const { register, isLoading } = useAuth(state => ({
-    register: state.register,
-    isLoading: state.isLoading,
-  }));
+  const { register, isLoading, error, resetError } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      errorHandler(error);
+    }
+
+    return resetError();
+  }, [error, resetError]);
+
   const handleSubmit = useCallback(
-    (values: IInputsData, { resetForm }: { resetForm: () => void }) => {
+    async (values: IInputsData, { resetForm }: { resetForm: () => void }) => {
       const credentials = {
         ...values,
       };
-      register(credentials)
-        .then(() => {
-          toast.success('Sign-up successful!', { duration: 2000, position: 'top-right' });
-          resetForm();
-          navigate(RoutePath.sign_in, { replace: true });
-        })
-        .catch(() => {
-          toast.error('User already exist!', { duration: 2000, position: 'top-right' });
-        });
+
+      const response = await register(credentials);
+
+      if (response) {
+        toast.success('Sign-up successful!', { duration: 2000, position: 'top-center' });
+        resetForm();
+        navigate(RoutePath.sign_in, { replace: true });
+      }
     },
     [navigate, register]
   );

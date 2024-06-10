@@ -5,7 +5,7 @@ export const registrationSchema = yup.object().shape({
   campName: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
   campId: yup.string().required('Camp ID is required'),
   city: yup.string().required('City is required'),
-  website: yup.string().matches(urlRegex, 'Invalid website address'),
+  camp_website: yup.string().matches(urlRegex, 'Invalid website address'),
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
   firstName: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
   lastName: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
@@ -53,7 +53,8 @@ export const confirmResetPassSchema = yup.object().shape({
     .matches(/[!@#$%^&*]/, 'Password must contain at least one special character')
     .matches(/[0-9]/, 'Password must contain at least one numeric character')
     .required('Password is required'),
-  password_confirm: yup.string()
+  password_confirm: yup
+    .string()
     .oneOf([yup.ref('newPassword')], 'Passwords must match')
     .required('Password confirmation is required'),
 });

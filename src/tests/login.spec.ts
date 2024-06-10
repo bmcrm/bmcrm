@@ -10,6 +10,7 @@ function getParameter(name: string): Promise<string> {
 
 const LOGIN_URL = 'https://app.dev.bmcrm.camp/login';
 const RESET_URL = 'https://app.dev.bmcrm.camp/reset-password';
+const FUNNEL_URL = 'https://app.dev.bmcrm.camp/funnel';
 
 // we have separate test account for a TCO persona and a Camper persona
 const TEST_ACCOUNT_TCO_EMAIL = await getParameter('/webapp/test/tco_email');
@@ -20,7 +21,7 @@ test('successful login', async ({ page }) => {
   await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
   await page.fill('input[name="password"]', TEST_ACCOUNT_TCO_PASSWORD);
   await page.click('button[type="submit"]');
-  await expect(page).toHaveURL(LOGIN_URL);
+  await expect(page).toHaveURL(FUNNEL_URL);
   await expect(page.locator('text=Invite')).toBeVisible();
 });
 test('unsuccessful login with incorrect credentials', async ({ page }) => {
