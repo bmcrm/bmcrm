@@ -1,6 +1,49 @@
+@import 'breakpoints';
+
 .nav {
+	@media (width < $md) {
+		position: fixed;
+		z-index: 110;
+		top: 60px;
+		right: 0;
+		width: 100%;
+		height: calc(100% - 60px);
+		transition: transform .2s ease;
+		transform: translateX(200vw);
+	}
+
+	&.open {
+		@media (width < $md) {
+			transform: translateX(0);
+		}
+	}
+
+	&__inner {
+		@media (width < $md) {
+			display: grid;
+			align-content: flex-start;
+			gap: 25px;
+			width: 100%;
+			height: 100%;
+			max-width: 220px;
+			margin-left: auto;
+			border-radius: 6px 0 0 0;
+			padding: 25px 20px;
+			background-color: var(--color-secondary-bg);
+			box-shadow: -3px 0 10px 3px rgba(0, 0, 0, .5);
+		}
+	}
+
 	&__list {
 		display: flex;
 		gap: 30px;
+
+		@media (width < $lg) {
+			gap: 20px;
+		}
+		@media (width < $md) {
+			flex-direction: column;
+			gap: 15px;
+		}
 	}
 }
