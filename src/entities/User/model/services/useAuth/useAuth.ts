@@ -26,7 +26,7 @@ interface AuthState {
   confirmEmail: (data: ConfirmTypes) => Promise<ConfirmSignUpCommandOutput | undefined>;
   initResetPass: (values: InitResetType) => Promise<unknown>;
   confirmResetPass: (values: ConfirmResetType) => Promise<unknown>;
-  logout: () => void;
+  logout: (accessToken: string) => Promise<void>;
 }
 
 export interface IResponse {
@@ -91,20 +91,6 @@ const useAuth = create<AuthState>()(
             set({ isLoading: false });
           }
         },
-        logout: () => async (accessToken: string) => {
-          try {
-            await logoutUser(accessToken);
-
-            set({
-              isLoggedIn: false,
-              accessToken: '',
-              idToken: '',
-              refreshToken: ''
-            });
-          } catch (error) {
-            set({ error: error as CognitoIdentityProviderServiceException });
-          }
-        },
         confirmEmail: async data => {
           try {
             set({ isLoading: true });
@@ -133,6 +119,20 @@ const useAuth = create<AuthState>()(
             set({ error: error as CognitoIdentityProviderServiceException });
           } finally {
             set({ isLoading: false });
+          }
+        },
+        logout: async (accessToken: string) => {
+          try {
+            await logoutUser(accessToken);
+
+            set({
+              isLoggedIn: false,
+              accessToken: '',
+              idToken: '',
+              refreshToken: ''
+            });
+          } catch (error) {
+            set({ error: error as CognitoIdentityProviderServiceException });
           }
         },
       }),
