@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik';
-import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
+import { useNavigate } from 'react-router-dom';
 
 import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 import Modal from 'shared/ui/Modal/Modal';
@@ -10,15 +10,16 @@ import FormLoader from 'features/FormLoader';
 
 import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { confirmUserSchema } from 'shared/lib/schemas/validations';
-import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
+import { RoutePath } from 'app/providers/AppRouter';
+import { ISignInCredentials } from 'pages/SignInPage';
 
 type UserConfirmModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  email: string;
+  credentials: ISignInCredentials | null;
 };
 
 type valuesType = {
@@ -29,38 +30,20 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
   const {
     isOpen,
     onClose,
-    email,
+    credentials,
   } = props;
-  const { confirm, isLoading } = useAuth(state => ({
-    confirm: state.confirm,
-    isLoading: state.isLoading,
-  }));
-
-  const errorHandler = (error: CognitoIdentityProviderServiceException) => {
-    switch (error.name) {
-      case 'CodeMismatchException': {
-        toast.error('Invalid verification code provided, please try again!', { duration: 4000, position: 'top-center' });
-        break;
-      }
-      default: {
-        toast.error('Oops, something wrong! Try again later!', { duration: 4000, position: 'top-center' });
-        break;
-      }
-    }
-  };
+  const { confirmEmail, isLoading, login } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = async (values: valuesType) => {
-    const data = { email, ...values };
+    const data = { email: credentials!.email, ...values };
 
-    try {
-      const response = await confirm(data);
+    const response = await confirmEmail(data);
 
-      if (response.$metadata.httpStatusCode === 200) {
-        onClose();
-      }
-
-    } catch (error) {
-      errorHandler(error as CognitoIdentityProviderServiceException);
+    if (response?.$metadata.httpStatusCode === 200) {
+      onClose();
+      await login(credentials!);
+      navigate(RoutePath.funnel, { replace: true });
     }
   };
 

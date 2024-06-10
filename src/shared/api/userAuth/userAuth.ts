@@ -9,7 +9,7 @@ import {
   ForgotPasswordCommandInput,
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
-  ConfirmForgotPasswordCommand,
+  ConfirmForgotPasswordCommand, GlobalSignOutCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
 
@@ -40,7 +40,7 @@ interface IConfirmResetPassword {
   newPassword: string;
 }
 
-export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
+export const signUpUser = async (userData: SignUpData) => {
   const params: SignUpCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: userData.email,
@@ -59,27 +59,62 @@ export const signUpUser = async (userData: SignUpData): Promise<unknown> => {
     ],
   };
 
-  const data = await cognitoClient.send(new SignUpCommand(params));
+  return await cognitoClient.send(new SignUpCommand(params));
+};
 
-  return data;
+export const loginUser = async ({ email, password }: { email: string; password: string }) => {
+  const params: InitiateAuthCommandInput = {
+    AuthFlow: 'USER_PASSWORD_AUTH',
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    AuthParameters: {
+      USERNAME: email,
+      PASSWORD: password,
+    },
+  };
+
+  const data = await cognitoClient.send(new InitiateAuthCommand(params));
+
+  return data.AuthenticationResult;
 };
 
 export const confirmEmail = async ({ email, code }: ConfirmCode) => {
   const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
-  try {
-    const command = new ConfirmSignUpCommand({
-      ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-      Username: email,
-      ConfirmationCode: code,
-    });
+  const command = new ConfirmSignUpCommand({
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: email,
+    ConfirmationCode: code,
+  });
 
-    const response = await client.send(command);
+  return await client.send(command);
+};
 
-    return response;
-  } catch (error) {
-    console.error('Error confirming email:', error);
-    throw error;
-  }
+export const initResetPassword = async ({ email }: { email: string }) => {
+  const params: ForgotPasswordCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: email,
+  };
+
+  return await cognitoClient.send(new ForgotPasswordCommand(params));
+};
+
+export const confirmResetPassword = async (props: IConfirmResetPassword) => {
+  const { email, confirmCode, newPassword } = props;
+  const params: ConfirmForgotPasswordCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: email,
+    ConfirmationCode: confirmCode,
+    Password: newPassword,
+  };
+
+  return await cognitoClient.send(new ConfirmForgotPasswordCommand(params));
+};
+
+export const logoutUser = async (accessToken: string) => {
+  const command = new GlobalSignOutCommand({
+    AccessToken: accessToken,
+  });
+
+  return await cognitoClient.send(command);
 };
 
 export const listUsers = async () => {
@@ -97,64 +132,6 @@ export const listUsers = async () => {
     return response.Users;
   } catch (error) {
     console.error('Error:', error);
-    throw error;
-  }
-};
-
-export const loginUser = async ({ email, password }: { email: string; password: string }) => {
-  const params: InitiateAuthCommandInput = {
-    AuthFlow: 'USER_PASSWORD_AUTH',
-    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    AuthParameters: {
-      USERNAME: email,
-      PASSWORD: password,
-    },
-  };
-
-  try {
-    const data = await cognitoClient.send(new InitiateAuthCommand(params));
-    return data.AuthenticationResult;
-  } catch (error) {
-    console.error('User not confirmed', error);
-    console.log('COGNITO_APP_CLIENT_ID >>>>>', EnvConfigs.COGNITO_APP_CLIENT_ID);
-    console.log('COGNITO_AWS_POOL_ID >>>>>>>', EnvConfigs.COGNITO_AWS_POOL_ID);
-
-    throw error;
-  }
-};
-
-export const initResetPassword = async ({ email }: { email: string }): Promise<unknown> => {
-  const params: ForgotPasswordCommandInput = {
-    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    Username: email,
-  };
-
-  try {
-    const data = await cognitoClient.send(new ForgotPasswordCommand(params));
-    return data;
-  } catch (error) {
-    console.error('Error initiating forgot password:', error);
-    throw error;
-  }
-};
-
-export const confirmResetPassword = async ({
-  email,
-  confirmCode,
-  newPassword,
-}: IConfirmResetPassword): Promise<unknown> => {
-  const params: ConfirmForgotPasswordCommandInput = {
-    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    Username: email,
-    ConfirmationCode: confirmCode,
-    Password: newPassword,
-  };
-
-  try {
-    const data = await cognitoClient.send(new ConfirmForgotPasswordCommand(params));
-    return data;
-  } catch (error) {
-    console.error('Error confirming forgot password:', error);
     throw error;
   }
 };
