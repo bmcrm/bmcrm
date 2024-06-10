@@ -5,13 +5,13 @@ import AnonymousAvatar from 'shared/assets/images/avatars/anonymous.jpg';
 
 type AvatarProps = {
   className?: string;
-  src?: string;
+  src?: string | null;
   alt?: string;
   size?: number;
 };
 
 const Avatar = (props: AvatarProps) => {
-  const { className, src = AnonymousAvatar, alt = 'img desc', size = 100 } = props;
+  const { className, src, alt = 'img desc', size = 100 } = props;
 
   const sizes = useMemo<CSSProperties>(
     () => ({
@@ -24,7 +24,7 @@ const Avatar = (props: AvatarProps) => {
   return (
     <div className={classNames(styles.avatar, {}, [className])} style={sizes}>
       <picture>
-        <img src={src} alt={alt} />
+        <img src={src ? src : AnonymousAvatar} alt={alt} />
       </picture>
     </div>
   );

@@ -4,6 +4,7 @@ import { type SignInFormData } from './ui/UserSignInForm/UserSignInForm.types';
 import OwnerSignUpForm from './ui/OwnerSignUpForm/OwnerSignUpForm';
 import { type IInputsData } from './ui/OwnerSignUpForm/OwnerSignUpForm.types';
 import useAuth from './model/services/useAuth/useAuth';
+import { type IUserAvatar } from './ui/UserAvatar/UserAvatar';
 
 export {
   UserAvatar,
@@ -12,4 +13,5 @@ export {
   OwnerSignUpForm,
   IInputsData,
   useAuth,
+  IUserAvatar,
 };
