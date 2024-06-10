@@ -1,6 +1,6 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
+import errorHandler from 'shared/lib/authErrorHandler/authErrorHandler';
 
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import ResetPassFormTemplate from 'shared/ui/ResetPassFormTemplate/ResetPassFormTemplate';
@@ -8,7 +8,6 @@ import { ResetPassStepOne, ResetPassStepTwo, type ResetPassStepTwoTypes } from '
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 import FormLoader from 'features/FormLoader';
-import toast from 'react-hot-toast';
 
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
@@ -42,37 +41,23 @@ const ResetPassPage = memo(() => {
   const navigate = useNavigate();
   const badgeLabel = textData.badge[step];
   const descLabel = textData.desc[step];
-  const { initResetPass, confirmResetPass, isLoading } = useAuth(state => ({
-    initResetPass: state.initResetPass,
-    confirmResetPass: state.confirmResetPass,
-    isLoading: state.isLoading,
-  }));
+  const { initResetPass, confirmResetPass, isLoading, error, resetError } = useAuth();
 
-  const errorHandler = (error: CognitoIdentityProviderServiceException) => {
-    switch (error.name) {
-      case 'UserNotFoundException': {
-        toast.error('This email was not found!', { duration: 4000, position: 'top-center' });
-        break;
-      }
-      case 'CodeMismatchException': {
-        toast.error('Invalid verification code provided, please try again!', { duration: 4000, position: 'top-center' });
-        break;
-      }
-      default: {
-        toast.error('Oops, something wrong! Try again later!', { duration: 4000, position: 'top-center' });
-        break;
-      }
+  useEffect(() => {
+    if (error) {
+      errorHandler(error);
     }
-  };
+
+    return resetError();
+  }, [error, resetError]);
 
   const handleStepOneSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-    try {
-      await initResetPass(values);
+    const response = await initResetPass(values);
+
+    if (response) {
       setEmail(values.email);
       resetForm();
       setStep(2);
-    } catch (error) {
-      errorHandler(error as CognitoIdentityProviderServiceException);
     }
   }, [initResetPass]);
 
@@ -83,12 +68,11 @@ const ResetPassPage = memo(() => {
       email: email,
     };
 
-    try {
-      await confirmResetPass(data);
+    const response = await confirmResetPass(data);
+
+    if (response) {
       resetForm();
       setStep(3);
-    } catch (error) {
-      errorHandler(error as CognitoIdentityProviderServiceException);
     }
   }, [confirmResetPass, email]);
 
