@@ -44,12 +44,14 @@ const FunnelCard = (props: FunnelCardProps) => {
           <MemberDetails camperId={userDetails} />
         </Modal>
       )}
-      <ul className={styles.card__content}>
-        {isLoading && !slicedUsers.length && <Loader />}
-        {slicedUsers.map(user => (
-          <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user} />
-        ))}
-      </ul>
+      {isLoading && !slicedUsers.length && <Loader className={'m-centred'} />}
+      {!isLoading && (
+        <ul className={styles.card__content}>
+          {slicedUsers.map(user => (
+            <FunnerCardItem openDetails={toggleDetails} key={user.id} user={user}/>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { jwtDecode } from 'jwt-decode';
 import { classNames } from 'shared/lib/classNames/classNames';
@@ -27,7 +27,7 @@ const Header = memo(({ className }: HeaderProps) => {
   const { isLoggedIn, idToken } = useAuth();
   const [user, setUser] = useState<IUserAvatar | null>(null);
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-  const { isOpen, toggle } = useToggle();
+  const { isOpen, toggle, close } = useToggle();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -48,7 +48,19 @@ const Header = memo(({ className }: HeaderProps) => {
     }
   }, [idToken, isLoggedIn]);
 
-  document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  const onContentClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
 
   return (
     <header className={classNames(styles.header, {}, [className])}>
@@ -58,7 +70,7 @@ const Header = memo(({ className }: HeaderProps) => {
             <Logo />
           </Link>
         </strong>
-        <Nav user={user} isOpen={isMobile ? isOpen : true}/>
+        <Nav user={user} isOpen={isMobile ? isOpen : true} onContentClick={onContentClick} onClick={close}/>
         {!isMobile && <UserAvatar user={user}/>}
         {isMobile && <Hamburger isOpen={isOpen} onClick={toggle}/>}
       </div>

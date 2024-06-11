@@ -3,19 +3,35 @@
 .funnel {
 	padding-bottom: 30px;
 
+	&__btn {
+		@media (width < $xl) {
+			align-self: flex-end;
+		}
+		@media (width < $lg) and (width > $md){
+			position: absolute;
+			right: 0;
+			bottom: 0;
+		}
+	}
+
 	&__head {
+		position: relative;
 		display: flex;
 		justify-content: center;
 		align-items: flex-end;
 
-		@media (width < $lg) {
+		@media (width < $xl) {
 			flex-direction: column;
 			align-items: center;
-			gap: 40px;
+			gap: 30px;
 		}
 
 		+ .funnel__content {
 			margin-top: 40px;
+
+			@media (width < $md) {
+				margin-top: 30px;
+			}
 		}
 	}
 

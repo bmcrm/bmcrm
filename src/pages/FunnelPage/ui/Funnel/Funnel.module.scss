@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 .funnel {
 	position: relative;
 	z-index: 1;
@@ -6,6 +8,17 @@
 	display: grid;
 	gap: 15px;
 	padding-top: 50px;
+
+	@media (width < $lg) {
+		max-width: 346px;
+		padding-bottom: 20px;
+		gap: 21px;
+	}
+	@media (width < $xs) {
+		padding-top: 35px;
+		padding-bottom: 10px;
+		gap: 17px;
+	}
 
 	&:before {
 		content: '';
@@ -19,9 +32,21 @@
 		background-repeat: no-repeat;
 		width: 312px;
 		height: 278px;
+
+		@media (width < $lg) {
+			left: unset;
+			right: 0;
+			width: 240px;
+			height: 214px;
+		}
+		@media (width < $xs) {
+			width: 204px;
+			height: 178px;
+		}
 	}
 
 	&__item {
+		position: relative;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -30,19 +55,66 @@
 		&:nth-child(2) {
 			padding-left: 30px;
 			padding-right: 30px;
+
+			@media (width < $lg) {
+				padding-left: 24px;
+				padding-right: 0;
+			}
+			@media (width < $xs) {
+				padding-left: 15px;
+			}
 		}
 		&:nth-child(3) {
 			padding-left: 60px;
 			padding-right: 60px;
+
+			@media (width < $lg) {
+				padding-left: 48px;
+				padding-right: 0;
+			}
+			@media (width < $xs) {
+				padding-left: 30px;
+			}
 		}
 		&:nth-child(4) {
 			padding-left: 90px;
 			padding-right: 90px;
+
+			@media (width < $lg) {
+				padding-left: 72px;
+				padding-right: 0;
+			}
+			@media (width < $xs) {
+				padding-left: 45px;
+			}
+		}
+	}
+
+	&__tooltip {
+		width: 100%;
+		max-width: 250px;
+
+		@media (width < $lg) {
+			position: absolute;
+			z-index: -10;
+			top: calc(100% + 5px);
+			padding: 10px;
+			border-radius: 10px;
+			background-color: var(--color-secondary-bg);
+			opacity: 0;
+			visibility: hidden;
+		}
+		@media (width < $xs) {
+			max-width: 200px;
+		}
+
+		&.show {
+			z-index: 10;
+			opacity: 1;
+			visibility: visible;
 		}
 
 		.text {
-			width: 100%;
-			max-width: 250px;
 			font: var(--font-xxs);
 		}
 	}

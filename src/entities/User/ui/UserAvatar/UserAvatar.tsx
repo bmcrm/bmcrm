@@ -35,7 +35,7 @@ const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps
   if (theme === 'mobile') {
     return (
       <Link
-        to={RoutePath.profile}
+        to={RoutePath.funnel}
         className={classNames(styles.userAvatar, {}, [className])}
       >
         <Avatar size={30} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null}/>

@@ -1,10 +1,11 @@
+@import 'breakpoints';
+
 .input {
   border-radius: 10px;
   border: 2px solid var(--color-input-orange);
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(4px);
   padding: 10px 20px;
-  font-family: Poppins;
   font-size: 14px;
   width: 100%;
 
@@ -36,6 +37,7 @@
 }
 .wrapper {
   width: 490px;
+  max-width: 100%;
   & h2 {
     font-size: var(--font-size-m);
     margin-bottom: 10px;
@@ -44,7 +46,10 @@
   & p {
     width: 80%;
     font-size: var(--font-size-s);
-
     margin-bottom: 20px;
+
+    @media (width < $md) {
+      width: 100%;
+    }
   }
 }

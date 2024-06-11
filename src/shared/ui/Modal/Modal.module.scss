@@ -1,4 +1,5 @@
 @import 'breakpoints';
+
 .modal {
   position: fixed;
   z-index: -1;
@@ -36,6 +37,7 @@
     height: 100%;
     padding: 20px;
     background-color: var(--color-overlay-bg);
+
     @media (width < $md) {
       padding: 10px;
     }
@@ -47,7 +49,11 @@
     padding: 30px;
     border-radius: 10px;
     background-color: var(--color-secondary-bg);
-    transition: transform 0.3s;
-    transform: scale(0.5);
+    transition: transform .3s;
+    transform: scale(.5);
+
+    @media (width < $md) {
+      padding: 20px;
+    }
   }
 }

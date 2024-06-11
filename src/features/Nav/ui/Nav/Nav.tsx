@@ -1,7 +1,7 @@
-import { memo, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { classNames } from 'shared/lib/classNames/classNames';
+import { classNames, Mods } from 'shared/lib/classNames/classNames';
 import NavItem from '../../ui/NavItem/NavItem';
 import { IUserAvatar, UserAvatar } from 'entities/User';
 
@@ -14,14 +14,26 @@ type NavProps = {
   className?: string;
   user?: IUserAvatar | null;
   isOpen?: boolean;
+  onClick?: () => void;
+  onContentClick?: (e: React.MouseEvent) => void;
 };
 
-const Nav = memo(({ className, user, isOpen }: NavProps) => {
+const Nav = memo((props: NavProps) => {
+  const {
+    className,
+    user,
+    isOpen,
+    onClick,
+    onContentClick,
+  } = props;
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+  const mods: Mods = {
+    [styles.open]: isOpen
+  };
   
   return (
-    <nav className={classNames(styles.nav, { [styles.open]: isOpen }, [className])}>
-      <div className={styles.nav__inner}>
+    <nav className={classNames(styles.nav, mods, [className])} onClick={onClick}>
+      <div className={styles.nav__inner} onClick={onContentClick}>
         {isMobile && <UserAvatar theme={'mobile'} user={user}/>}
         <ul className={styles.nav__list}>
           {useMemo(() => NavItemsList.map(item => <NavItem key={item.path} item={item}/>), [])}
