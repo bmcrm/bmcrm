@@ -2,14 +2,15 @@ import {
   confirmEmail,
   confirmResetPassword,
   initResetPassword,
-  loginUser, logoutUser,
-  signUpUser
+  loginUser,
+  logoutUser,
+  signUpUser,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import {
   CognitoIdentityProviderServiceException,
-  ConfirmSignUpCommandOutput
+  ConfirmSignUpCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { type IInputsData } from 'entities/User';
 
@@ -101,7 +102,7 @@ const useAuth = create<AuthState>()(
             set({ isLoading: false });
           }
         },
-        initResetPass: async (values) => {
+        initResetPass: async values => {
           try {
             set({ isLoading: true });
             return await initResetPassword(values);
@@ -111,7 +112,7 @@ const useAuth = create<AuthState>()(
             set({ isLoading: false });
           }
         },
-        confirmResetPass: async (values) => {
+        confirmResetPass: async values => {
           try {
             set({ isLoading: true });
             return await confirmResetPassword(values);
@@ -129,7 +130,7 @@ const useAuth = create<AuthState>()(
               isLoggedIn: false,
               accessToken: '',
               idToken: '',
-              refreshToken: ''
+              refreshToken: '',
             });
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
@@ -139,9 +140,9 @@ const useAuth = create<AuthState>()(
       {
         name: 'auth',
         storage: createJSONStorage(() => localStorage),
-      },
-    ),
-  ),
+      }
+    )
+  )
 );
 
 export default useAuth;

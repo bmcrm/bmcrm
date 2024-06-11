@@ -23,11 +23,7 @@ const SignUpOwnerPage = memo(() => {
 
   const handleSubmit = useCallback(
     async (values: IInputsData, { resetForm }: { resetForm: () => void }) => {
-      const credentials = {
-        ...values,
-      };
-
-      const response = await register(credentials);
+      const response = await register(values);
 
       if (response) {
         toast.success('Sign-up successful!', { duration: 2000, position: 'top-center' });
