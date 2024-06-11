@@ -4,6 +4,8 @@ import {
   InitiateAuthCommand,
   SignUpCommandInput,
   InitiateAuthCommandInput,
+  ConfirmSignUpCommandInput,
+  AdminCreateUserCommand,
   ConfirmSignUpCommand,
   ListUsersCommand,
   ForgotPasswordCommandInput,
@@ -35,6 +37,11 @@ interface SignUpData {
   playaName: string;
   role: string;
 }
+interface InviteData {
+  email: string;
+  camp_id: string;
+  role: string;
+}
 
 interface IConfirmResetPassword {
   email: string;
@@ -64,6 +71,54 @@ export const signUpUser = async (userData: SignUpData) => {
 
   return await cognitoClient.send(new SignUpCommand(params));
 };
+export const inviteUser = async (userData: InviteData) => {
+  const params: SignUpCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: userData.email,
+    Password: '123qweQ!',
+    UserAttributes: [
+      { Name: 'email', Value: userData.email },
+      { Name: 'custom:created_at', Value: new Date().getTime().toString() },
+      { Name: 'updated_at', Value: new Date().getTime().toString() },
+      { Name: 'custom:camp_id', Value: userData.camp_id },
+      { Name: 'custom:role', Value: userData.role },
+    ],
+  };
+
+  return await cognitoClient.send(new SignUpCommand(params));
+};
+// export const inviteUser = async (userData: InviteData) => {
+//   const client = new CognitoIdentityProviderClient({ region: 'us-east-1' });
+
+//   const params = {
+//     UserPoolId: EnvConfigs.COGNITO_AWS_POOL_ID, // Замените на ваш идентификатор пользовательского пула
+//     Username: userData.email, // Email пользователя, который вы приглашаете
+//     DesiredDeliveryMediums: ['EMAIL'], // Способ доставки приглашения
+//     UserAttributes: [
+//       {
+//         Name: 'email',
+//         Value: userData.email,
+//       },
+//       {
+//         Name: 'custom:role',
+//         Value: userData.role,
+//       },
+//       {
+//         Name: 'custom:camp_id',
+//         Value: userData.camp_id,
+//       },
+//     ],
+//   };
+
+//   const command = new AdminCreateUserCommand(params);
+
+//   try {
+//     const data = await client.send(command);
+//     console.log('Пользователь успешно создан и приглашение отправлено: ', data);
+//   } catch (err) {
+//     console.error('Ошибка при создании пользователя: ', err);
+//   }
+// };
 
 export const loginUser = async ({ email, password }: { email: string; password: string }) => {
   const params: InitiateAuthCommandInput = {

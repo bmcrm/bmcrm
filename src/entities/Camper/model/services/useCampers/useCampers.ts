@@ -3,7 +3,6 @@ import { ICamper } from '../../type';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 import { EnvConfigs } from 'shared/config/env/env';
-import { normalizeResponse } from 'shared/lib/normalizeCampers/normalizeCampers';
 import { useAuth } from 'entities/User';
 interface CamperState {
   isLoading: boolean;
@@ -28,8 +27,7 @@ const useCampers = create<CamperState>()(
           },
         });
 
-        const normalizedData = normalizeResponse(response.data);
-        set({ isLoading: false, campers: normalizedData });
+        set({ isLoading: false, campers: response.data });
       } catch (error) {
         throw new Error('Error fetching campers: ' + error);
       } finally {
