@@ -9,7 +9,8 @@ import {
   ForgotPasswordCommandInput,
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
-  ConfirmForgotPasswordCommand, GlobalSignOutCommand,
+  ConfirmForgotPasswordCommand,
+  GlobalSignOutCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
 
@@ -32,6 +33,7 @@ interface SignUpData {
   firstName: string;
   lastName: string;
   playaName: string;
+  role: string;
 }
 
 interface IConfirmResetPassword {
@@ -56,6 +58,7 @@ export const signUpUser = async (userData: SignUpData) => {
       { Name: 'custom:first_name', Value: userData.firstName },
       { Name: 'custom:last_name', Value: userData.lastName },
       { Name: 'custom:playa_name', Value: userData.playaName },
+      { Name: 'custom:role', Value: userData.role },
     ],
   };
 

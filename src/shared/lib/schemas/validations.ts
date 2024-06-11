@@ -4,6 +4,7 @@ const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/
 export const registrationSchema = yup.object().shape({
   campName: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
   campId: yup.string().required('Camp ID is required'),
+  role: yup.string(),
   city: yup.string().required('City is required'),
   camp_website: yup.string().matches(urlRegex, 'Invalid website address'),
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
