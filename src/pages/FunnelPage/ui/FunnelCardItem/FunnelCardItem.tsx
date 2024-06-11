@@ -15,7 +15,7 @@ type FunnerCardItemProps = {
   openDetails: (id: string) => void;
 };
 
-const FunnerCardItem = ({ className, user, openDetails }: FunnerCardItemProps) => {
+const FunnelCardItem = ({ className, user, openDetails }: FunnerCardItemProps) => {
   return (
     <li
       onClick={() => openDetails(user.id!)}
@@ -29,4 +29,4 @@ const FunnerCardItem = ({ className, user, openDetails }: FunnerCardItemProps) =
   );
 };
 
-export default FunnerCardItem;
+export default FunnelCardItem;

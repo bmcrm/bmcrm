@@ -4,7 +4,8 @@
 	background-color: var(--color-secondary-bg);
 
 	&__head {
-		padding: 9px 10px;
+		position: relative;
+		padding: 9px 50px;
 		border-bottom: 1px solid var(--color-neutral);
 
 		h3 {
@@ -12,6 +13,14 @@
 			font-weight: 500;
 			letter-spacing: .8px;
 		}
+	}
+
+	&__icon {
+		position: absolute;
+		top: 50%;
+		right: 25px;
+		transform: translateY(-50%);
+		color: var(--color-neutral);
 	}
 
 	&__content {

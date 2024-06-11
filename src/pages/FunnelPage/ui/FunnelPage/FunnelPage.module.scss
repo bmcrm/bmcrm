@@ -1,7 +1,6 @@
 @import 'breakpoints';
 
 .funnel {
-	padding-bottom: 30px;
 
 	&__btn {
 		@media (width < $xl) {
