@@ -3,10 +3,11 @@ import { ICamper } from '../../type';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 import { EnvConfigs } from 'shared/config/env/env';
-
+import { normalizeResponse } from 'shared/lib/normalizeCampers/normalizeCampers';
+import { useAuth } from 'entities/User';
 interface CamperState {
   isLoading: boolean;
-  campers: ICamper[];
+  campers: ICamper[] | Partial<ICamper>[];
   isError: string | null;
   getCampers(): Promise<void>;
   getCamperById(id: string): Promise<ICamper>;
@@ -21,9 +22,14 @@ const useCampers = create<CamperState>()(
     getCampers: async () => {
       try {
         set({ isLoading: true });
-        const response = await axios.get<ICamper[]>(EnvConfigs.CAMPERS_API_URL);
-        const data = response.data.filter(camper => camper.campId === 'DO12345');
-        set({ isLoading: false, campers: data });
+        const response = await axios.get('https://campers.dev.bmcrm.camp/campers', {
+          headers: {
+            Authorization: useAuth.getState().idToken,
+          },
+        });
+
+        const normalizedData = normalizeResponse(response.data);
+        set({ isLoading: false, campers: normalizedData });
       } catch (error) {
         throw new Error('Error fetching campers: ' + error);
       } finally {

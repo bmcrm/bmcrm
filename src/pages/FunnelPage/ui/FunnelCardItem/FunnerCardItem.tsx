@@ -11,19 +11,19 @@ export type User = {
 
 type FunnerCardItemProps = {
   className?: string;
-  user: ICamper;
+  user: ICamper | Partial<ICamper>;
   openDetails: (id: string) => void;
 };
 
 const FunnerCardItem = ({ className, user, openDetails }: FunnerCardItemProps) => {
   return (
     <li
-      onClick={() => openDetails(user.id)}
+      onClick={() => openDetails(user.id!)}
       className={classNames(styles.cardItem, { [styles.online]: user.id }, [className])}
     >
       <Avatar alt={user.avatar} size={30} />
       <p className={styles.cardItem__name}>
-        {user.firstName} {user.lastName}
+        {user.first_name} {user.last_name}
       </p>
     </li>
   );
