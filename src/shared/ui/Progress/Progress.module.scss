@@ -1,10 +1,21 @@
+@import 'breakpoints';
+
 .progress {
 	width: 100%;
 	max-width: 105px;
 
+	@media (width < $lg) {
+		max-width: 75px;
+	}
+
 	&__caption {
 		padding-left: 10px;
 		font: var(--font-s);
+
+		@media (width < $lg) {
+			padding-left: 8px;
+			font: var(--font-xs);
+		}
 
 		.small {
 			font: var(--font-xxs);
@@ -37,6 +48,9 @@
 				background-color: var(--color-orange-light);
 			}
 		}
+		.symbol {
+			color: var(--color-orange-light);
+		}
 	}
 	&.orange-dark {
 		.progress__bar {
@@ -45,6 +59,9 @@
 			.bar {
 				background-color: var(--color-orange-dark);
 			}
+		}
+		.symbol {
+			color: var(--color-orange-dark);
 		}
 	}
 	&.ruby-light {
@@ -55,6 +72,9 @@
 				background-color: var(--color-ruby-light);
 			}
 		}
+		.symbol {
+			color: var(--color-ruby-light);
+		}
 	}
 	&.ruby-dark {
 		.progress__bar {
@@ -63,6 +83,9 @@
 			.bar {
 				background-color: var(--color-ruby-dark);
 			}
+		}
+		.symbol {
+			color: var(--color-ruby-dark);
 		}
 	}
 }

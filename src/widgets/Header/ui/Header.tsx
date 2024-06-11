@@ -1,14 +1,17 @@
-import { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { jwtDecode } from 'jwt-decode';
 import { classNames } from 'shared/lib/classNames/classNames';
 
 import { Link } from 'react-router-dom';
 import { Nav } from 'features/Nav';
+import Hamburger from 'features/Hamburger';
 import { useAuth, UserAvatar, IUserAvatar } from 'entities/User';
 
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 import styles from './Header.module.scss';
+import { useToggle } from 'shared/hooks/useToggle.tsx';
 
 type HeaderProps = {
   className?: string;
@@ -23,29 +26,41 @@ interface IJwtPayload {
 const Header = memo(({ className }: HeaderProps) => {
   const { isLoggedIn, idToken } = useAuth();
   const [user, setUser] = useState<IUserAvatar | null>(null);
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+  const { isOpen, toggle, close } = useToggle();
 
   useEffect(() => {
     if (isLoggedIn) {
-      try {
-        const decodedToken = jwtDecode<IJwtPayload>(idToken);
-        const userName = decodedToken['custom:playa_name']
-          ? decodedToken['custom:playa_name']
-          : `${decodedToken['custom:first_name']} ${decodedToken['custom:last_name']}`;
-        const CapitalizedUserName = userName
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ');
-        const decodedUser: IUserAvatar = {
-          name: CapitalizedUserName,
-          avatar: null,
-        };
+      const decodedToken = jwtDecode<IJwtPayload>(idToken);
+      const userName = decodedToken['custom:playa_name']
+        ? decodedToken['custom:playa_name']
+        : `${decodedToken['custom:first_name']} ${decodedToken['custom:last_name']}`;
+      const CapitalizedUserName = userName
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+      const decodedUser: IUserAvatar = {
+        name: CapitalizedUserName,
+        avatar: null,
+      };
 
-        setUser(decodedUser);
-      } catch (error) {
-        console.log(error);
-      }
+      setUser(decodedUser);
     }
   }, [idToken, isLoggedIn]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  const onContentClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
 
   return (
     <header className={classNames(styles.header, {}, [className])}>
@@ -55,8 +70,9 @@ const Header = memo(({ className }: HeaderProps) => {
             <Logo />
           </Link>
         </strong>
-        <Nav />
-        <UserAvatar user={user}/>
+        <Nav user={user} isOpen={isMobile ? isOpen : true} onContentClick={onContentClick} onClick={close}/>
+        {!isMobile && <UserAvatar user={user}/>}
+        {isMobile && <Hamburger isOpen={isOpen} onClick={toggle}/>}
       </div>
     </header>
   );

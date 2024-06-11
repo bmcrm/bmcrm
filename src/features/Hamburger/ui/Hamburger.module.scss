@@ -1,0 +1,45 @@
+.hamburger {
+	position: relative;
+	width: 18px;
+	height: 12px;
+	transition: .2s ease;
+	cursor: pointer;
+
+	span {
+		display: block;
+		position: absolute;
+		height: 2px;
+		width: 100%;
+		background-color: var(--color-black);
+		border-radius: 3px;
+		left: 0;
+		transition: inherit;
+		transform-origin: left center;
+
+		&:nth-child(1) {
+			top: 0;
+		}
+		&:nth-child(2) {
+			top: 5px;
+		}
+		&:nth-child(3) {
+			top: 10px;
+		}
+	}
+
+	&.open {
+		span {
+			&:nth-child(1) {
+				transform: rotate(45deg);
+			}
+			&:nth-child(2) {
+				width: 0;
+				opacity: 0;
+			}
+			&:nth-child(3) {
+				transform: rotate(-45deg);
+				top: 13px;
+			}
+		}
+	}
+}

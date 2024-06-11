@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 .user-avatar {
 	position: relative;
 	display: flex;
@@ -5,12 +7,19 @@
 	gap: 25px;
 	cursor: pointer;
 
+	@media (width < $lg) {
+		gap: 10px;
+	}
+
 	&__name {
 		font: var(--font-l);
-		font-weight: 400;
 		max-width: 220px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+
+		@media (width < $lg) {
+			font: var(--font-s);
+		}
 	}
 }

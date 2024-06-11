@@ -1,3 +1,5 @@
+@import 'breakpoints';
+
 .sidebar {
   position: relative;
   display: flex;
@@ -9,10 +11,16 @@
   padding-left: 50px;
   background-color: transparent;
   transition: max-width 0.3s;
+
+  @media (width < $lg) {
+    display: none;
+  }
+
   &__item {
     padding: 15px;
     font-size: var(--font-size-m);
   }
+
   &__item:not(:last-child) {
     border-radius: 1px;
     border-bottom: 1px solid rgba(139, 16, 62, 0.3);

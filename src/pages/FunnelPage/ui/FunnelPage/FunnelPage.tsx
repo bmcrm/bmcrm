@@ -1,15 +1,17 @@
-import styles from './FunnelPage.module.scss';
 import { memo, useEffect } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
+import { useToggle } from 'shared/hooks/useToggle';
+import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
+
 import Sidebar from 'widgets/Sidebar';
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/FunnelCard';
 import Modal from 'shared/ui/Modal/Modal';
+
+import styles from './FunnelPage.module.scss';
 import { FUNNEL_STATIC } from './data';
 import { InviteMember } from '../InviteMember/InviteMember';
-import { useToggle } from 'shared/hooks/useToggle';
-import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
 const FunnelPage = memo(() => {
   const { toggle, isOpen } = useToggle();
@@ -35,7 +37,7 @@ const FunnelPage = memo(() => {
               campers: FUNNEL_STATIC.campers.funnel,
             }}
           />
-          <Button onClick={toggle}>Invite</Button>
+          <Button onClick={toggle} className={styles.funnel__btn}>Invite</Button>
           {isOpen && (
             <Modal isOpen={isOpen} onClose={toggle}>
               <InviteMember onClose={toggle} />
