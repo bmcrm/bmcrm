@@ -4,8 +4,6 @@ import {
   InitiateAuthCommand,
   SignUpCommandInput,
   InitiateAuthCommandInput,
-  ConfirmSignUpCommandInput,
-  AdminCreateUserCommand,
   ConfirmSignUpCommand,
   ListUsersCommand,
   ForgotPasswordCommandInput,
