@@ -1,12 +1,13 @@
 import { create } from 'zustand';
-import { ICamper } from '../../type';
+import { ICamper } from '../../types/camper.types';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 import { EnvConfigs } from 'shared/config/env/env';
 import { useAuth } from 'entities/User';
+
 interface CamperState {
   isLoading: boolean;
-  campers: ICamper[] | Partial<ICamper>[];
+  campers: ICamper[];
   isError: string | null;
   getCampers(): Promise<void>;
   getCamperById(id: string): Promise<ICamper>;
