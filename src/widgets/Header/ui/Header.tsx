@@ -30,13 +30,9 @@ const Header = memo(({ className }: HeaderProps) => {
 
   useEffect(() => {
     if (decodedIDToken) {
-      const playaName = decodedIDToken?.['custom:playa_name'];
-      const firstName = decodedIDToken?.['custom:first_name'];
-      const lastName = decodedIDToken?.['custom:last_name'];
-
-      const name =  playaName
-        || (firstName && lastName ? `${firstName} ${lastName}` : undefined)
-        || decodedIDToken.email;
+      const firstLastName = decodedIDToken.first_name && decodedIDToken.last_name
+        ? `${decodedIDToken.first_name} ${decodedIDToken.last_name}` : undefined;
+      const name = decodedIDToken.playa_name || firstLastName || decodedIDToken.email;
 
       const capitalizedName = name.split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())

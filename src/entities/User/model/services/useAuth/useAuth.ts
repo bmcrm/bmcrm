@@ -15,6 +15,7 @@ import {
 import { type IInputsData } from 'entities/User';
 import { CamperRole } from 'entities/Camper';
 import { jwtDecode } from 'jwt-decode';
+import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -55,19 +56,19 @@ type ConfirmResetType = {
   newPassword: string;
 };
 
-interface IIDToken {
+export interface IIDToken {
   aud: string;
   auth_time: number;
   'cognito:username': string;
-  'custom:camp_id': string;
-  'custom:camp_name'?: string;
-  'custom:camp_website'?: string;
-  'custom:city'?: string;
-  'custom:created_at': string;
-  'custom:first_name'?: string;
-  'custom:last_name'?: string;
-  'custom:playa_name'?: string;
-  'custom:role': CamperRole;
+  camp_id: string;
+  camp_name?: string;
+  camp_website?: string;
+  city?: string;
+  created_at: string;
+  first_name?: string;
+  last_name?: string;
+  playa_name?: string;
+  role: CamperRole;
   email: string;
   email_verified: boolean;
   event_id: string;
@@ -171,7 +172,8 @@ const useAuth = create<AuthState>()(
         decodeIDToken: (token: string) => {
           try {
             const decodedToken = jwtDecode<IIDToken>(token);
-            set({ decodedIDToken: decodedToken });
+            const normalizedToken = tokenNormalize(decodedToken);
+            set({ decodedIDToken: normalizedToken });
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
           }
