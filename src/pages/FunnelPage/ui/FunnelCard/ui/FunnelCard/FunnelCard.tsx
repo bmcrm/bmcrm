@@ -32,8 +32,6 @@ const FunnelCard = memo((props: FunnelCardProps) => {
   const slicedUsers = users.slice(0, +maxUsers);
   const isAllCardIcon = users.length > +maxUsers;
 
-  console.log(users);
-
   const toggleDetails = (id: string) => {
     toggle();
     setUserDetails(id);
