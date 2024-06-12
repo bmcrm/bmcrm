@@ -1,7 +1,5 @@
-import { memo, useState } from 'react';
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { memo } from 'react';
 import { inviteUser } from 'shared/api/userAuth/userAuth';
-import { useAuth } from 'entities/User';
 
 import { Field, Form, Formik } from 'formik';
 import Button from 'shared/ui/Button/Button';
@@ -15,28 +13,15 @@ interface IFormState {
   email: string;
   role: string;
 }
-interface CustomJwtPayload extends JwtPayload {
-  'custom:camp_id'?: string;
-}
+
 interface Props {
   onClose: () => void;
 }
 export const InviteMember = memo(({ onClose }: Props) => {
-  const idToken = useAuth(state => state.idToken);
-  const [profile, setProfile] = useState<CustomJwtPayload | null>(null);
-  const getProfile = async () => {
-    if (idToken) {
-      const decodedToken = await jwtDecode<CustomJwtPayload>(idToken);
-      setProfile(decodedToken);
-    }
-  };
   const handleSubmit = async (values: IFormState, { resetForm }: { resetForm: () => void }) => {
     onClose();
     resetForm();
-
     inviteUser({ ...values, camp_id: 'test' });
-    console.log(values);
-
     toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
   };
   return (
