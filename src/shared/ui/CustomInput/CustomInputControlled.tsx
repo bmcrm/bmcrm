@@ -9,6 +9,7 @@ import EyeClose from 'icons/eye_closed.svg';
 import clsx from 'clsx';
 import Icon from '../Icon/Icon';
 import { useState } from 'react';
+import { createSlug } from 'shared/lib/createSlug/createSlug';
 
 interface CustomInputProps {
   name: string;
@@ -16,11 +17,11 @@ interface CustomInputProps {
   type?: string;
   label?: string;
   values?: { [key: string]: string | boolean };
-  disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
+  setFieldValue: (field: string, value: string) => void;
 }
-export const CustomInput = ({
-  disabled,
+export const CustomInputControlled = ({
+  setFieldValue,
   name,
   errors,
   values,
@@ -55,9 +56,16 @@ export const CustomInput = ({
         </Tooltip>
       )}
       <Field
-        disabled={disabled}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          setIsFocused(false);
+        }}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          const campName = event.target.value;
+          const campId = createSlug(campName);
+          setFieldValue('campName', campName);
+          setFieldValue('campId', campId);
+        }}
         autoComplete='off'
         className={styles.input}
         name={name}

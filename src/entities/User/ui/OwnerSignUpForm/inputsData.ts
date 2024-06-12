@@ -18,32 +18,6 @@ export const inputsDataUser = [
     type: 'password',
   },
 ];
-export const inputsDataCamp = [
-  {
-    name: 'campName',
-    placeholder: 'Sparkle Unicorns',
-    label: 'Name your camp',
-    type: 'text',
-  },
-  {
-    name: 'campId',
-    placeholder: 'sparkle-unicorns',
-    label: 'Camp ID',
-    type: 'text',
-  },
-  {
-    name: 'city',
-    placeholder: 'Miami',
-    label: 'Hometown',
-    type: 'text',
-  },
-  {
-    name: 'camp_website',
-    placeholder: 'www.sparkle-unicorns.org',
-    label: 'Website',
-    type: 'text',
-  },
-];
 
 export const INPUTS_STATE = {
   campName: '',
