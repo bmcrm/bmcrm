@@ -34,7 +34,7 @@ export const signInSchema = yup.object().shape({
 
 export const inviteMemberSchema = yup.object().shape({
   email: yup.string().email('Invalid email address').required('Email is required'),
-  type: yup.string().required('Type is required'),
+  role: yup.string().required('Type is required'),
 });
 
 export const confirmUserSchema = yup.object().shape({
