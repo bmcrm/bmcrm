@@ -1,5 +1,6 @@
-import { type ICamper } from './model/type';
+import { type ICamper, CamperRole } from './model/types/camper.types.ts';
 
 export {
   ICamper,
+  CamperRole,
 };

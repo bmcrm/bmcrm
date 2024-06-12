@@ -23,7 +23,7 @@ const FunnelCardAll = memo((props: FunnelCardAllProps) => {
       {title && <h2 className={styles.title}>{title}</h2>}
       <ul className={styles.card__list}>
         {users.map(user => (
-          <FunnelCardItem key={user.id} user={user}/>
+          <FunnelCardItem key={user.email} user={user}/>
         ))}
       </ul>
     </div>
