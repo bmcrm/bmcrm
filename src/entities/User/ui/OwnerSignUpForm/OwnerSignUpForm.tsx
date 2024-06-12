@@ -8,7 +8,7 @@ import Camp from 'shared/assets/icons/camp.svg';
 
 import { INPUTS_STATE, inputsDataCamp, inputsDataUser } from './inputsData';
 import styles from './OwnerSignUpForm.module.scss';
-import { registrationSchema } from 'shared/lib/schemas/validations.ts';
+import { registrationSchema } from 'shared/const/schemas/validations.ts';
 import { ButtonSize } from 'shared/ui/Button/Button.types';
 import { IInputsData } from './OwnerSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';

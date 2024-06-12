@@ -11,7 +11,7 @@ import FormLoader from 'features/FormLoader';
 import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { confirmUserSchema } from 'shared/lib/schemas/validations';
+import { confirmUserSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
 import { RoutePath } from 'app/providers/AppRouter';
 import { ISignInCredentials } from 'pages/SignInPage';

@@ -12,7 +12,7 @@ import { type SignInFormData } from './UserSignInForm.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 import { RoutePath } from 'app/providers/AppRouter';
 import styles from './UserSignInForm.module.scss';
-import { signInSchema } from 'shared/lib/schemas/validations.ts';
+import { signInSchema } from 'shared/const/schemas/validations.ts';
 
 type SignInFormProps = {
   onSubmit: (values: SignInFormData, { resetForm }: { resetForm: () => void }) => void;

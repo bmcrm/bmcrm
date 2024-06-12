@@ -8,7 +8,7 @@ import Icon from 'shared/ui/Icon/Icon';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import styles from './ResetPassStepTwo.module.scss';
-import { confirmResetPassSchema } from 'shared/lib/schemas/validations';
+import { confirmResetPassSchema } from 'shared/const/schemas/validations';
 import { confirmationInputs, initialValues } from './inputsData';
 
 export type ResetPassStepTwoTypes = {

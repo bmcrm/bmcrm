@@ -8,7 +8,7 @@ import Icon from 'shared/ui/Icon/Icon';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import styles from './ResetPassStepOne.module.scss';
-import { initResetPassSchema } from 'shared/lib/schemas/validations';
+import { initResetPassSchema } from 'shared/const/schemas/validations';
 
 type ResetPassStepOneProps = {
   onSubmit: (values: { email: string }, { resetForm }: { resetForm: () => void }) => void;

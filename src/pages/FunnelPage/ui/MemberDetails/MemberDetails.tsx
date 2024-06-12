@@ -7,7 +7,7 @@ import Facebook from 'icons/fb_icon.svg';
 import Instagram from 'icons/inst_icon.svg';
 import mockImage from 'images/avatars/photoMock.png';
 import styles from './MemberDetails.module.scss';
-import { ICamper } from 'entities/Camper/model/type';
+import { ICamper } from 'entities/Camper/model/types/camper.types.ts';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import Loader from 'shared/ui/Loader/Loader';
 

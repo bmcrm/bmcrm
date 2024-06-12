@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 
 import styles from './InviteMember.module.scss';
-import { inviteMemberSchema } from 'shared/lib/schemas/validations';
+import { inviteMemberSchema } from 'shared/const/schemas/validations';
 
 interface IFormState {
   email: string;
