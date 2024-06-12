@@ -35,7 +35,8 @@ interface SignUpData {
   playaName: string;
   role: string;
 }
-interface InviteData {
+
+export interface InviteData {
   email: string;
   camp_id: string;
   role: string;
@@ -69,6 +70,7 @@ export const signUpUser = async (userData: SignUpData) => {
 
   return await cognitoClient.send(new SignUpCommand(params));
 };
+
 export const inviteUser = async (userData: InviteData) => {
   const params: SignUpCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
@@ -102,14 +104,13 @@ export const loginUser = async ({ email, password }: { email: string; password: 
 };
 
 export const confirmEmail = async ({ email, code }: ConfirmCode) => {
-  const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
   const command = new ConfirmSignUpCommand({
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,
     ConfirmationCode: code,
   });
 
-  return await client.send(command);
+  return await cognitoClient.send(command);
 };
 
 export const initResetPassword = async ({ email }: { email: string }) => {

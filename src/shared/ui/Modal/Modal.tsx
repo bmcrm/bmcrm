@@ -11,6 +11,7 @@ type ModalProps = {
 };
 
 const ANIMATION_DELAY = 300;
+let openModalCount = 0;
 
 const Modal = (props: ModalProps) => {
   const { className, children, isOpen, onClose } = props;
@@ -20,6 +21,7 @@ const Modal = (props: ModalProps) => {
     [styles.open]: isOpen,
     [styles.closing]: isClosing,
   };
+  console.log(openModalCount);
 
   const closeHandler = useCallback(() => {
     if (onClose) {
@@ -27,6 +29,11 @@ const Modal = (props: ModalProps) => {
       timerRef.current = setTimeout(() => {
         onClose();
         setIsClosing(false);
+        openModalCount -= 1;
+
+        if (openModalCount === 0) {
+          document.body.style.overflow = 'auto';
+        }
       }, ANIMATION_DELAY);
     }
   }, [onClose]);
@@ -35,15 +42,13 @@ const Modal = (props: ModalProps) => {
     e.stopPropagation();
   };
 
-  const onKeydown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeHandler();
-    },
-    [closeHandler]
-  );
+  const onKeydown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeHandler();
+  }, [closeHandler]);
 
   useEffect(() => {
     if (isOpen) {
+      openModalCount += 1;
       window.addEventListener('keydown', onKeydown);
       document.body.style.overflow = 'hidden';
     }
@@ -51,7 +56,6 @@ const Modal = (props: ModalProps) => {
     return () => {
       clearTimeout(timerRef.current);
       window.removeEventListener('keydown', onKeydown);
-      document.body.style.overflow = 'auto';
     };
   }, [isOpen, onKeydown]);
 

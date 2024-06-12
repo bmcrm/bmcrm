@@ -51,6 +51,7 @@
     background-color: var(--color-secondary-bg);
     transition: transform .3s;
     transform: scale(.5);
+    overflow: hidden;
 
     @media (width < $md) {
       padding: 20px;

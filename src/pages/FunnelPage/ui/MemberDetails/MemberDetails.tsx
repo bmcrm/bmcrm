@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 
 import Icon from 'shared/ui/Icon/Icon';
 import X from 'icons/x_icon.svg';
@@ -12,18 +12,17 @@ import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import Loader from 'shared/ui/Loader/Loader';
 
 interface Props {
-  camperId: string;
+  camperEmail: string | null;
 }
 
-export const MemberDetails = memo(({ camperId }: Props) => {
+export const MemberDetails = memo(({ camperEmail }: Props) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
-  const { getCamperById, isLoading } = useCampers(state => ({
-    getCamperById: state.getCamperById,
-    isLoading: state.isLoading,
-  }));
-  useEffect(() => {
-    getCamperById(camperId).then(data => setCamper(data));
-  }, [camperId, getCamperById]);
+  const { getCamperById, isLoading } = useCampers();
+
+  // useEffect(() => {
+  //   getCamperById(camperEmail).then(data => setCamper(data));
+  // }, [camperEmail, getCamperById]);
+
   return (
     <article className={styles.wrapper}>
       <section className={styles.firstBlock}>

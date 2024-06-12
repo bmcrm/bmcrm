@@ -19,7 +19,6 @@ const errorsNames: { [key: string]: string } = {
 
 const errorHandler = (error: CognitoIdentityProviderServiceException) => {
   const errorMessage = errorsNames[error.name] || 'Oops, something wrong! Try again later!';
-
   toast.error(errorMessage, { duration: 4000, position: 'top-center' });
 };
 

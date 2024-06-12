@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import errorHandler from 'shared/lib/authErrorHandler/authErrorHandler';
+import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
 
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import ResetPassFormTemplate from 'shared/ui/ResetPassFormTemplate/ResetPassFormTemplate';
