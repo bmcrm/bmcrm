@@ -5,16 +5,18 @@ import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
-import FunnelCard from '../FunnelCard/FunnelCard';
+import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard.tsx';
 import Modal from 'shared/ui/Modal/Modal';
 
 import styles from './FunnelPage.module.scss';
 import { FUNNEL_STATIC } from './data';
 import { InviteMember } from '../InviteMember/InviteMember';
 import Container from 'shared/ui/Container/Container';
+import { useMediaQuery } from 'react-responsive';
 
 const FunnelPage = memo(() => {
   const { toggle, isOpen } = useToggle();
+  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCampers, campers } = useCampers(state => ({
     getCampers: state.getCampers,
     campers: state.campers,
@@ -44,10 +46,10 @@ const FunnelPage = memo(() => {
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={FUNNEL_STATIC.leads.users}/>
-          <FunnelCard title={'Qualified'} users={FUNNEL_STATIC.qualified.users}/>
-          <FunnelCard title={'Intent'} users={FUNNEL_STATIC.intent.users}/>
-          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={FUNNEL_STATIC.campers.users}/>
+          <FunnelCard title={'Leads'} users={campers}/>
+          <FunnelCard title={'Qualified'} users={campers}/>
+          <FunnelCard title={'Intent'} users={campers}/>
+          <FunnelCard title={'Campers'} fluid={!isTablet} users={campers} maxUsers={12}/>
         </div>
       </Container>
     </section>

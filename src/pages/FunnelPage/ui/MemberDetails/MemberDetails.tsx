@@ -1,3 +1,4 @@
+import { memo, useEffect, useState } from 'react';
 import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
 
 import Icon from 'shared/ui/Icon/Icon';
@@ -6,7 +7,6 @@ import Facebook from 'icons/fb_icon.svg';
 import Instagram from 'icons/inst_icon.svg';
 import mockImage from 'images/avatars/photoMock.png';
 import styles from './MemberDetails.module.scss';
-import { useEffect, useState } from 'react';
 import { ICamper } from 'entities/Camper/model/type';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import Loader from 'shared/ui/Loader/Loader';
@@ -15,7 +15,7 @@ interface Props {
   camperId: string;
 }
 
-export const MemberDetails = ({ camperId }: Props) => {
+export const MemberDetails = memo(({ camperId }: Props) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
   const { getCamperById, isLoading } = useCampers(state => ({
     getCamperById: state.getCamperById,
@@ -77,4 +77,4 @@ export const MemberDetails = ({ camperId }: Props) => {
       </section>
     </article>
   );
-};
+});

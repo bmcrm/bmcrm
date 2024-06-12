@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from './FunnerCardItem.module.scss';
 import { classNames } from 'shared/lib/classNames/classNames';
 import Avatar from 'shared/ui/Avatar/Avatar';
@@ -12,13 +13,13 @@ export type User = {
 type FunnerCardItemProps = {
   className?: string;
   user: ICamper | Partial<ICamper>;
-  openDetails: (id: string) => void;
+  openDetails?: (id: string) => void;
 };
 
-const FunnelCardItem = ({ className, user, openDetails }: FunnerCardItemProps) => {
+const FunnelCardItem = memo(({ className, user, openDetails }: FunnerCardItemProps) => {
   return (
     <li
-      onClick={() => openDetails(user.id!)}
+      onClick={() => openDetails?.(user.id!)}
       className={classNames(styles.cardItem, { [styles.online]: user.id }, [className])}
     >
       <Avatar alt={user.avatar} size={30} />
@@ -27,6 +28,6 @@ const FunnelCardItem = ({ className, user, openDetails }: FunnerCardItemProps) =
       </p>
     </li>
   );
-};
+});
 
 export default FunnelCardItem;

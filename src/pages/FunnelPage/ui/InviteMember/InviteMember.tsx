@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Field, Form, Formik } from 'formik';
 import Button from 'shared/ui/Button/Button';
 import styles from './InviteMember.module.scss';
@@ -13,7 +14,7 @@ interface IFormState {
 interface Props {
   onClose: () => void;
 }
-export const InviteMember = ({ onClose }: Props) => {
+export const InviteMember = memo(({ onClose }: Props) => {
   const handleSubmit = (values: IFormState, { resetForm }: { resetForm: () => void }) => {
     onClose();
     resetForm();
@@ -45,4 +46,4 @@ export const InviteMember = ({ onClose }: Props) => {
       </Formik>
     </div>
   );
-};
+});

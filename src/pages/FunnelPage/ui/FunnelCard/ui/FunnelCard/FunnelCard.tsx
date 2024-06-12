@@ -1,48 +1,54 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { useToggle } from 'shared/hooks/useToggle';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
 import Loader from 'shared/ui/Loader/Loader';
-import FunnelCardItem from '../FunnelCardItem/FunnelCardItem';
+import FunnelCardItem from '../../../FunnelCardItem/FunnelCardItem';
 import Modal from 'shared/ui/Modal/Modal';
 import Icon from 'shared/ui/Icon/Icon';
-import { MemberDetails } from '../MemberDetails/MemberDetails';
+import { MemberDetails } from '../../../MemberDetails/MemberDetails';
+import FunnelCardAll from '../../ui/FunnelCardAll/FunnelCardAll';
 
 import styles from './FunnelCard.module.scss';
-import { ICamper } from 'entities/Camper/model/type';
 import FullSizeIcon from 'shared/assets/icons/full-screen_icon.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
+import { ICamper } from 'entities/Camper';
 
 type FunnelCardProps = {
   className?: string;
   title?: string;
   fluid?: boolean;
+  maxUsers?: string | number;
   users: ICamper[] | Partial<ICamper>[];
 };
 
-const FunnelCard = (props: FunnelCardProps) => {
-  const { className, title, fluid, users } = props;
+const FunnelCard = memo((props: FunnelCardProps) => {
+  const { className, title, fluid, users, maxUsers = 9 } = props;
   const [userDetails, setUserDetails] = useState<string>('');
   const { isOpen, toggle } = useToggle();
-  const [isFullCard, setIsFullCard] = useState(false);
+  const [isAllCard, setIsAllCard] = useState(false);
   const isLoading = useCampers(state => state.isLoading);
+  const slicedUsers = users.slice(0, +maxUsers);
+  const isAllCardIcon = users.length > +maxUsers;
+
   const toggleDetails = (id: string) => {
     toggle();
     setUserDetails(id);
   };
-  const slicedUsers = fluid ? users.slice(0, 12) : users.slice(0, 9);
 
-  const toggleFullCard = () => {
-    setIsFullCard(prev => !prev);
+  const toggleAllCard = () => {
+    if (isAllCardIcon) {
+      setIsAllCard(prev => !prev);
+    }
   };
 
   return (
     <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
       {title && (
-        <div className={styles.card__head} onClick={toggleFullCard}>
+        <div className={styles.card__head} onClick={toggleAllCard}>
           <h3>{title}</h3>
-          <Icon icon={<FullSizeIcon/>} size={IconSize.SIZE_20} className={styles.card__icon}/>
+          {isAllCardIcon && <Icon icon={<FullSizeIcon/>} size={IconSize.SIZE_20} className={styles.card__icon}/>}
         </div>
       )}
       {isOpen && (
@@ -50,13 +56,9 @@ const FunnelCard = (props: FunnelCardProps) => {
           <MemberDetails camperId={userDetails} />
         </Modal>
       )}
-      {isFullCard && (
-        <Modal isOpen={isFullCard} onClose={toggleFullCard}>
-          <ul>
-            {users.map(user => (
-              <FunnelCardItem openDetails={toggleDetails} key={user.id} user={user}/>
-            ))}
-          </ul>
+      {isAllCard && (
+        <Modal isOpen={isAllCard} onClose={toggleAllCard}>
+          <FunnelCardAll users={users} title={title}/>
         </Modal>
       )}
       {isLoading && !slicedUsers.length && <Loader className={'m-centred'} />}
@@ -69,6 +71,6 @@ const FunnelCard = (props: FunnelCardProps) => {
       )}
     </div>
   );
-};
+});
 
 export default FunnelCard;
