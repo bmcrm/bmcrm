@@ -16,14 +16,13 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  font-size: var(--font-size-xs);
 }
 .valid {
   color: #038f00;
-  font-weight: bold;
 }
 .invalid {
   color: var(--color-ruby-dark);
-  font-weight: bold;
 }
 .label {
   position: relative;
