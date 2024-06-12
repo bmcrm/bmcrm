@@ -3,7 +3,7 @@ import UserSignInForm from './ui/UserSignInForm/UserSignInForm';
 import { type SignInFormData } from './ui/UserSignInForm/UserSignInForm.types';
 import OwnerSignUpForm from './ui/OwnerSignUpForm/OwnerSignUpForm';
 import { type IInputsData } from './ui/OwnerSignUpForm/OwnerSignUpForm.types';
-import useAuth from './model/services/useAuth/useAuth';
+import useAuth, { type IIDToken } from './model/services/useAuth/useAuth';
 import { type IUserAvatar } from './ui/UserAvatar/UserAvatar';
 
 export {
@@ -14,4 +14,5 @@ export {
   IInputsData,
   useAuth,
   IUserAvatar,
+  IIDToken,
 };

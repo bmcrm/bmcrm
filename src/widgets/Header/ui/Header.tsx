@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { jwtDecode } from 'jwt-decode';
 import { classNames } from 'shared/lib/classNames/classNames';
 
 import { Link } from 'react-router-dom';
@@ -11,42 +10,42 @@ import { useAuth, UserAvatar, IUserAvatar } from 'entities/User';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 import styles from './Header.module.scss';
-import { useToggle } from 'shared/hooks/useToggle.tsx';
+import { useToggle } from 'shared/hooks/useToggle';
 
 type HeaderProps = {
   className?: string;
 };
 
-interface IJwtPayload {
-  'custom:first_name': string;
-  'custom:last_name': string;
-  'custom:playa_name': string;
-}
-
 const Header = memo(({ className }: HeaderProps) => {
-  const { isLoggedIn, idToken } = useAuth();
+  const { isLoggedIn, idToken, decodeIDToken, decodedIDToken } = useAuth();
   const [user, setUser] = useState<IUserAvatar | null>(null);
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const { isOpen, toggle, close } = useToggle();
 
   useEffect(() => {
     if (isLoggedIn) {
-      const decodedToken = jwtDecode<IJwtPayload>(idToken);
-      const userName = decodedToken['custom:playa_name']
-        ? decodedToken['custom:playa_name']
-        : `${decodedToken['custom:first_name']} ${decodedToken['custom:last_name']}`;
-      const CapitalizedUserName = userName
-        .split(' ')
+      decodeIDToken(idToken);
+    }
+  }, [isLoggedIn, idToken, decodeIDToken]);
+
+  useEffect(() => {
+    if (decodedIDToken) {
+      const firstLastName = decodedIDToken.first_name && decodedIDToken.last_name
+        ? `${decodedIDToken.first_name} ${decodedIDToken.last_name}` : undefined;
+      const name = decodedIDToken.playa_name || firstLastName || decodedIDToken.email;
+
+      const capitalizedName = name.split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
+
       const decodedUser: IUserAvatar = {
-        name: CapitalizedUserName,
+        name: capitalizedName,
         avatar: null,
       };
 
       setUser(decodedUser);
     }
-  }, [idToken, isLoggedIn]);
+  }, [decodedIDToken]);
 
   useEffect(() => {
     if (isOpen) {
