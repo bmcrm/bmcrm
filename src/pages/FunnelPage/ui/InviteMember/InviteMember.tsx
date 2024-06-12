@@ -34,25 +34,24 @@ export const InviteMember = memo(({ onClose }: Props) => {
     onClose();
     resetForm();
 
-    console.log(profile);
-    // console.log({ ...values, camp_id: profile['custom:camp_id'], password: '123qweQ!' });
+    inviteUser({ ...values, camp_id: 'test' });
+    console.log(values);
 
-    const response = inviteUser({ ...values, camp_id: 'test' });
     toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
   };
   return (
     <div className={styles.wrapper}>
       <h2>Invite User by Email</h2>
       <p>Please enter the email address of the user you want to invite and select Lead/Qualified status</p>
-      <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '', role: 'lead' }}>
+      <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '', role: '' }}>
         <Form className={styles.form}>
           <div className={styles.radioGroup}>
             <label>
-              <Field name='type' type='radio' value='lead' className={styles.input} />
+              <Field name='role' type='radio' value='lead' className={styles.input} />
               Lead
             </label>
             <label>
-              <Field name='type' type='radio' value='qualified' className={styles.input} />
+              <Field name='role' type='radio' value='qualified' className={styles.input} />
               Qualified
             </label>
           </div>
