@@ -3,18 +3,20 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import { useToggle } from 'shared/hooks/useToggle';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
-import Sidebar from 'widgets/Sidebar';
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
-import FunnelCard from '../FunnelCard/FunnelCard';
+import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard.tsx';
 import Modal from 'shared/ui/Modal/Modal';
 
 import styles from './FunnelPage.module.scss';
 import { FUNNEL_STATIC } from './data';
 import { InviteMember } from '../InviteMember/InviteMember';
+import Container from 'shared/ui/Container/Container';
+import { useMediaQuery } from 'react-responsive';
 
 const FunnelPage = memo(() => {
   const { toggle, isOpen } = useToggle();
+  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCampers, campers } = useCampers(state => ({
     getCampers: state.getCampers,
     campers: state.campers,
@@ -25,9 +27,8 @@ const FunnelPage = memo(() => {
   }, [getCampers]);
 
   return (
-    <>
-      <Sidebar title={'Funnel Page Sidebar'} datalist={['Leads', 'Qualified', 'Intent', 'Campers']} />
-      <section className={classNames(styles.funnel, {}, [])}>
+    <section className={classNames(styles.funnel, {}, [])}>
+      <Container fluid>
         <div className={styles.funnel__head}>
           <Funnel
             data={{
@@ -40,18 +41,18 @@ const FunnelPage = memo(() => {
           <Button onClick={toggle} className={styles.funnel__btn}>Invite</Button>
           {isOpen && (
             <Modal isOpen={isOpen} onClose={toggle}>
-              <InviteMember onClose={toggle} />
+              <InviteMember onClose={toggle}/>
             </Modal>
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={campers} />
-          <FunnelCard title={'Qualified'} users={campers} />
-          <FunnelCard title={'Intent'} users={campers} />
-          <FunnelCard title={'Campers'} fluid={window.innerWidth >= 1024} users={campers} />
+          <FunnelCard title={'Leads'} users={campers}/>
+          <FunnelCard title={'Qualified'} users={campers}/>
+          <FunnelCard title={'Intent'} users={campers}/>
+          <FunnelCard title={'Campers'} fluid={!isTablet} users={campers} maxUsers={12}/>
         </div>
-      </section>
-    </>
+      </Container>
+    </section>
   );
 });
 

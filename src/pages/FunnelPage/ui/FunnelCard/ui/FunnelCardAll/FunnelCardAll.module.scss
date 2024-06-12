@@ -1,0 +1,23 @@
+@import 'breakpoints';
+
+.card {
+	display: grid;
+	gap: 30px;
+	width: 975px;
+	max-width: 100%;
+
+	@media (width > $xxl) {
+		width: 80vw;
+	}
+
+	.title {
+		font: var(--font-l);
+		font-weight: 500;
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 15px 30px;
+	}
+}

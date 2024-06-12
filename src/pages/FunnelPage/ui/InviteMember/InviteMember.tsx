@@ -1,13 +1,15 @@
-import { Field, Form, Formik } from 'formik';
-import Button from 'shared/ui/Button/Button';
-import styles from './InviteMember.module.scss';
-import toast from 'react-hot-toast';
-import { inviteMemberSchema } from 'shared/lib/schemas/validations.ts';
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
-import { useAuth } from 'entities/User';
+import { memo, useState } from 'react';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { inviteUser } from 'shared/api/userAuth/userAuth';
-import { useState } from 'react';
+import { useAuth } from 'entities/User';
+
+import { Field, Form, Formik } from 'formik';
+import Button from 'shared/ui/Button/Button';
+import toast from 'react-hot-toast';
+import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+
+import styles from './InviteMember.module.scss';
+import { inviteMemberSchema } from 'shared/lib/schemas/validations';
 
 interface IFormState {
   email: string;
@@ -19,7 +21,7 @@ interface CustomJwtPayload extends JwtPayload {
 interface Props {
   onClose: () => void;
 }
-export const InviteMember = ({ onClose }: Props) => {
+export const InviteMember = memo(({ onClose }: Props) => {
   const idToken = useAuth(state => state.idToken);
   const [profile, setProfile] = useState<CustomJwtPayload | null>(null);
   const getProfile = async () => {
@@ -60,4 +62,4 @@ export const InviteMember = ({ onClose }: Props) => {
       </Formik>
     </div>
   );
-};
+});
