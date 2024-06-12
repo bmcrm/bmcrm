@@ -6,7 +6,7 @@ import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Camp from 'shared/assets/icons/camp.svg';
 
-import { INPUTS_STATE, inputsDataCamp, inputsDataUser } from './inputsData';
+import { INPUTS_STATE, inputsDataUser } from './inputsData';
 import styles from './OwnerSignUpForm.module.scss';
 import { registrationSchema } from 'shared/const/schemas/validations.ts';
 import { ButtonSize } from 'shared/ui/Button/Button.types';
@@ -14,6 +14,7 @@ import { IInputsData } from './OwnerSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
+import { CustomInputControlled } from 'shared/ui/CustomInput/CustomInputControlled';
 
 interface Props {
   handleSubmit: (values: IInputsData, { resetForm }: { resetForm: () => void }) => void;
@@ -21,13 +22,20 @@ interface Props {
 const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
   return (
     <Formik validationSchema={registrationSchema} onSubmit={handleSubmit} initialValues={INPUTS_STATE}>
-      {({ values }) => {
+      {({ values, setFieldValue }) => {
         return (
           <Form className={styles.form}>
             <section>
-              {inputsDataCamp.map(input => (
-                <CustomInput key={input.name} {...input} />
-              ))}
+              <CustomInputControlled
+                setFieldValue={setFieldValue}
+                values={values}
+                name='campName'
+                placeholder='Sparkle Unicorns'
+                label='Name your camp'
+              />
+              <CustomInput name='campId' disabled placeholder='sparkle-unicorns' label='Camp ID' />
+              <CustomInput name='city' placeholder='Miami' label='Hometown' />
+              <CustomInput name='camp_website' placeholder='www.sparkle-unicorns.org' label='Website' />
             </section>
             <section>
               <div className={styles.flex}>
