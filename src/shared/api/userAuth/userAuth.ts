@@ -4,6 +4,8 @@ import {
   InitiateAuthCommand,
   SignUpCommandInput,
   InitiateAuthCommandInput,
+  ConfirmSignUpCommandInput,
+  AdminCreateUserCommand,
   ConfirmSignUpCommand,
   ListUsersCommand,
   ForgotPasswordCommandInput,
@@ -35,6 +37,11 @@ interface SignUpData {
   playaName: string;
   role: string;
 }
+interface InviteData {
+  email: string;
+  camp_id: string;
+  role: string;
+}
 
 interface IConfirmResetPassword {
   email: string;
@@ -58,6 +65,22 @@ export const signUpUser = async (userData: SignUpData) => {
       { Name: 'custom:first_name', Value: userData.firstName },
       { Name: 'custom:last_name', Value: userData.lastName },
       { Name: 'custom:playa_name', Value: userData.playaName },
+      { Name: 'custom:role', Value: userData.role },
+    ],
+  };
+
+  return await cognitoClient.send(new SignUpCommand(params));
+};
+export const inviteUser = async (userData: InviteData) => {
+  const params: SignUpCommandInput = {
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    Username: userData.email,
+    Password: '123qweQ!',
+    UserAttributes: [
+      { Name: 'email', Value: userData.email },
+      { Name: 'custom:created_at', Value: new Date().getTime().toString() },
+      { Name: 'updated_at', Value: new Date().getTime().toString() },
+      { Name: 'custom:camp_id', Value: userData.camp_id },
       { Name: 'custom:role', Value: userData.role },
     ],
   };

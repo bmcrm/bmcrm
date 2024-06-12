@@ -8,6 +8,7 @@ export interface ICamper {
   camp_name: string;
   first_name: string;
   last_name: string;
+  role: string;
   playa_name: string;
   camp_website: string;
   avatar?: string;

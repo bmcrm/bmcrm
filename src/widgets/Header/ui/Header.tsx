@@ -70,9 +70,9 @@ const Header = memo(({ className }: HeaderProps) => {
             <Logo />
           </Link>
         </strong>
-        <Nav user={user} isOpen={isMobile ? isOpen : true} onContentClick={onContentClick} onClick={close}/>
-        {!isMobile && <UserAvatar user={user}/>}
-        {isMobile && <Hamburger isOpen={isOpen} onClick={toggle}/>}
+        <Nav user={user} isOpen={isMobile ? isOpen : true} onContentClick={onContentClick} onClick={close} />
+        {!isMobile && <UserAvatar user={user} />}
+        {isMobile && <Hamburger isOpen={isOpen} onClick={toggle} />}
       </div>
     </header>
   );
