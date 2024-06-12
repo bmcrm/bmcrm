@@ -9,4 +9,5 @@ export interface IInputsData {
   playaName: string;
   email: string;
   password: string;
+  role: string;
 }

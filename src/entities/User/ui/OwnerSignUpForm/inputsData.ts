@@ -55,5 +55,6 @@ export const INPUTS_STATE = {
   lastName: '',
   playaName: '',
   email: '',
+  role: 'tco',
   password: '',
 };
