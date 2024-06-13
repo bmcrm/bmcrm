@@ -10,7 +10,7 @@ interface CamperState {
   isError: string | null;
   getCampers(): Promise<void>;
   getCamper(email: string): Promise<ICamper | null>;
-  updateCamper(email: string, data: Partial<ICamper>): Promise<void>;
+  updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
 
 const useCampers = create<CamperState>()(
@@ -49,7 +49,6 @@ const useCampers = create<CamperState>()(
     },
     updateCamper: async (email: string, data: Partial<ICamper>) => {
       try {
-        set({ isLoading: true });
         const response = await axios.patch(
           `https://campers.dev.bmcrm.camp/campers/${email}`,
           { ...data, email: email },
@@ -62,11 +61,10 @@ const useCampers = create<CamperState>()(
         );
 
         set({ isLoading: false, campers: response.data });
+
+        return response.data;
       } catch (error) {
-        console.log(error);
         throw new Error('Error fetching campers: ' + error);
-      } finally {
-        set({ isLoading: false });
       }
     },
   }))

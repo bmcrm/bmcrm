@@ -1,4 +1,12 @@
-export type History = { year: number; text: string };
+export interface CamperHistory {
+  year: number;
+  value: string;
+}
+
+export interface CamperSocial {
+  name: string;
+  url: string;
+}
 
 export enum CamperRole {
   TCO = 'tco',
@@ -18,8 +26,11 @@ export interface ICamper {
   playa_name?: string;
   camp_website?: string;
   role: CamperRole;
-  email_confirmed: boolean;
   avatar?: string;
+  email_confirmed: boolean;
   summary?: string;
-  history?: History[];
+  social_links?: CamperSocial[];
+  history?: CamperHistory[];
+  updated_at: string;
+  created_at: string;
 }
