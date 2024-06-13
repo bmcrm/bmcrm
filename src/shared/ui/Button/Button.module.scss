@@ -12,6 +12,13 @@
 	border: 1px solid var(--color-ruby-dark);
 	transition: 0.1s ease;
 
+	// active
+
+	&:active {
+		background-color: #750e34;
+		border-color: #750e34;
+	}
+
 	// styles
 
 	&--primary {
@@ -36,6 +43,11 @@
 	&--clear {
 		background-color: transparent;
 		border: none;
+
+		&:active {
+			background-color: transparent;
+			border-color: transparent;
+		}
 	}
 
 	// colors
@@ -63,6 +75,9 @@
 				color: var(--color-white);
 			}
 		}
+	}
+	&--neutral {
+		color: var(--color-neutral);
 	}
 
 	// sizes
@@ -104,13 +119,6 @@
 
 	&.fluid {
 		width: 100%;
-	}
-
-	// active
-
-	&:active {
-		background-color: #750e34;
-		border-color: #750e34;
 	}
 
 	// disabled

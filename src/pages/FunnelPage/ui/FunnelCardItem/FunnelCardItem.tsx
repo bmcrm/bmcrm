@@ -9,7 +9,7 @@ import { ICamper } from 'entities/Camper/model/types/camper.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import ClockIcon from 'shared/assets/icons/clock.svg';
 import CheckIcon from 'shared/assets/icons/check.svg';
-import { MemberDetails } from 'pages/FunnelPage/ui/MemberDetails/MemberDetails.tsx';
+import MemberDetails from 'pages/FunnelPage/ui/MemberDetails/MemberDetails.tsx';
 import Modal from 'shared/ui/Modal/Modal.tsx';
 import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
 

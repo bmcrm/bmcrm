@@ -26,7 +26,10 @@ const SignUpOwnerPage = memo(() => {
       const response = await register(values);
 
       if (response) {
-        toast.success('Sign-up successful!', { duration: 2000, position: 'top-center' });
+        toast.success(
+          'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
+          { duration: 5000, position: 'top-center' }
+        );
         resetForm();
         navigate(RoutePath.sign_in, { replace: true });
       }

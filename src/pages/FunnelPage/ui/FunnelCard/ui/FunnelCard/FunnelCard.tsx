@@ -25,7 +25,7 @@ type FunnelCardProps = {
 const FunnelCard = memo((props: FunnelCardProps) => {
   const { className, title, fluid, users, maxUsers = 9 } = props;
   const { isOpen, open, close } = useToggle();
-  const isLoading = useCampers(state => state.isLoading);
+  const { isLoading } = useCampers();
   const slicedUsers = users.slice(0, +maxUsers);
   const isAllCardIcon = users.length > +maxUsers;
 

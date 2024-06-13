@@ -9,6 +9,7 @@ export enum ButtonColor {
   RUBY_LIGHT = 'btn--ruby-light',
   WHITE = 'btn--white',
   BLACK = 'btn--black',
+  NEUTRAL = 'btn--neutral',
 }
 
 export enum ButtonSize {

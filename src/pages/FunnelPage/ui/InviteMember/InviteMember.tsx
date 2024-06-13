@@ -21,7 +21,7 @@ interface IProps {
 }
 
 const InviteMember = memo(({ onClose }: IProps) => {
-  const { invite, isLoading, error, resetError } = useAuth();
+  const { invite, isLoading, error, resetError, decodedIDToken } = useAuth();
 
   useEffect(() => {
     if (error) {
@@ -32,14 +32,14 @@ const InviteMember = memo(({ onClose }: IProps) => {
   }, [error, resetError]);
 
   const handleSubmit = useCallback(async (values: IFormState, { resetForm }: { resetForm: () => void }) => {
-    const response = await invite({ ...values, camp_id: 'test' });
+    const response = await invite({ ...values, camp_id: decodedIDToken!.camp_id });
 
     if (response) {
       onClose();
       resetForm();
       toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
     }
-  }, [invite, onClose]);
+  }, [decodedIDToken, invite, onClose]);
 
   return (
     <div className={styles.wrapper}>

@@ -7,6 +7,14 @@ $name-width: calc(100% - (($gap * 2) + $avatar-width + $icon-width));
 	display: flex;
 	align-items: center;
 	gap: $gap;
+	cursor: pointer;
+	transition: .2s ease;
+
+	@media (hover: hover) {
+		&:hover {
+			transform: scale(1.05);
+		}
+	}
 
 	&__name {
 		max-width: $name-width;

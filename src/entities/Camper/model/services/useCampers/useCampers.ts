@@ -2,18 +2,15 @@ import { create } from 'zustand';
 import { ICamper } from '../../types/camper.types';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
-import { EnvConfigs } from 'shared/config/env/env';
 import { useAuth } from 'entities/User';
 
 interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
   isError: string | null;
-  camper: ICamper;
   getCampers(): Promise<void>;
-  getCamper(email: string, camp_id: string): Promise<void>;
-  getCamperById(id: string): Promise<ICamper>;
-  updateCamper(email: string, camp_id: string, data: Partial<ICamper>): Promise<void>;
+  getCamper(email: string): Promise<ICamper | null>;
+  updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
 
 const useCampers = create<CamperState>()(
@@ -21,7 +18,6 @@ const useCampers = create<CamperState>()(
     isLoading: false,
     isError: null,
     campers: [],
-    camper: {} as ICamper,
     getCampers: async () => {
       try {
         set({ isLoading: true });
@@ -40,23 +36,19 @@ const useCampers = create<CamperState>()(
     },
     getCamper: async (email: string) => {
       try {
-        set({ isLoading: true });
         const response = await axios.get(`https://campers.dev.bmcrm.camp/campers/${email}`, {
           headers: {
             Authorization: useAuth.getState().idToken,
           },
         });
 
-        set({ isLoading: false, camper: response?.data[0] || null });
+        return response?.data || null;
       } catch (error) {
         throw new Error('Error fetching campers: ' + error);
-      } finally {
-        set({ isLoading: false });
       }
     },
     updateCamper: async (email: string, data: Partial<ICamper>) => {
       try {
-        set({ isLoading: true });
         const response = await axios.patch(
           `https://campers.dev.bmcrm.camp/campers/${email}`,
           { ...data, email: email },
@@ -69,22 +61,10 @@ const useCampers = create<CamperState>()(
         );
 
         set({ isLoading: false, campers: response.data });
-      } catch (error) {
-        throw new Error('Error fetching campers: ' + error);
-      } finally {
-        set({ isLoading: false });
-      }
-    },
 
-    getCamperById: async (id: string) => {
-      try {
-        set({ isLoading: true });
-        const { data } = await axios.get<ICamper>(EnvConfigs.CAMPERS_API_URL + '/' + id);
-        return data;
+        return response.data;
       } catch (error) {
         throw new Error('Error fetching campers: ' + error);
-      } finally {
-        set({ isLoading: false });
       }
     },
   }))
