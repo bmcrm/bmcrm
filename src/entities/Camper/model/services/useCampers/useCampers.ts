@@ -36,21 +36,15 @@ const useCampers = create<CamperState>()(
     },
     getCamper: async (email: string) => {
       try {
-        set({ isLoading: true });
         const response = await axios.get(`https://campers.dev.bmcrm.camp/campers/${email}`, {
           headers: {
             Authorization: useAuth.getState().idToken,
           },
         });
 
-        console.log(response);
-
-        return response?.data[0] || null;
+        return response?.data || null;
       } catch (error) {
-        console.log(error);
         throw new Error('Error fetching campers: ' + error);
-      } finally {
-        set({ isLoading: false });
       }
     },
     updateCamper: async (email: string, data: Partial<ICamper>) => {
@@ -69,6 +63,7 @@ const useCampers = create<CamperState>()(
 
         set({ isLoading: false, campers: response.data });
       } catch (error) {
+        console.log(error);
         throw new Error('Error fetching campers: ' + error);
       } finally {
         set({ isLoading: false });

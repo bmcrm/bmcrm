@@ -6,7 +6,6 @@ import Icon from 'shared/ui/Icon/Icon';
 import Avatar from 'shared/ui/Avatar/Avatar';
 import Button from 'shared/ui/Button/Button';
 import { Link } from 'react-router-dom';
-import Loader from 'shared/ui/Loader/Loader';
 
 import styles from './MemberDetails.module.scss';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
@@ -21,30 +20,30 @@ import CheckIcon from 'icons/check.svg';
 import ClockIcon from 'icons/clock.svg';
 import { useMediaQuery } from 'react-responsive';
 
-interface Props {
+interface MemberDetailsProps {
   camperEmail: string | null;
 }
 
-const MemberDetails = memo(({ camperEmail }: Props) => {
+const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
   const [isReadonly, setIsReadonly] = useState(true);
-  const { getCamper, isLoading } = useCampers();
+  const { getCamper, updateCamper } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-
-  // useEffect(() => {
-  //   if (campers.length > 0) {
-  //     const currentCamper = campers.find(camper => camper.email === camperEmail);
-  //
-  //     if (currentCamper) {
-  //       setCamper(currentCamper);
-  //     }
-  //   }
-  // }, [camperEmail, campers]);
+  const currentYear = new Date().getFullYear();
+  const initialValues = {
+    summary: camper?.summary ? camper?.summary : '',
+    history: camper?.history
+      ? camper?.history?.map((item) => ({
+        year: item.year,
+        text: item.text,
+      }))
+      : [{ year: currentYear, text: '' }],
+  };
 
   useEffect(() => {
     const fetchCamper = async () => {
       if (camperEmail) {
-        const currentCamper = await getCamper(camperEmail);
+        const currentCamper =  await getCamper(camperEmail);
 
         if (currentCamper) {
           setCamper(currentCamper);
@@ -54,35 +53,6 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
 
     fetchCamper();
   }, [camperEmail, getCamper]);
-
-  const mock = [
-    {
-      year: 2024,
-      text: 'alsdasdasdalsdasdasdalsdasdasdalsd' +
-        'asdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasda' +
-        'lsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsda' +
-        'sdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdas' +
-        'dasdalsdasdasdalsdasdasdalsdasdasd',
-    },
-    {
-      year: 2023,
-      text: 'ddd',
-    },
-    {
-      year: 2022,
-      text: 'aasxxxx',
-    }
-  ];
-
-  const initialValues = {
-    summary: camper?.summary ? camper?.summary : 'No summary',
-    history: mock.map((item) => ({
-      year: item.year,
-      text: item.text,
-    })),
-  };
-
-  console.log(camper);
 
   const firstLastName = camper?.first_name && camper?.last_name
     ? `${camper?.first_name} ${camper?.last_name}` : undefined;
@@ -97,12 +67,14 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
     setIsReadonly(prev => !prev);
   }, []);
 
-  const submitHandler = (values: any) => {
-    console.log(values);
+  const submitHandler = useCallback((values: Partial<ICamper>) => {
     toggleReadonly();
-  };
+    updateCamper(camperEmail!, { ...values });
+  }, [camperEmail, toggleReadonly, updateCamper]);
 
-  if (isLoading) return <Loader className={'m-centred'}/>;
+  const cancelHandler = useCallback(() => {
+    toggleReadonly();
+  }, [toggleReadonly]);
 
   return (
     <Formik initialValues={initialValues} onSubmit={submitHandler}>
@@ -165,13 +137,13 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
         </section>
         <section>
           <h3 className={styles.blockTitle}>Summary</h3>
-          {isReadonly && <p>{camper?.summary || 'No summary'}</p>}
+          {isReadonly && <p>{camper?.summary}</p>}
           {!isReadonly && (
             <Field
-              as='textarea'
-              name='summary'
+              as={'textarea'}
+              name={'summary'}
               readOnly={isReadonly}
-              className={classNames(styles.textarea, { [styles.edit]: !isReadonly }, [])}
+              className={styles.textarea}
             />
           )}
         </section>
@@ -180,10 +152,10 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
           <FieldArray name='history'>
             {() => (
               <ul className={styles.details__history}>
-                {mock.map((item, index) => (
+                {camper?.history?.map((item, index) => (
                   <li key={index} className={styles.details__historyItem}>
                     <Field
-                      type='text'
+                      type={'text'}
                       readOnly={true}
                       name={`history.${index}.year`}
                       className={styles.year}
@@ -192,15 +164,30 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
                       <p>{item.text}</p>
                     ) : index === 0 ? (
                       <Field
-                        as='textarea'
+                        as={'textarea'}
                         name={`history.${index}.text`}
-                        className={classNames(styles.textarea, { [styles.edit]: !isReadonly }, [])}
+                        className={styles.textarea}
                       />
                     ) : (
                       <p>{item.text}</p>
                     )}
                   </li>
                 ))}
+                {!camper?.history && !isReadonly && (
+                  <li className={styles.details__historyItem}>
+                    <Field
+                      type='text'
+                      readOnly={true}
+                      name={'history.0.year'}
+                      className={styles.year}
+                    />
+                    <Field
+                      as='textarea'
+                      name={'history.0.text'}
+                      className={styles.textarea}
+                    />
+                  </li>
+                )}
               </ul>
             )}
           </FieldArray>
@@ -214,6 +201,7 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
               theme={ButtonTheme.CLEAR}
               size={ButtonSize.TEXT}
               color={ButtonColor.NEUTRAL}
+              onClick={cancelHandler}
             >
               Cancel
             </Button>
