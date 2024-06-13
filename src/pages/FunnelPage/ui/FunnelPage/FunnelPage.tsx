@@ -1,18 +1,18 @@
 import { memo, useEffect, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import { useToggle } from 'shared/hooks/useToggle';
+import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
+import { useMediaQuery } from 'react-responsive';
 
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard';
 import Modal from 'shared/ui/Modal/Modal';
+import Container from 'shared/ui/Container/Container';
+import InviteMember from '../InviteMember/InviteMember';
 
 import styles from './FunnelPage.module.scss';
 import { FUNNEL_STATIC } from './data';
-import { InviteMember } from '../InviteMember/InviteMember';
-import Container from 'shared/ui/Container/Container';
-import { useMediaQuery } from 'react-responsive';
 import { CamperRole, ICamper } from 'entities/Camper';
 
 interface IRoles {

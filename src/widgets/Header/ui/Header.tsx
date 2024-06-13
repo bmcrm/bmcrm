@@ -10,7 +10,7 @@ import { useAuth, UserAvatar, IUserAvatar } from 'entities/User';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 import styles from './Header.module.scss';
-import { useToggle } from 'shared/hooks/useToggle';
+import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
 
 type HeaderProps = {
   className?: string;

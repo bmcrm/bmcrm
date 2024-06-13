@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import errorHandler from 'shared/lib/authErrorHandler/authErrorHandler';
+import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
 
 import { type IInputsData, OwnerSignUpForm, useAuth } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';

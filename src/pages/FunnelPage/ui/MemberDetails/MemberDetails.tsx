@@ -1,5 +1,5 @@
-import { memo, useEffect, useState } from 'react';
-import { IconSize } from 'shared/ui/Icon/Icon.types.ts';
+import { memo } from 'react';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 
 import Icon from 'shared/ui/Icon/Icon';
 import X from 'icons/x_icon.svg';
@@ -7,23 +7,24 @@ import Facebook from 'icons/fb_icon.svg';
 import Instagram from 'icons/inst_icon.svg';
 import mockImage from 'images/avatars/photoMock.png';
 import styles from './MemberDetails.module.scss';
-import { ICamper } from 'entities/Camper/model/types/camper.types.ts';
+// import { ICamper } from 'entities/Camper/model/types/camper.types.ts';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import Loader from 'shared/ui/Loader/Loader';
 
 interface Props {
-  camperId: string;
+  camperEmail: string | null;
 }
 
-export const MemberDetails = memo(({ camperId }: Props) => {
-  const [camper, setCamper] = useState<ICamper | null>(null);
-  const { getCamperById, isLoading } = useCampers(state => ({
-    getCamperById: state.getCamperById,
-    isLoading: state.isLoading,
-  }));
-  useEffect(() => {
-    getCamperById(camperId).then(data => setCamper(data));
-  }, [camperId, getCamperById]);
+export const MemberDetails = memo(({ camperEmail }: Props) => {
+  // const [camper, setCamper] = useState<ICamper | null>(null);
+  const { isLoading } = useCampers();
+
+  console.log(camperEmail);
+
+  // useEffect(() => {
+  //   getCamperById(camperEmail).then(data => setCamper(data));
+  // }, [camperEmail, getCamperById]);
+
   return (
     <article className={styles.wrapper}>
       <section className={styles.firstBlock}>
@@ -33,7 +34,7 @@ export const MemberDetails = memo(({ camperId }: Props) => {
         <div className={styles.firstBlock__infoWrapper}>
           <div className={styles.firstBlock__info}>
             <h2>
-              {camper?.first_name} {camper?.last_name}
+              name
             </h2>
             <div>
               <div className={styles.firstBlock__socials}>
@@ -59,7 +60,7 @@ export const MemberDetails = memo(({ camperId }: Props) => {
         <h2>Summary</h2>
         <div className={styles.separator} />
         {isLoading && <Loader />}
-        <p>{camper?.summary}</p>
+        {/*<p>{camper?.summary}</p>*/}
       </section>
       <section className={styles.historyBlock}>
         <h2>History</h2>
@@ -67,12 +68,12 @@ export const MemberDetails = memo(({ camperId }: Props) => {
         <ul>
           {isLoading && <Loader />}
 
-          {camper?.history?.map((item, index) => (
-            <li key={index}>
-              <span>{item.year}</span>
-              <p>{item.text}</p>
-            </li>
-          ))}
+          {/*{camper?.history?.map((item, index) => (*/}
+          {/*  <li key={index}>*/}
+          {/*    <span>{item.year}</span>*/}
+          {/*    <p>{item.text}</p>*/}
+          {/*  </li>*/}
+          {/*))}*/}
         </ul>
       </section>
     </article>

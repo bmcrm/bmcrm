@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
-import errorHandler from 'shared/lib/authErrorHandler/authErrorHandler';
+import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
 
 import { type SignInFormData, useAuth, UserSignInForm } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';

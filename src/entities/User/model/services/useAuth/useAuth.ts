@@ -1,7 +1,7 @@
 import {
   confirmEmail,
   confirmResetPassword,
-  initResetPassword,
+  initResetPassword, type InviteData, inviteUser,
   loginUser,
   logoutUser,
   signUpUser,
@@ -33,6 +33,7 @@ interface AuthState {
   confirmResetPass: (values: ConfirmResetType) => Promise<unknown>;
   logout: (accessToken: string) => Promise<void>;
   decodeIDToken: (token: string) => void;
+  invite: (data: InviteData) => Promise<unknown>;
 }
 
 export interface IResponse {
@@ -176,6 +177,17 @@ const useAuth = create<AuthState>()(
             set({ decodedIDToken: normalizedToken });
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
+          }
+        },
+        invite: async data => {
+          try {
+            set({ isLoading: true });
+
+            return await inviteUser(data);
+          } catch (error) {
+            set({ error: error as CognitoIdentityProviderServiceException });
+          } finally {
+            set({ isLoading: false });
           }
         },
       }),
