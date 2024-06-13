@@ -8,10 +8,9 @@ interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
   isError: string | null;
-  camper: ICamper;
   getCampers(): Promise<void>;
-  getCamper(email: string, camp_id: string): Promise<void>;
-  updateCamper(email: string, camp_id: string, data: Partial<ICamper>): Promise<void>;
+  getCamper(email: string): Promise<ICamper | null>;
+  updateCamper(email: string, data: Partial<ICamper>): Promise<void>;
 }
 
 const useCampers = create<CamperState>()(
@@ -19,7 +18,6 @@ const useCampers = create<CamperState>()(
     isLoading: false,
     isError: null,
     campers: [],
-    camper: {} as ICamper,
     getCampers: async () => {
       try {
         set({ isLoading: true });
@@ -45,8 +43,11 @@ const useCampers = create<CamperState>()(
           },
         });
 
-        set({ isLoading: false, camper: response?.data[0] || null });
+        console.log(response);
+
+        return response?.data[0] || null;
       } catch (error) {
+        console.log(error);
         throw new Error('Error fetching campers: ' + error);
       } finally {
         set({ isLoading: false });

@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import {Field, FieldArray, Form, Formik} from 'formik';
+import { Field, FieldArray, Form, Formik } from 'formik';
 
 import Icon from 'shared/ui/Icon/Icon';
 import Avatar from 'shared/ui/Avatar/Avatar';
@@ -28,13 +28,41 @@ interface Props {
 const MemberDetails = memo(({ camperEmail }: Props) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
   const [isReadonly, setIsReadonly] = useState(true);
-  const { campers, isLoading } = useCampers();
+  const { getCamper, isLoading } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
+
+  // useEffect(() => {
+  //   if (campers.length > 0) {
+  //     const currentCamper = campers.find(camper => camper.email === camperEmail);
+  //
+  //     if (currentCamper) {
+  //       setCamper(currentCamper);
+  //     }
+  //   }
+  // }, [camperEmail, campers]);
+
+  useEffect(() => {
+    const fetchCamper = async () => {
+      if (camperEmail) {
+        const currentCamper = await getCamper(camperEmail);
+
+        if (currentCamper) {
+          setCamper(currentCamper);
+        }
+      }
+    };
+
+    fetchCamper();
+  }, [camperEmail, getCamper]);
 
   const mock = [
     {
       year: 2024,
-      text: 'alsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasd',
+      text: 'alsdasdasdalsdasdasdalsdasdasdalsd' +
+        'asdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasda' +
+        'lsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsda' +
+        'sdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdasdasdalsdas' +
+        'dasdalsdasdasdalsdasdasdalsdasdasd',
     },
     {
       year: 2023,
@@ -54,17 +82,7 @@ const MemberDetails = memo(({ camperEmail }: Props) => {
     })),
   };
 
-  useEffect(() => {
-    if (campers.length > 0) {
-      const currentCamper = campers.find(camper => camper.email === camperEmail);
-
-      if (currentCamper) {
-        setCamper(currentCamper);
-      }
-    }
-  }, [camperEmail, campers]);
-
-  // console.log(camper);
+  console.log(camper);
 
   const firstLastName = camper?.first_name && camper?.last_name
     ? `${camper?.first_name} ${camper?.last_name}` : undefined;
