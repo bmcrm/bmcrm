@@ -5,7 +5,6 @@ import {
   SignUpCommandInput,
   InitiateAuthCommandInput,
   ConfirmSignUpCommand,
-  ListUsersCommand,
   ForgotPasswordCommandInput,
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
@@ -140,23 +139,4 @@ export const logoutUser = async (accessToken: string) => {
   });
 
   return await cognitoClient.send(command);
-};
-
-export const listUsers = async () => {
-  const client = new CognitoIdentityProviderClient({ region: EnvConfigs.AWS_REGION });
-
-  const params = {
-    UserPoolId: EnvConfigs.COGNITO_AWS_POOL_ID,
-  };
-
-  try {
-    const command = new ListUsersCommand(params);
-
-    const response = await client.send(command);
-
-    return response.Users;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
 };

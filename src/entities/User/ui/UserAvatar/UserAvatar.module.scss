@@ -12,13 +12,14 @@
 	}
 
 	&__name {
-		font: var(--font-l);
 		max-width: 220px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font: var(--font-l);
 
 		@media (width < $lg) {
+			max-width: 140px;
 			font: var(--font-s);
 		}
 	}

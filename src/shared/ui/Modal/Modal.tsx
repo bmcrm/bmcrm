@@ -21,7 +21,6 @@ const Modal = (props: ModalProps) => {
     [styles.open]: isOpen,
     [styles.closing]: isClosing,
   };
-  console.log(openModalCount);
 
   const closeHandler = useCallback(() => {
     if (onClose) {
