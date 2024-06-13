@@ -38,10 +38,10 @@ const useCampers = create<CamperState>()(
         set({ isLoading: false });
       }
     },
-    getCamper: async (email: string, camp_id: string) => {
+    getCamper: async (email: string) => {
       try {
         set({ isLoading: true });
-        const response = await axios.get(`https://campers.dev.bmcrm.camp/campers/${camp_id}/${email}`, {
+        const response = await axios.get(`https://campers.dev.bmcrm.camp/campers/${email}`, {
           headers: {
             Authorization: useAuth.getState().idToken,
           },
@@ -54,15 +54,19 @@ const useCampers = create<CamperState>()(
         set({ isLoading: false });
       }
     },
-    updateCamper: async (email: string, camp_id: string, data: Partial<ICamper>) => {
+    updateCamper: async (email: string, data: Partial<ICamper>) => {
       try {
         set({ isLoading: true });
-        const response = await axios.patch('https://campers.dev.bmcrm.camp/campers', {
-          headers: {
-            Authorization: useAuth.getState().idToken,
-          },
-          body: { ...data, email: email, camp_id: camp_id },
-        });
+        const response = await axios.patch(
+          `https://campers.dev.bmcrm.camp/campers/${email}`,
+          { ...data, email: email },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuth.getState().idToken}`,
+            },
+          }
+        );
 
         set({ isLoading: false, campers: response.data });
       } catch (error) {
