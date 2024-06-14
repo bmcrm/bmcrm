@@ -6,23 +6,21 @@ import Progress from 'shared/ui/Progress/Progress';
 
 import { ProgressColors } from 'shared/ui/Progress/Progress.types';
 import styles from './Funnel.module.scss';
+import { CamperRole } from 'entities/Camper';
 
-type FunnelStage = {
-  count: string;
-  complete: string;
+type FunnelCampers = {
+  [CamperRole.LEAD]: number;
+  [CamperRole.QUALIFIED]: number;
+  [CamperRole.INTENT]: number;
+  [CamperRole.CAMPER]: number;
 };
 
 type FunnelProps = {
   className?: string;
-  data: {
-    leads: FunnelStage;
-    qualified: FunnelStage;
-    intent: FunnelStage;
-    campers: FunnelStage;
-  };
+  campers: FunnelCampers;
 };
 
-const Funnel = memo(({ className, data }: FunnelProps) => {
+const Funnel = memo(({ className, campers }: FunnelProps) => {
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const tooltipRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -50,25 +48,25 @@ const Funnel = memo(({ className, data }: FunnelProps) => {
 
   const stages = [
     {
-      stage: data.leads,
+      count: campers[CamperRole.LEAD],
       color: ProgressColors.ORANGE_LIGHT,
       description:
         'Potential campers who have expressed interest in participating but have not yet confirmed their participation',
     },
     {
-      stage: data.qualified,
+      count: campers[CamperRole.QUALIFIED],
       color: ProgressColors.ORANGE_DARK,
       description:
         'People who have already registered or have shown a specific level of interest',
     },
     {
-      stage: data.intent,
+      count: campers[CamperRole.INTENT],
       color: ProgressColors.RUBY_LIGHT,
       description:
         'Participants who confirmed their intention to participate in the camp and showed a high level of interest',
     },
     {
-      stage: data.campers,
+      count: campers[CamperRole.CAMPER],
       color: ProgressColors.RUBY_DARK,
       description:
         'Participants confirmed their intention to participate in the camp and showed a high level of interest',
@@ -77,30 +75,36 @@ const Funnel = memo(({ className, data }: FunnelProps) => {
 
   return (
     <ul className={classNames(styles.funnel, {}, [className])}>
-      {stages.map((item, index) => (
-        <li
-          key={index}
-          className={styles.funnel__item}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleToggle(index);
-          }}
-        >
-          <Progress
-            count={item.stage.count}
-            color={item.color}
-            barWidth={`${item.stage.complete}%`}
-            symbol={isTablet}
-          />
-          <div
-            ref={el => tooltipRefs.current[index] = el}
-            className={classNames(styles.funnel__tooltip, { [styles.show]: openIndex === index }, [])}
-            onClick={(e) => e.stopPropagation()}
+      {stages.map((item, index) => {
+        const prevCount = index > 0 ? stages[index - 1].count : item.count;
+        const barWidth = prevCount ? (item.count / prevCount) * 100 : 100;
+
+        return (
+          <li
+            key={index}
+            className={styles.funnel__item}
+
           >
-            <p className={styles.text}>{item.description}</p>
-          </div>
-        </li>
-      ))}
+            <Progress
+              count={item.count}
+              color={item.color}
+              barWidth={`${barWidth}%`}
+              symbol={isTablet}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggle(index);
+              }}
+            />
+            <div
+              ref={el => tooltipRefs.current[index] = el}
+              className={classNames(styles.funnel__tooltip, { [styles.show]: openIndex === index }, [])}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p className={styles.text}>{item.description}</p>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 });
