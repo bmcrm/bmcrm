@@ -10,6 +10,7 @@ import FormLoader from 'features/FormLoader';
 import styles from './InviteMember.module.scss';
 import { inviteMemberSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
+import useCampers from 'entities/Camper/model/services/useCampers/useCampers.ts';
 
 interface IFormState {
   email: string;
@@ -22,6 +23,7 @@ interface IProps {
 
 const InviteMember = memo(({ onClose }: IProps) => {
   const { invite, isLoading, error, resetError, decodedIDToken } = useAuth();
+  const { getCampers } = useCampers();
 
   useEffect(() => {
     if (error) {
@@ -37,9 +39,10 @@ const InviteMember = memo(({ onClose }: IProps) => {
     if (response) {
       onClose();
       resetForm();
+      getCampers();
       toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
     }
-  }, [decodedIDToken, invite, onClose]);
+  }, [decodedIDToken, getCampers, invite, onClose]);
 
   return (
     <div className={styles.wrapper}>
