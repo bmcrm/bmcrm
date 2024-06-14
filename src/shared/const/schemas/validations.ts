@@ -25,10 +25,10 @@ export const signInSchema = yup.object().shape({
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup
     .string()
-    .min(8, 'Password must be at least 8 characters long')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[!@#$%^&*]/, 'Password must contain at least one special character')
-    .matches(/[0-9]/, 'Password must contain at least one numeric character')
+    .min(8, 'Minimum 8 character')
+    .matches(/[A-Z]/, 'Uppercase letters')
+    .matches(/[!@#$%^&*]/, 'Special characters')
+    .matches(/[0-9]/, 'Numbers')
     .required('Password is required'),
 });
 
