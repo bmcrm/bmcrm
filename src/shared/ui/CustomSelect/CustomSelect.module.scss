@@ -1,0 +1,53 @@
+.select {
+	width: 100%;
+	border-radius: 10px;
+	border: 2px solid var(--color-input-orange);
+	background: rgba(255, 255, 255, .02);
+	backdrop-filter: blur(4px);
+	padding: 10px 20px;
+	font-size: 14px;
+	cursor: pointer;
+
+	&:active {
+		border-color: var(--color-black);
+	}
+
+	&.default {
+		color: var(--color-neutral);
+	}
+
+	option {
+		color: var(--color-black);
+
+		&:disabled {
+			color: var(--color-neutral);
+		}
+	}
+}
+
+.errorText {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font: var(--font-xs);
+}
+
+.valid {
+	color: #038f00;
+}
+
+.invalid {
+	color: var(--color-ruby-dark);
+}
+
+.label {
+	position: relative;
+	color: var(--color-black);
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	& p {
+		font-weight: 500;
+	}
+}

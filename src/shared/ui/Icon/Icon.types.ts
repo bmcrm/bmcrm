@@ -1,4 +1,6 @@
 export enum IconSize {
+  SIZE_8 = 'icon-8',
+  SIZE_10 = 'icon-10',
   SIZE_12 = 'icon-12',
   SIZE_14 = 'icon-14',
   SIZE_16 = 'icon-16',

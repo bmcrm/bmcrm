@@ -1,3 +1,4 @@
+import { memo, useState } from 'react';
 import { ErrorMessage, Field } from 'formik';
 import styles from './CustomInput.module.scss';
 import CustomErrorMessage from '../CustomErrorMessage/CustomErrorMessage';
@@ -8,7 +9,6 @@ import EyeOpen from 'icons/eye_open.svg';
 import EyeClose from 'icons/eye_closed.svg';
 import clsx from 'clsx';
 import Icon from '../Icon/Icon';
-import { useState } from 'react';
 import { createSlug } from 'shared/lib/createSlug/createSlug';
 
 interface CustomInputProps {
@@ -21,16 +21,18 @@ interface CustomInputProps {
   errors?: { [key: string]: string | boolean }[];
   setFieldValue: (field: string, value: string) => void;
 }
-export const CustomInputControlled = ({
-  setFieldValue,
-  name,
-  errors,
-  register,
-  values,
-  placeholder,
-  type = 'text',
-  label,
-}: CustomInputProps) => {
+
+export const CustomInputControlled = memo((props: CustomInputProps) => {
+  const {
+    setFieldValue,
+    name,
+    errors,
+    register,
+    values,
+    placeholder,
+    type = 'text',
+    label,
+  } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const validateDone = errors?.filter(error => !error.valid).length;
@@ -85,4 +87,4 @@ export const CustomInputControlled = ({
       )}
     </label>
   );
-};
+});
