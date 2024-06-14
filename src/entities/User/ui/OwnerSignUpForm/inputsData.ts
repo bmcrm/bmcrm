@@ -15,6 +15,7 @@ export const inputsDataUser = [
     name: 'password',
     placeholder: 'Min. 8 characters',
     label: 'Password',
+    register: true,
     type: 'password',
   },
 ];
