@@ -11,8 +11,8 @@ import FormLoader from 'features/FormLoader';
 import { RoutePath } from 'app/providers/AppRouter';
 
 export interface ISignInCredentials {
-  email: string,
-  password: string,
+  email: string;
+  password: string;
 }
 
 const SignInPage = memo(() => {
@@ -39,7 +39,7 @@ const SignInPage = memo(() => {
         if (e instanceof CognitoIdentityProviderServiceException && e.name === 'UserNotConfirmedException') {
           setCredentials(() => ({
             email: values.email,
-            password: values.password
+            password: values.password,
           }));
           setIsConfirmedModal(true);
         }
@@ -56,13 +56,9 @@ const SignInPage = memo(() => {
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background>
         <UserSignInForm onSubmit={handleSubmit} />
-        {isLoading && <FormLoader/>}
+        {isLoading && <FormLoader />}
         {isConfirmedModal && (
-          <UserConfirmModal
-            isOpen={isConfirmedModal}
-            onClose={closeConfirmModal}
-            credentials={credentials}
-          />
+          <UserConfirmModal isOpen={isConfirmedModal} onClose={closeConfirmModal} credentials={credentials} />
         )}
       </AuthFormTemplate>
     </AuthPageTemplate>

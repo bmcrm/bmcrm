@@ -14,6 +14,7 @@ interface CustomInputProps {
   name: string;
   placeholder: string;
   type?: string;
+  register?: boolean;
   label?: string;
   values?: { [key: string]: string | boolean };
   disabled?: boolean;
@@ -27,6 +28,7 @@ export const CustomInput = memo((props: CustomInputProps) => {
     errors,
     values,
     placeholder,
+    register,
     type = 'text',
     label,
   } = props;
@@ -72,7 +74,7 @@ export const CustomInput = memo((props: CustomInputProps) => {
           <Icon icon={isOpen ? <EyeOpen /> : <EyeClose />} />
         </button>
       )}
-      {type !== 'password' && (
+      {!register && (
         <ErrorMessage className={styles.error} name={name} render={msg => <CustomErrorMessage message={msg} />} />
       )}
     </label>
