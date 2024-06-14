@@ -1,3 +1,4 @@
+import { memo, useState } from 'react';
 import { ErrorMessage, Field } from 'formik';
 import styles from './CustomInput.module.scss';
 import CustomErrorMessage from '../CustomErrorMessage/CustomErrorMessage';
@@ -8,7 +9,6 @@ import EyeOpen from 'icons/eye_open.svg';
 import EyeClose from 'icons/eye_closed.svg';
 import clsx from 'clsx';
 import Icon from '../Icon/Icon';
-import { useState } from 'react';
 
 interface CustomInputProps {
   name: string;
@@ -19,15 +19,17 @@ interface CustomInputProps {
   disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
 }
-export const CustomInput = ({
-  disabled,
-  name,
-  errors,
-  values,
-  placeholder,
-  type = 'text',
-  label,
-}: CustomInputProps) => {
+
+export const CustomInput = memo((props: CustomInputProps) => {
+  const {
+    disabled,
+    name,
+    errors,
+    values,
+    placeholder,
+    type = 'text',
+    label,
+  } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const validateDone = errors?.filter(error => !error.valid).length;
@@ -75,4 +77,4 @@ export const CustomInput = ({
       )}
     </label>
   );
-};
+});

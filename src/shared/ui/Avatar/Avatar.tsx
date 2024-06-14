@@ -1,5 +1,5 @@
 import styles from './Avatar.module.scss';
-import { CSSProperties, useMemo } from 'react';
+import { CSSProperties, memo, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import AnonymousAvatar from 'shared/assets/images/avatars/anonymous.jpg';
 
@@ -10,7 +10,7 @@ type AvatarProps = {
   size?: number;
 };
 
-const Avatar = (props: AvatarProps) => {
+const Avatar = memo((props: AvatarProps) => {
   const { className, src, alt = 'img desc', size = 100 } = props;
 
   const sizes = useMemo<CSSProperties>(
@@ -28,6 +28,6 @@ const Avatar = (props: AvatarProps) => {
       </picture>
     </div>
   );
-};
+});
 
 export default Avatar;

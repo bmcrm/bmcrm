@@ -1,0 +1,10 @@
+.link {
+	display: block;
+	transition: .2s ease;
+
+	@media (hover: hover) {
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+}
