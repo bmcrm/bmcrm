@@ -44,7 +44,9 @@ test('successful logout', async ({ page }) => {
   await page.fill('input[name="password"]', TEST_ACCOUNT_TCO_PASSWORD);
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL(LOGIN_URL);
-  const element = await page.locator('text=Sd');
+
+  const element = await page.locator('text=Test Account');
+
   await element.hover();
   const logoutBtn = await page.locator('text=Log Out');
   await logoutBtn.click();
@@ -60,4 +62,14 @@ test('forgot password unsuccessful', async ({ page }) => {
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL(RESET_URL);
   await expect(page.locator('text=Oops, something wrong! Try again later!')).toBeVisible();
+});
+test('click by campers test user', async ({ page }) => {
+  await page.goto(LOGIN_URL);
+  await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
+  await page.fill('input[name="password"]', TEST_ACCOUNT_TCO_PASSWORD);
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL(FUNNEL_URL);
+  await expect(page.locator('text=Invite')).toBeVisible();
+  await page.locator('text=Test User').click();
+  await expect(page.locator('text=Summary')).toBeVisible();
 });
