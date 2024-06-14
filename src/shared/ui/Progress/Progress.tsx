@@ -1,7 +1,7 @@
-import styles from './Progress.module.scss';
-import { CSSProperties, memo, useMemo } from 'react';
+import React, { CSSProperties, memo, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { ProgressColors } from 'shared/ui/Progress/Progress.types';
+import styles from './Progress.module.scss';
 
 type ProgressProps = {
   className?: string;
@@ -9,6 +9,7 @@ type ProgressProps = {
   color: ProgressColors;
   barWidth: number | string;
   symbol?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const Progress = memo((props: ProgressProps) => {
@@ -18,6 +19,7 @@ const Progress = memo((props: ProgressProps) => {
     color,
     barWidth,
     symbol,
+    onClick,
   } = props;
 
   const width = useMemo<CSSProperties>(() => ({
@@ -25,9 +27,9 @@ const Progress = memo((props: ProgressProps) => {
   }), [barWidth]);
 
   return (
-    <div className={classNames(styles.progress, {}, [className, styles[color]])}>
+    <div className={classNames(styles.progress, {}, [className, styles[color]])} onClick={onClick}>
       <p className={styles.progress__caption}>
-        {count} <span className={styles.small}>users{symbol && <span className={styles.symbol}>*</span>}</span>
+        {count} <span className={styles.small}>user{+count > 1 ? 's' : ''}{symbol && <span className={styles.symbol}>*</span>}</span>
       </p>
       <span className={styles.progress__bar}>
         <span className={styles.bar} style={width}></span>
