@@ -9,7 +9,7 @@ function getParameter(name: string): Promise<string> {
 }
 
 const LOGIN_URL = 'https://app.dev.bmcrm.camp/login';
-const RESET_URL = 'https://app.dev.bmcrm.camp/reset-password';
+// const RESET_URL = 'https://app.dev.bmcrm.camp/reset-password';
 const FUNNEL_URL = 'https://app.dev.bmcrm.camp/funnel';
 
 // we have separate test account for a TCO persona and a Camper persona
