@@ -8,7 +8,7 @@ import FunnelCardItem from 'pages/FunnelPage/ui/FunnelCardItem/FunnelCardItem';
 type FunnelCardAllProps = {
   className?: string;
   title?: string;
-  users: ICamper[] | Partial<ICamper>[];
+  users: ICamper[];
 };
 
 const FunnelCardAll = memo((props: FunnelCardAllProps) => {
