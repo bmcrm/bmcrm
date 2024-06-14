@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
+import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import { useMediaQuery } from 'react-responsive';
 
@@ -12,15 +12,14 @@ import Container from 'shared/ui/Container/Container';
 import InviteMember from '../InviteMember/InviteMember';
 
 import styles from './FunnelPage.module.scss';
-import { FUNNEL_STATIC } from './data';
 import { CamperRole, ICamper } from 'entities/Camper';
 
 interface IRoles {
-  tco: ICamper | undefined;
-  leads: ICamper[];
-  qualified: ICamper[];
-  intent: ICamper[];
-  campers: ICamper[];
+  [CamperRole.TCO]: ICamper | undefined;
+  [CamperRole.LEAD]: ICamper[];
+  [CamperRole.QUALIFIED]: ICamper[];
+  [CamperRole.INTENT]: ICamper[];
+  [CamperRole.CAMPER]: ICamper[];
 }
 
 const FunnelPage = memo(() => {
@@ -28,11 +27,11 @@ const FunnelPage = memo(() => {
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCampers, campers } = useCampers();
   const [roles, setRoles] = useState<IRoles>({
-    tco: undefined,
-    leads: [],
-    qualified: [],
-    intent: [],
-    campers: [],
+    [CamperRole.TCO]: undefined,
+    [CamperRole.LEAD]: [],
+    [CamperRole.QUALIFIED]: [],
+    [CamperRole.INTENT]: [],
+    [CamperRole.CAMPER]: [],
   });
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const FunnelPage = memo(() => {
   useEffect(() => {
     if (campers.length > 0) {
       const tco = campers.find(camper => camper.role === CamperRole.TCO);
-      const leads = campers.filter(camper => camper.role === CamperRole.LEAD);
+      const lead = campers.filter(camper => camper.role === CamperRole.LEAD);
       const qualified = campers.filter(camper => camper.role === CamperRole.QUALIFIED);
       const intent = campers.filter(camper => camper.role === CamperRole.INTENT);
       const campersRole = campers.filter(camper => camper.role === CamperRole.CAMPER);
@@ -53,10 +52,10 @@ const FunnelPage = memo(() => {
 
       setRoles({
         tco,
-        leads,
+        lead,
         qualified,
         intent,
-        campers: campersRole,
+        camper: campersRole,
       });
     }
   }, [campers]);
@@ -66,11 +65,11 @@ const FunnelPage = memo(() => {
       <Container fluid>
         <div className={styles.funnel__head}>
           <Funnel
-            data={{
-              leads: FUNNEL_STATIC.leads.funnel,
-              qualified: FUNNEL_STATIC.qualified.funnel,
-              intent: FUNNEL_STATIC.intent.funnel,
-              campers: FUNNEL_STATIC.campers.funnel,
+            campers={{
+              [CamperRole.LEAD]: roles[CamperRole.LEAD].length,
+              [CamperRole.QUALIFIED]: roles[CamperRole.QUALIFIED].length,
+              [CamperRole.INTENT]: roles[CamperRole.INTENT].length,
+              [CamperRole.CAMPER]: roles[CamperRole.CAMPER].length,
             }}
           />
           <Button onClick={toggle} className={styles.funnel__btn}>Invite</Button>
@@ -81,10 +80,10 @@ const FunnelPage = memo(() => {
           )}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={roles.leads}/>
-          <FunnelCard title={'Qualified'} users={roles.qualified}/>
-          <FunnelCard title={'Intent'} users={roles.intent}/>
-          <FunnelCard title={'Campers'} fluid={!isTablet} users={roles.campers} maxUsers={12}/>
+          <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]}/>
+          <FunnelCard title={'Qualified'} users={roles[CamperRole.QUALIFIED]}/>
+          <FunnelCard title={'Intent'} users={roles[CamperRole.INTENT]}/>
+          <FunnelCard title={'Campers'} fluid={!isTablet} users={roles[CamperRole.CAMPER]} maxUsers={12}/>
         </div>
       </Container>
     </section>
