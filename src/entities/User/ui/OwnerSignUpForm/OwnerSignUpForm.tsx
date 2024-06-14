@@ -30,6 +30,7 @@ const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
                 setFieldValue={setFieldValue}
                 values={values}
                 name='campName'
+                register
                 placeholder='Sparkle Unicorns'
                 label='Name your camp'
               />

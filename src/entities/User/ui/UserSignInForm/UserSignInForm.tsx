@@ -25,13 +25,15 @@ const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
         {SignInInputs.map(input => (
           <CustomInput key={input.name} {...input} />
         ))}
-        <Link to={RoutePath.reset_pass} className={styles.link}>Forgot Password?</Link>
+        <Link to={RoutePath.reset_pass} className={styles.link}>
+          Forgot Password?
+        </Link>
         <Button type='submit' className={styles.btn} fluid>
           <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           LOG IN
         </Button>
         <p className='redirect-link redirect-link--orange'>
-          Don't have an account yet? <br className='br-md'/>
+          Don't have an account yet? <br className='br-md' />
           <Link className='link' to={RoutePath.sign_up}>
             Register and create a camp
           </Link>
