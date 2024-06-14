@@ -34,12 +34,11 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
 
-  # deploy-to-prod:
-  #   needs: [smoke-tests-dev]
-  #   uses: dusty-lab/bmcrm/.github/workflows/deploy.yaml@main
-  #   with:
-  #     env: prod
-  #   secrets:
-  #     AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-  #     NPM_PUBLISHER_PAT: ${{ secrets.NPM_PUBLISHER_PAT }}
+  deploy-to-prod:
+    needs: [smoke-tests-dev]
+    uses: bmcrm/bmcrm/.github/workflows/deploy.yaml@main
+    with:
+      env: prod
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
