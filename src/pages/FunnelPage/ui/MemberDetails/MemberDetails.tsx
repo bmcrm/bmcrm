@@ -1,26 +1,26 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik';
+import dateNormalize from 'shared/lib/dateNormalize/dateNormalize';
+import { useMediaQuery } from 'react-responsive';
+import { useToggle } from 'shared/hooks/useToggle/useToggle';
 
 import Icon from 'shared/ui/Icon/Icon';
 import Avatar from 'shared/ui/Avatar/Avatar';
 import Button from 'shared/ui/Button/Button';
-import { Link } from 'react-router-dom';
+import FormLoader from 'features/FormLoader';
+import SocialIconItem from 'shared/ui/SocialIconItem/SocialIconItem';
+import AddSocialModal from 'features/AddSocialModal';
 
 import styles from './MemberDetails.module.scss';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { ICamper } from 'entities/Camper/model/types/camper.types';
+import { CamperSocial, ICamper } from 'entities/Camper';
 import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
-import X from 'icons/x_icon.svg';
-import Facebook from 'icons/fb_icon.svg';
-import Instagram from 'icons/inst_icon.svg';
 import EditIcon from 'icons/edit_icon.svg';
 import CheckIcon from 'icons/check.svg';
 import ClockIcon from 'icons/clock.svg';
-import { useMediaQuery } from 'react-responsive';
-import FormLoader from 'features/FormLoader';
-import dateNormalize from 'shared/lib/dateNormalize/dateNormalize.ts';
+import PlusIcon from 'icons/plus_icon.svg';
 
 interface MemberDetailsProps {
   camperEmail: string | null;
@@ -28,8 +28,10 @@ interface MemberDetailsProps {
 
 const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
+  const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isReadonly, setIsReadonly] = useState(true);
+  const { isOpen, open, close } = useToggle();
   const { getCamper, updateCamper } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const currentYear = new Date().getFullYear();
@@ -42,6 +44,7 @@ const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
 
         if (currentCamper) {
           setCamper(currentCamper);
+          setSocialIcons(currentCamper.social_links || []);
           setIsLoading(false);
         }
       }
@@ -66,13 +69,13 @@ const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
   const submitHandler = useCallback(async (values: Partial<ICamper>) => {
     toggleReadonly();
     setIsLoading(true);
-    const updatedCamper = await updateCamper(camperEmail!, { ...values });
+    const updatedCamper = await updateCamper(camperEmail!, { ...values, social_links: socialIcons });
 
     if (updatedCamper) {
       setCamper(updatedCamper);
       setIsLoading(false);
     }
-  }, [camperEmail, toggleReadonly, updateCamper]);
+  }, [camperEmail, socialIcons, toggleReadonly, updateCamper]);
 
   const initialValues = useMemo(() => ({
     summary: camper?.summary || '',
@@ -85,7 +88,19 @@ const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
   const cancelHandler = useCallback((resetForm: FormikHelpers<Partial<ICamper>>['resetForm']) => {
     toggleReadonly();
     resetForm({ values: initialValues });
-  }, [initialValues, toggleReadonly]);
+    setSocialIcons(camper?.social_links || []);
+  }, [camper?.social_links, initialValues, toggleReadonly]);
+
+  const onAddSocialHandler = useCallback((values: CamperSocial) => {
+    if (socialIcons.length < 3) {
+      setSocialIcons(prev => ([
+        ...prev,
+        { name: values.name, url: values.url }
+      ]));
+    }
+
+    close();
+  }, [close, socialIcons.length]);
 
   return (
     <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
@@ -121,22 +136,21 @@ const MemberDetails = memo(({ camperEmail }: MemberDetailsProps) => {
                 </div>
               </div>
               <ul className={styles.details__socials}>
-                <li>
-                  <Link to={'https://x.com/'} target={'_blank'} className={styles.link}>
-                    <Icon icon={<X/>} size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}/>
-                  </Link>
-                </li>
-                <li>
-                  <Link to={'https://www.facebook.com/'} target={'_blank'} className={styles.link}>
-                    <Icon icon={<Facebook/>} size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}/>
-                  </Link>
-                </li>
-                <li>
-                  <Link to={'https://www.instagram.com/'} target={'_blank'} className={styles.link}>
-                    <Icon icon={<Instagram/>} size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}/>
-                  </Link>
-                </li>
+                {socialIcons.map((icon, i) => <SocialIconItem key={i} social={icon}/>)}
+                {!isReadonly && socialIcons.length < 3 && (
+                  <li>
+                    <Button
+                      theme={ButtonTheme.CLEAR}
+                      size={ButtonSize.TEXT}
+                      className={classNames(styles.btn, {}, [styles.btnSocial])}
+                      onClick={open}
+                    >
+                      <Icon icon={<PlusIcon/>} size={IconSize.SIZE_10}/>
+                    </Button>
+                  </li>
+                )}
               </ul>
+              {isOpen && !isReadonly && <AddSocialModal isOpen={isOpen} onClose={close} onSubmit={onAddSocialHandler}/>}
             </div>
             <div className={styles.details__headInfo}>
               {!isTablet && <p className={styles.email}>{camper?.email}</p>}

@@ -1,0 +1,15 @@
+.title {
+	font: var(--font-l);
+	font-weight: 500;
+
+	+ * {
+		margin-top: 15px;
+	}
+}
+
+.form {
+	display: grid;
+	gap: 25px;
+	width: 340px;
+	max-width: 100%;
+}

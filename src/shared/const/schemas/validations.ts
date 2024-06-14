@@ -1,5 +1,7 @@
 import * as yup from 'yup';
+
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+const socialRegex = /^(https?:\/\/)?(www\.)?(facebook\.com|x\.com|twitter\.com|instagram\.com)(\/)?$/;
 
 export const registrationSchema = yup.object().shape({
   campName: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
@@ -58,6 +60,11 @@ export const confirmResetPassSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('newPassword')], 'Passwords must match')
     .required('Password confirmation is required'),
+});
+
+export const addSocialSchema = yup.object().shape({
+  socialName: yup.string().required('Social network name is required!'),
+  url: yup.string().required('URL is required!').matches(socialRegex, 'Enter a valid URL!'),
 });
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
