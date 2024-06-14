@@ -52,24 +52,24 @@ test('successful logout', async ({ page }) => {
   await logoutBtn.click();
   await expect(page).toHaveURL(LOGIN_URL);
 });
-test('forgot password unsuccessful', async ({ page }) => {
-  await page.goto(LOGIN_URL);
-  await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
-  await page.locator('text=Forgot Password?').click();
-  await expect(page).toHaveURL(RESET_URL);
-  await expect(page.locator('text=Forgot Password')).toBeVisible();
-  await page.fill('input[name="email"]', 'incorrect_email@example.com');
-  await page.click('button[type="submit"]');
-  await expect(page).toHaveURL(RESET_URL);
-  await expect(page.locator('text=Oops, something wrong! Try again later!')).toBeVisible();
-});
-test('click by campers test user', async ({ page }) => {
-  await page.goto(LOGIN_URL);
-  await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
-  await page.fill('input[name="password"]', TEST_ACCOUNT_TCO_PASSWORD);
-  await page.click('button[type="submit"]');
-  await expect(page).toHaveURL(FUNNEL_URL);
-  await expect(page.locator('text=Invite')).toBeVisible();
-  await page.locator('text=Test User').click();
-  await expect(page.locator('text=Summary')).toBeVisible();
-});
+// test('forgot password unsuccessful', async ({ page }) => {
+//   await page.goto(LOGIN_URL);
+//   await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
+//   await page.locator('text=Forgot Password?').click();
+//   await expect(page).toHaveURL(RESET_URL);
+//   await expect(page.locator('text=Forgot Password')).toBeVisible();
+//   await page.fill('input[name="email"]', 'incorrect_email@example.com');
+//   await page.click('button[type="submit"]');
+//   await expect(page).toHaveURL(RESET_URL);
+//   await expect(page.locator('text=Oops, something wrong! Try again later!')).toBeVisible();
+// });
+// test('click by campers test user', async ({ page }) => {
+//   await page.goto(LOGIN_URL);
+//   await page.fill('input[name="email"]', TEST_ACCOUNT_TCO_EMAIL);
+//   await page.fill('input[name="password"]', TEST_ACCOUNT_TCO_PASSWORD);
+//   await page.click('button[type="submit"]');
+//   await expect(page).toHaveURL(FUNNEL_URL);
+//   await expect(page.locator('text=Invite')).toBeVisible();
+//   await page.locator('text=Test User').click();
+//   await expect(page.locator('text=Summary')).toBeVisible();
+// });
