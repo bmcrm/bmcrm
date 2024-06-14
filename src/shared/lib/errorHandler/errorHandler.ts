@@ -10,7 +10,7 @@ enum ErrorNames {
   INVALID_CODE = 'CodeMismatchException',
 }
 
-const errorsNames: { [key: string]: string } = {
+const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.USER_NOT_FOUND]: 'User does not exist!',
   [ErrorNames.USER_NOT_AUTHORIZED]: 'Incorrect username or password!',
   [ErrorNames.USER_NOT_CONFIRMED]: 'Email is not confirmed!',
@@ -20,7 +20,21 @@ const errorsNames: { [key: string]: string } = {
 };
 
 const errorHandler = (error: CognitoIdentityProviderServiceException) => {
-  const errorMessage = errorsNames[error.name || error.message] || 'Oops, something wrong! Try again later!';
+  let errorMessage = errorsNames[error.name as ErrorNames];
+
+  if (!errorMessage && error.message) {
+    for (const key in ErrorNames) {
+      if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {
+        errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
+        break;
+      }
+    }
+  }
+
+  if (!errorMessage) {
+    errorMessage = 'Oops, something went wrong! Try again later!';
+  }
+
   toast.error(errorMessage, { duration: 4000, position: 'top-center' });
 };
 
