@@ -13,7 +13,7 @@ interface CamperState {
   updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
 
-const mode = import.meta.env.Mode === 'development' ? 'dev' : 'prod';
+const mode = import.meta.env.Mode !== 'development' ? 'dev' : 'prod';
 
 const useCampers = create<CamperState>()(
   devtools(set => ({
