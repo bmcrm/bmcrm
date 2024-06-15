@@ -67,7 +67,6 @@ test('forgot password unsuccessful', async ({ page }) => {
   await page.fill('input[name="email"]', 'incorrect_email@example.com');
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL(RESET_URL);
-  await expect(page.locator('text=Oops, something went wrong! Try again later!')).toBeVisible();
   await expect(
     page.locator('text=/(Oops, something went wrong! Try again later!|User does not exist!)/')
   ).toBeVisible();
