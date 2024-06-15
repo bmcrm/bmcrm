@@ -5,23 +5,38 @@ const LOGIN_URL = 'https://app.dev.bmcrm.camp/login';
 const FUNNEL_URL = 'https://app.dev.bmcrm.camp/funnel';
 const RESET_URL = 'https://app.dev.bmcrm.camp/reset-password';
 
-const TEST_COGNITO_POOL_ID = await getParameter('/campers/cognito_user_pool_id');
-const COGNITO_APP_CLIENT_ID = await getParameter('/campers/cognito_client_pool_id');
-const TEST_EMAIL = await getParameter('/webapp/test/email');
-const CAMP_ID = await getParameter('/webapp/test/account_camp_id');
-const TEMP_PASSWORD = await getParameter('/webapp/test/password_temp');
-const NEW_PASSWORD = await getParameter('/webapp/test/password_new');
-const USER_ROLE = await getParameter('/webapp/test/user_role');
-const TABLE_NAME = await getParameter('/campers/ddb_table_name');
+let TEST_COGNITO_POOL_ID: string;
+let COGNITO_APP_CLIENT_ID: string;
+let TEST_EMAIL: string;
+let CAMP_ID: string;
+let TEMP_PASSWORD: string;
+let NEW_PASSWORD: string;
+let USER_ROLE: string;
+let TABLE_NAME: string;
 
-await test.beforeEach(async ({ page }) => {
+test.beforeAll(async () => {
+  TEST_COGNITO_POOL_ID = await getParameter('/campers/cognito_user_pool_id');
+  COGNITO_APP_CLIENT_ID = await getParameter('/campers/cognito_client_pool_id');
+  TEST_EMAIL = await getParameter('/webapp/test/email');
+  CAMP_ID = await getParameter('/webapp/test/account_camp_id');
+  TEMP_PASSWORD = await getParameter('/webapp/test/password_temp');
+  NEW_PASSWORD = await getParameter('/webapp/test/password_new');
+  USER_ROLE = await getParameter('/webapp/test/user_role');
+  TABLE_NAME = await getParameter('/campers/ddb_table_name');
+
   await createUser(TEST_COGNITO_POOL_ID, TEST_EMAIL, CAMP_ID, TEMP_PASSWORD, USER_ROLE);
   await initiateAuth(TEST_COGNITO_POOL_ID, COGNITO_APP_CLIENT_ID, TEST_EMAIL, TEMP_PASSWORD, NEW_PASSWORD);
+});
+
+test.afterAll(async () => {
+  await deleteUser(TEST_COGNITO_POOL_ID, TEST_EMAIL, CAMP_ID, TABLE_NAME);
+});
+
+test.beforeEach(async ({ page }) => {
   await page.goto(LOGIN_URL);
 });
 
 test.afterEach(async ({ page }) => {
-  await deleteUser(TEST_COGNITO_POOL_ID, TEST_EMAIL, CAMP_ID, TABLE_NAME);
   await page.goto(LOGIN_URL);
 });
 
