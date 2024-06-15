@@ -3,6 +3,7 @@ import { ICamper } from '../../types/camper.types';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 import { useAuth } from 'entities/User';
+import { EnvConfigs } from 'shared/config/env/env';
 
 interface CamperState {
   isLoading: boolean;
@@ -13,7 +14,7 @@ interface CamperState {
   updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
 
-const mode = import.meta.env.Mode !== 'development' ? 'dev' : 'prod';
+const mode = EnvConfigs.BMCRM_ENV;
 
 const useCampers = create<CamperState>()(
   devtools(set => ({
