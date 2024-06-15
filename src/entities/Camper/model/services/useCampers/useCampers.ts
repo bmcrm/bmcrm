@@ -3,6 +3,7 @@ import { ICamper } from '../../types/camper.types';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 import { useAuth } from 'entities/User';
+import { EnvConfigs } from 'shared/config/env/env';
 
 interface CamperState {
   isLoading: boolean;
@@ -13,6 +14,8 @@ interface CamperState {
   updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
 
+const mode = EnvConfigs.BMCRM_ENV;
+
 const useCampers = create<CamperState>()(
   devtools(set => ({
     isLoading: false,
@@ -21,7 +24,7 @@ const useCampers = create<CamperState>()(
     getCampers: async () => {
       try {
         set({ isLoading: true });
-        const response = await axios.get('https://campers.dev.bmcrm.camp/campers', {
+        const response = await axios.get(`https://api.${mode}.bmcrm.camp/campers`, {
           headers: {
             Authorization: useAuth.getState().idToken,
           },
@@ -36,7 +39,7 @@ const useCampers = create<CamperState>()(
     },
     getCamper: async (email: string) => {
       try {
-        const response = await axios.get(`https://campers.dev.bmcrm.camp/campers/${email}`, {
+        const response = await axios.get(`https://api.${mode}.bmcrm.camp/campers/${email}`, {
           headers: {
             Authorization: useAuth.getState().idToken,
           },
@@ -50,7 +53,7 @@ const useCampers = create<CamperState>()(
     updateCamper: async (email: string, data: Partial<ICamper>) => {
       try {
         const response = await axios.patch(
-          `https://campers.dev.bmcrm.camp/campers/${email}`,
+          `https://api.${mode}.bmcrm.camp/campers/${email}`,
           { ...data, email: email },
           {
             headers: {
