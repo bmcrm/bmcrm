@@ -118,7 +118,7 @@ export async function deleteUser(
       email: { S: username },
     },
   };
-  const dynamoDBClient = new DynamoDBClient({});
+  const dynamoDBClient = new DynamoDBClient({ region: 'us-east-1' });
 
   try {
     await dynamoDBClient.send(new DeleteItemCommand(paramsDDB));
