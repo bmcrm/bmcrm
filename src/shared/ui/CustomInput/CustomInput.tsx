@@ -21,7 +21,7 @@ interface CustomInputProps {
   errors?: { [key: string]: string | boolean }[];
 }
 
-export const CustomInput = memo((props: CustomInputProps) => {
+const CustomInput = memo((props: CustomInputProps) => {
   const {
     disabled,
     name,
@@ -75,8 +75,10 @@ export const CustomInput = memo((props: CustomInputProps) => {
         </button>
       )}
       {!register && (
-        <ErrorMessage className={styles.error} name={name} render={msg => <CustomErrorMessage message={msg} />} />
+        <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />
       )}
     </label>
   );
 });
+
+export default CustomInput;

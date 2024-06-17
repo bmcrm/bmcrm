@@ -7,7 +7,7 @@ import NotFoundPage from 'pages/NotFoundPage';
 import ProfilePage from 'pages/ProfilePage';
 import DashboardPage from 'pages/DashboardPage';
 import SignInPage from 'pages/SignInPage';
-import SignUpOwnerPage from 'pages/SignUpOwnerPage';
+import SignUpOwnerPage from 'pages/SignUpTCOPage';
 import ResetPassPage from 'pages/ResetPassPage';
 
 export type AppRouterProps = {

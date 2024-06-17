@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Form, Formik } from 'formik';
 
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 

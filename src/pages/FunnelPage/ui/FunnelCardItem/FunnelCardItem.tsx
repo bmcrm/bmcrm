@@ -1,17 +1,16 @@
 import { memo, useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
+import { useToggle } from 'shared/hooks/useToggle/useToggle';
 
 import Avatar from 'shared/ui/Avatar/Avatar';
 import Icon from 'shared/ui/Icon/Icon';
+import UserDetailsModal from 'features/UserDetailsModal';
 
 import styles from './FunnerCardItem.module.scss';
 import { ICamper } from 'entities/Camper/model/types/camper.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import ClockIcon from 'shared/assets/icons/clock.svg';
 import CheckIcon from 'shared/assets/icons/check.svg';
-import MemberDetails from 'pages/FunnelPage/ui/MemberDetails/MemberDetails.tsx';
-import Modal from 'shared/ui/Modal/Modal.tsx';
-import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
 
 type FunnerCardItemProps = {
   className?: string;
@@ -43,11 +42,7 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
           style={{ color: user.email_confirmed ? '#4ECB71' : '#C1C1C1' }}
         />
       </li>
-      {isOpen && (
-        <Modal isOpen={isOpen} onClose={close}>
-          <MemberDetails camperEmail={camperEmail} />
-        </Modal>
-      )}
+      {isOpen && <UserDetailsModal camperEmail={camperEmail} isDetailsOpen={isOpen} onDetailsClose={close}/>}
     </>
   );
 });

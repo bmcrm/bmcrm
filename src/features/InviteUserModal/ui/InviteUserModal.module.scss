@@ -1,0 +1,39 @@
+@import 'breakpoints';
+
+.invite-modal {
+  width: 490px;
+  max-width: 100%;
+
+  .title {
+    font: var(--font-m);
+    font-weight: 500;
+
+    + .subtitle {
+      margin-top: 10px;
+    }
+  }
+  .subtitle {
+    width: 80%;
+    font: var(--font-s);
+
+    @media (width < $md) {
+      width: 100%;
+    }
+
+    + .invite-modal__form {
+      margin-top: 20px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  &__radio-group {
+    position: relative;
+    display: flex;
+    gap: 15px;
+  }
+}

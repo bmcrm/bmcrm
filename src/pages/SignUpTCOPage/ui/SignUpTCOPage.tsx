@@ -1,15 +1,15 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
+import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
-import { type IInputsData, OwnerSignUpForm, useAuth } from 'entities/User';
+import { type IInputsData, TCOSignUpForm, useAuth } from 'entities/User';
 import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
 import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
-import { RoutePath } from 'app/providers/AppRouter';
 import FormLoader from 'features/FormLoader';
+import { RoutePath } from 'app/providers/AppRouter';
 
-const SignUpOwnerPage = memo(() => {
+const SignUpTCOPage = memo(() => {
   const { register, isLoading, error, resetError } = useAuth();
   const navigate = useNavigate();
 
@@ -40,11 +40,11 @@ const SignUpOwnerPage = memo(() => {
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Create a camp and account'}>
-        <OwnerSignUpForm handleSubmit={handleSubmit} />
+        <TCOSignUpForm handleSubmit={handleSubmit} />
         {isLoading && <FormLoader />}
       </AuthFormTemplate>
     </AuthPageTemplate>
   );
 });
 
-export default SignUpOwnerPage;
+export default SignUpTCOPage;

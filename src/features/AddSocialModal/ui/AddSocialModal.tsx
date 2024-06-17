@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import Modal from 'shared/ui/Modal/Modal';
 import { Form, Formik } from 'formik';
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import CustomSelect from 'shared/ui/CustomSelect/CustomSelect';
 import Button from 'shared/ui/Button/Button';
 

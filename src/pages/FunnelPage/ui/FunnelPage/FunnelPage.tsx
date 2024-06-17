@@ -7,9 +7,8 @@ import { useMediaQuery } from 'react-responsive';
 import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard';
-import Modal from 'shared/ui/Modal/Modal';
 import Container from 'shared/ui/Container/Container';
-import InviteMember from '../InviteMember/InviteMember';
+import InviteUserModal from 'features/InviteUserModal';
 
 import styles from './FunnelPage.module.scss';
 import { CamperRole, ICamper } from 'entities/Camper';
@@ -23,7 +22,7 @@ interface IRoles {
 }
 
 const FunnelPage = memo(() => {
-  const { toggle, isOpen } = useToggle();
+  const { isOpen, open, close } = useToggle();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCampers, campers } = useCampers();
   const [roles, setRoles] = useState<IRoles>({
@@ -72,12 +71,8 @@ const FunnelPage = memo(() => {
               [CamperRole.CAMPER]: roles[CamperRole.CAMPER].length,
             }}
           />
-          <Button onClick={toggle} className={styles.funnel__btn}>Invite</Button>
-          {isOpen && (
-            <Modal isOpen={isOpen} onClose={toggle}>
-              <InviteMember onClose={toggle}/>
-            </Modal>
-          )}
+          <Button onClick={open} className={styles.funnel__btn}>Invite</Button>
+          {isOpen && <InviteUserModal isOpen={isOpen} onClose={close}/>}
         </div>
         <div className={styles.funnel__content}>
           <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]}/>

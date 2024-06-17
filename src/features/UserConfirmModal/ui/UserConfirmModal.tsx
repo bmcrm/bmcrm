@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 import Modal from 'shared/ui/Modal/Modal';
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 import FormLoader from 'features/FormLoader';
