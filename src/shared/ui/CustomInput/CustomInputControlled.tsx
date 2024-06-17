@@ -22,7 +22,7 @@ interface CustomInputProps {
   setFieldValue: (field: string, value: string) => void;
 }
 
-export const CustomInputControlled = memo((props: CustomInputProps) => {
+const CustomInputControlled = memo((props: CustomInputProps) => {
   const {
     setFieldValue,
     name,
@@ -88,3 +88,5 @@ export const CustomInputControlled = memo((props: CustomInputProps) => {
     </label>
   );
 });
+
+export default CustomInputControlled;

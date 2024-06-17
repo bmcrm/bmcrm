@@ -2,24 +2,25 @@ import { memo } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Link } from 'react-router-dom';
 
-import { CustomInput } from 'shared/ui/CustomInput/CustomInput';
+import CustomInput from 'shared/ui/CustomInput/CustomInput';
+import CustomInputControlled from 'shared/ui/CustomInput/CustomInputControlled';
 import Button from 'shared/ui/Button/Button';
 import Camp from 'shared/assets/icons/camp.svg';
 
 import { INPUTS_STATE, inputsDataUser } from './inputsData';
-import styles from './OwnerSignUpForm.module.scss';
+import styles from './TCOSignUpForm.module.scss';
 import { registrationSchema } from 'shared/const/schemas/validations';
 import { ButtonSize } from 'shared/ui/Button/Button.types';
-import { IInputsData } from './OwnerSignUpForm.types';
+import { IInputsData } from './TCOSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
-import { CustomInputControlled } from 'shared/ui/CustomInput/CustomInputControlled';
 
-interface Props {
+interface TCOSignUpFormProps {
   handleSubmit: (values: IInputsData, { resetForm }: { resetForm: () => void }) => void;
 }
-const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
+
+const TCOSignUpForm = memo(({ handleSubmit }: TCOSignUpFormProps) => {
   return (
     <Formik validationSchema={registrationSchema} onSubmit={handleSubmit} initialValues={INPUTS_STATE}>
       {({ values, setFieldValue }) => {
@@ -75,4 +76,4 @@ const OwnerSignUpForm = memo(({ handleSubmit }: Props) => {
   );
 });
 
-export default OwnerSignUpForm;
+export default TCOSignUpForm;

@@ -1,5 +1,5 @@
-import { SignInPage } from './ui/SignInPage/SignInPage.async';
-import { type ISignInCredentials } from './ui/SignInPage/SignInPage';
+import { SignInPage } from './ui/SignInPage.async';
+import { type ISignInCredentials } from './ui/SignInPage';
 
 export { ISignInCredentials };
 export default SignInPage;
