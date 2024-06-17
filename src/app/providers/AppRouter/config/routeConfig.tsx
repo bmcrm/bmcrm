@@ -9,6 +9,7 @@ import DashboardPage from 'pages/DashboardPage';
 import SignInPage from 'pages/SignInPage';
 import SignUpOwnerPage from 'pages/SignUpTCOPage';
 import ResetPassPage from 'pages/ResetPassPage';
+import CampOverviewPage from 'pages/CampOverviewPage';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -24,6 +25,7 @@ export enum AppRoutes {
   SIGN_UP = 'sign_up',
   SIGN_IN = 'sign_in',
   RESET_PASS = 'reset_pass',
+  CAMP_OVERVIEW = 'camp_overview',
   NOT_FOUND = 'not_found',
 }
 
@@ -37,6 +39,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.SIGN_UP]: '/signup',
   [AppRoutes.SIGN_IN]: '/login',
   [AppRoutes.RESET_PASS]: '/reset-password',
+  [AppRoutes.CAMP_OVERVIEW]: '/id/',
   [AppRoutes.NOT_FOUND]: '*',
 };
 
@@ -82,6 +85,10 @@ export const routeConfig: Record<AppRoutes, AppRouterProps> = {
   [AppRoutes.RESET_PASS]: {
     path: RoutePath.reset_pass,
     element: <ResetPassPage />,
+  },
+  [AppRoutes.CAMP_OVERVIEW]: {
+    path: `${RoutePath.camp_overview}:id`,
+    element: <CampOverviewPage />,
   },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,
