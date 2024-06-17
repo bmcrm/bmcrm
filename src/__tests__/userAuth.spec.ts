@@ -47,6 +47,21 @@ test('successful login', async ({ page }) => {
   await expect(page).toHaveURL(FUNNEL_URL);
   await expect(page.locator('text=Invite')).toBeVisible();
 });
+test('successful login and show modal info', async ({ page }) => {
+  await page.fill('input[name="email"]', TEST_EMAIL);
+  await page.fill('input[name="password"]', NEW_PASSWORD);
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL(FUNNEL_URL);
+  await expect(page.locator('text=Invite')).toBeVisible();
+  const element = await page.locator('text=fake@example.com').nth(1);
+  await element.hover();
+  await element.click();
+  await expect(page.locator('text=Summary')).toBeVisible();
+  await page.getByRole('button').nth(1).click();
+  await page.getByRole('button', { name: 'cancel' }).click();
+  await page.press('body', 'Escape');
+  await page.waitForTimeout(3000);
+});
 
 test('unsuccessful login with incorrect credentials', async ({ page }) => {
   await page.fill('input[name="email"]', 'incorrect_email@example.com');
