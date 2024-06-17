@@ -1,0 +1,21 @@
+@import 'breakpoints';
+
+.form {
+	display: grid;
+	gap: 20px;
+
+	@media (width < $md) {
+		gap: 15px;
+	}
+
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: inherit;
+
+		@media (width < $md) {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+}

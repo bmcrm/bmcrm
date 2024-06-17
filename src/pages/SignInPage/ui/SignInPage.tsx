@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
+import AuthFormTemplate from 'features/AuthFormTemplate';
+import AuthPageTemplate from 'features/AuthPageTemplate';
 import { type SignInFormData, useAuth, UserSignInForm } from 'entities/User';
-import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
-import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 import { UserConfirmModal } from 'features/UserConfirmModal';
 import FormLoader from 'features/FormLoader';
 import { RoutePath } from 'app/providers/AppRouter';

@@ -10,7 +10,6 @@ import Camp from 'shared/assets/icons/camp.svg';
 import { INPUTS_STATE, inputsDataUser } from './inputsData';
 import styles from './TCOSignUpForm.module.scss';
 import { registrationSchema } from 'shared/const/schemas/validations';
-import { ButtonSize } from 'shared/ui/Button/Button.types';
 import { IInputsData } from './TCOSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
@@ -58,7 +57,7 @@ const TCOSignUpForm = memo(({ handleSubmit }: TCOSignUpFormProps) => {
                 <span className={styles.checkmark} />
                 <p>I agree to the privacy policy</p>
               </label>
-              <Button size={ButtonSize.M} type='submit' fluid>
+              <Button type='submit' fluid>
                 <Camp />
                 SIGN UP
               </Button>

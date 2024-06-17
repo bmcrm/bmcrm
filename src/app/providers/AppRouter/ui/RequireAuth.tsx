@@ -4,9 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { RoutePath } from 'app/providers/AppRouter';
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {
-  const { isLoggedIn } = useAuth(state => ({
-    isLoggedIn: state.isLoggedIn,
-  }));
+  const { isLoggedIn } = useAuth();
   const location = useLocation();
 
   if (!isLoggedIn) {

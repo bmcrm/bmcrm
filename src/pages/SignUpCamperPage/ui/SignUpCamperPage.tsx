@@ -1,7 +1,6 @@
 import { memo } from 'react';
-
-import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
-import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
+import AuthPageTemplate from 'features/AuthPageTemplate';
+import AuthFormTemplate from 'features/AuthFormTemplate';
 
 const SignUpCamperPage = memo(() => {
   return (

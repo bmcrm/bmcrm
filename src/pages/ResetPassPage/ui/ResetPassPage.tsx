@@ -2,8 +2,8 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
-import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
-import ResetPassFormTemplate from 'shared/ui/ResetPassFormTemplate/ResetPassFormTemplate';
+import AuthPageTemplate from 'features/AuthPageTemplate';
+import { ResetFormBg, ResetPassFormTemplate } from 'features/ResetPassFormTemplate';
 import { ResetPassStepOne, ResetPassStepTwo, type ResetPassStepTwoTypes } from 'features/ResetPassForm';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
@@ -12,7 +12,6 @@ import FormLoader from 'features/FormLoader';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { RoutePath } from 'app/providers/AppRouter';
-import { ResetFormBg } from 'shared/ui/ResetPassFormTemplate/ReserPassFormTemplate.types';
 import { useAuth } from 'entities/User';
 
 type Step = 1 | 2 | 3;
