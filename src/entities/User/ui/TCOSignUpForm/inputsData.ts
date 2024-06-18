@@ -1,6 +1,6 @@
-export const inputsDataUser = [
+export const inputsData = [
   {
-    name: 'playaName',
+    name: 'playa_name',
     placeholder: 'Playa Name',
     label: 'Playa Name',
     type: 'text',
@@ -9,27 +9,26 @@ export const inputsDataUser = [
     name: 'email',
     placeholder: 'cole@gmail.com',
     label: 'Email',
-    type: 'text',
+    type: 'email',
   },
   {
     name: 'password',
     placeholder: 'Min. 8 characters',
     label: 'Password',
-    register: true,
     type: 'password',
+    register: true,
   },
 ];
 
-export const INPUTS_STATE = {
-  campName: '',
-  campId: '',
+export const initialData = {
+  camp_name: '',
+  camp_id: '',
   city: '',
   camp_website: '',
-  accept: false,
-  firstName: '',
-  lastName: '',
-  playaName: '',
+  first_name: '',
+  last_name: '',
+  playa_name: '',
   email: '',
-  role: 'tco',
   password: '',
+  accept: false,
 };

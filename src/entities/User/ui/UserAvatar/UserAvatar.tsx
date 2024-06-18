@@ -8,11 +8,7 @@ import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
 
 import styles from './UserAvatar.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
-
-export interface IUserAvatar {
-  name?: string;
-  avatar?: string | null;
-}
+import { IUserAvatar } from '../../model/types/userAvatar.types';
 
 type UserAvatarProps = {
   className?: string;

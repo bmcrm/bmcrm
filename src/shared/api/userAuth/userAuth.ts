@@ -1,93 +1,61 @@
 import {
   CognitoIdentityProviderClient,
-  SignUpCommand,
-  InitiateAuthCommand,
-  SignUpCommandInput,
-  InitiateAuthCommandInput,
-  ConfirmSignUpCommand,
-  ForgotPasswordCommandInput,
-  ForgotPasswordCommand,
-  ConfirmForgotPasswordCommandInput,
   ConfirmForgotPasswordCommand,
+  ConfirmForgotPasswordCommandInput,
+  ConfirmSignUpCommand,
+  ForgotPasswordCommand,
+  ForgotPasswordCommandInput,
   GlobalSignOutCommand,
+  InitiateAuthCommand,
+  InitiateAuthCommandInput,
+  SignUpCommand,
+  SignUpCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
+import {
+  type IConfirmEmail,
+  type IConfirmResetPass,
+  type IInviteData,
+  type ILoginData,
+  type IUserRegisterData
+} from 'entities/User';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
 });
 
-interface ConfirmCode {
-  code: string;
-  email: string;
-}
+export const signUpUser = async (data: IUserRegisterData) => {
+  const userAttributes = [
+    { Name: 'email', Value: data.email },
+    { Name: 'custom:created_at', Value: new Date().getTime().toString() },
+    { Name: 'updated_at', Value: new Date().getTime().toString() },
+    { Name: 'custom:first_name', Value: data.first_name },
+    { Name: 'custom:last_name', Value: data.last_name },
+    { Name: 'custom:playa_name', Value: data.playa_name },
+    { Name: 'custom:role', Value: data.role },
+    { Name: 'custom:camp_id', Value: data.camp_id },
+    { Name: 'custom:camp_website', Value: data.camp_website || '' },
+    { Name: 'custom:camp_name', Value: data.camp_name || '' },
+    { Name: 'custom:city', Value: data.city || '' }
+  ];
 
-interface SignUpData {
-  password: string;
-  email: string;
-  campName: string;
-  campId: string;
-  city: string;
-  camp_website: string;
-  firstName: string;
-  lastName: string;
-  playaName: string;
-  role: string;
-}
-
-export interface InviteData {
-  email: string;
-  camp_id: string;
-  role: string;
-}
-
-interface IConfirmResetPassword {
-  email: string;
-  confirmCode: string;
-  newPassword: string;
-}
-
-export const signUpUser = async (userData: SignUpData) => {
   const params: SignUpCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    Username: userData.email,
-    Password: userData.password,
-    UserAttributes: [
-      { Name: 'email', Value: userData.email },
-      { Name: 'custom:camp_website', Value: userData.camp_website },
-      { Name: 'custom:created_at', Value: new Date().getTime().toString() },
-      { Name: 'updated_at', Value: new Date().getTime().toString() },
-      { Name: 'custom:camp_name', Value: userData.campName },
-      { Name: 'custom:camp_id', Value: userData.campId },
-      { Name: 'custom:city', Value: userData.city },
-      { Name: 'custom:first_name', Value: userData.firstName },
-      { Name: 'custom:last_name', Value: userData.lastName },
-      { Name: 'custom:playa_name', Value: userData.playaName },
-      { Name: 'custom:role', Value: userData.role },
-    ],
+    Username: data.email,
+    Password: data.password,
+    UserAttributes: userAttributes,
   };
 
   return await cognitoClient.send(new SignUpCommand(params));
 };
 
-export const inviteUser = async (userData: InviteData) => {
-  const params: SignUpCommandInput = {
-    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    Username: userData.email,
-    Password: '123qweQ!',
-    UserAttributes: [
-      { Name: 'email', Value: userData.email },
-      { Name: 'custom:created_at', Value: new Date().getTime().toString() },
-      { Name: 'updated_at', Value: new Date().getTime().toString() },
-      { Name: 'custom:camp_id', Value: userData.camp_id },
-      { Name: 'custom:role', Value: userData.role },
-    ],
-  };
+export const inviteUser = async (data: IInviteData) => {
+  console.log(data);
 
-  return await cognitoClient.send(new SignUpCommand(params));
+  return true;
 };
 
-export const loginUser = async ({ email, password }: { email: string; password: string }) => {
+export const loginUser = async ({ email, password }: ILoginData) => {
   const params: InitiateAuthCommandInput = {
     AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
@@ -102,7 +70,7 @@ export const loginUser = async ({ email, password }: { email: string; password: 
   return data.AuthenticationResult;
 };
 
-export const confirmEmail = async ({ email, code }: ConfirmCode) => {
+export const confirmEmail = async ({ email, code }: IConfirmEmail) => {
   const command = new ConfirmSignUpCommand({
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,
@@ -121,13 +89,13 @@ export const initResetPassword = async ({ email }: { email: string }) => {
   return await cognitoClient.send(new ForgotPasswordCommand(params));
 };
 
-export const confirmResetPassword = async (props: IConfirmResetPassword) => {
-  const { email, confirmCode, newPassword } = props;
+export const confirmResetPassword = async (props: IConfirmResetPass) => {
+  const { email, confirm_code, password_new } = props;
   const params: ConfirmForgotPasswordCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,
-    ConfirmationCode: confirmCode,
-    Password: newPassword,
+    ConfirmationCode: confirm_code,
+    Password: password_new,
   };
 
   return await cognitoClient.send(new ConfirmForgotPasswordCommand(params));

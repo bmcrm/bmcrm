@@ -1,28 +1,28 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 
-import { SignInInputs, initialValues } from './inputsData';
-import Camp from 'shared/assets/icons/camp.svg';
-import { type SignInFormData } from './UserSignInForm.types';
+import { inputsData, initialValues } from './inputsData';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { RoutePath } from 'app/providers/AppRouter';
-import styles from './UserSignInForm.module.scss';
 import { signInSchema } from 'shared/const/schemas/validations';
+import { type ILoginData } from '../../model/types/auth.types.ts';
+import styles from './UserSignInForm.module.scss';
+import Camp from 'shared/assets/icons/camp.svg';
 
 type SignInFormProps = {
-  onSubmit: (values: SignInFormData, { resetForm }: { resetForm: () => void }) => void;
+  onSubmit: (values: ILoginData, formikHelpers: FormikHelpers<ILoginData>) => void;
 };
 
 const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
   return (
     <Formik validationSchema={signInSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
-        {SignInInputs.map(input => (
+        {inputsData.map(input => (
           <CustomInput key={input.name} {...input} />
         ))}
         <Link to={RoutePath.reset_pass} className={styles.link}>

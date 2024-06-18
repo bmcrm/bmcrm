@@ -1,7 +1,8 @@
 import {
   confirmEmail,
   confirmResetPassword,
-  initResetPassword, type InviteData, inviteUser,
+  initResetPassword,
+  inviteUser,
   loginUser,
   logoutUser,
   signUpUser,
@@ -12,12 +13,12 @@ import {
   CognitoIdentityProviderServiceException,
   ConfirmSignUpCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { type ICamperRegisterData, type IInputsData } from 'entities/User';
-import { CamperRole } from 'entities/Camper';
+import { type IInviteData, type ILoginData, type IUserRegisterData } from 'entities/User';
 import { jwtDecode } from 'jwt-decode';
 import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
+import type { IConfirmEmail, IConfirmResetPass, IIDToken, ILoggedUser } from '../../types/auth.types';
 
-interface AuthState {
+interface IAuthState {
   isLoggedIn: boolean;
   accessToken: string;
   decodedIDToken: IIDToken | null;
@@ -26,65 +27,17 @@ interface AuthState {
   isLoading: boolean;
   error: CognitoIdentityProviderServiceException | null;
   resetError: () => void;
-  register: (credentials: IInputsData) => Promise<unknown>;
-  registerCamper: (credentials: ICamperRegisterData) => Promise<unknown>;
-  login: (values: { email: string; password: string }) => Promise<unknown>;
-  confirmEmail: (data: ConfirmTypes) => Promise<ConfirmSignUpCommandOutput | undefined>;
-  initResetPass: (values: InitResetType) => Promise<unknown>;
-  confirmResetPass: (values: ConfirmResetType) => Promise<unknown>;
+  register: (credentials: IUserRegisterData) => Promise<unknown>;
+  login: (values: ILoginData) => Promise<unknown>;
+  confirmEmail: (data: IConfirmEmail) => Promise<ConfirmSignUpCommandOutput | undefined>;
+  initResetPass: (values: { email: string }) => Promise<unknown>;
+  confirmResetPass: (values: IConfirmResetPass) => Promise<unknown>;
   logout: (accessToken: string) => Promise<void>;
   decodeIDToken: (token: string) => void;
-  invite: (data: InviteData) => Promise<unknown>;
+  invite: (data: IInviteData) => Promise<unknown>;
 }
 
-export interface IResponse {
-  AccessToken?: string;
-  IdToken?: string;
-  RefreshToken?: string;
-}
-
-type ConfirmTypes = {
-  code: string;
-  email: string;
-};
-
-type InitResetType = {
-  email: string;
-};
-
-type ConfirmResetType = {
-  confirmCode: string;
-  email: string;
-  newPassword: string;
-};
-
-export interface IIDToken {
-  aud: string;
-  auth_time: number;
-  'cognito:username': string;
-  camp_id: string;
-  camp_name?: string;
-  camp_website?: string;
-  city?: string;
-  created_at: string;
-  first_name?: string;
-  last_name?: string;
-  playa_name?: string;
-  role: CamperRole;
-  email: string;
-  email_verified: boolean;
-  event_id: string;
-  exp: number;
-  iat: number;
-  iss: string;
-  jti: string;
-  origin_jti: string;
-  sub: string;
-  token_use: string;
-  updated_at: number;
-}
-
-const useAuth = create<AuthState>()(
+const useAuth = create<IAuthState>()(
   devtools(
     persist(
       set => ({
@@ -106,22 +59,10 @@ const useAuth = create<AuthState>()(
             set({ isLoading: false });
           }
         },
-        registerCamper: async credentials => {
-          try {
-            set({ isLoading: true });
-            console.log(credentials);
-
-            return true;
-          } catch (error) {
-            set({ error: error as CognitoIdentityProviderServiceException });
-          } finally {
-            set({ isLoading: false });
-          }
-        },
         login: async values => {
           try {
             set({ isLoading: true });
-            const user: IResponse | undefined = await loginUser(values);
+            const user: ILoggedUser | undefined = await loginUser(values);
 
             set({
               isLoggedIn: true,

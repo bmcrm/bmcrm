@@ -1,12 +1,12 @@
-export const confirmationInputs = [
+export const inputsData = [
   {
-    name: 'confirmCode',
+    name: 'confirm_code',
     placeholder: '--- ---',
     label: 'Confirmation Code',
     type: 'text',
   },
   {
-    name: 'newPassword',
+    name: 'password_new',
     placeholder: '∗∗∗∗∗∗∗∗',
     label: 'New Password',
     type: 'password',
@@ -20,7 +20,7 @@ export const confirmationInputs = [
 ];
 
 export const initialValues = {
-  confirmCode: '',
-  newPassword: '',
+  confirm_code: '',
+  password_new: '',
   password_confirm: '',
 };
