@@ -1,9 +1,11 @@
 @import 'breakpoints';
+
 .flex {
   display: flex;
   gap: 20px;
   align-items: center;
 }
+
 .form {
   & section {
     display: flex;
@@ -21,51 +23,4 @@
   @media (width < $md) {
     grid-template-columns: 1fr;
   }
-}
-
-.acceptLabel {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.acceptLabel input {
-  display: none;
-}
-
-.acceptLabel {
-  display: inline-block;
-  position: relative;
-  padding-left: 25px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.acceptLabel .checkmark {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  height: 15px;
-  width: 15px;
-  border: 1px solid var(--color-ruby-light);
-  border-radius: 4px;
-}
-
-.acceptLabel .checkmark:after {
-  content: '';
-  position: absolute;
-  display: none;
-}
-
-.acceptLabel input:checked + .checkmark:after {
-  display: block;
-}
-
-.acceptLabel .checkmark:after {
-  inset: 0;
-  width: 6px;
-  left: 4px;
-  height: 12px;
-  border: solid red;
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
 }

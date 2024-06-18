@@ -1,32 +1,45 @@
 import { memo } from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { classNames } from 'shared/lib/classNames/classNames';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
+import CustomCheckbox from 'shared/ui/CustomCheckbox/CustomCheckbox';
 import Button from 'shared/ui/Button/Button';
-import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 
-import styles from './CamperSignUpForm.module.scss';
 import { initialData, inputsData } from './inputsData';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
+import { camperRegistrationSchema } from 'shared/const/schemas/validations';
+import { ICamperRegisterData, type ICamperRegisterForm } from './CamperSignUpForm.types';
+import { CamperRole } from 'entities/Camper';
+import styles from './CamperSignUpForm.module.scss';
 import Camp from 'shared/assets/icons/camp.svg';
 
 type CamperSignUpFormProps = {
   className?: string;
+  onSubmit: (values: ICamperRegisterData, formikHelpers: FormikHelpers<ICamperRegisterForm>) => void;
 };
 
 const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
   const {
     className,
+    onSubmit,
   } = props;
 
-  // @ts-ignore
-  const onSubmitHandler = (values) => {
-    console.log(values);
+  const onSubmitHandler = (values: ICamperRegisterForm, formikHelpers: FormikHelpers<ICamperRegisterForm>) => {
+    const data: ICamperRegisterData = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      playaName: values.playaName,
+      email: values.email,
+      password: values.password,
+      role: CamperRole.LEAD,
+    };
+
+    onSubmit(data, formikHelpers);
   };
 
   return (
-    <Formik initialValues={initialData} onSubmit={onSubmitHandler}>
+    <Formik validationSchema={camperRegistrationSchema} initialValues={initialData} onSubmit={onSubmitHandler}>
       {({ values }) => {
         return (
           <Form className={classNames(styles.form, {}, [className])}>
@@ -37,19 +50,9 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
             {inputsData.map(input => (
               <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />
             ))}
-            <label className={styles.acceptLabel}>
-              <Field className={styles.checkbox} type='checkbox' name='accept'/>
-              <ErrorMessage
-                className={styles.error}
-                name='accept'
-                render={msg => <CustomErrorMessage message={msg}/>}
-              />
-              <span className={styles.checkmark}/>
-              <p>I agree to the privacy policy</p>
-            </label>
+            <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
             <Button type='submit' fluid>
-              <Camp/>
-              SIGN UP
+              <Camp/>SIGN UP
             </Button>
           </Form>
         );

@@ -21,6 +21,7 @@ export const inputsData = [
 ];
 
 export const initialData = {
+  accept: false,
   firstName: '',
   lastName: '',
   playaName: '',

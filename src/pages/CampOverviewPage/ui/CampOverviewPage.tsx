@@ -1,23 +1,37 @@
-import { memo } from 'react';
-import { Link } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
+import { memo, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import errorHandler from 'shared/lib/errorHandler/errorHandler';
+import { classNames } from 'shared/lib/classNames/classNames';
 
 import Container from 'shared/ui/Container/Container';
-import Image from 'shared/ui/Image/Image';
-import Icon from 'shared/ui/Icon/Icon';
-import { CamperSignUpForm } from 'entities/User';
+import { CampOverview, useCamp } from 'entities/Camp';
+import { CamperSignUpForm, type ICamperRegisterData, useAuth } from 'entities/User';
 import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 
 import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
 import Logo from 'shared/assets/icons/logo.svg';
-import LocationIcon from 'shared/assets/icons/location_icon.svg';
-import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
 
 const CampOverviewPage = memo(() => {
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
+  const { registerCamper, error, resetError } = useAuth();
+  const { isLoading, isError } = useCamp();
+  const { id }  = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (error) {
+      errorHandler(error);
+    }
+
+    return resetError();
+  }, [error, resetError]);
+
+  const submitHandler = async (values: ICamperRegisterData, { resetForm }: { resetForm: () => void }) => {
+    const response = await registerCamper(values);
+
+    if (response) {
+      resetForm();
+    }
+  };
 
   return (
     <>
@@ -31,38 +45,21 @@ const CampOverviewPage = memo(() => {
         </Container>
       </header>
       <main className={styles.page}>
-        <section className={styles.overview}>
+        <section className={classNames(styles.overview, { [styles.centred]: !!isError }, [])}>
           <Container>
-            <h1 className={styles.title}>camp overview</h1>
-            <h2 className={styles.subtitle}>Campers 21</h2>
-            <div className={styles.overview__row}>
-              <Image borderRadius={isMobile ? 20 : 30}/>
-              <div className={styles.overview__desc}>
-                <p className={styles.text}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
-                <address className={styles.overview__address}>
-                  <Icon icon={<LocationIcon/>} size={isTablet ? IconSize.SIZE_18 : IconSize.SIZE_24}/>
-                  Miami Shores, FL, 33127
-                </address>
-                <Link to={'https://www.google.com.ua/'} className={styles.overview__btn}>
-                  Camp website
-                  <Icon icon={<RedirectIcon/>} size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28}/>
-                </Link>
+            <CampOverview campID={id}/>
+          </Container>
+        </section>
+        {!isLoading && !isError && (
+          <section className={styles.register}>
+            <Container>
+              <div className={styles.register__inner}>
+                <AuthBadge label={'Register to Join the Camp'}/>
+                <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
               </div>
-            </div>
-          </Container>
-        </section>
-        <section className={styles.register}>
-          <Container>
-            <div className={styles.register__inner}>
-              <AuthBadge label={'Register to Join the Camp'}/>
-              <CamperSignUpForm className={styles.form}/>
-            </div>
-          </Container>
-        </section>
+            </Container>
+          </section>
+        )}
       </main>
     </>
   );

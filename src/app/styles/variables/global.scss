@@ -4,17 +4,17 @@
   // colors
 
   --color-white: #fff;
-  --color-input-orange: #ffc750;
   --color-black: #000;
   --color-primary-bg: #f1f1f1;
   --color-secondary-bg: #f8f8f8;
   --color-neutral: #c1c1c1;
   --color-ruby-dark: #8b103e;
-  --color-overlay-bg: rgba(0, 0, 0, 0.5);
   --color-ruby-light: #e54051;
   --color-orange-dark: #fe912a;
   --color-orange-light: #feca5c;
   --color-orange-pastel: #ffdd95;
+  --color-input-orange: #ffc750;
+  --color-overlay-bg: rgba(0, 0, 0, .5);
   --gradient-ruby: linear-gradient(90deg, var(--color-ruby-light) 0%, var(--color-ruby-dark) 100%);
   --gradient-orange: linear-gradient(90deg, var(--color-orange-light) 0%, var(--color-orange-dark) 100%);
 
@@ -54,6 +54,11 @@
 
   --container-width: 1180px;
   --container-gap: 50px;
+
+  // skeleton
+
+  --skeleton-color: white;
+  --skeleton-shadow: rgba(0 0 0 / 20%);
 
   // tablet
 

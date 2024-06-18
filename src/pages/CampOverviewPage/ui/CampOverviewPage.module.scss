@@ -20,8 +20,13 @@
 }
 
 .page {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
 	padding-top: 30px;
 	padding-bottom: 30px;
+	overflow-x: hidden;
 
 	@media (width < $lg) and (width > $md){
 		padding-top: 10px;
@@ -29,130 +34,12 @@
 }
 
 .overview {
-	//overflow-x: hidden;
+	flex-grow: 1;
 
-	.title {
-		font: var(--font-xxl);
-		font-weight: 500;
-		text-align: center;
-
-		@media (width < $md) {
-			font: var(--font-l);
-			font-weight: 500;
-			text-align: left;
-		}
-
-		+ .subtitle {
-			margin-top: 10px;
-
-			@media (width < $md) {
-				margin-top: 5px;
-			}
-		}
-	}
-	.subtitle {
-		font: var(--font-l);
-		text-align: center;
-
-		@media (width < $lg) {
-			font: var(--font-s);
-		}
-		@media (width < $md) {
-			font: var(--font-xs);
-			text-align: left;
-		}
-
-		+ .overview__row {
-			margin-top: 30px;
-
-			@media (width < $md) {
-				margin-top: 20px;
-			}
-		}
-	}
-	.text {
-		@media (width < $lg) {
-			font: var(--font-xs);
-		}
-	}
-
-	&__row {
-		position: relative;
-		z-index: 1;
-		display: grid;
-		align-items: flex-start;
-		grid-template-columns: minmax(300px, 515px) 1fr;
-		gap: 25px;
-
-		@media (width < $lg) {
-			grid-template-columns: minmax(200px, 300px) 1fr;
-		}
-		@media (width < $md) {
-			display: flex;
-			flex-direction: column-reverse;
-		}
-
-		&:after {
-			content: '';
-			position: absolute;
-			display: block;
-			z-index: -1;
-			right: -100px;
-			bottom: 25px;
-			width: 245px;
-			height: 283px;
-			background-image: url('images/camp-overview/bg.png');
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-
-			@media (width < $lg) {
-				width: 137px;
-				height: 158px;
-				right: 0;
-			}
-			@media (width < $md) {
-				display: none;
-			}
-		}
-	}
-
-	&__desc {
-		height: 100%;
+	&.centred {
 		display: flex;
 		flex-direction: column;
-		gap: 25px;
-	}
-
-	&__address {
-		display: flex;
-		align-items: center;
-		gap: 5px;
-
-		@media (width < $lg) {
-			font: var(--font-xs);
-		}
-	}
-
-	&__btn {
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		width: 100%;
-		max-width: 190px;
-		margin-top: auto;
-		padding: 10px 20px;
-		border-radius: 100px;
-		background-color: var(--color-orange-dark);
-		transition: .2s ease;
-		font: var(--font-m);
-		color: var(--color-white);
-
-		@media (hover: hover) {
-			&:hover {
-				scale: 1.05;
-			}
-		}
+		justify-content: center;
 	}
 
 	+ .register {
@@ -165,7 +52,6 @@
 }
 
 .register {
-
 	&__inner {
 		position: relative;
 		z-index: 1;

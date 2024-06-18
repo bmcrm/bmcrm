@@ -12,7 +12,7 @@ import {
   CognitoIdentityProviderServiceException,
   ConfirmSignUpCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { type IInputsData } from 'entities/User';
+import { type ICamperRegisterData, type IInputsData } from 'entities/User';
 import { CamperRole } from 'entities/Camper';
 import { jwtDecode } from 'jwt-decode';
 import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
@@ -27,6 +27,7 @@ interface AuthState {
   error: CognitoIdentityProviderServiceException | null;
   resetError: () => void;
   register: (credentials: IInputsData) => Promise<unknown>;
+  registerCamper: (credentials: ICamperRegisterData) => Promise<unknown>;
   login: (values: { email: string; password: string }) => Promise<unknown>;
   confirmEmail: (data: ConfirmTypes) => Promise<ConfirmSignUpCommandOutput | undefined>;
   initResetPass: (values: InitResetType) => Promise<unknown>;
@@ -99,6 +100,18 @@ const useAuth = create<AuthState>()(
           try {
             set({ isLoading: true });
             return await signUpUser(credentials);
+          } catch (error) {
+            set({ error: error as CognitoIdentityProviderServiceException });
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+        registerCamper: async credentials => {
+          try {
+            set({ isLoading: true });
+            console.log(credentials);
+
+            return true;
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
           } finally {
