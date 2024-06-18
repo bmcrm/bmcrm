@@ -67,5 +67,20 @@ export const addSocialSchema = yup.object().shape({
   url: yup.string().required('URL is required!').matches(socialRegex, 'Enter a valid URL!'),
 });
 
+export const camperRegistrationSchema = yup.object().shape({
+  accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
+  firstName: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
+  lastName: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
+  playaName: yup.string(),
+  email: yup.string().email('Invalid email address').required('Email is required'),
+  password: yup
+    .string()
+    .min(8, 'Minimum 8 character')
+    .matches(/[A-Z]/, 'Uppercase letters')
+    .matches(/[!@#$%^&*]/, 'Special characters')
+    .matches(/[0-9]/, 'Numbers')
+    .required('Password is required'),
+});
+
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
 export type InviteMemberFormData = yup.InferType<typeof inviteMemberSchema>;

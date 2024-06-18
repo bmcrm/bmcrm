@@ -1,19 +1,18 @@
 import { memo } from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { Link } from 'react-router-dom';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import CustomInputControlled from 'shared/ui/CustomInput/CustomInputControlled';
 import Button from 'shared/ui/Button/Button';
+import CustomCheckbox from 'shared/ui/CustomCheckbox/CustomCheckbox';
 import Camp from 'shared/assets/icons/camp.svg';
 
 import { INPUTS_STATE, inputsDataUser } from './inputsData';
 import styles from './TCOSignUpForm.module.scss';
 import { registrationSchema } from 'shared/const/schemas/validations';
-import { ButtonSize } from 'shared/ui/Button/Button.types';
 import { IInputsData } from './TCOSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
-import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
 
 interface TCOSignUpFormProps {
@@ -47,18 +46,8 @@ const TCOSignUpForm = memo(({ handleSubmit }: TCOSignUpFormProps) => {
               {inputsDataUser.map(input => (
                 <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />
               ))}
-              <label className={styles.acceptLabel}>
-                <Field className={styles.checkbox} type='checkbox' name='accept' />
-                <ErrorMessage
-                  className={styles.error}
-                  name='accept'
-                  render={msg => <CustomErrorMessage message={msg} />}
-                />
-
-                <span className={styles.checkmark} />
-                <p>I agree to the privacy policy</p>
-              </label>
-              <Button size={ButtonSize.M} type='submit' fluid>
+              <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
+              <Button type='submit' fluid>
                 <Camp />
                 SIGN UP
               </Button>

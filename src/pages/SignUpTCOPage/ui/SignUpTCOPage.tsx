@@ -4,9 +4,9 @@ import toast from 'react-hot-toast';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
 import { type IInputsData, TCOSignUpForm, useAuth } from 'entities/User';
-import AuthPageTemplate from 'shared/ui/AuthPageTemplate/AuthPageTemplate';
-import AuthFormTemplate from 'shared/ui/AuthFormTemplate/AuthFormTemplate';
 import FormLoader from 'features/FormLoader';
+import AuthPageTemplate from 'features/AuthPageTemplate';
+import AuthFormTemplate from 'features/AuthFormTemplate';
 import { RoutePath } from 'app/providers/AppRouter';
 
 const SignUpTCOPage = memo(() => {

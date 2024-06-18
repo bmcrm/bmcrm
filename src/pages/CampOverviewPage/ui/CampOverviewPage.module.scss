@@ -1,0 +1,118 @@
+@import 'breakpoints';
+
+.header {
+	padding-top: 30px;
+}
+
+.logo {
+	display: block;
+	width: 100%;
+	max-width: 144px;
+
+	&__link {
+		display: block;
+
+		svg, path {
+			display: block;
+			width: 100%;
+		}
+	}
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	padding-top: 30px;
+	padding-bottom: 30px;
+	overflow-x: hidden;
+
+	@media (width < $lg) and (width > $md){
+		padding-top: 10px;
+	}
+}
+
+.overview {
+	flex-grow: 1;
+
+	&.centred {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	+ .register {
+		margin-top: 140px;
+
+		@media (width < $md) {
+			margin-top: 100px;
+		}
+	}
+}
+
+.register {
+	&__inner {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: 25px;
+		padding: 50px 115px;
+		background-color: var(--color-secondary-bg);
+		border: 1px solid #D2D2D2;
+		border-radius: 20px;
+		box-shadow: 0 2px 60px 0 rgba(0, 0, 0, .1);
+		
+		@media (width < $xl) {
+			padding-left: 30px;
+			padding-right: 30px;
+		}
+		@media (width < $lg) {
+			padding-top: 30px;
+			padding-bottom: 30px;
+		}
+		@media (width < $md) {
+			padding: 20px 15px;
+			gap: 20px;
+		}
+
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			display: block;
+			top: 50%;
+			right: 115px;
+			transform: translateY(-50%);
+			width: 335px;
+			aspect-ratio: 1;
+			background-image: url('images/auth/desert_bg.png');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+
+			@media (width < $xl) {
+				right: 50px;
+			}
+			@media (width < $lg) {
+				width: 270px;
+				right: 30px;
+			}
+			@media (width < $md) {
+				display: none;
+			}
+		}
+	}
+}
+
+.form {
+	width: 100%;
+	max-width: 400px;
+
+	@media (width < $lg) {
+		max-width: 320px;
+	}
+	@media (width < $md) {
+		max-width: 100%;
+	}
+}

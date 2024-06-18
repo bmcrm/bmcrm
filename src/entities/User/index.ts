@@ -5,6 +5,8 @@ import TCOSignUpForm from './ui/TCOSignUpForm/TCOSignUpForm';
 import { type IInputsData } from './ui/TCOSignUpForm/TCOSignUpForm.types';
 import useAuth, { type IIDToken } from './model/services/useAuth/useAuth';
 import { type IUserAvatar } from './ui/UserAvatar/UserAvatar';
+import CamperSignUpForm from './ui/CamperSignUpForm/CamperSignUpForm';
+import { type ICamperRegisterData } from './ui/CamperSignUpForm/CamperSignUpForm.types';
 
 export {
   UserAvatar,
@@ -15,4 +17,6 @@ export {
   useAuth,
   IUserAvatar,
   IIDToken,
+  CamperSignUpForm,
+  ICamperRegisterData,
 };

@@ -43,8 +43,8 @@ const CustomInput = memo((props: CustomInputProps) => {
         <Tooltip
           className={styles.tooltip}
           properties={{
-            top: '-120px',
-            left: '50%',
+            top: '-100px',
+            left: '60%',
             transform: 'translateX(-50%)',
             width: '287px',
           }}

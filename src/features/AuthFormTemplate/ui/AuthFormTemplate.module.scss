@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@import '../../../app/styles/breakpoints';
 
 .wrapper {
   position: relative;
@@ -65,7 +65,7 @@
     display: block;
     width: 265px;
     height: 355px;
-    background-image: url('images/auth/page_bg.png');
+    background-image: url('shared/assets/images/auth/page_bg.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -92,7 +92,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('images/auth/form_bg.png');
+        background-image: url('shared/assets/images/auth/form_bg.png');
         background-repeat: no-repeat;
         background-position: calc(100% + 80px) calc(100% + 47px);
         background-size: 641px 360px;

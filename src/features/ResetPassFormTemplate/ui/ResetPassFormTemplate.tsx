@@ -1,10 +1,12 @@
 import { ReactNode } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 import { Link } from 'react-router-dom';
-import { RoutePath } from 'app/providers/AppRouter';
+import { classNames } from 'shared/lib/classNames/classNames';
+
+import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
+
 import styles from './ResetPassFormTemplate.module.scss';
-import { ResetFormBg } from './ReserPassFormTemplate.types';
+import { RoutePath } from 'app/providers/AppRouter';
+import { ResetFormBg } from '../types/ReserPassFormTemplate.types';
 
 interface ResetPassFormTemplateProps {
   className?: string;
