@@ -1,27 +1,46 @@
 import { memo } from 'react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { Link } from 'react-router-dom';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import CustomInputControlled from 'shared/ui/CustomInput/CustomInputControlled';
 import Button from 'shared/ui/Button/Button';
 import CustomCheckbox from 'shared/ui/CustomCheckbox/CustomCheckbox';
-import Camp from 'shared/assets/icons/camp.svg';
 
-import { INPUTS_STATE, inputsDataUser } from './inputsData';
+import { initialData, inputsData } from './inputsData';
 import styles from './TCOSignUpForm.module.scss';
 import { registrationSchema } from 'shared/const/schemas/validations';
-import { IInputsData } from './TCOSignUpForm.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
+import { type ITCORegisterForm, IUserRegisterData } from '../../model/types/auth.types.ts';
+import { CamperRole } from 'entities/Camper';
+import Camp from 'shared/assets/icons/camp.svg';
 
 interface TCOSignUpFormProps {
-  handleSubmit: (values: IInputsData, { resetForm }: { resetForm: () => void }) => void;
+  onSubmit: (values: IUserRegisterData, formikHelpers: FormikHelpers<ITCORegisterForm>) => void;
 }
 
-const TCOSignUpForm = memo(({ handleSubmit }: TCOSignUpFormProps) => {
+const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
+
+  const onSubmitHandler = (values: ITCORegisterForm, formikHelpers: FormikHelpers<ITCORegisterForm>) => {
+    const data: IUserRegisterData = {
+      camp_name: values.camp_name,
+      camp_id: values.camp_id,
+      camp_website: values.camp_website,
+      city: values.city,
+      first_name: values.first_name,
+      last_name: values.last_name,
+      playa_name: values.playa_name,
+      email: values.email,
+      password: values.password,
+      role: CamperRole.TCO,
+    };
+
+    onSubmit(data, formikHelpers);
+  };
+
   return (
-    <Formik validationSchema={registrationSchema} onSubmit={handleSubmit} initialValues={INPUTS_STATE}>
+    <Formik validationSchema={registrationSchema} onSubmit={onSubmitHandler} initialValues={initialData}>
       {({ values, setFieldValue }) => {
         return (
           <Form className={styles.form}>
@@ -29,21 +48,20 @@ const TCOSignUpForm = memo(({ handleSubmit }: TCOSignUpFormProps) => {
               <CustomInputControlled
                 setFieldValue={setFieldValue}
                 values={values}
-                name='campName'
-                register
+                name='camp_name'
                 placeholder='Sparkle Unicorns'
                 label='Name your camp'
               />
-              <CustomInput name='campId' disabled placeholder='sparkle-unicorns' label='Camp ID' />
+              <CustomInput name='camp_id' disabled placeholder='sparkle-unicorns' label='Camp ID' />
               <CustomInput name='city' placeholder='Miami' label='Hometown' />
               <CustomInput name='camp_website' placeholder='www.sparkle-unicorns.org' label='Website' />
             </section>
             <section>
               <div className={styles.flex}>
-                <CustomInput name='firstName' placeholder='Cole' label='First Name' />
-                <CustomInput name='lastName' placeholder='Sprouse' label='Last Name' />
+                <CustomInput name='first_name' placeholder='Cole' label='First Name' />
+                <CustomInput name='last_name' placeholder='Sprouse' label='Last Name' />
               </div>
-              {inputsDataUser.map(input => (
+              {inputsData.map(input => (
                 <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />
               ))}
               <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>

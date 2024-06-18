@@ -9,27 +9,24 @@ import Button from 'shared/ui/Button/Button';
 import { initialData, inputsData } from './inputsData';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
 import { camperRegistrationSchema } from 'shared/const/schemas/validations';
-import { ICamperRegisterData, type ICamperRegisterForm } from './CamperSignUpForm.types';
+import { type IUserRegisterData, type ICamperRegisterForm } from '../../model/types/auth.types.ts';
 import { CamperRole } from 'entities/Camper';
 import styles from './CamperSignUpForm.module.scss';
 import Camp from 'shared/assets/icons/camp.svg';
 
 type CamperSignUpFormProps = {
   className?: string;
-  onSubmit: (values: ICamperRegisterData, formikHelpers: FormikHelpers<ICamperRegisterForm>) => void;
+  onSubmit: (values: IUserRegisterData, formikHelpers: FormikHelpers<ICamperRegisterForm>) => void;
 };
 
 const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
-  const {
-    className,
-    onSubmit,
-  } = props;
+  const { className, onSubmit } = props;
 
   const onSubmitHandler = (values: ICamperRegisterForm, formikHelpers: FormikHelpers<ICamperRegisterForm>) => {
-    const data: ICamperRegisterData = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      playaName: values.playaName,
+    const data: IUserRegisterData = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      playa_name: values.playa_name,
       email: values.email,
       password: values.password,
       role: CamperRole.LEAD,
@@ -44,8 +41,8 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
         return (
           <Form className={classNames(styles.form, {}, [className])}>
             <div className={styles.form__row}>
-              <CustomInput name='firstName' placeholder='Cole' label='First Name'/>
-              <CustomInput name='lastName' placeholder='Sprouse' label='Last Name'/>
+              <CustomInput name='first_name' placeholder='Cole' label='First Name'/>
+              <CustomInput name='last_name' placeholder='Sprouse' label='Last Name'/>
             </div>
             {inputsData.map(input => (
               <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />

@@ -4,7 +4,7 @@ import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
 import AuthPageTemplate from 'features/AuthPageTemplate';
 import { ResetFormBg, ResetPassFormTemplate } from 'features/ResetPassFormTemplate';
-import { ResetPassStepOne, ResetPassStepTwo, type ResetPassStepTwoTypes } from 'features/ResetPassForm';
+import { ResetPassStepOne, ResetPassStepTwo, type IResetPassStepTwo } from 'features/ResetPassForm';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 import FormLoader from 'features/FormLoader';
@@ -60,10 +60,10 @@ const ResetPassPage = memo(() => {
     }
   }, [initResetPass]);
 
-  const handleStepTwoSubmit = useCallback(async (values: ResetPassStepTwoTypes, { resetForm }: { resetForm: () => void }) => {
+  const handleStepTwoSubmit = useCallback(async (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => {
     const data = {
-      confirmCode: values.confirmCode,
-      newPassword: values.newPassword,
+      confirm_code: values.confirm_code,
+      password_new: values.password_new,
       email: email,
     };
 

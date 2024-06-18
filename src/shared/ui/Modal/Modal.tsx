@@ -10,7 +10,7 @@ type ModalProps = {
   onClose?: () => void;
 };
 
-const ANIMATION_DELAY = 300;
+const ANIMATION_DELAY = 200;
 let openModalCount = 0;
 
 const Modal = (props: ModalProps) => {

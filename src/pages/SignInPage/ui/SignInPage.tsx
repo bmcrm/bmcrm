@@ -5,20 +5,15 @@ import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
 import AuthFormTemplate from 'features/AuthFormTemplate';
 import AuthPageTemplate from 'features/AuthPageTemplate';
-import { type SignInFormData, useAuth, UserSignInForm } from 'entities/User';
+import { type ILoginData, useAuth, UserSignInForm } from 'entities/User';
 import { UserConfirmModal } from 'features/UserConfirmModal';
 import FormLoader from 'features/FormLoader';
 import { RoutePath } from 'app/providers/AppRouter';
 
-export interface ISignInCredentials {
-  email: string;
-  password: string;
-}
-
 const SignInPage = memo(() => {
   const navigate = useNavigate();
   const [isConfirmedModal, setIsConfirmedModal] = useState(false);
-  const [credentials, setCredentials] = useState<ISignInCredentials | null>(null);
+  const [credentials, setCredentials] = useState<ILoginData | null>(null);
   const { login, isLoading, error, resetError } = useAuth();
 
   useEffect(() => {
@@ -30,7 +25,7 @@ const SignInPage = memo(() => {
   }, [error, resetError]);
 
   const handleSubmit = useCallback(
-    async (values: SignInFormData, { resetForm }: { resetForm: () => void }) => {
+    async (values: ILoginData, { resetForm }: { resetForm: () => void }) => {
       try {
         await login(values);
         resetForm();

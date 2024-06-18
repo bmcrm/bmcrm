@@ -1,6 +1,6 @@
 export const inputsData = [
   {
-    name: 'playaName',
+    name: 'playa_name',
     placeholder: 'Playa Name',
     label: 'Playa Name',
     type: 'text',
@@ -22,9 +22,9 @@ export const inputsData = [
 
 export const initialData = {
   accept: false,
-  firstName: '',
-  lastName: '',
-  playaName: '',
+  first_name: '',
+  last_name: '',
+  playa_name: '',
   email: '',
   password: '',
 };

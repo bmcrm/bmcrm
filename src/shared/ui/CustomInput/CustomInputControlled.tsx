@@ -67,8 +67,8 @@ const CustomInputControlled = memo((props: CustomInputProps) => {
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           const campName = event.target.value;
           const campId = createSlug(campName);
-          setFieldValue('campName', campName);
-          setFieldValue('campId', campId);
+          setFieldValue('camp_name', campName);
+          setFieldValue('camp_id', campId);
         }}
         autoComplete='off'
         className={styles.input}

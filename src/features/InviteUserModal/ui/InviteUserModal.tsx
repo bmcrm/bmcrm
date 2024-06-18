@@ -1,24 +1,17 @@
 import { memo, useCallback, useEffect } from 'react';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
-import { ErrorMessage, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import toast from 'react-hot-toast';
 
 import Modal from 'shared/ui/Modal/Modal';
 import Button from 'shared/ui/Button/Button';
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import FormLoader from 'features/FormLoader';
-import CustomRadio from 'shared/ui/CustomRadio/CustomRadio';
-import CustomErrorMessage from 'shared/ui/CustomErrorMessage/CustomErrorMessage';
 
 import styles from './InviteUserModal.module.scss';
 import { inviteMemberSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
 import { useCampers } from 'entities/Camper';
-
-interface IFormState {
-  email: string;
-  role: string;
-}
 
 interface InviteUserFormProps {
   isOpen: boolean;
@@ -37,7 +30,7 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
     return resetError();
   }, [error, resetError]);
 
-  const handleSubmit = useCallback(async (values: IFormState, { resetForm }: { resetForm: () => void }) => {
+  const handleSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
     const response = await invite({ ...values, camp_id: decodedIDToken!.camp_id });
 
     if (response) {
@@ -53,14 +46,9 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
       <div className={styles.inviteModal}>
         {isLoading && <FormLoader/>}
         <h2 className={styles.title}>Invite User by Email</h2>
-        <p className={styles.subtitle}>Please enter the email address of the user you want to invite and select Lead/Qualified status</p>
-        <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '', role: '' }}>
+        <p className={styles.subtitle}>Please enter the email address of the user you want to invite</p>
+        <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '' }}>
           <Form className={styles.inviteModal__form}>
-            <div className={styles.inviteModal__radioGroup}>
-              <CustomRadio name={'role'} value={'lead'} label={'Lead'}/>
-              <CustomRadio name={'role'} value={'qualified'} label={'Qualified'}/>
-              <ErrorMessage name={'role'} render={msg => <CustomErrorMessage message={msg} />} />
-            </div>
             <CustomInput name={'email'} placeholder={'Email'}/>
             <Button type={'submit'} className={'m-centred'}>Send Invitation</Button>
           </Form>

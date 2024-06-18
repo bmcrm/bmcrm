@@ -1,22 +1,29 @@
+import useAuth from './model/services/useAuth/useAuth';
 import UserAvatar from './ui/UserAvatar/UserAvatar';
 import UserSignInForm from './ui/UserSignInForm/UserSignInForm';
-import { type SignInFormData } from './ui/UserSignInForm/UserSignInForm.types';
 import TCOSignUpForm from './ui/TCOSignUpForm/TCOSignUpForm';
-import { type IInputsData } from './ui/TCOSignUpForm/TCOSignUpForm.types';
-import useAuth, { type IIDToken } from './model/services/useAuth/useAuth';
-import { type IUserAvatar } from './ui/UserAvatar/UserAvatar';
 import CamperSignUpForm from './ui/CamperSignUpForm/CamperSignUpForm';
-import { type ICamperRegisterData } from './ui/CamperSignUpForm/CamperSignUpForm.types';
+import type {
+  IUserRegisterData,
+  ILoginData,
+  IIDToken,
+  IConfirmEmail,
+  IConfirmResetPass,
+  IInviteData,
+} from './model/types/auth.types';
+import type { IUserAvatar } from './model/types/userAvatar.types';
 
 export {
+  useAuth,
   UserAvatar,
   UserSignInForm,
-  SignInFormData,
   TCOSignUpForm,
-  IInputsData,
-  useAuth,
-  IUserAvatar,
-  IIDToken,
   CamperSignUpForm,
-  ICamperRegisterData,
+  IIDToken,
+  IUserRegisterData,
+  ILoginData,
+  IUserAvatar,
+  IConfirmEmail,
+  IConfirmResetPass,
+  IInviteData,
 };

@@ -12,21 +12,16 @@
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
+  transition: opacity .2s;
 
   &.open {
     z-index: 100;
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
-
-    .modal__content {
-      transform: scale(1);
-    }
   }
   &.closing {
-    .modal__content {
-      transform: scale(0.2);
-    }
+    opacity: 0;
   }
 
   &__overlay {
@@ -49,8 +44,6 @@
     padding: 30px;
     border-radius: 10px;
     background-color: var(--color-secondary-bg);
-    transition: transform .3s;
-    transform: scale(.5);
     overflow: hidden;
 
     @media (width < $md) {

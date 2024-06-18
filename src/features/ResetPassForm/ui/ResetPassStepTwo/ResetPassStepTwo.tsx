@@ -9,23 +9,18 @@ import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import styles from './ResetPassStepTwo.module.scss';
 import { confirmResetPassSchema } from 'shared/const/schemas/validations';
-import { confirmationInputs, initialValues } from './inputsData';
-
-export type ResetPassStepTwoTypes = {
-  confirmCode: string,
-  newPassword: string,
-  password_confirm: string,
-};
+import { inputsData, initialValues } from './inputsData';
+import { type IResetPassStepTwo } from '../../model/types/resetPass.types';
 
 type ResetPassStepTwoProps = {
-  onSubmit: (values: ResetPassStepTwoTypes, { resetForm }: { resetForm: () => void }) => void;
+  onSubmit: (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => void;
 };
 
 const ResetPassStepTwo = memo(({ onSubmit }: ResetPassStepTwoProps) => {
   return (
     <Formik validationSchema={confirmResetPassSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
-        {confirmationInputs.map(input => (
+        {inputsData.map(input => (
           <CustomInput key={input.name} {...input} />
         ))}
         <Button type='submit' className={styles.btn} fluid>

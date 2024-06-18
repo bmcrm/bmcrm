@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
@@ -11,7 +11,7 @@ import styles from './ResetPassStepOne.module.scss';
 import { initResetPassSchema } from 'shared/const/schemas/validations';
 
 type ResetPassStepOneProps = {
-  onSubmit: (values: { email: string }, { resetForm }: { resetForm: () => void }) => void;
+  onSubmit: (values: { email: string }, formikHelpers: FormikHelpers<{ email: string }>) => void;
 };
 
 const ResetPassStepOne = memo(({ onSubmit }: ResetPassStepOneProps) => {

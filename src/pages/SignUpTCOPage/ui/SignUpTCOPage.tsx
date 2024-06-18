@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 
-import { type IInputsData, TCOSignUpForm, useAuth } from 'entities/User';
+import { type IUserRegisterData, TCOSignUpForm, useAuth } from 'entities/User';
 import FormLoader from 'features/FormLoader';
 import AuthPageTemplate from 'features/AuthPageTemplate';
 import AuthFormTemplate from 'features/AuthFormTemplate';
@@ -21,26 +21,25 @@ const SignUpTCOPage = memo(() => {
     return resetError();
   }, [error, resetError]);
 
-  const handleSubmit = useCallback(
-    async (values: IInputsData, { resetForm }: { resetForm: () => void }) => {
-      const response = await register(values);
+  const submitHandler = useCallback(async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
+    const response = await register(values);
 
-      if (response) {
-        toast.success(
-          'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
-          { duration: 5000, position: 'top-center' }
-        );
-        resetForm();
-        navigate(RoutePath.sign_in, { replace: true });
-      }
-    },
-    [navigate, register]
+    if (response) {
+      toast.success(
+        'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
+        { duration: 5000, position: 'top-center' }
+      );
+      resetForm();
+      navigate(RoutePath.sign_in, { replace: true });
+    }
+  },
+  [navigate, register]
   );
 
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Create a camp and account'}>
-        <TCOSignUpForm handleSubmit={handleSubmit} />
+        <TCOSignUpForm onSubmit={submitHandler} />
         {isLoading && <FormLoader />}
       </AuthFormTemplate>
     </AuthPageTemplate>

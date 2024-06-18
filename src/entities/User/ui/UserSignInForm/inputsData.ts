@@ -1,4 +1,4 @@
-export const SignInInputs = [
+export const inputsData = [
   {
     name: 'email',
     placeholder: 'example@gmail.com',
