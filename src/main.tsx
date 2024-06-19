@@ -21,7 +21,7 @@ Sentry.init({
     Sentry.replayIntegration(),
   ],
   tracesSampleRate: import.meta.env.VITE_BMCRM_ENV === 'dev' ? 1.0 : 0.1,
-  tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
+  tracePropagationTargets: [/^https:\/\/app\.bmcrm\.camp(?:\/.*)?$/],
   replaysSessionSampleRate: import.meta.env.VITE_BMCRM_ENV === 'dev' ? 1.0 : 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
