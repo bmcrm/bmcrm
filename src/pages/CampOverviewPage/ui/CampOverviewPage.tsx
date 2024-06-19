@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
@@ -15,11 +15,10 @@ import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 
 const CampOverviewPage = memo(() => {
-  const { register, error, resetError } = useAuth();
+  const { register, error, resetError, isLoading: authIsLoading } = useAuth();
   const { isLoading, isError } = useCamp();
   const { id }  = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [isLoader, setIsLoader] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -30,7 +29,6 @@ const CampOverviewPage = memo(() => {
   }, [error, resetError]);
 
   const submitHandler = async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
-    setIsLoader(true);
     const data = { ...values, camp_id: id };
     const response = await register(data);
 
@@ -42,7 +40,6 @@ const CampOverviewPage = memo(() => {
       resetForm();
       navigate(RoutePath.sign_in, { replace: true });
     }
-    setIsLoader(false);
   };
 
   return (
@@ -66,7 +63,7 @@ const CampOverviewPage = memo(() => {
           <section className={styles.register}>
             <Container>
               <div className={styles.register__inner}>
-                {isLoader && <FormLoader/>}
+                {authIsLoading && <FormLoader/>}
                 <AuthBadge label={'Register to Join the Camp'}/>
                 <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
               </div>

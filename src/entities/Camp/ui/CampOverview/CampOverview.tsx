@@ -15,14 +15,14 @@ import { TextAlign, TextSize } from 'shared/ui/Text/Text.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import LocationIcon from 'shared/assets/icons/location_icon.svg';
 import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
-import { ICampOverview } from '../../model/types/camp.types';
+import { ICamp } from '../../model/types/camp.types';
 
 type CampOverviewProps = {
   campID?: string;
 };
 
 const CampOverview = memo(({ campID }: CampOverviewProps) => {
-  const [camp, setCamp] = useState<ICampOverview>();
+  const [camp, setCamp] = useState<ICamp>();
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCamp, isLoading, isError } = useCamp();
@@ -83,18 +83,20 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
   } else {
     content = (
       <>
-        <h1 className={styles.camp__title}>{camp?.name}</h1>
-        <h2 className={styles.camp__subtitle}>Campers {camp?.campers_count}</h2>
+        <h1 className={styles.camp__title}>{camp?.camp_name}</h1>
+        <h2 className={styles.camp__subtitle}>Campers {camp?.campers_count || '0'}</h2>
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30}/>
           <div className={styles.camp__desc}>
-            <p className={styles.camp__text}>{camp?.description}</p>
-            <address className={styles.camp__address}>
-              <Icon icon={<LocationIcon/>} size={isTablet ? IconSize.SIZE_18 : IconSize.SIZE_24}/>
-              {camp?.location}
-            </address>
-            {camp?.website && (
-              <Link to={camp.website} className={styles.camp__btn}>
+            <p className={styles.camp__text}>{camp?.camp_description || 'Someday, there will be a camp description here!'}</p>
+            {camp?.city && (
+              <address className={styles.camp__address}>
+                <Icon icon={<LocationIcon/>} size={isTablet ? IconSize.SIZE_18 : IconSize.SIZE_24}/>
+                {camp.city}
+              </address>
+            )}
+            {camp?.camp_website && (
+              <Link to={camp.camp_website} className={styles.camp__btn}>
                 Camp website
                 <Icon icon={<RedirectIcon/>} size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28}/>
               </Link>
