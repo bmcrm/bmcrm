@@ -15,14 +15,14 @@ let USER_ROLE: string;
 let TABLE_NAME: string;
 
 test.beforeAll(async () => {
-  TEST_COGNITO_POOL_ID = await getParameter('/campers/cognito_user_pool_id');
-  COGNITO_APP_CLIENT_ID = await getParameter('/campers/cognito_client_pool_id');
+  TEST_COGNITO_POOL_ID = await getParameter('/fetchCampers/cognito_user_pool_id');
+  COGNITO_APP_CLIENT_ID = await getParameter('/fetchCampers/cognito_client_pool_id');
   TEST_EMAIL = await getParameter('/webapp/test/email');
   CAMP_ID = await getParameter('/webapp/test/account_camp_id');
   TEMP_PASSWORD = await getParameter('/webapp/test/password_temp');
   NEW_PASSWORD = await getParameter('/webapp/test/password_new');
   USER_ROLE = await getParameter('/webapp/test/user_role');
-  TABLE_NAME = await getParameter('/campers/ddb_table_name');
+  TABLE_NAME = await getParameter('/fetchCampers/ddb_table_name');
 
   await createUser(TEST_COGNITO_POOL_ID, TEST_EMAIL, CAMP_ID, TEMP_PASSWORD, USER_ROLE);
   await initiateAuth(TEST_COGNITO_POOL_ID, COGNITO_APP_CLIENT_ID, TEST_EMAIL, TEMP_PASSWORD, NEW_PASSWORD);

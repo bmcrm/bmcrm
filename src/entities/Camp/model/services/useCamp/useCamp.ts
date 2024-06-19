@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import axios from 'axios';
-import { EnvConfigs } from 'shared/config/env/env';
-import { ICampOverview } from '../../types/camp.types';
+import { AxiosError } from 'axios';
+import { ICamp } from '../../types/camp.types';
+import { fetchCamp } from 'shared/api/fetchCamp/fetchCamp';
 
 interface CampState {
   isLoading: boolean;
-  isError: string | Error | null;
-  getCamp(campID: string): Promise<ICampOverview>;
+  isError: string | AxiosError | Error | null;
+  getCamp(campID: string): Promise<ICamp>;
 }
-
-const mode = EnvConfigs.BMCRM_ENV;
 
 const useCamp = create<CampState>()(
   devtools(set => ({
@@ -19,7 +17,7 @@ const useCamp = create<CampState>()(
     getCamp: async (campID: string) => {
       try {
         set({ isLoading: true });
-        const response = await axios.get(`https://api.${mode}.bmcrm.camp/camps/${campID}`);
+        const response = await fetchCamp({ method: 'get', endpoint: campID });
 
         if (!response.data) {
           set({ isError: new Error() });
@@ -27,7 +25,7 @@ const useCamp = create<CampState>()(
 
         return response?.data || null;
       } catch (error) {
-        throw new Error('Error fetching campers: ' + error);
+        set({ isError: error as AxiosError });
       } finally {
         set({ isLoading: false });
       }

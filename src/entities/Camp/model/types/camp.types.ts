@@ -1,9 +1,11 @@
-export interface ICampOverview {
-  camp_id: string,
-  campers_count: string | number,
-  description: string,
-  location: string,
-  name: string,
-  tco: string,
-  website: string,
+export interface ICamp {
+  camp_id: string;
+  tco?: string;
+  city: string;
+  created_at?: number;
+  camp_name?: string;
+  camp_website?: string;
+  updated_at?: number;
+  camp_description: string;
+  campers_count?: string | number;
 }

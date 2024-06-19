@@ -1,20 +1,17 @@
 import { create } from 'zustand';
 import { ICamper } from '../../types/camper.types';
 import { devtools } from 'zustand/middleware';
-import axios from 'axios';
-import { useAuth } from 'entities/User';
-import { EnvConfigs } from 'shared/config/env/env';
+import { fetchCampers } from 'shared/api/fetchCampers/fetchCampers';
+import { AxiosError } from 'axios';
 
 interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
-  isError: string | null;
+  isError: string | null | Error | AxiosError;
   getCampers(): Promise<void>;
   getCamper(email: string): Promise<ICamper | null>;
   updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
 }
-
-const mode = EnvConfigs.BMCRM_ENV;
 
 const useCampers = create<CamperState>()(
   devtools(set => ({
@@ -24,50 +21,37 @@ const useCampers = create<CamperState>()(
     getCampers: async () => {
       try {
         set({ isLoading: true });
-        const response = await axios.get(`https://api.${mode}.bmcrm.camp/campers`, {
-          headers: {
-            Authorization: useAuth.getState().idToken,
-          },
-        });
+        const response = await fetchCampers({ method: 'get' });
 
-        set({ isLoading: false, campers: response.data });
+        set({ campers: response.data });
       } catch (error) {
-        throw new Error('Error fetching campers: ' + error);
+        set({ isError: error as AxiosError });
       } finally {
         set({ isLoading: false });
       }
     },
     getCamper: async (email: string) => {
       try {
-        const response = await axios.get(`https://api.${mode}.bmcrm.camp/campers/${email}`, {
-          headers: {
-            Authorization: useAuth.getState().idToken,
-          },
-        });
+        const response = await fetchCampers({ method: 'get', endpoint: email });
 
         return response?.data || null;
       } catch (error) {
-        throw new Error('Error fetching campers: ' + error);
+        set({ isError: error as AxiosError });
       }
     },
     updateCamper: async (email: string, data: Partial<ICamper>) => {
       try {
-        const response = await axios.patch(
-          `https://api.${mode}.bmcrm.camp/campers/${email}`,
-          { ...data, email: email },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${useAuth.getState().idToken}`,
-            },
-          }
-        );
+        const response = await fetchCampers({
+          method: 'patch',
+          endpoint: email,
+          payload: { ...data, email: email },
+        });
 
-        set({ isLoading: false, campers: response.data });
+        set({ campers: response.data });
 
         return response.data;
       } catch (error) {
-        throw new Error('Error fetching campers: ' + error);
+        set({ isError: error as AxiosError });
       }
     },
   }))
