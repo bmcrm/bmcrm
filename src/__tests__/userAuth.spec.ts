@@ -56,7 +56,7 @@ test('successful login and show modal info', async ({ page }) => {
   const element = await page.locator('text=fake@example.com').nth(1);
   await element.hover();
   await element.click();
-  await expect(page.locator('text=Summary')).toBeVisible();
+  await expect(page.locator('text=About Me')).toBeVisible();
   await page.getByRole('button').nth(1).click();
   await page.getByRole('button', { name: 'cancel' }).click();
   await page.press('body', 'Escape');
