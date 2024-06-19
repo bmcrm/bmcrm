@@ -1,4 +1,4 @@
-@import '../../../app/styles/breakpoints';
+@import 'breakpoints';
 
 .details {
   display: grid;
@@ -74,10 +74,7 @@
     border: 2px solid var(--color-input-orange);
     border-radius: 10px;
     padding: 10px 20px;
-
-    &.edit {
-
-    }
+    font-weight: 500;
   }
 
   &__avatar {
@@ -220,6 +217,8 @@
         background-color: transparent;
         border: none;
         padding: 0;
+        font-weight: 500;
+        pointer-events: none;
       }
     }
   }

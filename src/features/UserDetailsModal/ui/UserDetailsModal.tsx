@@ -172,8 +172,8 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               </div>
             </section>
             <section>
-              <h3 className={styles.blockTitle}>Summary</h3>
-              {isReadonly ? <p>{camper?.summary}</p> : (
+              <h3 className={styles.blockTitle}>About Me</h3>
+              {isReadonly ? <p className={styles.text}>{camper?.summary}</p> : (
                 <Field
                   as={'textarea'}
                   name={'summary'}
@@ -183,7 +183,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               )}
             </section>
             <section>
-              <h3 className={styles.blockTitle}>History</h3>
+              <h3 className={styles.blockTitle}>Campers Notes</h3>
               <FieldArray name='history'>
                 {() => (
                   <ul className={styles.details__history}>
