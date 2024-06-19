@@ -1,0 +1,131 @@
+@import 'breakpoints';
+
+.notFound {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+	background-image: url('images/camp-overview/bg_404.png');
+	background-size: 100% 100%;
+	background-position: top center;
+	background-repeat: no-repeat;
+
+	@media (width < $md) {
+		background-image: url('images/camp-overview/bg_404_mobile.png');
+		background-size: cover;
+	}
+
+	&:before {
+		content: '';
+		position: absolute;
+		z-index: 2;
+		left: 0;
+		bottom: 0;
+		width: 332px;
+		height: 155px;
+		background-image: url('images/camp-overview/bg_404_small.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		@media (width < $md) {
+			display: none;
+		}
+	}
+
+	&__tumbleweed {
+		position: absolute;
+		z-index: 1;
+		left: 106px;
+		bottom: 63px;
+		display: block;
+		width: 146px;
+		height: 137px;
+		background-image: url('images/camp-overview/tumbleweed.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		@media (width < $md) {
+			left: 30px;
+			bottom: 40px;
+			width: 80px;
+			height: 75px;
+		}
+
+		&.animate {
+			animation: tumbleweedAnim 3s ease-in-out forwards;
+
+			@media (width < $md) {
+				animation: tumbleweedAnim_mobile 3s ease-in-out forwards;
+			}
+		}
+	}
+}
+
+.message {
+	position: relative;
+	z-index: 3;
+	display: grid;
+	gap: 20px;
+	width: 100%;
+	max-width: 460px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 30px;
+	border-radius: 20px;
+	border: 1px solid #D9C4A9;
+	background-color: rgba(255, 255, 255, .5);
+	backdrop-filter: blur(10px);
+	text-align: center;
+
+	@media (width < $md) {
+		padding: 15px;
+	}
+
+	h1 {
+		font: var(--font-xl);
+		font-weight: 500;
+
+		@media (width < $md) {
+			font: var(--font-m);
+			font-weight: 500;
+		}
+	}
+	p {
+		font: var(--font-l);
+
+		@media (width < $md) {
+			font: var(--font-xs);
+		}
+	}
+}
+
+.btn {
+	@media (width < $xs) {
+		font: var(--font-xs);
+		font-weight: 500;
+	}
+}
+
+@keyframes tumbleweedAnim {
+	from {
+		left: 106px;
+		transform: rotate(0deg);
+	}
+	to {
+		left: 50%;
+		transform: rotate(180deg);
+	}
+}
+@keyframes tumbleweedAnim_mobile {
+	from {
+		left: 30px;
+		transform: rotate(0deg);
+	}
+	to {
+		left: 60%;
+		transform: rotate(180deg);
+	}
+}

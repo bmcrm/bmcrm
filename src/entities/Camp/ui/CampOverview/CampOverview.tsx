@@ -1,17 +1,13 @@
 import { memo, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { useCamp } from 'entities/Camp';
-import { RoutePath } from 'app/providers/AppRouter';
 
 import Skeleton from 'shared/ui/Skeleton/Skeleton';
-import Text from 'shared/ui/Text/Text';
-import Button from 'shared/ui/Button/Button';
 import Image from 'shared/ui/Image/Image';
 import Icon from 'shared/ui/Icon/Icon';
 
 import styles from './CampOverview.module.scss';
-import { TextAlign, TextSize } from 'shared/ui/Text/Text.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import LocationIcon from 'shared/assets/icons/location_icon.svg';
 import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
@@ -25,8 +21,7 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
   const [camp, setCamp] = useState<ICamp>();
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { getCamp, isLoading, isError } = useCamp();
-  const navigate = useNavigate();
+  const { getCamp, isLoading } = useCamp();
   let content;
   
   useEffect(() => {
@@ -34,18 +29,12 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
       const response = await getCamp(campID as string);
 
       if (response) {
-        setCamp({
-          ...response
-        });
+        setCamp({ ...response });
       }
     };
 
     fetchCamp();
   }, [getCamp, campID]);
-
-  const onRedirectHandler = (target: string) => {
-    navigate(target, { replace: true });
-  };
 
   if (isLoading) {
     content = (
@@ -62,22 +51,6 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
             <Skeleton width={'30%'} height={50} border={'100px'} className={'mt-a'}/>
           </div>
         </div>
-      </>
-    );
-  } else if (isError) {
-    content = (
-      <>
-        <Text
-          title={'Such a camp doesn\'t exist!'}
-          titleSize={TextSize.XL}
-          titleAlign={TextAlign.CENTER}
-          description={'Want to create it? Click the button below!'}
-          descSize={TextSize.L}
-          descAlign={TextAlign.CENTER}
-        />
-        <Button className={'m-centred mt-30'} onClick={() => onRedirectHandler(RoutePath.sign_up)}>
-          REGISTER
-        </Button>
       </>
     );
   } else {
