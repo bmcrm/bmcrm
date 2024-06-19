@@ -1,4 +1,5 @@
 import {
+  AuthFlowType,
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
@@ -17,12 +18,15 @@ import {
   type IConfirmResetPass,
   type IInviteData,
   type ILoginData,
-  type IUserRegisterData
+  type IUserRegisterData, useAuth
 } from 'entities/User';
+import axios from 'axios';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
 });
+
+const mode = EnvConfigs.BMCRM_ENV;
 
 export const signUpUser = async (data: IUserRegisterData) => {
   const userAttributes = [
@@ -49,15 +53,17 @@ export const signUpUser = async (data: IUserRegisterData) => {
   return await cognitoClient.send(new SignUpCommand(params));
 };
 
-export const inviteUser = async (data: IInviteData) => {
-  console.log(data);
-
-  return true;
+export const inviteUser = async (data: IInviteData): Promise<unknown> => {
+  return await axios.post(`https://api.${mode}.bmcrm.camp/campers`, data, {
+    headers: {
+      Authorization: useAuth.getState().idToken,
+    }
+  });
 };
 
 export const loginUser = async ({ email, password }: ILoginData) => {
   const params: InitiateAuthCommandInput = {
-    AuthFlow: 'USER_PASSWORD_AUTH',
+    AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     AuthParameters: {
       USERNAME: email,
@@ -107,4 +113,18 @@ export const logoutUser = async (accessToken: string) => {
   });
 
   return await cognitoClient.send(command);
+};
+
+export const refreshUserTokens = async (refreshToken: string) => {
+  const params = {
+    AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
+    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+    AuthParameters: {
+      REFRESH_TOKEN: refreshToken,
+    },
+  };
+
+  const response = await cognitoClient.send(new InitiateAuthCommand(params));
+
+  return response.AuthenticationResult;
 };
