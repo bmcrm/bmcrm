@@ -1,14 +1,45 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BM CRM</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script src="https://embed.small.chat/T06TCK9AYEQC078Q1STH3P.js" async></script>
-  </body>
+<head>
+	<meta charset="UTF-8"/>
+	<link rel="icon" href="/favicon.ico"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>BM CRM</title>
+
+	<!-- begin Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-8KVKZRPR06"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+
+		gtag('js', new Date());
+		gtag('config', 'G-8KVKZRPR06');
+	</script>
+  <!-- end Google tag (gtag.js) -->
+
+	<!-- BEGIN PLERDY CODE -->
+	<script type="text/javascript" defer data-plerdy_code='1'>
+		var _protocol = "https:" == document.location.protocol ? "https://" : "http://";
+		_site_hash_code = "5332d078c20b1d4e7c64d8b4b4411545", _suid = 51928,
+			plerdyScript = document.createElement("script");
+		plerdyScript.setAttribute("defer", ""), plerdyScript.dataset.plerdymainscript = "plerdymainscript",
+			plerdyScript.src = "https://a.plerdy.com/public/js/click/main.js?v=" + Math.random();
+		var plerdymainscript = document.querySelector("[data-plerdymainscript='plerdymainscript']");
+		plerdymainscript && plerdymainscript.parentNode.removeChild(plerdymainscript);
+		try {
+			document.head.appendChild(plerdyScript)
+		} catch (t) {
+			console.log(t, "unable add script tag")
+		}
+	</script>
+	<!-- END PLERDY CODE -->
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
+<script src="https://embed.small.chat/T06TCK9AYEQC078Q1STH3P.js" async></script>
+</body>
 </html>
