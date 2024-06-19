@@ -1,10 +1,11 @@
 import { memo, Suspense, useCallback } from 'react';
-import { Route, Routes } from 'react-router-dom';
 import { AppRouterProps, routeConfig } from '../config/routeConfig';
 import PageLoader from 'features/PageLoader';
 import RequireAuth from './RequireAuth';
 import Header from 'widgets/Header';
-
+import { Routes, Route } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
+const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 const AppRouter = memo(() => {
   const renderWithWrapper = useCallback((route: AppRouterProps) => {
     const element = route.authOnly ? (
@@ -27,7 +28,7 @@ const AppRouter = memo(() => {
     );
   }, []);
 
-  return <Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>;
+  return <SentryRoutes>{Object.values(routeConfig).map(renderWithWrapper)}</SentryRoutes>;
 });
 
 export default AppRouter;
