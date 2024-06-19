@@ -25,6 +25,7 @@ const useCampers = create<CamperState>()(
 
         set({ campers: response.data });
       } catch (error) {
+        console.error(error);
         set({ isError: error as AxiosError });
       } finally {
         set({ isLoading: false });

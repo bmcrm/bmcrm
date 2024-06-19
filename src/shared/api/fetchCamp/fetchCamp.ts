@@ -10,14 +10,14 @@ interface IFetchCamp {
   payload?: Partial<ICamp>;
 }
 
-export const fetchCamp = async (props: IFetchCamp) => {
+export const fetchCamp = (props: IFetchCamp) => {
   const { endpoint, payload, method } = props;
   const url = `https://api.${mode}.bmcrm.camp/camps${endpoint ? `/${endpoint}` : ''}`;
 
   const axiosMethods = {
-    get: () => axios.get(url),
-    post: () => axios.post(url, payload),
-    patch: () => axios.patch(url, payload),
+    get: async () => await axios.get(url),
+    post: async () => await axios.post(url, payload),
+    patch: async () => await axios.patch(url, payload),
   };
 
   return axiosMethods[method]();

@@ -11,7 +11,6 @@ import FormLoader from 'features/FormLoader';
 import styles from './InviteUserModal.module.scss';
 import { inviteMemberSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
-import { useCampers } from 'entities/Camper';
 
 interface InviteUserFormProps {
   isOpen: boolean;
@@ -19,8 +18,7 @@ interface InviteUserFormProps {
 }
 
 const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
-  const { invite, isLoading, error, resetError, decodedIDToken } = useAuth();
-  const { getCampers } = useCampers();
+  const { invite, isLoading, error, resetError, decodedIDToken, idToken } = useAuth();
 
   useEffect(() => {
     if (error) {
@@ -31,15 +29,18 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
   }, [error, resetError]);
 
   const handleSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-    const response = await invite({ ...values, camp_id: decodedIDToken!.camp_id });
+    const response = await invite({
+      ...values,
+      camp_id: decodedIDToken!.camp_id,
+      idToken,
+    });
 
     if (response) {
       onClose();
       resetForm();
-      getCampers();
       toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
     }
-  }, [decodedIDToken, getCampers, invite, onClose]);
+  }, [decodedIDToken, idToken, invite, onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
