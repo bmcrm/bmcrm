@@ -30,11 +30,7 @@ interface UserDetailsModalProps {
 }
 
 const UserDetailsModal = memo((props: UserDetailsModalProps) => {
-  const {
-    camperEmail,
-    isDetailsOpen,
-    onDetailsClose,
-  } = props;
+  const { camperEmail, isDetailsOpen, onDetailsClose } = props;
   const [camper, setCamper] = useState<ICamper | null>(null);
   const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +44,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     const fetchCamper = async () => {
       if (camperEmail) {
         setIsLoading(true);
-        const currentCamper =  await getCamper(camperEmail);
+        const currentCamper = await getCamper(camperEmail);
 
         if (currentCamper) {
           setCamper(currentCamper);
@@ -61,12 +57,13 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     fetchCamper();
   }, [camperEmail, getCamper]);
 
-  const firstLastName = camper?.first_name && camper?.last_name
-    ? `${camper?.first_name} ${camper?.last_name}` : undefined;
+  const firstLastName =
+    camper?.first_name && camper?.last_name ? `${camper?.first_name} ${camper?.last_name}` : undefined;
 
   const name = camper?.playa_name || firstLastName || camper?.email;
 
-  const capitalizedName = name?.split(' ')
+  const capitalizedName = name
+    ?.split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
@@ -74,48 +71,57 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setIsReadonly(prev => !prev);
   }, []);
 
-  const submitHandler = useCallback(async (values: Partial<ICamper>) => {
-    toggleReadonly();
-    setIsLoading(true);
-    const updatedCamper = await updateCamper(camperEmail!, { ...values, social_links: socialIcons });
+  const submitHandler = useCallback(
+    async (values: Partial<ICamper>) => {
+      toggleReadonly();
+      setIsLoading(true);
+      const updatedCamper = await updateCamper(camperEmail!, { ...values, social_links: socialIcons });
 
-    if (updatedCamper) {
-      setCamper(updatedCamper);
-      setIsLoading(false);
-    }
-  }, [camperEmail, socialIcons, toggleReadonly, updateCamper]);
+      if (updatedCamper) {
+        setCamper(updatedCamper);
+        setIsLoading(false);
+      }
+    },
+    [camperEmail, socialIcons, toggleReadonly, updateCamper]
+  );
 
-  const initialValues = useMemo(() => ({
-    summary: camper?.summary || '',
-    history: camper?.history?.map(item => ({
-      year: item.year,
-      value: item.value,
-    })) || [{ year: currentYear, value: '' }],
-  }), [camper, currentYear]);
+  const initialValues = useMemo(
+    () => ({
+      summary: camper?.summary || '',
+      history: camper?.history?.map(item => ({
+        year: item.year,
+        value: item.value,
+      })) || [{ year: currentYear, value: '' }],
+    }),
+    [camper, currentYear]
+  );
 
-  const cancelHandler = useCallback((resetForm: FormikHelpers<Partial<ICamper>>['resetForm']) => {
-    toggleReadonly();
-    resetForm({ values: initialValues });
-    setSocialIcons(camper?.social_links || []);
-  }, [camper?.social_links, initialValues, toggleReadonly]);
+  const cancelHandler = useCallback(
+    (resetForm: FormikHelpers<Partial<ICamper>>['resetForm']) => {
+      toggleReadonly();
+      resetForm({ values: initialValues });
+      setSocialIcons(camper?.social_links || []);
+    },
+    [camper?.social_links, initialValues, toggleReadonly]
+  );
 
-  const onAddSocialHandler = useCallback((values: CamperSocial) => {
-    if (socialIcons.length < 3) {
-      setSocialIcons(prev => ([
-        ...prev,
-        { name: values.name, url: values.url }
-      ]));
-    }
+  const onAddSocialHandler = useCallback(
+    (values: CamperSocial) => {
+      if (socialIcons.length < 3) {
+        setSocialIcons(prev => [...prev, { name: values.name, url: values.url }]);
+      }
 
-    close();
-  }, [close, socialIcons.length]);
+      close();
+    },
+    [close, socialIcons.length]
+  );
 
   return (
     <Modal isOpen={isDetailsOpen} onClose={onDetailsClose}>
       <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
         {({ resetForm }) => (
           <Form className={classNames(styles.details, {}, [])}>
-            {isLoading && <FormLoader style={{ backgroundColor: 'white' }}/>}
+            {isLoading && <FormLoader style={{ backgroundColor: 'white' }} />}
             <section className={styles.details__head}>
               <Avatar
                 src={camper?.avatar || null}
@@ -128,7 +134,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                   <h2>{capitalizedName}</h2>
                   <div className={styles.details__headTitleIcons}>
                     <Icon
-                      icon={camper?.email_confirmed ? <CheckIcon/> : <ClockIcon/>}
+                      icon={camper?.email_confirmed ? <CheckIcon /> : <ClockIcon />}
                       size={IconSize.SIZE_24}
                       style={{ color: camper?.email_confirmed ? '#4ECB71' : '#C1C1C1' }}
                     />
@@ -139,13 +145,15 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                         className={styles.btn}
                         onClick={toggleReadonly}
                       >
-                        <Icon icon={<EditIcon/>} size={IconSize.SIZE_24} style={{ color: '#C1C1C1' }}/>
+                        <Icon icon={<EditIcon />} size={IconSize.SIZE_24} style={{ color: '#C1C1C1' }} />
                       </Button>
                     )}
                   </div>
                 </div>
                 <ul className={styles.details__socials}>
-                  {socialIcons.map((icon, i) => <SocialIconItem key={i} social={icon}/>)}
+                  {socialIcons.map((icon, i) => (
+                    <SocialIconItem key={i} social={icon} />
+                  ))}
                   {!isReadonly && socialIcons.length < 3 && (
                     <li>
                       <Button
@@ -154,12 +162,14 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                         className={classNames(styles.btn, {}, [styles.btnSocial])}
                         onClick={open}
                       >
-                        <Icon icon={<PlusIcon/>} size={IconSize.SIZE_10}/>
+                        <Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
                       </Button>
                     </li>
                   )}
                 </ul>
-                {isOpen && !isReadonly && <AddSocialModal isOpen={isOpen} onClose={close} onSubmit={onAddSocialHandler}/>}
+                {isOpen && !isReadonly && (
+                  <AddSocialModal isOpen={isOpen} onClose={close} onSubmit={onAddSocialHandler} />
+                )}
               </div>
               <div className={styles.details__headInfo}>
                 {!isTablet && <p className={styles.email}>{camper?.email}</p>}
@@ -167,41 +177,33 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                   <p>{camper?.city || 'Not specified'}</p>
                   <p>Added: {dateNormalize(camper?.created_at as string)}</p>
                   <p>BMs: 2022, 2023</p>
-                  <p>Updated: { dateNormalize(camper?.updated_at as string) }</p>
+                  <p>Updated: {dateNormalize(camper?.updated_at as string)}</p>
                 </div>
               </div>
             </section>
             <section>
-              <h3 className={styles.blockTitle}>Summary</h3>
-              {isReadonly ? <p>{camper?.summary}</p> : (
-                <Field
-                  as={'textarea'}
-                  name={'summary'}
-                  readOnly={isReadonly}
-                  className={styles.textarea}
-                />
+              <h3 className={styles.blockTitle}>About Me</h3>
+              {isReadonly ? (
+                <p className={styles.text}>{camper?.summary}</p>
+              ) : (
+                <Field as={'textarea'} name={'summary'} readOnly={isReadonly} className={styles.textarea} />
               )}
             </section>
             <section>
-              <h3 className={styles.blockTitle}>History</h3>
+              <h3 className={styles.blockTitle}>Campers Notes</h3>
               <FieldArray name='history'>
                 {() => (
                   <ul className={styles.details__history}>
                     {initialValues.history.map((item, index) => (
                       <li key={index} className={styles.details__historyItem}>
-                        <Field
-                          type={'text'}
-                          readOnly={true}
-                          name={`history.${index}.year`}
-                          className={styles.year}
-                        />
-                        {isReadonly ? (<p>{item.value}</p>) : index === 0 ? (
-                          <Field
-                            as={'textarea'}
-                            name={`history.${index}.value`}
-                            className={styles.textarea}
-                          />
-                        ) : (<p>{item.value}</p>)}
+                        <Field type={'text'} readOnly={true} name={`history.${index}.year`} className={styles.year} />
+                        {isReadonly ? (
+                          <p>{item.value}</p>
+                        ) : index === 0 ? (
+                          <Field as={'textarea'} name={`history.${index}.value`} className={styles.textarea} />
+                        ) : (
+                          <p>{item.value}</p>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -210,9 +212,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
             </section>
             {!isReadonly && (
               <div className={styles.details__buttons}>
-                <Button type={'submit'}>
-                  Save
-                </Button>
+                <Button type={'submit'}>Save</Button>
                 <Button
                   theme={ButtonTheme.CLEAR}
                   size={ButtonSize.TEXT}
