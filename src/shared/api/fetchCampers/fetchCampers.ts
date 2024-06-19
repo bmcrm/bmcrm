@@ -11,7 +11,7 @@ interface IFetchCamper {
   payload?: Partial<ICamper>;
 }
 
-export const fetchCampers = async (props: IFetchCamper) => {
+export const fetchCampers = (props: IFetchCamper) => {
   const { endpoint, payload, method } = props;
   const url = `https://api.${mode}.bmcrm.camp/campers${endpoint ? `/${endpoint}` : ''}`;
   const idToken = useAuth.getState().idToken;
@@ -20,9 +20,9 @@ export const fetchCampers = async (props: IFetchCamper) => {
   };
 
   const axiosMethods = {
-    get: () => axios.get(url, { headers }),
-    post: () => axios.post(url, payload, { headers }),
-    patch: () => axios.patch(url, payload, { headers }),
+    get: async () => await axios.get(url, { headers }),
+    post: async () => await axios.post(url, payload, { headers }),
+    patch: async () => await axios.patch(url, payload, { headers }),
   };
 
   return axiosMethods[method]();

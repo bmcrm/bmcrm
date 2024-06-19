@@ -13,6 +13,7 @@ import FormLoader from 'features/FormLoader';
 import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
+import CampNotFound from 'widgets/CampNotFound';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading } = useAuth();
@@ -53,12 +54,15 @@ const CampOverviewPage = memo(() => {
           </strong>
         </Container>
       </header>
-      <main className={styles.page}>
-        <section className={classNames(styles.overview, { [styles.centred]: !!isError }, [])}>
-          <Container>
-            <CampOverview campID={id}/>
-          </Container>
-        </section>
+      <main className={classNames(styles.page, { [styles.error]: !!isError }, [])}>
+        {isError && <CampNotFound/>}
+        {!isError && (
+          <section className={classNames(styles.overview, {}, [])}>
+            <Container>
+              <CampOverview campID={id}/>
+            </Container>
+          </section>
+        )}
         {!isLoading && !isError && (
           <section className={styles.register}>
             <Container>

@@ -23,24 +23,22 @@
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
-
 	padding-top: 30px;
 	padding-bottom: 30px;
 	overflow-x: hidden;
 
-	@media (width < $lg) and (width > $md){
+	@media (width < $lg) and (width > $md) {
 		padding-top: 10px;
+	}
+
+	&.error {
+		padding-top: 0;
+		padding-bottom: 0;
 	}
 }
 
 .overview {
 	flex-grow: 1;
-
-	&.centred {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
 
 	+ .register {
 		margin-top: 140px;

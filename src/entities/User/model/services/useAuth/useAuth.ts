@@ -4,7 +4,7 @@ import {
   initResetPassword,
   inviteUser,
   loginUser,
-  logoutUser,
+  logoutUser, refreshUserTokens,
   signUpUser,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
@@ -35,6 +35,8 @@ interface IAuthState {
   logout: (accessToken: string) => Promise<void>;
   decodeIDToken: (token: string) => void;
   invite: (data: IInviteData) => Promise<unknown>;
+  updateTokens: (refreshToken: string) => Promise<unknown>;
+  resetState: () => void;
 }
 
 const useAuth = create<IAuthState>()(
@@ -109,7 +111,7 @@ const useAuth = create<IAuthState>()(
             set({ isLoading: false });
           }
         },
-        logout: async (accessToken: string) => {
+        logout: async accessToken => {
           try {
             await logoutUser(accessToken);
 
@@ -124,7 +126,7 @@ const useAuth = create<IAuthState>()(
             set({ error: error as CognitoIdentityProviderServiceException });
           }
         },
-        decodeIDToken: (token: string) => {
+        decodeIDToken: token => {
           try {
             const decodedToken = jwtDecode<IIDToken>(token);
             const normalizedToken = tokenNormalize(decodedToken);
@@ -143,6 +145,38 @@ const useAuth = create<IAuthState>()(
           } finally {
             set({ isLoading: false });
           }
+        },
+        updateTokens: async refreshToken => {
+          try {
+            const newTokens =  await refreshUserTokens(refreshToken);
+
+            if (newTokens) {
+              const decodedIDToken = jwtDecode<IIDToken>(newTokens.IdToken as string);
+              const normalizedIDToken = tokenNormalize(decodedIDToken);
+
+              set({
+                accessToken: newTokens.AccessToken,
+                idToken: newTokens.IdToken,
+                refreshToken: newTokens.RefreshToken || refreshToken,
+                decodedIDToken: normalizedIDToken,
+              });
+            }
+
+            return newTokens;
+          } catch (error) {
+            set({ error: error as CognitoIdentityProviderServiceException });
+          }
+        },
+        resetState: () => {
+          set({
+            isLoggedIn: false,
+            isLoading: false,
+            decodedIDToken: null,
+            accessToken: '',
+            idToken: '',
+            refreshToken: '',
+            error: null,
+          });
         },
       }),
       {
