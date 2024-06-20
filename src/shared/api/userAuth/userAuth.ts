@@ -3,7 +3,8 @@ import {
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
-  ConfirmSignUpCommand, ConfirmSignUpCommandInput,
+  ConfirmSignUpCommand,
+  ConfirmSignUpCommandInput,
   ForgotPasswordCommand,
   ForgotPasswordCommandInput,
   GlobalSignOutCommand,
@@ -18,9 +19,11 @@ import {
   type IConfirmResetPass,
   type IInviteData,
   type ILoginData,
-  type IUserRegisterData, useAuth
+  type IUserRegisterData,
+  useAuth,
 } from 'entities/User';
 import axios from 'axios';
+import axiosInstance from 'shared/config/axios';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
@@ -40,7 +43,7 @@ export const signUpUser = async (data: IUserRegisterData) => {
     { Name: 'custom:camp_id', Value: data.camp_id },
     { Name: 'custom:camp_website', Value: data.camp_website || '' },
     { Name: 'custom:camp_name', Value: data.camp_name || '' },
-    { Name: 'custom:city', Value: data.city || '' }
+    { Name: 'custom:city', Value: data.city || '' },
   ];
 
   const params: SignUpCommandInput = {
@@ -54,10 +57,10 @@ export const signUpUser = async (data: IUserRegisterData) => {
 };
 
 export const inviteUser = async (data: IInviteData): Promise<unknown> => {
-  return await axios.post(`https://api.${mode}.bmcrm.camp/campers`, data, {
+  return await axiosInstance.post(`https://api.${mode}.bmcrm.camp/campers`, data, {
     headers: {
       Authorization: useAuth.getState().idToken,
-    }
+    },
   });
 };
 

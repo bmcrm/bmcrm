@@ -1,6 +1,7 @@
 import { EnvConfigs } from 'shared/config/env/env';
 import axios from 'axios';
 import { type ICamp } from 'entities/Camp';
+import axiosInstance from 'shared/config/axios';
 
 const mode = EnvConfigs.BMCRM_ENV;
 
@@ -15,9 +16,9 @@ export const fetchCamp = (props: IFetchCamp) => {
   const url = `https://api.${mode}.bmcrm.camp/camps${endpoint ? `/${endpoint}` : ''}`;
 
   const axiosMethods = {
-    get: async () => await axios.get(url),
-    post: async () => await axios.post(url, payload),
-    patch: async () => await axios.patch(url, payload),
+    get: async () => await axiosInstance.get(url),
+    post: async () => await axiosInstance.post(url, payload),
+    patch: async () => await axiosInstance.patch(url, payload),
   };
 
   return axiosMethods[method]();
