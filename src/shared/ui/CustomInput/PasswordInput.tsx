@@ -19,10 +19,11 @@ interface CustomInputProps {
   values?: { [key: string]: string | boolean };
   disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
+  input?: boolean;
 }
 
-const CustomInput = memo((props: CustomInputProps) => {
-  const { disabled, name, errors, values, placeholder, register, type = 'text', label } = props;
+const PasswordInput = memo((props: CustomInputProps) => {
+  const { disabled, name, errors, values, placeholder, register, type = 'text', label, input } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const validateDone = errors?.filter(error => !error.valid).length;
@@ -30,7 +31,7 @@ const CustomInput = memo((props: CustomInputProps) => {
   return (
     <label className={styles.label}>
       {label && <p>{label}</p>}
-      {type === 'password' && values?.password && isFocused && !!validateDone && (
+      {input && values?.password && isFocused && !!validateDone && (
         <Tooltip
           className={styles.tooltip}
           properties={{
@@ -54,10 +55,9 @@ const CustomInput = memo((props: CustomInputProps) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         autocomplete={type === 'password' ? 'new-password' : 'off'}
-        readonly
         className={styles.input}
         name={name}
-        type={isOpen ? 'text' : type}
+        type={isOpen ? 'text' : 'password'}
         placeholder={placeholder}
       />
 
@@ -71,4 +71,4 @@ const CustomInput = memo((props: CustomInputProps) => {
   );
 });
 
-export default CustomInput;
+export default PasswordInput;

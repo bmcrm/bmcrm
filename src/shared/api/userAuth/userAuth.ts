@@ -23,7 +23,6 @@ import {
   useAuth,
 } from 'entities/User';
 import axios from 'axios';
-import axiosInstance from 'shared/config/axios';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
@@ -57,7 +56,7 @@ export const signUpUser = async (data: IUserRegisterData) => {
 };
 
 export const inviteUser = async (data: IInviteData): Promise<unknown> => {
-  return await axiosInstance.post(`https://api.${mode}.bmcrm.camp/campers`, data, {
+  return await axios.post(`https://api.${mode}.bmcrm.camp/campers`, data, {
     headers: {
       Authorization: useAuth.getState().idToken,
     },
