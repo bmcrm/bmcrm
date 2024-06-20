@@ -132,6 +132,10 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     [close, socialIcons.length]
   );
 
+  const onRemoveSocialHandler = useCallback((index: number) => {
+    setSocialIcons(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
   return (
     <Modal isOpen={isDetailsOpen} onClose={onDetailsClose}>
       <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
@@ -168,7 +172,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                 </div>
                 <ul className={styles.details__socials}>
                   {socialIcons.map((icon, i) => (
-                    <SocialIconItem key={i} social={icon} />
+                    <SocialIconItem key={i} social={icon} readonly={isReadonly} onRemove={() => onRemoveSocialHandler(i)}/>
                   ))}
                   {!isReadonly && socialIcons.length < 3 && (
                     <li>
