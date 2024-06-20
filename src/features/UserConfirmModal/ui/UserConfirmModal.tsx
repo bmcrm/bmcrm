@@ -13,7 +13,7 @@ import styles from './UserConfirmModal.module.scss';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { confirmUserSchema } from 'shared/const/schemas/validations';
-import { type ILoginData, useAuth } from 'entities/User';
+import { type IConfirmEmail, type ILoginData, useAuth } from 'entities/User';
 import { RoutePath } from 'app/providers/AppRouter';
 
 type UserConfirmModalProps = {
@@ -32,7 +32,10 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
   const navigate = useNavigate();
 
   const onSubmit = useCallback(async (values: { code: string }) => {
-    const data = { email: credentials!.email, ...values };
+    const data: IConfirmEmail = {
+      email: credentials!.email,
+      code: values.code.trim(),
+    };
 
     const response = await confirmEmail(data);
 

@@ -24,15 +24,15 @@ const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
 
   const onSubmitHandler = (values: ITCORegisterForm, formikHelpers: FormikHelpers<ITCORegisterForm>) => {
     const data: IUserRegisterData = {
-      camp_name: values.camp_name,
-      camp_id: values.camp_id,
-      camp_website: values.camp_website,
-      city: values.city,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      playa_name: values.playa_name,
-      email: values.email,
-      password: values.password,
+      camp_name: values.camp_name.trim(),
+      camp_id: values.camp_id.trim(),
+      camp_website: values.camp_website.trim(),
+      city: values.city.trim(),
+      first_name: values.first_name.trim(),
+      last_name: values.last_name.trim(),
+      playa_name: values.playa_name.trim(),
+      email: values.email.trim(),
+      password: values.password.trim(),
       role: CamperRole.TCO,
     };
 

@@ -12,7 +12,7 @@ import FormLoader from 'features/FormLoader';
 import Camp from 'icons/camp.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { RoutePath } from 'app/providers/AppRouter';
-import { useAuth } from 'entities/User';
+import { type IConfirmResetPass, useAuth } from 'entities/User';
 
 type Step = 1 | 2 | 3;
 
@@ -51,19 +51,20 @@ const ResetPassPage = memo(() => {
   }, [error, resetError]);
 
   const handleStepOneSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-    const response = await initResetPass(values);
+    const trimEmail = values.email.trim();
+    const response = await initResetPass({ email: trimEmail });
 
     if (response) {
-      setEmail(values.email);
+      setEmail(trimEmail);
       resetForm();
       setStep(2);
     }
   }, [initResetPass]);
 
   const handleStepTwoSubmit = useCallback(async (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => {
-    const data = {
-      confirm_code: values.confirm_code,
-      password_new: values.password_new,
+    const data: IConfirmResetPass = {
+      confirm_code: values.confirm_code.trim(),
+      password_new: values.password_new.trim(),
       email: email,
     };
 

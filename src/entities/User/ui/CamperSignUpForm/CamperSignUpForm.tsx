@@ -24,11 +24,11 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
 
   const onSubmitHandler = (values: ICamperRegisterForm, formikHelpers: FormikHelpers<ICamperRegisterForm>) => {
     const data: IUserRegisterData = {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      playa_name: values.playa_name,
-      email: values.email,
-      password: values.password,
+      first_name: values.first_name.trim(),
+      last_name: values.last_name.trim(),
+      playa_name: values.playa_name.trim(),
+      email: values.email.trim(),
+      password: values.password.trim(),
       role: CamperRole.LEAD,
     };
 
