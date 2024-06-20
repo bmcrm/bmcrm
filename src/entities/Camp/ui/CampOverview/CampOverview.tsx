@@ -56,7 +56,7 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
   } else {
     content = (
       <>
-        <h1 className={styles.camp__title}>{camp?.camp_name}</h1>
+        <h1 className={styles.camp__title}>{camp?.camp_name || 'Camp Name will be here'}</h1>
         <h2 className={styles.camp__subtitle}>Campers {camp?.campers_count || '0'}</h2>
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30}/>

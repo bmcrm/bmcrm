@@ -84,6 +84,7 @@ const useAuth = create<IAuthState>()(
         confirmEmail: async data => {
           try {
             set({ isLoading: true });
+
             return await confirmEmail(data);
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });

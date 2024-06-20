@@ -3,7 +3,7 @@ import {
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
   ConfirmForgotPasswordCommandInput,
-  ConfirmSignUpCommand,
+  ConfirmSignUpCommand, ConfirmSignUpCommandInput,
   ForgotPasswordCommand,
   ForgotPasswordCommandInput,
   GlobalSignOutCommand,
@@ -77,13 +77,13 @@ export const loginUser = async ({ email, password }: ILoginData) => {
 };
 
 export const confirmEmail = async ({ email, code }: IConfirmEmail) => {
-  const command = new ConfirmSignUpCommand({
+  const params: ConfirmSignUpCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: email,
     ConfirmationCode: code,
-  });
+  };
 
-  return await cognitoClient.send(command);
+  return await cognitoClient.send(new ConfirmSignUpCommand(params));
 };
 
 export const initResetPassword = async ({ email }: { email: string }) => {
