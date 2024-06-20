@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create();
 
@@ -9,8 +8,7 @@ axiosInstance.interceptors.response.use(
   },
   error => {
     if (error.response.status === 401 || error.response.status === 403) {
-      const navigate = useNavigate();
-      navigate('/login');
+      window.location.replace('/login');
     }
     return Promise.reject(error);
   }
