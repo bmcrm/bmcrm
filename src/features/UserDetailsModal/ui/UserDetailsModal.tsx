@@ -94,7 +94,6 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
       const updatedCamper = await updateCamper(camperEmail!, { ...trimmedValues, social_links: socialIcons });
 
       if (updatedCamper) {
-        console.log(updatedCamper);
         setCamper(updatedCamper);
         setIsLoading(false);
       }
