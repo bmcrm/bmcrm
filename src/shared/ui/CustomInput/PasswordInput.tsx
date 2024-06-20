@@ -54,16 +54,16 @@ const PasswordInput = memo((props: CustomInputProps) => {
         disabled={disabled}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        autocomplete={type === 'password' ? 'new-password' : 'off'}
+        autoComplete={type === 'password' ? 'new-password' : 'off'}
         className={styles.input}
         name={name}
-        type={isOpen ? 'text' : 'password'}
+        type={isOpen ? 'password' : 'text'}
         placeholder={placeholder}
       />
 
-      {type === 'password' && (
+      {input && (
         <button type='button' className={styles.eye} onClick={() => setIsOpen(!isOpen)}>
-          <Icon icon={isOpen ? <EyeOpen /> : <EyeClose />} />
+          <Icon icon={!isOpen ? <EyeOpen /> : <EyeClose />} />
         </button>
       )}
       {!register && <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />}

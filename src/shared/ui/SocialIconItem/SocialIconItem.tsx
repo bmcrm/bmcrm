@@ -21,23 +21,17 @@ type SocialIconItemProps = {
 
 const SocialIconItem = memo(({ social, readonly, onRemove }: SocialIconItemProps) => {
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  
+
   return (
     <li className={styles.item}>
-      <Link
-        to={social.url}
-        target={'_blank'}
-        className={classNames(styles.link, { [styles.disabled]: !readonly }, [])}
-      >
-        <Icon icon={SocialIcons[social.name as SocialIconsEnum]} size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}/>
+      <Link to={social.url} target={'_blank'} className={classNames(styles.link, { [styles.disabled]: !readonly }, [])}>
+        <Icon
+          icon={SocialIcons[social.name as SocialIconsEnum]}
+          size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}
+        />
       </Link>
       {!readonly && (
-        <Button
-          theme={ButtonTheme.CLEAR}
-          size={ButtonSize.TEXT}
-          className={styles.btnRemove}
-          onClick={onRemove}
-        >
+        <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} className={styles.btnRemove} onClick={onRemove}>
           <Icon icon={<MinusIcon />} size={IconSize.SIZE_12} />
         </Button>
       )}
