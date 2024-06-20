@@ -27,15 +27,20 @@ const SignInPage = memo(() => {
 
   const handleSubmit = useCallback(
     async (values: ILoginData, { resetForm }: { resetForm: () => void }) => {
+      const data: ILoginData = {
+        email: values.email.trim(),
+        password: values.password.trim(),
+      };
+
       try {
-        await login(values);
+        await login(data);
         resetForm();
         navigate(RoutePath.funnel, { replace: true });
       } catch (e) {
         if (e instanceof CognitoIdentityProviderServiceException && e.name === 'UserNotConfirmedException') {
           setCredentials(() => ({
-            email: values.email,
-            password: values.password,
+            email: data.email,
+            password: data.password,
           }));
           open();
         }

@@ -71,18 +71,35 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setIsReadonly(prev => !prev);
   }, []);
 
+  const removeExtraSpaces = (str: string) => {
+    return str.replace(/[ \t]+/g, ' ').trim();
+  };
+
+  const trimFields = useCallback((values: Partial<ICamper>): Partial<ICamper> => {
+    return {
+      about_me: values.about_me ? removeExtraSpaces(values.about_me) : '',
+      history: values.history?.map(item => ({
+        ...item,
+        value: item.value ? removeExtraSpaces(item.value) : '',
+      })),
+    };
+  }, []);
+
   const submitHandler = useCallback(
     async (values: Partial<ICamper>) => {
+      const trimmedValues = trimFields(values);
+
       toggleReadonly();
       setIsLoading(true);
-      const updatedCamper = await updateCamper(camperEmail!, { ...values, social_links: socialIcons });
+      const updatedCamper = await updateCamper(camperEmail!, { ...trimmedValues, social_links: socialIcons });
 
       if (updatedCamper) {
+        console.log(updatedCamper);
         setCamper(updatedCamper);
         setIsLoading(false);
       }
     },
-    [camperEmail, socialIcons, toggleReadonly, updateCamper]
+    [camperEmail, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
   const initialValues = useMemo(
@@ -198,11 +215,11 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                       <li key={index} className={styles.details__historyItem}>
                         <Field type={'text'} readOnly={true} name={`history.${index}.year`} className={styles.year} />
                         {isReadonly ? (
-                          <p>{item.value}</p>
+                          <p className={styles.text}>{item.value}</p>
                         ) : index === 0 ? (
                           <Field as={'textarea'} name={`history.${index}.value`} className={styles.textarea} />
                         ) : (
-                          <p>{item.value}</p>
+                          <p className={styles.text}>{item.value}</p>
                         )}
                       </li>
                     ))}

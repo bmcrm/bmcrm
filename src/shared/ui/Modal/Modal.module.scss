@@ -41,10 +41,12 @@
   &__content {
     position: relative;
     max-width: 85%;
+    max-height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 30px;
     border-radius: 10px;
     background-color: var(--color-secondary-bg);
-    overflow: hidden;
 
     @media (width < $md) {
       padding: 20px;
