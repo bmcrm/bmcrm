@@ -22,16 +22,7 @@ interface CustomInputProps {
 }
 
 const CustomInput = memo((props: CustomInputProps) => {
-  const {
-    disabled,
-    name,
-    errors,
-    values,
-    placeholder,
-    register,
-    type = 'text',
-    label,
-  } = props;
+  const { disabled, name, errors, values, placeholder, register, type = 'text', label } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const validateDone = errors?.filter(error => !error.valid).length;
@@ -62,7 +53,7 @@ const CustomInput = memo((props: CustomInputProps) => {
         disabled={disabled}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        autoComplete='off'
+        autocomplete={type === 'password' ? 'new-password' : 'off'}
         className={styles.input}
         name={name}
         type={isOpen ? 'text' : type}
@@ -74,9 +65,7 @@ const CustomInput = memo((props: CustomInputProps) => {
           <Icon icon={isOpen ? <EyeOpen /> : <EyeClose />} />
         </button>
       )}
-      {!register && (
-        <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />
-      )}
+      {!register && <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />}
     </label>
   );
 });
