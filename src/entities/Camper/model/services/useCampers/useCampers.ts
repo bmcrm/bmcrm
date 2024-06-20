@@ -31,7 +31,7 @@ const useCampers = create<CamperState>()(
         set({ isLoading: false });
       }
     },
-    getCamper: async (email: string) => {
+    getCamper: async email => {
       try {
         const response = await fetchCampers({ method: 'get', endpoint: email });
 
@@ -40,7 +40,7 @@ const useCampers = create<CamperState>()(
         set({ isError: error as AxiosError });
       }
     },
-    updateCamper: async (email: string, data: Partial<ICamper>) => {
+    updateCamper: async (email, data) => {
       try {
         const response = await fetchCampers({
           method: 'patch',

@@ -28,9 +28,9 @@ export interface ICamper {
   role: CamperRole;
   avatar?: string;
   email_confirmed: boolean;
-  summary?: string;
+  about_me?: string;
   social_links?: CamperSocial[];
   history?: CamperHistory[];
-  updated_at: string;
-  created_at: string;
+  updated_at: string | number;
+  created_at: string | number;
 }

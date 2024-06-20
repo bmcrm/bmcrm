@@ -87,7 +87,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   const initialValues = useMemo(
     () => ({
-      summary: camper?.summary || '',
+      about_me: camper?.about_me || '',
       history: camper?.history?.map(item => ({
         year: item.year,
         value: item.value,
@@ -184,9 +184,9 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
             <section>
               <h3 className={styles.blockTitle}>About Me</h3>
               {isReadonly ? (
-                <p className={styles.text}>{camper?.summary}</p>
+                <p className={styles.text}>{camper?.about_me}</p>
               ) : (
-                <Field as={'textarea'} name={'summary'} readOnly={isReadonly} className={styles.textarea} />
+                <Field as={'textarea'} name={'about_me'} readOnly={isReadonly} className={styles.textarea} />
               )}
             </section>
             <section>
