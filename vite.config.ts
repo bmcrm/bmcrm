@@ -1,19 +1,24 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [react(), svgr({
-    include: '**/*.svg',
-    svgrOptions: {
-      exportType: 'default',
-    },
-  }), sentryVitePlugin({
-    org: "karma-fixer",
-    project: "javascript-react"
-  })],
+  plugins: [
+    react(),
+    svgr({
+      include: '**/*.svg',
+      svgrOptions: {
+        exportType: 'default',
+      },
+    }),
+
+    sentryVitePlugin({
+      org: 'karma-fixer',
+      project: 'javascript-react',
+    }),
+  ],
 
   css: {
     modules: {
@@ -36,6 +41,6 @@ export default defineConfig({
   },
 
   build: {
-    sourcemap: true
-  }
+    sourcemap: true,
+  },
 });
