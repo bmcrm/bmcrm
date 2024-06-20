@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
-const socialRegex = /^(https?:\/\/)?(www\.)?(facebook\.com|x\.com|twitter\.com|instagram\.com)(\/)?$/;
+const socialRegex = /^(https?:\/\/)?(www\.)?(facebook\.com|x\.com|twitter\.com|instagram\.com)\/.*$/;
 
 export const registrationSchema = yup.object().shape({
   camp_name: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
