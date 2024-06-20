@@ -1,5 +1,4 @@
 import { EnvConfigs } from 'shared/config/env/env';
-import axios from 'axios';
 import { useAuth } from 'entities/User';
 import { type ICamper } from 'entities/Camper';
 import axiosInstance from 'shared/config/axios';
