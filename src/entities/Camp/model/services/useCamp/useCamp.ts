@@ -14,7 +14,7 @@ const useCamp = create<CampState>()(
   devtools(set => ({
     isLoading: false,
     isError: null,
-    getCamp: async (campID: string) => {
+    getCamp: async campID => {
       try {
         set({ isLoading: true });
         const response = await fetchCamp({ method: 'get', endpoint: campID });
