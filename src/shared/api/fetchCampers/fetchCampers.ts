@@ -2,6 +2,7 @@ import { EnvConfigs } from 'shared/config/env/env';
 import axios from 'axios';
 import { useAuth } from 'entities/User';
 import { type ICamper } from 'entities/Camper';
+import axiosInstance from 'shared/config/axios';
 
 const mode = EnvConfigs.BMCRM_ENV;
 
@@ -20,9 +21,9 @@ export const fetchCampers = (props: IFetchCamper) => {
   };
 
   const axiosMethods = {
-    get: async () => await axios.get(url, { headers }),
-    post: async () => await axios.post(url, payload, { headers }),
-    patch: async () => await axios.patch(url, payload, { headers }),
+    get: async () => await axiosInstance.get(url, { headers }),
+    post: async () => await axiosInstance.post(url, payload, { headers }),
+    patch: async () => await axiosInstance.patch(url, payload, { headers }),
   };
 
   return axiosMethods[method]();
