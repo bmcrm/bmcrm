@@ -14,6 +14,7 @@ export enum CamperRole {
   INTENT = 'intent',
   CAMPER = 'camper',
   QUALIFIED = 'qualified',
+  COORGANIZER = 'co-organizer',
 }
 
 export interface ICamper {
