@@ -28,7 +28,6 @@ const Modal = (props: ModalProps) => {
       timerRef.current = setTimeout(() => {
         onClose();
         setIsClosing(false);
-        openModalCount -= 1;
 
         if (openModalCount === 0) {
           document.body.style.overflow = 'auto';
@@ -55,8 +54,16 @@ const Modal = (props: ModalProps) => {
     return () => {
       clearTimeout(timerRef.current);
       window.removeEventListener('keydown', onKeydown);
+
+      if (isOpen) {
+        openModalCount -= 1;
+
+        if (openModalCount === 0) {
+          document.body.style.overflow = 'auto';
+        }
+      }
     };
-  }, [isOpen, onKeydown]);
+  }, [isOpen, onClose, onKeydown]);
 
   return (
     <Portal>

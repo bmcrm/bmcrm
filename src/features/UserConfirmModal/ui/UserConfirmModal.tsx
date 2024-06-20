@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +31,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
   const { confirmEmail, isLoading, login } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = async (values: { code: string }) => {
+  const onSubmit = useCallback(async (values: { code: string }) => {
     const data = { email: credentials!.email, ...values };
 
     const response = await confirmEmail(data);
@@ -40,7 +41,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
       await login(credentials!);
       navigate(RoutePath.funnel, { replace: true });
     }
-  };
+  }, [confirmEmail, credentials, login, navigate, onClose]);
 
   return (
     <Modal
