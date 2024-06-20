@@ -1,5 +1,4 @@
 import { EnvConfigs } from 'shared/config/env/env';
-import axios from 'axios';
 import { type ICamp } from 'entities/Camp';
 import axiosInstance from 'shared/config/axios';
 
