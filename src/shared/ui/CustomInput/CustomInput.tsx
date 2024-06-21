@@ -53,7 +53,7 @@ const CustomInput = memo((props: CustomInputProps) => {
         disabled={disabled}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        autoComplete={type === 'password' ? 'new-password' : 'off'}
+        autoComplete='off'
         className={styles.input}
         name={name}
         type={isOpen ? 'text' : type}
