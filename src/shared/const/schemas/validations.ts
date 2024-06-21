@@ -18,7 +18,6 @@ export const registrationSchema = yup.object().shape({
     .string()
     .min(8, 'Minimum 8 character')
     .matches(/[A-Z]/, 'Uppercase letters')
-    .matches(/[!@#$%^&*]/, 'Special characters')
     .matches(/[0-9]/, 'Numbers')
     .required('Password is required'),
 });
@@ -29,7 +28,6 @@ export const signInSchema = yup.object().shape({
     .string()
     .min(8, 'Minimum 8 character')
     .matches(/[A-Z]/, 'Uppercase letters')
-    .matches(/[!@#$%^&*]/, 'Special characters')
     .matches(/[0-9]/, 'Numbers')
     .required('Password is required'),
 });
@@ -52,7 +50,6 @@ export const confirmResetPassSchema = yup.object().shape({
     .string()
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[!@#$%^&*]/, 'Password must contain at least one special character')
     .matches(/[0-9]/, 'Password must contain at least one numeric character')
     .required('Password is required'),
   password_confirm: yup
@@ -76,7 +73,6 @@ export const camperRegistrationSchema = yup.object().shape({
     .string()
     .min(8, 'Minimum 8 character')
     .matches(/[A-Z]/, 'Uppercase letters')
-    .matches(/[!@#$%^&*]/, 'Special characters')
     .matches(/[0-9]/, 'Numbers')
     .required('Password is required'),
 });
