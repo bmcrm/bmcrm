@@ -47,6 +47,7 @@ test('successful login', async ({ page }) => {
   await expect(page).toHaveURL(FUNNEL_URL);
   await expect(page.locator('text=Invite')).toBeVisible();
 });
+
 test('successful login and show modal info', async ({ page }) => {
   await page.fill('input[name="email"]', TEST_EMAIL);
   await page.fill('input[name="password"]', NEW_PASSWORD);
@@ -76,6 +77,7 @@ test('unsuccessful login without providing credentials', async ({ page }) => {
   await expect(page).toHaveURL(LOGIN_URL);
   await expect(page.locator('text=Email is required')).toBeVisible();
 });
+
 test('successful logout', async ({ page }) => {
   await page.fill('input[name="email"]', TEST_EMAIL);
   await page.fill('input[name="password"]', NEW_PASSWORD);
@@ -100,4 +102,22 @@ test('forgot password unsuccessful', async ({ page }) => {
   await expect(
     page.locator('text=/(Oops, something went wrong! Try again later!|User does not exist!)/')
   ).toBeVisible();
+});
+
+test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
+  await page.fill('input[name="email"]', TEST_EMAIL);
+  await page.fill('input[name="password"]', NEW_PASSWORD);
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL(FUNNEL_URL);
+  const element = await page.locator('text=fake@example.com').nth(1);
+  await element.hover();
+  await element.click();
+  await expect(page.locator('text=About Me')).toBeVisible();
+  await expect(page.locator('text=Campers Notes')).toBeVisible();
+  const editBtn = await page.locator('._btn_awgzo_1').nth(1);
+  await editBtn.click();
+  await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
+  await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
+
+
 });
