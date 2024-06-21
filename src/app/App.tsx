@@ -1,10 +1,8 @@
-
 import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRouter, RoutePath } from 'app/providers/AppRouter';
 import { useAuth } from 'entities/User';
-
 
 const App = () => {
   const { decodedIDToken, updateTokens, refreshToken, error, resetState } = useAuth();
