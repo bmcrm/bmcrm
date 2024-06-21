@@ -6,10 +6,6 @@ export const validateErrors = (field: string | undefined) => {
       valid: /[A-Z]/.test(field),
     },
     {
-      message: 'Special character',
-      valid: /\W/.test(field),
-    },
-    {
       message: 'Numbers',
       valid: /\d/.test(field),
     },

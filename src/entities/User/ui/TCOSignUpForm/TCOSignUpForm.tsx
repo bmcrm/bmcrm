@@ -15,7 +15,6 @@ import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
 import { type ITCORegisterForm, IUserRegisterData } from '../../model/types/auth.types.ts';
 import { CamperRole } from 'entities/Camper';
 import Camp from 'shared/assets/icons/camp.svg';
-import PasswordInput from 'shared/ui/CustomInput/PasswordInput.tsx';
 
 interface TCOSignUpFormProps {
   onSubmit: (values: IUserRegisterData, formikHelpers: FormikHelpers<ITCORegisterForm>) => void;
@@ -62,15 +61,15 @@ const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
                 <CustomInput name='last_name' placeholder='Sprouse' label='Last Name' />
               </div>
               {inputsData.map(input => (
-                <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />
+                <CustomInput values={values} key={input.name} {...input} />
               ))}
-              <PasswordInput
+              <CustomInput
                 placeholder='Min. 8 characters'
                 values={values}
                 errors={validateErrors(values.password)}
                 name='password'
                 label='Password'
-                input
+                type='password'
                 register
               />
               <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
