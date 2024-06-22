@@ -7,7 +7,8 @@ import App from './app/App';
 import 'app/styles/index.scss';
 import * as Sentry from '@sentry/react';
 
-const isProd = import.meta.env.VITE_BMCRM_ENV === 'production';
+const isProd = import.meta.env.MODE === 'production';
+
 isProd &&
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
