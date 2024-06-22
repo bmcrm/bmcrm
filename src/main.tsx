@@ -22,7 +22,6 @@ Sentry.init({
   ],
 
   tracesSampleRate: 0.1,
-  tracePropagationTargets: [/^https:\/\/app\.bmcrm\.camp(?:\/.*)?$/],
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
