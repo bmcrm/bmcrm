@@ -9,9 +9,7 @@
   <!-- begin Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8KVKZRPR06"></script>
   <script>
-    const mode = EnvConfigs.BMCRM_ENV;
-
-    if (mode === 'prod') {
+ if(window.location.hostname === 'https://app.bmcrm.camp'){
       window.dataLayer = window.dataLayer || [];
 
       function gtag() {
@@ -19,16 +17,13 @@
       }
 
       gtag('js', new Date());
-      gtag('config', 'G-8KVKZRPR06');
-    }
+      gtag('config', 'G-8KVKZRPR06');}
   </script>
   <!-- end Google tag (gtag.js) -->
 
   <!-- BEGIN PLERDY CODE -->
   <script type="text/javascript" defer data-plerdy_code='1'>
-    const mode = EnvConfigs.BMCRM_ENV;
-
-    if (mode === 'prod') {
+    if(window.location.hostname === 'https://app.bmcrm.camp'){
       var _protocol = "https:" == document.location.protocol ? "https://" : "http://";
       _site_hash_code = "5332d078c20b1d4e7c64d8b4b4411545", _suid = 51928,
         plerdyScript = document.createElement("script");
@@ -42,6 +37,7 @@
         console.log(t, "unable add script tag")
       }
     }
+      
   </script>
   <!-- END PLERDY CODE -->
 </head>

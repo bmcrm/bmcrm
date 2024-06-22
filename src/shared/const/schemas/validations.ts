@@ -13,7 +13,7 @@ export const registrationSchema = yup.object().shape({
   first_name: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
   last_name: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
   playa_name: yup.string(),
-  email: yup.string().email('Invalid email address').required('Email is required'),
+  email: yup.string().trim().email('Invalid email address').required('Email is required'),
   password: yup
     .string()
     .min(8, 'Minimum 8 character')
@@ -23,7 +23,7 @@ export const registrationSchema = yup.object().shape({
 });
 
 export const signInSchema = yup.object().shape({
-  email: yup.string().email('Invalid email address').required('Email is required'),
+  email: yup.string().trim().email('Invalid email address').required('Email is required'),
   password: yup
     .string()
     .min(8, 'Minimum 8 character')
@@ -33,7 +33,7 @@ export const signInSchema = yup.object().shape({
 });
 
 export const inviteMemberSchema = yup.object().shape({
-  email: yup.string().email('Invalid email address').required('Email is required'),
+  email: yup.string().trim().email('Invalid email address').required('Email is required'),
 });
 
 export const confirmUserSchema = yup.object().shape({
@@ -41,7 +41,7 @@ export const confirmUserSchema = yup.object().shape({
 });
 
 export const initResetPassSchema = yup.object().shape({
-  email: yup.string().email('Invalid email address').required('Email is required'),
+  email: yup.string().trim().email('Invalid email address').required('Email is required'),
 });
 
 export const confirmResetPassSchema = yup.object().shape({
