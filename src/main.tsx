@@ -7,27 +7,24 @@ import App from './app/App';
 import 'app/styles/index.scss';
 import * as Sentry from '@sentry/react';
 
-const isProd = import.meta.env.VITE_BMCRM_ENV === 'prod';
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [
+    Sentry.reactRouterV6BrowserTracingIntegration({
+      useEffect,
+      useLocation,
+      useNavigationType,
+      createRoutesFromChildren,
+      matchRoutes,
+    }),
+    Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration(),
+  ],
 
-isProd &&
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [
-      Sentry.reactRouterV6BrowserTracingIntegration({
-        useEffect,
-        useLocation,
-        useNavigationType,
-        createRoutesFromChildren,
-        matchRoutes,
-      }),
-      Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration(),
-    ],
-    tracesSampleRate: 0.1,
-    tracePropagationTargets: [/^https:\/\/app\.bmcrm\.camp(?:\/.*)?$/],
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-  });
+  tracesSampleRate: 0.1,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
