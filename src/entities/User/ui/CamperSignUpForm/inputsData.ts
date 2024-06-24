@@ -1,11 +1,5 @@
 export const inputsData = [
   {
-    name: 'playa_name',
-    placeholder: 'Playa Name',
-    label: 'Playa Name',
-    type: 'text',
-  },
-  {
     name: 'email',
     placeholder: 'cole@gmail.com',
     label: 'Email',
@@ -25,6 +19,8 @@ export const initialData = {
   first_name: '',
   last_name: '',
   playa_name: '',
+  about_me: '',
   email: '',
   password: '',
+  social_links: [''],
 };

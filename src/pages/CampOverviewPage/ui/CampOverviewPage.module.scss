@@ -51,8 +51,6 @@
 
 .register {
 	&__inner {
-		position: relative;
-		z-index: 1;
 		display: grid;
 		gap: 25px;
 		padding: 50px 115px;
@@ -73,44 +71,6 @@
 			padding: 20px 15px;
 			gap: 20px;
 		}
-
-		&:before {
-			content: '';
-			position: absolute;
-			z-index: -1;
-			display: block;
-			top: 50%;
-			right: 115px;
-			transform: translateY(-50%);
-			width: 335px;
-			aspect-ratio: 1;
-			background-image: url('images/auth/desert_bg.png');
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-
-			@media (width < $xl) {
-				right: 50px;
-			}
-			@media (width < $lg) {
-				width: 270px;
-				right: 30px;
-			}
-			@media (width < $md) {
-				display: none;
-			}
-		}
 	}
 }
 
-.form {
-	width: 100%;
-	max-width: 400px;
-
-	@media (width < $lg) {
-		max-width: 320px;
-	}
-	@media (width < $md) {
-		max-width: 100%;
-	}
-}

@@ -16,7 +16,7 @@ interface CustomInputProps {
   type?: string;
   register?: boolean;
   label?: string;
-  values?: { [key: string]: string | boolean };
+  values?: { [key: string]: string | boolean | string[] };
   disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
 }
