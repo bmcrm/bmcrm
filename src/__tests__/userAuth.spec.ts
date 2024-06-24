@@ -118,6 +118,13 @@ test('successful login and show details modal, edit and save user data, close de
   await editBtn.click();
   await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
   await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
-
-
+  await page.locator('textarea[name="about_me"]').fill('my new about me');
+  await page.locator('textarea[name="history.0.value"]').fill('my new note');
+  await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
+  await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
+  await page.getByRole('button', { name: 'save' }).click();
+  await expect(page.locator('text=my new about me')).toBeVisible();
+  await expect(page.locator('text=my new note')).toBeVisible();
+  await page.press('body', 'Escape');
+  await page.waitForTimeout(3000);
 });

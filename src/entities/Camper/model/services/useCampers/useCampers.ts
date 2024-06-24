@@ -8,6 +8,7 @@ interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
   isError: string | null | Error | AxiosError;
+  resetError: () => void;
   getCampers(): Promise<void>;
   getCamper(email: string): Promise<ICamper | null>;
   updateCamper(email: string, data: Partial<ICamper>): Promise<ICamper>;
@@ -18,6 +19,7 @@ const useCampers = create<CamperState>()(
     isLoading: false,
     isError: null,
     campers: [],
+    resetError: () => set({ isError: null }),
     getCampers: async () => {
       try {
         set({ isLoading: true });

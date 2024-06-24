@@ -1,5 +1,6 @@
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 enum ErrorNames {
   USER_NOT_FOUND = 'UserNotFoundException',
@@ -19,7 +20,7 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
 };
 
-const errorHandler = (error: CognitoIdentityProviderServiceException) => {
+const errorHandler = (error: CognitoIdentityProviderServiceException | AxiosError | Error) => {
   let errorMessage = errorsNames[error.name as ErrorNames];
 
   if (!errorMessage && error.message) {

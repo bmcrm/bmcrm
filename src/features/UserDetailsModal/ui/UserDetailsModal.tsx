@@ -4,6 +4,8 @@ import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik';
 import dateNormalize from 'shared/lib/dateNormalize/dateNormalize';
 import { useMediaQuery } from 'react-responsive';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
+import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
+import { AxiosError } from 'axios';
 
 import Icon from 'shared/ui/Icon/Icon';
 import Avatar from 'shared/ui/Avatar/Avatar';
@@ -36,9 +38,18 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReadonly, setIsReadonly] = useState(true);
   const { isOpen, open, close } = useToggle();
-  const { getCamper, updateCamper } = useCampers();
+  const { getCamper, updateCamper, isError, resetError } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    if (isError) {
+      console.error(isError);
+      errorHandler(isError as AxiosError);
+    }
+
+    return resetError();
+  }, [isError, resetError]);
 
   useEffect(() => {
     const fetchCamper = async () => {
@@ -87,16 +98,19 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   const submitHandler = useCallback(
     async (values: Partial<ICamper>) => {
+      setIsLoading(true);
+      toggleReadonly();
       const trimmedValues = trimFields(values);
 
-      toggleReadonly();
-      setIsLoading(true);
       const updatedCamper = await updateCamper(camperEmail!, { ...trimmedValues, social_links: socialIcons });
+
+      console.log(updatedCamper);
 
       if (updatedCamper) {
         setCamper(updatedCamper);
-        setIsLoading(false);
       }
+
+      setIsLoading(false);
     },
     [camperEmail, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
