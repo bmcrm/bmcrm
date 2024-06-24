@@ -44,7 +44,6 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   useEffect(() => {
     if (isError) {
-      console.error(isError);
       errorHandler(isError as AxiosError);
     }
 
@@ -103,8 +102,6 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
       const trimmedValues = trimFields(values);
 
       const updatedCamper = await updateCamper(camperEmail!, { ...trimmedValues, social_links: socialIcons });
-
-      console.log(updatedCamper);
 
       if (updatedCamper) {
         setCamper(updatedCamper);

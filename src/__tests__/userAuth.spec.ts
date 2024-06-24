@@ -15,14 +15,34 @@ let USER_ROLE: string;
 let TABLE_NAME: string;
 
 test.beforeAll(async () => {
-  TEST_COGNITO_POOL_ID = await getParameter('/campers/cognito_user_pool_id');
-  COGNITO_APP_CLIENT_ID = await getParameter('/campers/cognito_client_pool_id');
-  TEST_EMAIL = await getParameter('/webapp/test/email');
-  CAMP_ID = await getParameter('/webapp/test/account_camp_id');
-  TEMP_PASSWORD = await getParameter('/webapp/test/password_temp');
-  NEW_PASSWORD = await getParameter('/webapp/test/password_new');
-  USER_ROLE = await getParameter('/webapp/test/user_role');
-  TABLE_NAME = await getParameter('/campers/ddb_table_name');
+  const [
+    TEST_COGNITO_POOL_ID_RES,
+    COGNITO_APP_CLIENT_ID_RES,
+    TEST_EMAIL_RES,
+    CAMP_ID_RES,
+    TEMP_PASSWORD_RES,
+    NEW_PASSWORD_RES,
+    USER_ROLE_RES,
+    TABLE_NAME_RES
+  ] = await Promise.all([
+    getParameter('/campers/cognito_user_pool_id'),
+    getParameter('/campers/cognito_client_pool_id'),
+    getParameter('/webapp/test/email'),
+    getParameter('/webapp/test/account_camp_id'),
+    getParameter('/webapp/test/password_temp'),
+    getParameter('/webapp/test/password_new'),
+    getParameter('/webapp/test/user_role'),
+    getParameter('/campers/ddb_table_name')
+  ]);
+
+  TEST_COGNITO_POOL_ID = TEST_COGNITO_POOL_ID_RES;
+  COGNITO_APP_CLIENT_ID = COGNITO_APP_CLIENT_ID_RES;
+  TEST_EMAIL = TEST_EMAIL_RES;
+  CAMP_ID = CAMP_ID_RES;
+  TEMP_PASSWORD = TEMP_PASSWORD_RES;
+  NEW_PASSWORD = NEW_PASSWORD_RES;
+  USER_ROLE = USER_ROLE_RES;
+  TABLE_NAME = TABLE_NAME_RES;
 
   await createUser(TEST_COGNITO_POOL_ID, TEST_EMAIL, CAMP_ID, TEMP_PASSWORD, USER_ROLE);
   await initiateAuth(TEST_COGNITO_POOL_ID, COGNITO_APP_CLIENT_ID, TEST_EMAIL, TEMP_PASSWORD, NEW_PASSWORD);
@@ -48,18 +68,44 @@ test('successful login', async ({ page }) => {
   await expect(page.locator('text=Invite')).toBeVisible();
 });
 
-test('successful login and show modal info', async ({ page }) => {
+test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
   await page.fill('input[name="email"]', TEST_EMAIL);
   await page.fill('input[name="password"]', NEW_PASSWORD);
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL(FUNNEL_URL);
-  await expect(page.locator('text=Invite')).toBeVisible();
   const element = await page.locator('text=fake@example.com').nth(1);
   await element.hover();
   await element.click();
   await expect(page.locator('text=About Me')).toBeVisible();
-  await page.getByRole('button').nth(1).click();
-  await page.getByRole('button', { name: 'cancel' }).click();
+  await expect(page.locator('text=Campers Notes')).toBeVisible();
+  const editBtn = await page.locator('._btn_awgzo_1').nth(1);
+  await editBtn.click();
+  await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
+  await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
+  await page.locator('textarea[name="about_me"]').fill('my new about me');
+  await page.locator('textarea[name="history.0.value"]').fill('my new note');
+  await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
+  await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
+  const addSocialBtn = page.locator('._btn_ii6bv_56');
+
+  if (await addSocialBtn.isVisible()) {
+    await addSocialBtn.click();
+    await expect(page.locator('text=Add Social Media Link')).toBeVisible();
+    await page.selectOption('select._select_15n49_1', { value: 'x' });
+    await page.fill('input[name="url"]', 'https://x.com/test-user');
+    await page.getByRole('button', { name: 'add' }).click();
+    const link = page.locator('a[href="https://x.com/test-user"]');
+    await expect(link).toBeVisible();
+    const removeSocialBtn = page.locator('._btn-remove_14bmx_18');
+    await removeSocialBtn.click();
+    await page.waitForSelector('a[href="https://x.com/test-user"]', { state: 'detached' });
+    const isLinkVisible = await link.isVisible().catch(() => false);
+    expect(isLinkVisible).toBe(false);
+  }
+
+  await page.getByRole('button', { name: 'save' }).click();
+  await expect(page.locator('text=my new about me')).toBeVisible();
+  await expect(page.locator('text=my new note')).toBeVisible();
   await page.press('body', 'Escape');
   await page.waitForTimeout(3000);
 });
@@ -102,29 +148,4 @@ test('forgot password unsuccessful', async ({ page }) => {
   await expect(
     page.locator('text=/(Oops, something went wrong! Try again later!|User does not exist!)/')
   ).toBeVisible();
-});
-
-test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
-  await page.fill('input[name="email"]', TEST_EMAIL);
-  await page.fill('input[name="password"]', NEW_PASSWORD);
-  await page.click('button[type="submit"]');
-  await expect(page).toHaveURL(FUNNEL_URL);
-  const element = await page.locator('text=fake@example.com').nth(1);
-  await element.hover();
-  await element.click();
-  await expect(page.locator('text=About Me')).toBeVisible();
-  await expect(page.locator('text=Campers Notes')).toBeVisible();
-  const editBtn = await page.locator('._btn_awgzo_1').nth(1);
-  await editBtn.click();
-  await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
-  await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
-  await page.locator('textarea[name="about_me"]').fill('my new about me');
-  await page.locator('textarea[name="history.0.value"]').fill('my new note');
-  await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
-  await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
-  await page.getByRole('button', { name: 'save' }).click();
-  await expect(page.locator('text=my new about me')).toBeVisible();
-  await expect(page.locator('text=my new note')).toBeVisible();
-  await page.press('body', 'Escape');
-  await page.waitForTimeout(3000);
 });
