@@ -21,8 +21,8 @@ Sentry.init({
     Sentry.replayIntegration(),
   ],
 
-  tracesSampleRate: 0.1,
-  replaysSessionSampleRate: 0.1,
+  tracesSampleRate: 1.0,
+  replaysSessionSampleRate: 1.0,
   replaysOnErrorSampleRate: 1.0,
 });
 

@@ -29,8 +29,10 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
   }, [error, resetError]);
 
   const handleSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
+    const trimmedInviteEmail = values.email.trim();
+
     const response = await invite({
-      ...values,
+      email: trimmedInviteEmail,
       camp_id: decodedIDToken!.camp_id,
       idToken,
     });

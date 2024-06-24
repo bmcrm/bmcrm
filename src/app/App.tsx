@@ -9,7 +9,6 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Sentry.captureMessage('App mounted');
     const checkAndRefreshToken = async () => {
       const now = Math.floor(Date.now() / 1000);
       const exp = decodedIDToken?.exp;
