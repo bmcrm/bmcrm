@@ -1,5 +1,6 @@
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import toast from 'react-hot-toast';
+import * as Sentry from '@sentry/react';
 
 enum ErrorNames {
   USER_NOT_FOUND = 'UserNotFoundException',
@@ -21,6 +22,7 @@ const errorsNames: { [key in ErrorNames]: string } = {
 
 const errorHandler = (error: CognitoIdentityProviderServiceException) => {
   let errorMessage = errorsNames[error.name as ErrorNames];
+  Sentry.captureMessage(`${error.name}: ${error.message}`);
 
   if (!errorMessage && error.message) {
     for (const key in ErrorNames) {
