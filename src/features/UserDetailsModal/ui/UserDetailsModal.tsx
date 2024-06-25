@@ -4,8 +4,9 @@ import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik';
 import dateNormalize from 'shared/lib/dateNormalize/dateNormalize';
 import { useMediaQuery } from 'react-responsive';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
-import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
+import errorHandler from 'shared/lib/errorHandler/errorHandler';
 import { AxiosError } from 'axios';
+import { useAuth } from 'entities/User';
 
 import Icon from 'shared/ui/Icon/Icon';
 import Avatar from 'shared/ui/Avatar/Avatar';
@@ -14,11 +15,13 @@ import FormLoader from 'features/FormLoader';
 import SocialIconItem from 'shared/ui/SocialIconItem/SocialIconItem';
 import AddSocialModal from 'features/AddSocialModal';
 import Modal from 'shared/ui/Modal/Modal';
+import CustomTextarea from 'shared/ui/CustomTextarea/CustomTextarea';
+import CustomRadio from 'shared/ui/CustomRadio/CustomRadio';
 
 import styles from './UserDetailsModal.module.scss';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { CamperSocial, ICamper } from 'entities/Camper';
+import { CamperRole, CamperSocial, ICamper } from 'entities/Camper';
 import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import EditIcon from 'icons/edit_icon.svg';
 import CheckIcon from 'icons/check.svg';
@@ -41,6 +44,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const { getCamper, updateCamper, isError, resetError } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const currentYear = new Date().getFullYear();
+  const { decodedIDToken } = useAuth();
 
   useEffect(() => {
     if (isError) {
@@ -119,8 +123,9 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
         year: item.year,
         value: item.value,
       })) || [{ year: currentYear, value: '' }],
+      role: decodedIDToken?.role,
     }),
-    [camper, currentYear]
+    [camper?.about_me, camper?.history, currentYear, decodedIDToken?.role]
   );
 
   const cancelHandler = useCallback(
@@ -134,7 +139,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   const onAddSocialHandler = useCallback(
     (values: CamperSocial) => {
-      if (socialIcons.length < 3) {
+      if (socialIcons.length < 5) {
         setSocialIcons(prev => [...prev, { name: values.name, url: values.url }]);
       }
 
@@ -160,7 +165,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                 size={isTablet ? 70 : 125}
                 className={styles.details__avatar}
               />
-              <div className={styles.details__headRow}>
+              <div className={styles.details__headHeading}>
                 <div className={styles.details__headTitle}>
                   <h2>{capitalizedName}</h2>
                   <div className={styles.details__headTitleIcons}>
@@ -185,7 +190,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                   {socialIcons.map((icon, i) => (
                     <SocialIconItem key={i} social={icon} readonly={isReadonly} onRemove={() => onRemoveSocialHandler(i)}/>
                   ))}
-                  {!isReadonly && socialIcons.length < 3 && (
+                  {!isReadonly && socialIcons.length < 5 && (
                     <li>
                       <Button
                         theme={ButtonTheme.CLEAR}
@@ -203,12 +208,23 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                 )}
               </div>
               <div className={styles.details__headInfo}>
-                {!isTablet && <p className={styles.email}>{camper?.email}</p>}
-                <div className={styles.details__headDesc}>
-                  <p>{camper?.city || 'Not specified'}</p>
-                  <p>Added: {dateNormalize(camper?.created_at as string)}</p>
-                  <p>BMs: 2022, 2023</p>
-                  <p>Updated: {dateNormalize(camper?.updated_at as string)}</p>
+                {!isTablet && (
+                  <a href={`mailto: ${camper?.email}`} className={styles.email}>{camper?.email}</a>
+                )}
+                <div className={styles.details__headInfoRow}>
+                  <div className={styles.details__headDesc}>
+                    <p>{camper?.city || 'Not specified'}</p>
+                    <p>Added: {dateNormalize(camper?.created_at as string)}</p>
+                    <p>BMs: 2022, 2023</p>
+                    <p>Updated: {dateNormalize(camper?.updated_at as string)}</p>
+                  </div>
+                  <div>
+                    <CustomRadio name={'role'} label={CamperRole.LEAD} value={CamperRole.LEAD}/>
+                    <CustomRadio name={'role'} label={CamperRole.QUALIFIED} value={CamperRole.QUALIFIED}/>
+                    <CustomRadio name={'role'} label={CamperRole.INTENT} value={CamperRole.INTENT}/>
+                    <CustomRadio name={'role'} label={CamperRole.CAMPER} value={CamperRole.CAMPER}/>
+                    <CustomRadio name={'role'} label={CamperRole.TCO} value={CamperRole.TCO}/>
+                  </div>
                 </div>
               </div>
             </section>
@@ -217,7 +233,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               {isReadonly ? (
                 <p className={styles.text}>{camper?.about_me}</p>
               ) : (
-                <Field as={'textarea'} name={'about_me'} readOnly={isReadonly} className={styles.textarea} />
+                <CustomTextarea name={'about_me'} readonly={isReadonly} className={styles.textarea}/>
               )}
             </section>
             <section>
@@ -231,7 +247,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                         {isReadonly ? (
                           <p className={styles.text}>{item.value}</p>
                         ) : index === 0 ? (
-                          <Field as={'textarea'} name={`history.${index}.value`} className={styles.textarea} />
+                          <CustomTextarea name={`history.${index}.value`} readonly={isReadonly} className={styles.textarea}/>
                         ) : (
                           <p className={styles.text}>{item.value}</p>
                         )}
@@ -245,6 +261,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               <div className={styles.details__buttons}>
                 <Button type={'submit'}>Save</Button>
                 <Button
+                  className={styles.btnCancel}
                   theme={ButtonTheme.CLEAR}
                   size={ButtonSize.TEXT}
                   color={ButtonColor.NEUTRAL}

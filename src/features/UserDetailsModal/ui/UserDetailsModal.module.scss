@@ -1,4 +1,4 @@
-@import 'app/styles/breakpoints';
+@import 'breakpoints';
 
 .details {
   display: grid;
@@ -62,6 +62,14 @@
       }
     }
   }
+  
+  .btn-cancel {
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+      }
+    }
+  }
 
   .btn-social {
     padding: 6px;
@@ -71,14 +79,7 @@
   }
 
   .textarea {
-    display: block;
-    width: 100%;
     height: 150px;
-    resize: none;
-    background-color: transparent;
-    border: 2px solid var(--color-input-orange);
-    border-radius: 10px;
-    padding: 10px 20px;
     font-weight: 500;
   }
 
@@ -101,7 +102,7 @@
       grid-template-columns: 70px 1fr;
     }
 
-    &-row {
+    &-heading {
       display: flex;
       justify-content: space-between;
       gap: 15px;
@@ -115,7 +116,6 @@
 
     &-info {
       width: 100%;
-      max-width: 400px;
 
       @media (width < $lg) {
         max-width: 300px;
@@ -130,10 +130,23 @@
         font: var(--font-s);
         color: var(--color-neutral);
 
-        + .details__head-desc {
+        @media (hover: hover) {
+          &:hover {
+            color: var(--color-black);
+          }
+        }
+
+        + .details__head-info-row {
           margin-top: 5px;
         }
       }
+    }
+
+    &-info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     &-title {
@@ -194,10 +207,10 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    gap: 30px;
+    gap: 15px;
 
     @media (width < $lg) {
-      gap: 20px;
+      gap: 10px;
     }
   }
 
