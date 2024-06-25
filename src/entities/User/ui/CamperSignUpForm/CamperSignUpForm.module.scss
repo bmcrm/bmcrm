@@ -1,11 +1,26 @@
 @import 'breakpoints';
 
 .form {
-	display: grid;
-	gap: 30px;
+	display: flex;
+	align-items: flex-start;
+	gap: 90px;
 
+	@media (width < $lg) {
+		flex-direction: column;
+		gap: 30px;
+	}
 	@media (width < $md) {
 		gap: 15px;
+	}
+
+	&__item {
+		display: grid;
+		gap: 30px;
+		width: 100%;
+
+		@media (width < $md) {
+			gap: 15px;
+		}
 	}
 
 	&__row {
@@ -18,5 +33,63 @@
 			align-items: stretch;
 			gap: inherit;
 		}
+	}
+}
+
+.social {
+
+	&__wrapper {
+		position: relative;
+	}
+
+	&__btn {
+		position: absolute;
+		z-index: 1;
+		top: 1px;
+		right: 0;
+		color: var(--color-black);
+
+		@media (hover: hover) {
+			&:hover {
+				transform: scale(1.2);
+			}
+		}
+	}
+}
+
+.tooltip {
+	display: grid;
+	gap: 10px;
+	z-index: 2;
+	border: 1px solid var(--color-neutral);
+
+	&__btn {
+		font: var(--font-s);
+
+		@media (hover: hover) {
+			&:hover {
+				color: var(--color-black);
+				transform: scale(1.05);
+			}
+		}
+
+		&:disabled {
+			background-color: transparent;
+			color: var(--color-neutral);
+
+			.tooltip__icon {
+				border-color: var(--color-neutral);
+			}
+		}
+	}
+
+	&__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		border: 1px solid var(--color-black);
 	}
 }

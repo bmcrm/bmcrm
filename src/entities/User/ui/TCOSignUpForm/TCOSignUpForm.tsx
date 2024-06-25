@@ -46,7 +46,7 @@ const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
             <section>
               <CustomInputControlled
                 setFieldValue={setFieldValue}
-                values={values}
+                value={values.camp_name}
                 name='camp_name'
                 placeholder='Sparkle Unicorns'
                 label='Name your camp'
@@ -61,11 +61,11 @@ const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
                 <CustomInput name='last_name' placeholder='Sprouse' label='Last Name' />
               </div>
               {inputsData.map(input => (
-                <CustomInput values={values} key={input.name} {...input} />
+                <CustomInput value={values[input.name]} key={input.name} {...input} />
               ))}
               <CustomInput
                 placeholder='Min. 8 characters'
-                values={values}
+                value={values.password}
                 errors={validateErrors(values.password)}
                 name='password'
                 label='Password'

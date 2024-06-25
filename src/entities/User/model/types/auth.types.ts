@@ -1,12 +1,15 @@
 import { CamperRole } from 'entities/Camper';
 
 export interface ICamperRegisterForm {
+  [key: string]: string | boolean | string[] | undefined;
   accept: boolean;
   first_name: string;
   last_name: string;
   playa_name: string;
   email: string;
   password: string;
+  about_me?: string;
+  social_links?: string[];
 }
 
 export interface ITCORegisterForm extends ICamperRegisterForm {
@@ -27,6 +30,8 @@ export interface IUserRegisterData {
   city?: string;
   camp_name?: string;
   camp_website?: string;
+  about_me?: string;
+  social_links?: string[];
 }
 
 export interface ILoginData {

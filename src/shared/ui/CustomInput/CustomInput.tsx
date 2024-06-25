@@ -16,13 +16,13 @@ interface CustomInputProps {
   type?: string;
   register?: boolean;
   label?: string;
-  values?: { [key: string]: string | boolean };
+  value?: string | boolean | string[] | undefined;
   disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
 }
 
 const CustomInput = memo((props: CustomInputProps) => {
-  const { disabled, name, errors, values, placeholder, register, type = 'text', label } = props;
+  const { disabled, name, errors, value, placeholder, register, type = 'text', label } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const validateDone = errors?.filter(error => !error.valid).length;
@@ -30,7 +30,7 @@ const CustomInput = memo((props: CustomInputProps) => {
   return (
     <label className={styles.label}>
       {label && <p>{label}</p>}
-      {type === 'password' && values?.password && isFocused && !!validateDone && (
+      {type === 'password' && value && isFocused && !!validateDone && (
         <Tooltip
           className={styles.tooltip}
           properties={{

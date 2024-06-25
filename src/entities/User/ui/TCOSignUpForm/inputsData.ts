@@ -11,13 +11,6 @@ export const inputsData = [
     label: 'Email',
     type: 'email',
   },
-  // {
-  //   name: 'password',
-  //   placeholder: 'Min. 8 characters',
-  //   label: 'Password',
-  //   type: 'password',
-  //   register: true,
-  // },
 ];
 
 export const initialData = {
