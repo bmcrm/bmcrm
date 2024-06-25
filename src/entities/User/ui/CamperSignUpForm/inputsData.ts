@@ -1,19 +1,3 @@
-export const inputsData = [
-  {
-    name: 'email',
-    placeholder: 'cole@gmail.com',
-    label: 'Email',
-    type: 'email',
-  },
-  {
-    name: 'password',
-    placeholder: '∗∗∗∗∗∗∗∗',
-    label: 'Password',
-    type: 'password',
-    register: true,
-  },
-];
-
 export const initialData = {
   accept: false,
   first_name: '',

@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { FieldArray, Form, Formik, FormikHelpers } from 'formik';
-import { classNames } from 'shared/lib/classNames/classNames';
+import { FieldArray, Form, Formik } from 'formik';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import CustomTextarea from 'shared/ui/CustomTextarea/CustomTextarea';
@@ -9,12 +8,13 @@ import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 import Tooltip from 'shared/ui/Tooltip/Tooltip';
 
-import { initialData, inputsData } from './inputsData';
+import { initialData } from './inputsData';
 import { validateErrors } from 'shared/ui/CustomInput/validateErrors';
 import { camperRegistrationSchema } from 'shared/const/schemas/validations';
 import { type ICamperRegisterForm, type IUserRegisterData } from '../../model/types/auth.types';
 import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
+import { CamperRole } from 'entities/Camper';
 import styles from './CamperSignUpForm.module.scss';
 import Camp from 'shared/assets/icons/camp.svg';
 import ThreeDotIcon from 'shared/assets/icons/three-dot_icon.svg';
@@ -23,11 +23,11 @@ import MinusIcon from 'shared/assets/icons/minus_icon.svg';
 
 type CamperSignUpFormProps = {
   className?: string;
-  onSubmit: (values: IUserRegisterData, formikHelpers: FormikHelpers<ICamperRegisterForm>) => void;
+  onSubmit: (values: IUserRegisterData, resetForm: () => void) => void;
 };
 
 const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
-  const { className, onSubmit } = props;
+  const { onSubmit } = props;
   const [tooltipsVisible, setTooltipsVisible] = useState<boolean[]>(initialData.social_links.map(() => false));
 
   useEffect(() => {
@@ -57,28 +57,26 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
     });
   };
 
-  const onSubmitHandler = (values: ICamperRegisterForm, formikHelpers: FormikHelpers<ICamperRegisterForm>) => {
+  const onSubmitHandler = (values: ICamperRegisterForm, { resetForm }: { resetForm: () => void }) => {
+    const data: IUserRegisterData = {
+      first_name: values.first_name.trim(),
+      last_name: values.last_name.trim(),
+      playa_name: values.playa_name.trim(),
+      email: values.email.trim(),
+      password: values.password.trim(),
+      about_me: values.about_me?.trim(),
+      social_links: values.social_links,
+      role: CamperRole.LEAD,
+    };
 
-    console.log(values);
-
-    // const data: IUserRegisterData = {
-    //   first_name: values.first_name.trim(),
-    //   last_name: values.last_name.trim(),
-    //   playa_name: values.playa_name.trim(),
-    //   email: values.email.trim(),
-    //   password: values.password.trim(),
-    //   about_me: values.about_me.trim(),
-    //   role: CamperRole.LEAD,
-    // };
-
-    // onSubmit(data, formikHelpers);
+    onSubmit(data, resetForm);
   };
 
   return (
     <Formik validationSchema={camperRegistrationSchema} initialValues={initialData} onSubmit={onSubmitHandler}>
       {({ values }) => {
         return (
-          <Form className={classNames(styles.form, {}, [className])}>
+          <Form className={styles.form}>
             <div className={styles.form__item}>
               <CustomInput name={'playa_name'} placeholder={'Playa Name'} label={'Playa Name'} />
               <FieldArray name={'social_links'}>
@@ -90,8 +88,8 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                           <Tooltip
                             className={styles.tooltip}
                             properties={{
-                              bottom: '100%',
-                              right: 0,
+                              bottom: 'calc(100% - 20px)',
+                              right: '30px',
                               width: '150px',
                             }}
                           >
@@ -151,12 +149,19 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
             </div>
             <div className={styles.form__item}>
               <div className={styles.form__row}>
-                <CustomInput name='first_name' placeholder='Cole' label='First Name'/>
-                <CustomInput name='last_name' placeholder='Sprouse' label='Last Name'/>
+                <CustomInput name={'first_name'} placeholder={'Cole'} label={'First Name'}/>
+                <CustomInput name={'last_name'} placeholder={'Sprouse'} label={'Last Name'}/>
               </div>
-              {inputsData.map(input => (
-                <CustomInput values={values} errors={validateErrors(values.password)} key={input.name} {...input} />
-              ))}
+              <CustomInput name={'email'} placeholder={'cole@gmail.com'} label={'Email'} type={'email'}/>
+              <CustomInput
+                name={'password'}
+                placeholder={'∗∗∗∗∗∗∗∗'}
+                label={'Password'}
+                type={'password'}
+                value={values.password}
+                errors={validateErrors(values.password)}
+                register
+              />
               <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
               <Button type='submit' fluid>
                 <Camp/>SIGN UP

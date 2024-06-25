@@ -48,29 +48,3 @@
 		}
 	}
 }
-
-.register {
-	&__inner {
-		display: grid;
-		gap: 25px;
-		padding: 50px 115px;
-		background-color: var(--color-secondary-bg);
-		border: 1px solid #D2D2D2;
-		border-radius: 20px;
-		box-shadow: 0 2px 60px 0 rgba(0, 0, 0, .1);
-		
-		@media (width < $xl) {
-			padding-left: 30px;
-			padding-right: 30px;
-		}
-		@media (width < $lg) {
-			padding-top: 30px;
-			padding-bottom: 30px;
-		}
-		@media (width < $md) {
-			padding: 20px 15px;
-			gap: 20px;
-		}
-	}
-}
-

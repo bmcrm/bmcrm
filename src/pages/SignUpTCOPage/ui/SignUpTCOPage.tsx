@@ -38,7 +38,7 @@ const SignUpTCOPage = memo(() => {
 
   return (
     <AuthPageTemplate>
-      <AuthFormTemplate badge={'Create a camp and account'}>
+      <AuthFormTemplate badge={'Create a camp and account'} logo decor>
         <TCOSignUpForm onSubmit={submitHandler} />
         {isLoading && <FormLoader />}
       </AuthFormTemplate>

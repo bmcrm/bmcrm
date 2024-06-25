@@ -7,13 +7,13 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import Container from 'shared/ui/Container/Container';
 import { CampOverview, useCamp } from 'entities/Camp';
 import { CamperSignUpForm, type IUserRegisterData, useAuth } from 'entities/User';
-import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 import FormLoader from 'features/FormLoader';
+import CampNotFound from 'widgets/CampNotFound';
+import AuthFormTemplate from 'features/AuthFormTemplate';
 
 import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
-import CampNotFound from 'widgets/CampNotFound';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading } = useAuth();
@@ -29,8 +29,9 @@ const CampOverviewPage = memo(() => {
     return resetError();
   }, [error, resetError]);
 
-  const submitHandler = async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
+  const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
+
     const response = await register(data);
 
     if (response) {
@@ -66,11 +67,10 @@ const CampOverviewPage = memo(() => {
         {!isLoading && !isError && (
           <section className={styles.register}>
             <Container>
-              <div className={styles.register__inner}>
-                {authIsLoading && <FormLoader/>}
-                <AuthBadge label={'Register to Join the Camp'}/>
+              <AuthFormTemplate badge={'Register to Join the Camp'}>
                 <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
-              </div>
+                {authIsLoading && <FormLoader/>}
+              </AuthFormTemplate>
             </Container>
           </section>
         )}

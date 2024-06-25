@@ -51,7 +51,7 @@ const SignInPage = memo(() => {
 
   return (
     <AuthPageTemplate>
-      <AuthFormTemplate badge={'Sign in to your account'} background>
+      <AuthFormTemplate badge={'Sign in to your account'} background decor>
         <UserSignInForm onSubmit={handleSubmit} />
         {isLoading && <FormLoader />}
         {isOpen && (

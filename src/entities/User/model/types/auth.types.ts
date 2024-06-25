@@ -1,14 +1,15 @@
 import { CamperRole } from 'entities/Camper';
 
 export interface ICamperRegisterForm {
+  [key: string]: string | boolean | string[] | undefined;
   accept: boolean;
   first_name: string;
   last_name: string;
   playa_name: string;
   email: string;
   password: string;
-  about_me: string;
-  social_links: string[];
+  about_me?: string;
+  social_links?: string[];
 }
 
 export interface ITCORegisterForm extends ICamperRegisterForm {

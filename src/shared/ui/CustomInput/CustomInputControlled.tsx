@@ -17,7 +17,7 @@ interface CustomInputProps {
   type?: string;
   label?: string;
   register?: boolean;
-  values?: { [key: string]: string | boolean };
+  value?: string | boolean | string[] | undefined;
   errors?: { [key: string]: string | boolean }[];
   setFieldValue: (field: string, value: string) => void;
 }
@@ -28,7 +28,7 @@ const CustomInputControlled = memo((props: CustomInputProps) => {
     name,
     errors,
     register,
-    values,
+    value,
     placeholder,
     type = 'text',
     label,
@@ -40,7 +40,7 @@ const CustomInputControlled = memo((props: CustomInputProps) => {
   return (
     <label className={styles.label}>
       {label && <p>{label}</p>}
-      {type === 'password' && values?.password && isFocused && !!validateDone && (
+      {type === 'password' && value && isFocused && !!validateDone && (
         <Tooltip
           className={styles.tooltip}
           properties={{

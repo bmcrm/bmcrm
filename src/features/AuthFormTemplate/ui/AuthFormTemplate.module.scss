@@ -1,4 +1,4 @@
-@import '../../../app/styles/breakpoints';
+@import 'breakpoints';
 
 .wrapper {
   position: relative;
@@ -10,7 +10,7 @@
   border-radius: 20px;
 
   @media (width < $md) {
-    max-width: max-content;
+    max-width: 100%;
   }
 
   &__logo {
@@ -56,29 +56,31 @@
     }
   }
 
-  &:after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    left: calc(100% - 75px);
-    bottom: 65%;
-    display: block;
-    width: 265px;
-    height: 355px;
-    background-image: url('shared/assets/images/auth/page_bg.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  &.decor {
+    &:after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      left: calc(100% - 75px);
+      bottom: 65%;
+      display: block;
+      width: 265px;
+      height: 355px;
+      background-image: url('shared/assets/images/auth/page_bg.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
 
-    @media (width < $lg) {
-      width: 175px;
-      height: 235px;
-      left: unset;
-      right: -55px;
-      bottom: 80%;
-    }
-    @media (width < $md) {
-      display: none;
+      @media (width < $lg) {
+        width: 175px;
+        height: 235px;
+        left: unset;
+        right: -55px;
+        bottom: 80%;
+      }
+      @media (width < $md) {
+        display: none;
+      }
     }
   }
 

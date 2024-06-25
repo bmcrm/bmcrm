@@ -65,16 +65,32 @@ export const addSocialSchema = yup.object().shape({
 
 export const camperRegistrationSchema = yup.object().shape({
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
-  first_name: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
-  last_name: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
-  playa_name: yup.string(),
-  email: yup.string().email('Invalid email address').required('Email is required'),
+  first_name: yup
+    .string()
+    .required('Field is required')
+    .max(32, 'First name must be less than 32 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  last_name: yup
+    .string()
+    .required('Field is required')
+    .max(32, 'Last name must be less than 32 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  playa_name: yup.string().transform((_, originalValue) => originalValue.trim()),
+  about_me: yup.string().transform((_, originalValue) => originalValue.trim()),
+  email: yup.string().email('Invalid email address').required('Email is required').transform((_, originalValue) => originalValue.trim()),
+  social_links: yup.array().of(
+    yup.string().matches(
+      /^https:\/\/.+\/.+$/,
+      'URL must be in the format https://*social*/*user*'
+    ).transform((_, originalValue) => originalValue.trim()),
+  ),
   password: yup
     .string()
     .min(8, 'Minimum 8 character')
     .matches(/[A-Z]/, 'Uppercase letters')
     .matches(/[0-9]/, 'Numbers')
-    .required('Password is required'),
+    .required('Password is required')
+    .transform((_, originalValue) => originalValue.trim()),
 });
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;

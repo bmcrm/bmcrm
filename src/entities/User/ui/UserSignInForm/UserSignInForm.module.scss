@@ -10,6 +10,9 @@
 		max-width: 320px;
 		gap: 20px;
 	}
+	@media (width < $md) {
+		max-width: 100%;
+	}
 }
 
 .btn {
