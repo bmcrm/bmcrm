@@ -51,7 +51,7 @@ const FunnelCard = memo((props: FunnelCardProps) => {
           <FunnelCardAll users={users} title={title}/>
         </Modal>
       )}
-      {isLoading && !slicedUsers.length && <Loader className={'m-centred'} />}
+      {isLoading && <Loader className={'m-centred'} />}
       {!isLoading && (
         <ul className={styles.card__content}>
           {slicedUsers.map(user => (

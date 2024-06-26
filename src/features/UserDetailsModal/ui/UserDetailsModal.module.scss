@@ -79,7 +79,7 @@
   }
 
   .textarea {
-    height: 150px;
+    height: 120px;
     font-weight: 500;
   }
 
@@ -96,7 +96,7 @@
     display: grid;
     grid-template-columns: 125px 1fr;
     align-items: flex-start;
-    gap: 10px 20px;
+    gap: 5px 20px;
 
     @media (width < $lg) {
       grid-template-columns: 70px 1fr;
@@ -136,7 +136,7 @@
           }
         }
 
-        + .details__head-info-row {
+        + .details__head-desc {
           margin-top: 5px;
         }
       }
@@ -192,6 +192,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       column-gap: 5px;
+      width: 100%;
+      max-width: 500px;
 
       p {
         font: var(--font-s);
@@ -247,5 +249,67 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__role {
+    padding: 4px 15px;
+    border-radius: 5px;
+    background-color: var(--color-ruby-dark);
+    font: var(--font-s);
+    font-weight: 500;
+    color: var(--color-white);
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+
+    @media (width < $md) {
+      margin-left: auto;
+      margin-right: auto;
+      padding: 2px 7px;
+      font: var(--font-xs);
+    }
+
+    &.tco {
+      text-transform: uppercase;
+    }
+  }
+
+  &__select {
+    max-width: 150px;
+
+    @media (width < $md) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    select {
+      padding: 4px 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--color-ruby-dark);
+      font-weight: 500;
+      color: var(--color-white);
+
+      @media (width < $md) {
+        padding: 2px 7px;
+        font: var(--font-xs);
+      }
+
+      option {
+        color: var(--color-black);
+        background-color: var(--color-secondary-bg);
+      }
+    }
+
+
+
+
   }
 }

@@ -51,5 +51,8 @@
     @media (width < $md) {
       padding: 20px;
     }
+    @media (width < $xs) {
+      padding: 10px;
+    }
   }
 }

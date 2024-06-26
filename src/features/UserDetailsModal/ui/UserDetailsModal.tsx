@@ -16,7 +16,7 @@ import SocialIconItem from 'shared/ui/SocialIconItem/SocialIconItem';
 import AddSocialModal from 'features/AddSocialModal';
 import Modal from 'shared/ui/Modal/Modal';
 import CustomTextarea from 'shared/ui/CustomTextarea/CustomTextarea';
-import CustomRadio from 'shared/ui/CustomRadio/CustomRadio';
+import CustomSelect from 'shared/ui/CustomSelect/CustomSelect';
 
 import styles from './UserDetailsModal.module.scss';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
@@ -41,7 +41,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReadonly, setIsReadonly] = useState(true);
   const { isOpen, open, close } = useToggle();
-  const { getCamper, updateCamper, isError, resetError } = useCampers();
+  const { getCamper, updateCamper, isError, resetError, getCampers } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const currentYear = new Date().getFullYear();
   const { decodedIDToken } = useAuth();
@@ -99,21 +99,24 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     };
   }, []);
 
-  const submitHandler = useCallback(
-    async (values: Partial<ICamper>) => {
-      setIsLoading(true);
-      toggleReadonly();
-      const trimmedValues = trimFields(values);
+  const submitHandler = useCallback(async (values: Partial<ICamper>) => {
+    setIsLoading(true);
+    toggleReadonly();
+    const trimmedValues = trimFields(values);
+    const data = {
+      ...trimmedValues,
+      role: values.role,
+    };
 
-      const updatedCamper = await updateCamper(camperEmail!, { ...trimmedValues, social_links: socialIcons });
+    const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
 
-      if (updatedCamper) {
-        setCamper(updatedCamper);
-      }
+    if (updatedCamper) {
+      setCamper(updatedCamper);
+    }
 
-      setIsLoading(false);
-    },
-    [camperEmail, socialIcons, toggleReadonly, trimFields, updateCamper]
+    setIsLoading(false);
+  },
+  [camperEmail, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
   const initialValues = useMemo(
@@ -123,9 +126,9 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
         year: item.year,
         value: item.value,
       })) || [{ year: currentYear, value: '' }],
-      role: decodedIDToken?.role,
+      role: camper?.role,
     }),
-    [camper?.about_me, camper?.history, currentYear, decodedIDToken?.role]
+    [camper?.about_me, camper?.history, camper?.role, currentYear]
   );
 
   const cancelHandler = useCallback(
@@ -152,8 +155,27 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setSocialIcons(prev => prev.filter((_, i) => i !== index));
   }, []);
 
+  const selectOptions = decodedIDToken?.role === CamperRole.TCO
+    ? Object.values(CamperRole).map(role => ({
+      value: role,
+      content: role === CamperRole.TCO
+        ? role.toUpperCase()
+        : role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+    }))
+    : Object.values(CamperRole)
+      .filter(role => role !== CamperRole.TCO)
+      .map(role => ({
+        value: role,
+        content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+      }));
+
+  const closeDetailsHandler = () => {
+    void getCampers();
+    onDetailsClose();
+  };
+
   return (
-    <Modal isOpen={isDetailsOpen} onClose={onDetailsClose}>
+    <Modal isOpen={isDetailsOpen} onClose={closeDetailsHandler}>
       <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
         {({ resetForm }) => (
           <Form className={classNames(styles.details, {}, [])}>
@@ -211,22 +233,25 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                 {!isTablet && (
                   <a href={`mailto: ${camper?.email}`} className={styles.email}>{camper?.email}</a>
                 )}
-                <div className={styles.details__headInfoRow}>
-                  <div className={styles.details__headDesc}>
-                    <p>{camper?.city || 'Not specified'}</p>
-                    <p>Added: {dateNormalize(camper?.created_at as string)}</p>
-                    <p>BMs: 2022, 2023</p>
-                    <p>Updated: {dateNormalize(camper?.updated_at as string)}</p>
-                  </div>
-                  <div>
-                    <CustomRadio name={'role'} label={CamperRole.LEAD} value={CamperRole.LEAD}/>
-                    <CustomRadio name={'role'} label={CamperRole.QUALIFIED} value={CamperRole.QUALIFIED}/>
-                    <CustomRadio name={'role'} label={CamperRole.INTENT} value={CamperRole.INTENT}/>
-                    <CustomRadio name={'role'} label={CamperRole.CAMPER} value={CamperRole.CAMPER}/>
-                    <CustomRadio name={'role'} label={CamperRole.TCO} value={CamperRole.TCO}/>
-                  </div>
+                <div className={styles.details__headDesc}>
+                  {camper?.city && <p>{camper?.city}</p>}
+                  <p>Added: {dateNormalize(camper?.created_at as string)}</p>
+                  <p>BMs: 2022, 2023</p>
+                  <p>Updated: {dateNormalize(camper?.updated_at as string)}</p>
                 </div>
               </div>
+            </section>
+            <section className={styles.status}>
+              {(isReadonly || decodedIDToken?.role !== CamperRole.TCO) && (
+                <p
+                  className={classNames(styles.status__role, { [styles.tco]: camper?.role === CamperRole.TCO }, [])}
+                >
+                  {camper?.role}
+                </p>
+              )}
+              {!isReadonly && decodedIDToken?.role === CamperRole.TCO && (
+                <CustomSelect name={'role'} options={selectOptions} className={styles.status__select}/>
+              )}
             </section>
             <section>
               <h3 className={styles.blockTitle}>About Me</h3>
