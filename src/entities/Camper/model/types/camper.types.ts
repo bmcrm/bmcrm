@@ -10,7 +10,7 @@ export interface CamperSocial {
 
 export enum CamperRole {
   TCO = 'tco',
-  COORGANIZER = 'co-organizer',
+  COORG = 'co-organizer',
   LEAD = 'lead',
   QUALIFIED = 'qualified',
   INTENT = 'intent',
