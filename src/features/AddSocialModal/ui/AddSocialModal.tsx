@@ -1,12 +1,11 @@
 import { memo } from 'react';
+import socialLinksParser from 'shared/lib/socialLinkParser/socialLinkParser';
 import Modal from 'shared/ui/Modal/Modal';
 import { Form, Formik } from 'formik';
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import CustomSelect from 'shared/ui/CustomSelect/CustomSelect';
 import Button from 'shared/ui/Button/Button';
 
 import styles from './AddSocialModal.module.scss';
-import { SocialIconsEnum } from 'shared/ui/SocialIconItem/SocialIconItem.types';
 import { CamperSocial } from 'entities/Camper';
 import { addSocialSchema } from 'shared/const/schemas/validations';
 
@@ -23,25 +22,17 @@ const AddSocialModal = memo((props: AddSocialModalProps) => {
     onSubmit,
   } = props;
 
-  const options = Object.values(SocialIconsEnum).map(icon => (
-    { value: icon, content: icon.charAt(0).toUpperCase() + icon.slice(1).toLowerCase() }
-  ));
+  const onSubmitHandler = (values: { url: string }) => {
+    const data = socialLinksParser(values.url);
 
-  const onSubmitHandler = (values: { socialName: string, url: string }) => {
-    const data = {
-      url: values.url,
-      name: values.socialName,
-    };
-
-    onSubmit(data);
+    onSubmit(data[0]);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className={styles.title}>Add Social Media Link</h2>
-      <Formik validationSchema={addSocialSchema} onSubmit={onSubmitHandler} initialValues={{ socialName: '', url: '' }}>
+      <Formik validationSchema={addSocialSchema} onSubmit={onSubmitHandler} initialValues={{ url: '' }}>
         <Form className={styles.form}>
-          <CustomSelect name={'socialName'} label={'Name'} options={options}/>
           <CustomInput name={'url'} placeholder={'facebook.com/'} label={'URL'}/>
           <Button type={'submit'} className={'m-centred'}>Add</Button>
         </Form>

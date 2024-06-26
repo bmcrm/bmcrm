@@ -11,6 +11,7 @@ import { RoutePath } from 'app/providers/AppRouter';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
+import CampIcon from 'shared/assets/icons/camp_monocolor.svg';
 
 type UserAvatarTooltipProps = {
   className?: string;
@@ -18,7 +19,7 @@ type UserAvatarTooltipProps = {
 };
 
 const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) => {
-  const { logout, accessToken } = useAuth();
+  const { logout, accessToken, decodedIDToken } = useAuth();
 
   const handleLogout = () => {
     onClick?.();
@@ -37,8 +38,22 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
     >
       <ul className={styles.userTooltip__list}>
         <li>
-          <Link to={RoutePath.profile} className={classNames(styles.userTooltip__link, {}, [styles.disabled])} onClick={onClick}>
-            <Icon icon={<SettingsIcon />} size={IconSize.SIZE_24} />
+          <Link
+            to={`${RoutePath.camp_overview}${decodedIDToken?.camp_id}`}
+            className={classNames(styles.userTooltip__link, {}, [])}
+            onClick={onClick}
+          >
+            <Icon icon={<CampIcon/>} size={IconSize.SIZE_24}/>
+            <span className={styles.text}>My Camp</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to={RoutePath.profile}
+            className={classNames(styles.userTooltip__link, {}, [styles.disabled])}
+            onClick={onClick}
+          >
+            <Icon icon={<SettingsIcon/>} size={IconSize.SIZE_24}/>
             <span className={styles.text}>Setting</span>
           </Link>
         </li>

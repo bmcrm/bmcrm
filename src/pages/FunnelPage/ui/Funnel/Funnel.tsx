@@ -83,7 +83,6 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
           <li
             key={index}
             className={styles.funnel__item}
-
           >
             <Progress
               count={item.count}

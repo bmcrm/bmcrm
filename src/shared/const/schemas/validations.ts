@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
-const socialRegex = /^(https?:\/\/)?(www\.)?(facebook\.com|x\.com|twitter\.com|instagram\.com)\/.*$/;
+const socialRegex = /^https:\/\/.+\/.+$/;
 
 export const registrationSchema = yup.object().shape({
   camp_name: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
@@ -59,8 +59,9 @@ export const confirmResetPassSchema = yup.object().shape({
 });
 
 export const addSocialSchema = yup.object().shape({
-  socialName: yup.string().required('Social network name is required!'),
-  url: yup.string().required('URL is required!').matches(socialRegex, 'Enter a valid URL!'),
+  url: yup.string()
+    .required('URL is required!')
+    .matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
 });
 
 export const camperRegistrationSchema = yup.object().shape({
@@ -79,10 +80,9 @@ export const camperRegistrationSchema = yup.object().shape({
   about_me: yup.string().transform((_, originalValue) => originalValue.trim()),
   email: yup.string().email('Invalid email address').required('Email is required').transform((_, originalValue) => originalValue.trim()),
   social_links: yup.array().of(
-    yup.string().matches(
-      /^https:\/\/.+\/.+$/,
-      'URL must be in the format https://*social*/*user*'
-    ).transform((_, originalValue) => originalValue.trim()),
+    yup.string()
+      .matches(socialRegex, 'URL must be in the format https://*social*/*user*')
+      .transform((_, originalValue) => originalValue.trim()),
   ),
   password: yup
     .string()

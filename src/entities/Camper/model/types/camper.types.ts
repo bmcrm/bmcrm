@@ -10,11 +10,11 @@ export interface CamperSocial {
 
 export enum CamperRole {
   TCO = 'tco',
+  COORG = 'co-organizer',
   LEAD = 'lead',
+  QUALIFIED = 'qualified',
   INTENT = 'intent',
   CAMPER = 'camper',
-  QUALIFIED = 'qualified',
-  COORGANIZER = 'co-organizer',
 }
 
 export interface ICamper {

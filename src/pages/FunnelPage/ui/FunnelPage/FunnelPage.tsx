@@ -34,7 +34,7 @@ const FunnelPage = memo(() => {
   });
 
   useEffect(() => {
-    getCampers();
+    void getCampers();
   }, [getCampers]);
 
   useEffect(() => {
