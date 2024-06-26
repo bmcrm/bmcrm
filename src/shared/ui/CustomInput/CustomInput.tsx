@@ -12,7 +12,7 @@ import EyeClose from 'icons/eye_closed.svg';
 
 interface CustomInputProps {
   name: string;
-  className: string;
+  className?: string;
   placeholder?: string;
   type?: string;
   register?: boolean;
