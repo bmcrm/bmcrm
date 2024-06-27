@@ -2,16 +2,22 @@ import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { useCamp } from 'entities/Camp';
+import { useAuth } from 'entities/User';
 
 import Skeleton from 'shared/ui/Skeleton/Skeleton';
 import Image from 'shared/ui/Image/Image';
 import Icon from 'shared/ui/Icon/Icon';
+import Button from 'shared/ui/Button/Button';
 
 import styles from './CampOverview.module.scss';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
+import { type ICamp } from '../../model/types/camp.types';
+import { ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import LocationIcon from 'shared/assets/icons/location_icon.svg';
 import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
-import { ICamp } from '../../model/types/camp.types';
+import BlurIcon from 'shared/assets/icons/blur_icon.svg';
+import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
+import CampersCountModal from 'features/CampersCountModal';
 
 type CampOverviewProps = {
   campID?: string;
@@ -22,6 +28,8 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const { getCamp, isLoading } = useCamp();
+  const { isLoggedIn } = useAuth();
+  const { isOpen, open, close } = useToggle();
   let content;
   
   useEffect(() => {
@@ -33,8 +41,23 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
       }
     };
 
-    fetchCamp();
+    void fetchCamp();
   }, [getCamp, campID]);
+
+  const campersCount = isLoggedIn
+    ? camp?.campers_count || '0'
+    : (
+      <>
+        <Button
+          theme={ButtonTheme.CLEAR}
+          size={ButtonSize.TEXT}
+          onClick={open}
+        >
+          <Icon icon={<BlurIcon/>} size={IconSize.SIZE_24}/>
+        </Button>
+        {isOpen && <CampersCountModal isOpen={isOpen} onClose={close}/>}
+      </>
+    );
 
   if (isLoading) {
     content = (
@@ -57,7 +80,7 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
     content = (
       <>
         <h1 className={styles.camp__title}>{camp?.camp_name || 'Camp Name will be here'}</h1>
-        <h2 className={styles.camp__subtitle}>Campers {camp?.campers_count || '0'}</h2>
+        <h2 className={styles.camp__subtitle}>Campers {campersCount}</h2>
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30}/>
           <div className={styles.camp__desc}>
