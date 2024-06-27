@@ -68,47 +68,46 @@ test('successful login', async ({ page }) => {
   await expect(page.locator('text=Invite')).toBeVisible();
 });
 
-// test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
-//   await page.fill('input[name="email"]', TEST_EMAIL);
-//   await page.fill('input[name="password"]', NEW_PASSWORD);
-//   await page.click('button[type="submit"]');
-//   await expect(page).toHaveURL(FUNNEL_URL);
-//   const element = await page.locator('text=fake@example.com').nth(1);
-//   await element.hover();
-//   await element.click();
-//   await expect(page.locator('text=About Me')).toBeVisible();
-//   await expect(page.locator('text=Campers Notes')).toBeVisible();
-//   const editBtn = await page.locator('._btn_awgzo_1').nth(1);
-//   await editBtn.click();
-//   await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
-//   await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
-//   await page.locator('textarea[name="about_me"]').fill('my new about me');
-//   await page.locator('textarea[name="history.0.value"]').fill('my new note');
-//   await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
-//   await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
-//   const addSocialBtn = page.locator('._btn_ii6bv_56');
-//
-//   if (await addSocialBtn.isVisible()) {
-//     await addSocialBtn.click();
-//     await expect(page.locator('text=Add Social Media Link')).toBeVisible();
-//     await page.selectOption('select._select_15n49_1', { value: 'x' });
-//     await page.fill('input[name="url"]', 'https://x.com/test-user');
-//     await page.getByRole('button', { name: 'add' }).click();
-//     const link = page.locator('a[href="https://x.com/test-user"]');
-//     await expect(link).toBeVisible();
-//     const removeSocialBtn = page.locator('._btn-remove_14bmx_18');
-//     await removeSocialBtn.click();
-//     await page.waitForSelector('a[href="https://x.com/test-user"]', { state: 'detached' });
-//     const isLinkVisible = await link.isVisible().catch(() => false);
-//     expect(isLinkVisible).toBe(false);
-//   }
-//
-//   await page.getByRole('button', { name: 'save' }).click();
-//   await expect(page.locator('text=my new about me')).toBeVisible();
-//   await expect(page.locator('text=my new note')).toBeVisible();
-//   await page.press('body', 'Escape');
-//   await page.waitForTimeout(3000);
-// });
+test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
+  await page.fill('input[name="email"]', TEST_EMAIL);
+  await page.fill('input[name="password"]', NEW_PASSWORD);
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL(FUNNEL_URL);
+  const element = await page.locator('text=fake@example.com').nth(1);
+  await element.hover();
+  await element.click();
+  await expect(page.locator('text=About Me')).toBeVisible();
+  await expect(page.locator('text=Campers Notes')).toBeVisible();
+  const editBtn = await page.locator('._btn_awgzo_1').nth(1);
+  await editBtn.click();
+  await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
+  await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
+  await page.locator('textarea[name="about_me"]').fill('my new about me');
+  await page.locator('textarea[name="history.0.value"]').fill('my new note');
+  await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
+  await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
+  const addSocialBtn = page.locator('._btn_ii6bv_56');
+
+  if (await addSocialBtn.isVisible()) {
+    await addSocialBtn.click();
+    await expect(page.locator('text=Add Social Media Link')).toBeVisible();
+    await page.fill('input[name="url"]', 'https://x.com/test-user');
+    await page.getByRole('button', { name: 'add' }).click();
+    const link = page.locator('a[href="https://x.com/test-user"]');
+    await expect(link).toBeVisible();
+    const removeSocialBtn = page.locator('._btn-remove_14bmx_18');
+    await removeSocialBtn.click();
+    await page.waitForSelector('a[href="https://x.com/test-user"]', { state: 'detached' });
+    const isLinkVisible = await link.isVisible().catch(() => false);
+    expect(isLinkVisible).toBe(false);
+  }
+
+  await page.getByRole('button', { name: 'save' }).click();
+  await expect(page.locator('text=my new about me')).toBeVisible();
+  await expect(page.locator('text=my new note')).toBeVisible();
+  await page.press('body', 'Escape');
+  await page.waitForTimeout(3000);
+});
 
 test('unsuccessful login with incorrect credentials', async ({ page }) => {
   await page.fill('input[name="email"]', 'incorrect_email@example.com');

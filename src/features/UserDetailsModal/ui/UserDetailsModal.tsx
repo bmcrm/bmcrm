@@ -40,6 +40,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isReadonly, setIsReadonly] = useState(true);
+  const [isEdited, setIsEdited] = useState(false);
   const { isOpen, open, close } = useToggle();
   const { getCamper, updateCamper, isError, resetError, getCampers } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
@@ -48,6 +49,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   useEffect(() => {
     if (isError) {
+      console.error(isError);
       errorHandler(isError as AxiosError);
     }
 
@@ -68,7 +70,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
       }
     };
 
-    fetchCamper();
+    void fetchCamper();
   }, [camperEmail, getCamper]);
 
   const firstLastName =
@@ -103,20 +105,22 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setIsLoading(true);
     toggleReadonly();
     const trimmedValues = trimFields(values);
+
     const data = {
       ...trimmedValues,
-      role: values.role,
+      ...(values.role !== CamperRole.TCO && decodedIDToken?.role === CamperRole.TCO ? { role: values.role } : {})
     };
 
     const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
 
     if (updatedCamper) {
       setCamper(updatedCamper);
+      setIsEdited(true);
     }
 
     setIsLoading(false);
   },
-  [camperEmail, socialIcons, toggleReadonly, trimFields, updateCamper]
+  [camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
   const initialValues = useMemo(
@@ -155,22 +159,18 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setSocialIcons(prev => prev.filter((_, i) => i !== index));
   }, []);
 
-  const selectOptions = decodedIDToken?.role === CamperRole.TCO
-    ? Object.values(CamperRole).map(role => ({
+  const selectOptions = Object.values(CamperRole)
+    .filter(role => role !== CamperRole.TCO)
+    .map(role => ({
       value: role,
-      content: role === CamperRole.TCO
-        ? role.toUpperCase()
-        : role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
-    }))
-    : Object.values(CamperRole)
-      .filter(role => role !== CamperRole.TCO)
-      .map(role => ({
-        value: role,
-        content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
-      }));
+      content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+    }));
 
   const closeDetailsHandler = () => {
-    void getCampers();
+    if (isEdited) {
+      void getCampers();
+    }
+
     onDetailsClose();
   };
 
@@ -242,14 +242,14 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               </div>
             </section>
             <section className={styles.status}>
-              {(isReadonly || decodedIDToken?.role !== CamperRole.TCO) && (
+              {(isReadonly || decodedIDToken?.role !== CamperRole.TCO || camper?.role === CamperRole.TCO) && (
                 <p
                   className={classNames(styles.status__role, { [styles.tco]: camper?.role === CamperRole.TCO }, [])}
                 >
                   {camper?.role}
                 </p>
               )}
-              {!isReadonly && decodedIDToken?.role === CamperRole.TCO && (
+              {!isReadonly && decodedIDToken?.role === CamperRole.TCO && camper?.role !== CamperRole.TCO && (
                 <CustomSelect name={'role'} options={selectOptions} className={styles.status__select}/>
               )}
             </section>
