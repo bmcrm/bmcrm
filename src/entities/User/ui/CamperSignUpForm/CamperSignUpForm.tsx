@@ -90,7 +90,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                             properties={{
                               bottom: 'calc(100% - 20px)',
                               right: '30px',
-                              width: '150px',
+                              width: '140px',
                             }}
                           >
                             <Button
