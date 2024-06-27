@@ -23,6 +23,10 @@
 	}
 
 	&__subtitle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
 		font: var(--font-l);
 		text-align: center;
 
