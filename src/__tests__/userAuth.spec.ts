@@ -91,7 +91,6 @@ test('successful login and show details modal, edit and save user data, close de
   if (await addSocialBtn.isVisible()) {
     await addSocialBtn.click();
     await expect(page.locator('text=Add Social Media Link')).toBeVisible();
-    // await page.selectOption('select._select_15n49_1', { value: 'x' });
     await page.fill('input[name="url"]', 'https://x.com/test-user');
     await page.getByRole('button', { name: 'add' }).click();
     const link = page.locator('a[href="https://x.com/test-user"]');
