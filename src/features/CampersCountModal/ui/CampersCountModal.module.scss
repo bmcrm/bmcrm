@@ -1,0 +1,13 @@
+.content {
+	display: grid;
+	justify-items: center;
+	gap: 20px;
+
+	&__icon {
+		display: block;
+
+		svg {
+			display: block;
+		}
+	}
+}
