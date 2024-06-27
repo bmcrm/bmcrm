@@ -48,6 +48,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   useEffect(() => {
     if (isError) {
+      console.error(isError);
       errorHandler(isError as AxiosError);
     }
 
@@ -68,7 +69,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
       }
     };
 
-    fetchCamper();
+    void fetchCamper();
   }, [camperEmail, getCamper]);
 
   const firstLastName =
@@ -103,16 +104,17 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     setIsLoading(true);
     toggleReadonly();
     const trimmedValues = trimFields(values);
-    const data = {
-      ...trimmedValues,
-      role: values.role,
-    };
+    const data = values.role !== CamperRole.TCO
+      ? { ...trimmedValues, role: values.role }
+      : trimmedValues;
 
-    const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
+    console.log(data);
 
-    if (updatedCamper) {
-      setCamper(updatedCamper);
-    }
+    // const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
+    //
+    // if (updatedCamper) {
+    //   setCamper(updatedCamper);
+    // }
 
     setIsLoading(false);
   },
