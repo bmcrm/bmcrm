@@ -39,7 +39,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const [camper, setCamper] = useState<ICamper | null>(null);
   const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isReadonly, setIsReadonly] = useState(true);
+  const [isReadonly, setIsReadonly] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const { isOpen, open, close } = useToggle();
   const { getCamper, updateCamper, isError, resetError, getCampers } = useCampers();
