@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppRouter, RoutePath } from 'app/providers/AppRouter';
 import { useAuth } from 'entities/User';
+import { useCampers } from 'entities/Camper';
 
 const App = () => {
-  const { decodedIDToken, updateTokens, refreshToken, error, resetState } = useAuth();
+  const { decodedIDToken, updateTokens, refreshToken, error, resetState, isLoggedIn } = useAuth();
+  const { getCampers } = useCampers();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const App = () => {
       }
     };
 
-    checkAndRefreshToken();
+    void checkAndRefreshToken();
   }, [decodedIDToken?.exp, refreshToken, updateTokens]);
 
   useEffect(() => {
@@ -27,6 +29,12 @@ const App = () => {
       navigate(RoutePath.sign_in, { replace: true });
     }
   }, [error?.name, navigate, resetState]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      void getCampers();
+    }
+  }, [getCampers, isLoggedIn]);
 
   return (
     <div className='app'>

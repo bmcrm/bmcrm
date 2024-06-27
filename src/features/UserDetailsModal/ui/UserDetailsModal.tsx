@@ -49,7 +49,6 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
 
   useEffect(() => {
     if (isError) {
-      console.error(isError);
       errorHandler(isError as AxiosError);
     }
 
