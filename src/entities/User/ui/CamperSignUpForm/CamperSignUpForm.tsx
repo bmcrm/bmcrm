@@ -65,7 +65,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
       email: values.email.trim(),
       password: values.password.trim(),
       about_me: values.about_me?.trim(),
-      social_links: values.social_links,
+      social_links: values.social_links?.join(', '),
       role: CamperRole.LEAD,
     };
 
@@ -90,7 +90,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                             properties={{
                               bottom: 'calc(100% - 20px)',
                               right: '30px',
-                              width: '150px',
+                              width: '140px',
                             }}
                           >
                             <Button

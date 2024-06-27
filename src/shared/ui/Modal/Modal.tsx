@@ -2,6 +2,7 @@ import styles from './Modal.module.scss';
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { classNames, type Mods } from 'shared/lib/classNames/classNames';
 import Portal from 'shared/ui/Portal/Portal';
+import { ANIMATION_DELAY } from 'shared/const/global/global';
 
 type ModalProps = {
   className?: string;
@@ -10,7 +11,6 @@ type ModalProps = {
   onClose?: () => void;
 };
 
-const ANIMATION_DELAY = 200;
 let openModalCount = 0;
 
 const Modal = (props: ModalProps) => {

@@ -1,13 +1,15 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, RefObject } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import { useCamp } from 'entities/Camp';
 import { useAuth } from 'entities/User';
+import { useCampers } from 'entities/Camper';
+import { useToggle } from 'shared/hooks/useToggle/useToggle';
 
 import Skeleton from 'shared/ui/Skeleton/Skeleton';
 import Image from 'shared/ui/Image/Image';
 import Icon from 'shared/ui/Icon/Icon';
 import Button from 'shared/ui/Button/Button';
+import CampersCountModal from 'features/CampersCountModal';
 
 import styles from './CampOverview.module.scss';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
@@ -16,36 +18,47 @@ import { ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import LocationIcon from 'shared/assets/icons/location_icon.svg';
 import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
 import BlurIcon from 'shared/assets/icons/blur_icon.svg';
-import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
-import CampersCountModal from 'features/CampersCountModal';
+import { ANIMATION_DELAY } from 'shared/const/global/global';
 
 type CampOverviewProps = {
-  campID?: string;
+  camp: ICamp | null;
+  isLoading: boolean;
+  scrollTarget: RefObject<HTMLDivElement>;
 };
 
-const CampOverview = memo(({ campID }: CampOverviewProps) => {
-  const [camp, setCamp] = useState<ICamp>();
+const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOverviewProps) => {
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { getCamp, isLoading } = useCamp();
   const { isLoggedIn } = useAuth();
+  const { campersCount } = useCampers();
   const { isOpen, open, close } = useToggle();
-  let content;
-  
-  useEffect(() => {
-    const fetchCamp = async () => {
-      const response = await getCamp(campID as string);
+  let content = (
+    <>
+      <Skeleton width={300} height={42} className={'m-centred'}/>
+      <Skeleton width={200} height={26} className={'m-centred mt-10'}/>
+      <div className={`${styles.camp__row} mt-30`}>
+        <Skeleton width={isMobile ? '100%' : 515} height={400} border={'20px'}/>
+        <div className={styles.camp__desc}>
+          <Skeleton width={'100%'} height={32}/>
+          <Skeleton width={'90%'} height={32}/>
+          <Skeleton width={'80%'} height={32}/>
+          <Skeleton width={'30%'} height={32}/>
+          <Skeleton width={'30%'} height={50} border={'100px'} className={'mt-a'}/>
+        </div>
+      </div>
+    </>
+  );
 
-      if (response) {
-        setCamp({ ...response });
-      }
-    };
+  const closeModalHandler = () => {
+    close();
 
-    void fetchCamp();
-  }, [getCamp, campID]);
+    setTimeout(() => {
+      scrollTarget.current?.scrollIntoView({ behavior: 'smooth' });
+    }, ANIMATION_DELAY);
+  };
 
-  const campersCount = isLoggedIn
-    ? camp?.campers_count || '0'
+  const campersCounter = isLoggedIn
+    ? campersCount || '0'
     : (
       <>
         <Button
@@ -55,32 +68,15 @@ const CampOverview = memo(({ campID }: CampOverviewProps) => {
         >
           <Icon icon={<BlurIcon/>} size={IconSize.SIZE_24}/>
         </Button>
-        {isOpen && <CampersCountModal isOpen={isOpen} onClose={close}/>}
+        {isOpen && <CampersCountModal isOpen={isOpen} onClose={closeModalHandler}/>}
       </>
     );
 
-  if (isLoading) {
-    content = (
-      <>
-        <Skeleton width={300} height={42} className={'m-centred'}/>
-        <Skeleton width={200} height={26} className={'m-centred mt-10'}/>
-        <div className={`${styles.camp__row} mt-30`}>
-          <Skeleton width={isMobile ? '100%' : 515} height={400} border={'20px'}/>
-          <div className={styles.camp__desc}>
-            <Skeleton width={'100%'} height={32}/>
-            <Skeleton width={'90%'} height={32}/>
-            <Skeleton width={'80%'} height={32}/>
-            <Skeleton width={'30%'} height={32}/>
-            <Skeleton width={'30%'} height={50} border={'100px'} className={'mt-a'}/>
-          </div>
-        </div>
-      </>
-    );
-  } else {
+  if (!isLoading) {
     content = (
       <>
         <h1 className={styles.camp__title}>{camp?.camp_name || 'Camp Name will be here'}</h1>
-        <h2 className={styles.camp__subtitle}>Campers {campersCount}</h2>
+        <h2 className={styles.camp__subtitle}>Campers {campersCounter}</h2>
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30}/>
           <div className={styles.camp__desc}>

@@ -42,9 +42,11 @@
 
 	+ .register {
 		margin-top: 140px;
+		padding-bottom: 100px;
 
 		@media (width < $md) {
 			margin-top: 100px;
+			padding-bottom: 50px;
 		}
 	}
 }

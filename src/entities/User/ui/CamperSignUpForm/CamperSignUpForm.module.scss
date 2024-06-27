@@ -59,8 +59,9 @@
 
 .tooltip {
 	display: grid;
-	gap: 10px;
+	gap: 5px;
 	z-index: 2;
+	padding: 10px 20px;
 	border: 1px solid var(--color-neutral);
 
 	&__btn {
@@ -87,7 +88,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 20px;
+		width: 18px;
 		aspect-ratio: 1;
 		border-radius: 50%;
 		border: 1px solid var(--color-black);

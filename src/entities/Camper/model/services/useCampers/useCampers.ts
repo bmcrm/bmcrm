@@ -7,6 +7,7 @@ import { AxiosError } from 'axios';
 interface CamperState {
   isLoading: boolean;
   campers: ICamper[];
+  campersCount: number;
   isError: string | null | Error | AxiosError;
   resetError: () => void;
   getCampers(): Promise<void>;
@@ -19,13 +20,14 @@ const useCampers = create<CamperState>()(
     isLoading: false,
     isError: null,
     campers: [],
+    campersCount: 0,
     resetError: () => set({ isError: null }),
     getCampers: async () => {
       try {
         set({ isLoading: true });
         const response = await fetchCampers({ method: 'get' });
 
-        set({ campers: response.data });
+        set({ campers: response.data, campersCount: response.data.length });
       } catch (error) {
         console.error(error);
         set({ isError: error as AxiosError });

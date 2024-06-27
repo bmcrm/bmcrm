@@ -1,25 +1,28 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 import { classNames } from 'shared/lib/classNames/classNames';
 
 import Container from 'shared/ui/Container/Container';
-import { CampOverview, useCamp } from 'entities/Camp';
+import { CampOverview, type ICamp, useCamp } from 'entities/Camp';
 import { CamperSignUpForm, type IUserRegisterData, useAuth } from 'entities/User';
 import FormLoader from 'features/FormLoader';
 import CampNotFound from 'widgets/CampNotFound';
 import AuthFormTemplate from 'features/AuthFormTemplate';
+import AlreadyRegisteredBlock from 'features/AlreadyRegisteredBlock';
 
 import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 
 const CampOverviewPage = memo(() => {
-  const { register, error, resetError, isLoading: authIsLoading } = useAuth();
-  const { isLoading, isError } = useCamp();
+  const { register, error, resetError, isLoading: authIsLoading, isLoggedIn } = useAuth();
+  const { isLoading, isError, getCamp } = useCamp();
+  const [camp, setCamp] = useState<ICamp>();
   const { id }  = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const scrollTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (error) {
@@ -29,9 +32,20 @@ const CampOverviewPage = memo(() => {
     return resetError();
   }, [error, resetError]);
 
+  useEffect(() => {
+    const fetchCamp = async () => {
+      const response = await getCamp(id as string);
+
+      if (response) {
+        setCamp({ ...response });
+      }
+    };
+
+    void fetchCamp();
+  }, [getCamp, id]);
+
   const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
-
     const response = await register(data);
 
     if (response) {
@@ -60,17 +74,21 @@ const CampOverviewPage = memo(() => {
         {!isError && (
           <section className={classNames(styles.overview, {}, [])}>
             <Container>
-              <CampOverview campID={id}/>
+              <CampOverview camp={camp || null} isLoading={isLoading} scrollTarget={scrollTarget}/>
             </Container>
           </section>
         )}
         {!isLoading && !isError && (
-          <section className={styles.register}>
+          <section className={styles.register} ref={scrollTarget}>
             <Container>
-              <AuthFormTemplate badge={'Register to Join the Camp'}>
-                <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
-                {authIsLoading && <FormLoader/>}
-              </AuthFormTemplate>
+              {isLoggedIn ? (
+                <AlreadyRegisteredBlock camp={camp || null}/>
+              ) : (
+                <AuthFormTemplate badge={'Register to Join the Camp'}>
+                  <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
+                  {authIsLoading && <FormLoader/>}
+                </AuthFormTemplate>
+              )}
             </Container>
           </section>
         )}

@@ -31,7 +31,7 @@ export interface IUserRegisterData {
   camp_name?: string;
   camp_website?: string;
   about_me?: string;
-  social_links?: string[];
+  social_links?: string;
 }
 
 export interface ILoginData {
