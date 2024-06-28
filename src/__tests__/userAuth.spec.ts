@@ -138,7 +138,7 @@ test('forgot password unsuccessful', async ({ page }) => {
   await page.fill('input[name="email"]', TEST_EMAIL);
   await page.locator('text=Forgot Password?').click();
   await expect(page).toHaveURL(RESET_URL);
-  await expect(page.locator('text=Forgot Password')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Reset Password' })).toBeVisible();
   await page.fill('input[name="email"]', 'incorrect_email@example.com');
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL(RESET_URL);

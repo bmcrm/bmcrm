@@ -7,6 +7,7 @@ import { fetchCamp } from 'shared/api/fetchCamp/fetchCamp';
 interface CampState {
   isLoading: boolean;
   isError: string | AxiosError | Error | null;
+  resetError: () => void;
   getCamp(campID: string): Promise<ICamp>;
   updateCamp(campID: string, data: Partial<ICamp>): Promise<ICamp>;
 }
@@ -15,6 +16,7 @@ const useCamp = create<CampState>()(
   devtools(set => ({
     isLoading: false,
     isError: null,
+    resetError: () => set({ isError: null }),
     getCamp: async campID => {
       try {
         set({ isLoading: true });
