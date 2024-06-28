@@ -23,7 +23,7 @@ interface ITextData {
 
 const textData: ITextData = {
   badge: {
-    1: 'Forgot Password',
+    1: 'Reset Password',
     2: 'Create a New Password',
     3: 'Your password has been successfully reset',
   },

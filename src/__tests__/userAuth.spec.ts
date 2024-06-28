@@ -78,8 +78,6 @@ test('successful login and show details modal, edit and save user data, close de
   await element.click();
   await expect(page.locator('text=About Me')).toBeVisible();
   await expect(page.locator('text=Campers Notes')).toBeVisible();
-  // const editBtn = await page.locator('._btn_awgzo_1').nth(1);
-  // await editBtn.click();
   await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
   await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
   await page.locator('textarea[name="about_me"]').fill('my new about me');

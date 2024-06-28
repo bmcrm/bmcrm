@@ -16,7 +16,6 @@ const Avatar = memo((props: AvatarProps) => {
   const sizes = useMemo<CSSProperties>(
     () => ({
       width: size,
-      height: size,
     }),
     [size]
   );

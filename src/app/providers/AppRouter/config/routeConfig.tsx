@@ -4,7 +4,6 @@ import FinancesPage from 'pages/FinancesPage';
 import InventoryPage from 'pages/InventoryPage';
 import ShiftsPage from 'pages/ShiftsPage';
 import NotFoundPage from 'pages/NotFoundPage';
-import ProfilePage from 'pages/ProfilePage';
 import DashboardPage from 'pages/DashboardPage';
 import SignInPage from 'pages/SignInPage';
 import SignUpOwnerPage from 'pages/SignUpTCOPage';
@@ -21,7 +20,9 @@ export enum AppRoutes {
   FUNNEL = 'funnel',
   INVENTORY = 'inventory',
   SHIFTS = 'shifts',
-  PROFILE = 'profile',
+  SETTINGS = 'settings',
+  SETTINGS_ACCOUNT = 'settings_account',
+  SETTINGS_CAMP = 'settings_camp',
   SIGN_UP = 'sign_up',
   SIGN_IN = 'sign_in',
   RESET_PASS = 'reset_pass',
@@ -35,7 +36,9 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.FINANCES]: '/finances',
   [AppRoutes.INVENTORY]: '/inventory',
   [AppRoutes.SHIFTS]: '/shifts',
-  [AppRoutes.PROFILE]: '/profile',
+  [AppRoutes.SETTINGS]: '/settings',
+  [AppRoutes.SETTINGS_ACCOUNT]: '/settings/account',
+  [AppRoutes.SETTINGS_CAMP]: '/settings/camp',
   [AppRoutes.SIGN_UP]: '/signup',
   [AppRoutes.SIGN_IN]: '/login',
   [AppRoutes.RESET_PASS]: '/reset-password',
@@ -43,7 +46,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.NOT_FOUND]: '*',
 };
 
-export const routeConfig: Record<AppRoutes, AppRouterProps> = {
+export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
   [AppRoutes.DASHBOARD]: {
     path: RoutePath.dashboard,
     element: <DashboardPage />,
@@ -67,11 +70,6 @@ export const routeConfig: Record<AppRoutes, AppRouterProps> = {
   [AppRoutes.SHIFTS]: {
     path: RoutePath.shifts,
     element: <ShiftsPage />,
-    authOnly: true,
-  },
-  [AppRoutes.PROFILE]: {
-    path: RoutePath.profile,
-    element: <ProfilePage />,
     authOnly: true,
   },
   [AppRoutes.SIGN_UP]: {

@@ -38,11 +38,10 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const { camperEmail, isDetailsOpen, onDetailsClose } = props;
   const [camper, setCamper] = useState<ICamper | null>(null);
   const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isReadonly, setIsReadonly] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const { isOpen, open, close } = useToggle();
-  const { getCamper, updateCamper, isError, resetError, getCampers } = useCampers();
+  const { getCamper, updateCamper, isError, resetError, getCampers, isLoading } = useCampers();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
   const currentYear = new Date().getFullYear();
   const { decodedIDToken } = useAuth();
@@ -58,13 +57,11 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   useEffect(() => {
     const fetchCamper = async () => {
       if (camperEmail) {
-        setIsLoading(true);
         const currentCamper = await getCamper(camperEmail);
 
         if (currentCamper) {
           setCamper(currentCamper);
           setSocialIcons(currentCamper.social_links || []);
-          setIsLoading(false);
         }
       }
     };
@@ -101,7 +98,6 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   }, []);
 
   const submitHandler = useCallback(async (values: Partial<ICamper>) => {
-    setIsLoading(true);
     toggleReadonly();
     const trimmedValues = trimFields(values);
 
@@ -113,13 +109,14 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
 
     if (updatedCamper) {
-      setCamper(updatedCamper);
-      setIsEdited(true);
-    }
+      if (camper?.role !== updatedCamper.role) {
+        setIsEdited(true);
+      }
 
-    setIsLoading(false);
+      setCamper(updatedCamper);
+    }
   },
-  [camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
+  [camper?.role, camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
   const initialValues = useMemo(

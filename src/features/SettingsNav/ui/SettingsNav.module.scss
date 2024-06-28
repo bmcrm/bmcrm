@@ -1,0 +1,22 @@
+@import 'breakpoints';
+
+.nav {
+	width: 100%;
+	padding: 20px 30px;
+	border-radius: 10px;
+	background-color: var(--color-secondary-bg);
+	
+	@media (width < $md) {
+		padding: 10px 15px;
+	}
+
+	&__list {
+		display: flex;
+		align-items: center;
+		gap: 30px;
+
+		@media (width < $md) {
+			gap: 20px;
+		}
+	}
+}

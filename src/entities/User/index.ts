@@ -3,6 +3,7 @@ import UserAvatar from './ui/UserAvatar/UserAvatar';
 import UserSignInForm from './ui/UserSignInForm/UserSignInForm';
 import TCOSignUpForm from './ui/TCOSignUpForm/TCOSignUpForm';
 import CamperSignUpForm from './ui/CamperSignUpForm/CamperSignUpForm';
+import UserSettingsForm from './ui/UserSettingsForm/UserSettingsForm';
 import type {
   IUserRegisterData,
   ILoginData,
@@ -19,6 +20,7 @@ export {
   UserSignInForm,
   TCOSignUpForm,
   CamperSignUpForm,
+  UserSettingsForm,
   IIDToken,
   IUserRegisterData,
   ILoginData,

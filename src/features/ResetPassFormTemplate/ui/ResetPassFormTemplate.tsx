@@ -6,7 +6,7 @@ import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
 
 import styles from './ResetPassFormTemplate.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
-import { ResetFormBg } from '../types/ReserPassFormTemplate.types';
+import { ResetFormBg } from 'features/ResetPassFormTemplate/model/types/resetPassFormTemplate.types.ts';
 
 interface ResetPassFormTemplateProps {
   className?: string;

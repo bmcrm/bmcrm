@@ -1,0 +1,19 @@
+@import 'breakpoints';
+
+.content {
+	position: relative;
+	padding: 40px 65px;
+	border-radius: 20px;
+	background: var(--color-secondary-bg);
+
+	@media (width < $lg) {
+		padding: 15px;
+		border-radius: 10px;
+	}
+	@media (width < $md) {
+		margin-bottom: 40px;
+		padding: 0;
+		border-radius: 10px;
+		background: transparent;
+	}
+}

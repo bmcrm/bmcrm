@@ -1,9 +1,11 @@
 import useCamp from './model/services/useCamp/useCamp';
-import CampOverview from './ui/CampOverview/CampOverview';
 import type { ICamp } from './model/types/camp.types';
+import CampOverview from './ui/CampOverview/CampOverview';
+import CampSettingsForm from './ui/CampSettingsForm/CampSettingsForm';
 
 export {
   useCamp,
-  CampOverview,
   ICamp,
+  CampOverview,
+  CampSettingsForm,
 };
