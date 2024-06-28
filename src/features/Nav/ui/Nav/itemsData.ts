@@ -1,15 +1,7 @@
-import { ReactElement } from 'react';
 import { RoutePath } from 'app/providers/AppRouter';
+import { NavLinkType } from 'shared/ui/CustomNavLink/CustomNavLink.types';
 
-export type NavItemType = {
-  path: string;
-  text: string;
-  icon?: ReactElement;
-  logout?: boolean;
-  disabled?: boolean;
-};
-
-export const NavItemsList: NavItemType[] = [
+export const navItemsList: NavLinkType[] = [
   {
     path: RoutePath.dashboard,
     text: 'Dashboard',

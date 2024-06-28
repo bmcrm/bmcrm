@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { AxiosError } from 'axios';
-import { ICamp } from '../../types/camp.types';
+import { type ICamp } from '../../types/camp.types';
 import { fetchCamp } from 'shared/api/fetchCamp/fetchCamp';
 
 interface CampState {
   isLoading: boolean;
   isError: string | AxiosError | Error | null;
   getCamp(campID: string): Promise<ICamp>;
+  updateCamp(campID: string, data: Partial<ICamp>): Promise<ICamp>;
 }
 
 const useCamp = create<CampState>()(
@@ -24,6 +25,22 @@ const useCamp = create<CampState>()(
         }
 
         return response?.data || null;
+      } catch (error) {
+        set({ isError: error as AxiosError });
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    updateCamp: async (campID, data) => {
+      try {
+        set({ isLoading: true });
+        const response = await fetchCamp({
+          method: 'patch',
+          endpoint: campID,
+          payload: { ...data },
+        });
+
+        return response.data;
       } catch (error) {
         set({ isError: error as AxiosError });
       } finally {

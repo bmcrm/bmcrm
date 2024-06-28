@@ -37,26 +37,30 @@ const useCampers = create<CamperState>()(
     },
     getCamper: async email => {
       try {
+        set({ isLoading: true });
         const response = await fetchCampers({ method: 'get', endpoint: email });
 
         return response?.data || null;
       } catch (error) {
         set({ isError: error as AxiosError });
+      } finally {
+        set({ isLoading: false });
       }
     },
     updateCamper: async (email, data) => {
       try {
+        set({ isLoading: true });
         const response = await fetchCampers({
           method: 'patch',
           endpoint: email,
           payload: { ...data, email: email },
         });
 
-        set({ campers: response.data });
-
         return response.data;
       } catch (error) {
         set({ isError: error as AxiosError });
+      } finally {
+        set({ isLoading: false });
       }
     },
   }))

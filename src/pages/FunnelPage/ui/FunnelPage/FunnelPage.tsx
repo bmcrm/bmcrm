@@ -24,7 +24,7 @@ interface IRoles {
 const FunnelPage = memo(() => {
   const { isOpen, open, close } = useToggle();
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { campers } = useCampers();
+  const { campers, getCampers } = useCampers();
   const [roles, setRoles] = useState<IRoles>({
     [CamperRole.TCO]: undefined,
     [CamperRole.LEAD]: [],
@@ -32,6 +32,10 @@ const FunnelPage = memo(() => {
     [CamperRole.INTENT]: [],
     [CamperRole.CAMPER]: [],
   });
+
+  useEffect(() => {
+    void getCampers();
+  }, [getCampers]);
 
   useEffect(() => {
     if (campers.length > 0) {

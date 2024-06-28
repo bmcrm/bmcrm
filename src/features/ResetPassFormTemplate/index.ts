@@ -1,5 +1,5 @@
 import ResetPassFormTemplate from './ui/ResetPassFormTemplate';
-import { ResetFormBg } from './types/ReserPassFormTemplate.types';
+import { ResetFormBg } from './model/types/resetPassFormTemplate.types';
 
 export {
   ResetPassFormTemplate,

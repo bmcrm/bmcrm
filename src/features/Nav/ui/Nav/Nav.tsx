@@ -1,13 +1,16 @@
 import React, { memo, useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
-import { classNames, Mods } from 'shared/lib/classNames/classNames';
-import NavItem from '../../ui/NavItem/NavItem';
-import { IUserAvatar, UserAvatar } from 'entities/User';
+import { classNames, type Mods } from 'shared/lib/classNames/classNames';
+import CustomNavLink from 'shared/ui/CustomNavLink/CustomNavLink';
+import { type IUserAvatar, useAuth, UserAvatar } from 'entities/User';
 
-import { NavItemsList } from '../../model/NavItems';
-import styles from './Nav.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
+import { navItemsList } from './itemsData';
+import { CustomNavLinkTheme } from 'shared/ui/CustomNavLink/CustomNavLink.types';
+import styles from './Nav.module.scss';
+import CampIcon from 'shared/assets/icons/camp_monocolor.svg';
+import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
 
 type NavProps = {
@@ -26,6 +29,7 @@ const Nav = memo((props: NavProps) => {
     onClick,
     onContentClick,
   } = props;
+  const { decodedIDToken } = useAuth();
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const mods: Mods = {
     [styles.open]: isOpen
@@ -36,14 +40,41 @@ const Nav = memo((props: NavProps) => {
       <div className={styles.nav__inner} onClick={onContentClick}>
         {isMobile && <UserAvatar theme={'mobile'} user={user}/>}
         <ul className={styles.nav__list}>
-          {useMemo(() => NavItemsList.map(item => <NavItem key={item.path} item={item}/>), [])}
-          {isMobile && <NavItem item={{
-            path: RoutePath.sign_in,
-            text: 'Log Out',
-            disabled: false,
-            icon: <LogoutIcon/>,
-            logout: true,
-          }}/>}
+          {useMemo(() => navItemsList.map(item => <li key={item.path}><CustomNavLink link={item}/></li>), [])}
+          {isMobile && (
+            <>
+              <li>
+                <CustomNavLink
+                  link={{
+                    path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}`,
+                    text: 'My Camp',
+                    icon: <CampIcon/>,
+                  }}
+                  theme={CustomNavLinkTheme.ICON}
+                />
+              </li>
+              <li>
+                <CustomNavLink
+                  link={{
+                    path: RoutePath.settings_account,
+                    text: 'Setting',
+                    icon: <SettingsIcon/>,
+                  }}
+                  theme={CustomNavLinkTheme.ICON}
+                />
+              </li>
+              <li>
+                <CustomNavLink
+                  link={{
+                    path: RoutePath.sign_in,
+                    text: 'Log Out',
+                    icon: <LogoutIcon/>,
+                  }}
+                  theme={CustomNavLinkTheme.LOGOUT}
+                />
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

@@ -3,7 +3,7 @@ import { classNames } from 'shared/lib/classNames/classNames';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
 
-import Loader from 'shared/ui/Loader/Loader';
+import FormLoader from 'features/FormLoader';
 import FunnelCardItem from '../../../FunnelCardItem/FunnelCardItem';
 import Modal from 'shared/ui/Modal/Modal';
 import Icon from 'shared/ui/Icon/Icon';
@@ -51,14 +51,12 @@ const FunnelCard = memo((props: FunnelCardProps) => {
           <FunnelCardAll users={users} title={title}/>
         </Modal>
       )}
-      {isLoading && <Loader className={'m-centred'} />}
-      {!isLoading && (
-        <ul className={styles.card__content}>
-          {slicedUsers.map(user => (
-            <FunnelCardItem key={user.email} user={user}/>
-          ))}
-        </ul>
-      )}
+      {isLoading && <FormLoader className={'m-centred'} />}
+      <ul className={styles.card__content}>
+        {slicedUsers.map(user => (
+          <FunnelCardItem key={user.email} user={user}/>
+        ))}
+      </ul>
     </div>
   );
 });

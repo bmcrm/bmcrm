@@ -93,5 +93,38 @@ export const camperRegistrationSchema = yup.object().shape({
     .transform((_, originalValue) => originalValue.trim()),
 });
 
+export const userSettingsSchema = yup.object().shape({
+  first_name: yup
+    .string()
+    .required('Field is required')
+    .max(32, 'First name must be less than 32 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  last_name: yup
+    .string()
+    .required('Field is required')
+    .max(32, 'Last name must be less than 32 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  playa_name: yup.string().transform((_, originalValue) => originalValue.trim()),
+});
+
+export const campSettingsSchema = yup.object().shape({
+  camp_name: yup
+    .string()
+    .required('Camp name is required')
+    .min(3, 'Camp name must be at least 3 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  city: yup
+    .string()
+    .required('City is required')
+    .transform((_, originalValue) => originalValue.trim()),
+  camp_website: yup
+    .string()
+    .matches(urlRegex, 'Invalid website address')
+    .transform((_, originalValue) => originalValue.trim()),
+  camp_description: yup
+    .string()
+    .transform((_, originalValue) => originalValue.trim()),
+});
+
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
 export type InviteMemberFormData = yup.InferType<typeof inviteMemberSchema>;

@@ -1,0 +1,35 @@
+@import 'breakpoints';
+
+.form {
+
+	&__inner {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 20px;
+
+		@media (width < $lg) {
+			flex-direction: column-reverse;
+			align-items: center;
+		}
+
+		+ button {
+			margin-top: 40px;
+
+			@media (width < $md) {
+				margin-top: 20px;
+			}
+		}
+	}
+
+	&__inputs {
+		display: grid;
+		gap: 25px;
+		width: 100%;
+		max-width: 475px;
+
+		@media (width < $md) {
+			gap: 15px;
+		}
+	}
+}
