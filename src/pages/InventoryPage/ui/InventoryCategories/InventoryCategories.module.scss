@@ -1,5 +1,8 @@
+@import 'breakpoints';
+
 .inventoryCategories {
   display: flex;
+  margin-top: 25px;
   flex-direction: column;
   gap: 15px;
   .title {
@@ -7,8 +10,8 @@
   }
   & .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 345px);
-    justify-content: space-between;
+    grid-template-columns: repeat(4, 1fr);
+
     gap: 25px;
   }
 }
