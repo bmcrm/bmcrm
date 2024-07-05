@@ -56,16 +56,6 @@ const Nav = memo((props: NavProps) => {
               <li>
                 <CustomNavLink
                   link={{
-                    path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}`,
-                    text: 'My Camp',
-                    icon: <CampIcon />,
-                  }}
-                  theme={CustomNavLinkTheme.ICON}
-                />
-              </li>
-              <li>
-                <CustomNavLink
-                  link={{
                     path: RoutePath.settings_account,
                     text: 'Setting',
                     icon: <SettingsIcon />,

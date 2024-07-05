@@ -1,7 +1,7 @@
 import styles from './Avatar.module.scss';
 import { CSSProperties, memo, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import AnonymousAvatar from 'shared/assets/images/avatars/anonymous.jpg';
+import AnonymousAvatar from 'shared/assets/icons/avatar.svg';
 
 type AvatarProps = {
   className?: string;
@@ -19,11 +19,13 @@ const Avatar = memo((props: AvatarProps) => {
     }),
     [size]
   );
-
+  if (!src) {
+    return <AnonymousAvatar />;
+  }
   return (
     <div className={classNames(styles.avatar, {}, [className])} style={sizes}>
       <picture>
-        <img src={src ? src : AnonymousAvatar} alt={alt} />
+        <img src={src} alt={alt} />
       </picture>
     </div>
   );

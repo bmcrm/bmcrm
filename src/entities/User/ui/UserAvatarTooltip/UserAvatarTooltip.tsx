@@ -11,7 +11,6 @@ import { RoutePath } from 'app/providers/AppRouter';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
-import CampIcon from 'shared/assets/icons/camp_monocolor.svg';
 
 type UserAvatarTooltipProps = {
   className?: string;
@@ -19,7 +18,7 @@ type UserAvatarTooltipProps = {
 };
 
 const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) => {
-  const { logout, accessToken, decodedIDToken } = useAuth();
+  const { logout, accessToken } = useAuth();
 
   const handleLogout = () => {
     onClick?.();
