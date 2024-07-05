@@ -8,6 +8,7 @@ import Button from 'shared/ui/Button/Button.tsx';
 import { userSettingsSchema } from 'shared/const/schemas/validations';
 import { inputsData } from './inputsData';
 import styles from './UserSettingsForm.module.scss';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 
 type UserSettingsFormProps = {
   onSubmit: (values: Partial<ICamper>) => void;
@@ -55,12 +56,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
   }, [getCamper, userEmail]);
 
   return (
-    <Formik
-      validationSchema={userSettingsSchema}
-      initialValues={initialData}
-      onSubmit={onSubmit}
-      enableReinitialize
-    >
+    <Formik validationSchema={userSettingsSchema} initialValues={initialData} onSubmit={onSubmit} enableReinitialize>
       <Form className={styles.form}>
         <div className={styles.form__inner}>
           <div className={styles.form__inputs}>
@@ -68,7 +64,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
               <CustomInput key={input.name} {...input} />
             ))}
           </div>
-          <Avatar size={240} src={null}/>
+          <Avatar iconSize={IconSize.SIZE_AVATAR_SETTINGS} size={240} src={null} />
         </div>
         <Button type={'submit'} className={'m-centred'}>
           Save changes
