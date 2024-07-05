@@ -1,26 +1,45 @@
 @import 'breakpoints';
 
 .user-avatar {
-	position: relative;
-	display: flex;
-	align-items: center;
-	gap: 25px;
-	cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  cursor: pointer;
 
-	@media (width < $lg) {
-		gap: 10px;
-	}
+  @media (width < $lg) {
+    gap: 10px;
+  }
+  &__infoWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    @media (width < $lg) {
+      align-items: flex-start;
+    }
+  }
+  &__camp {
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font: var(--font-xs);
+    font-weight: 600;
+    @media (width < $lg) {
+      max-width: 140px;
+      font: var(--font-xxs);
+    }
+  }
+  &__name {
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font: var(--font-l);
 
-	&__name {
-		max-width: 220px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		font: var(--font-l);
-
-		@media (width < $lg) {
-			max-width: 140px;
-			font: var(--font-s);
-		}
-	}
+    @media (width < $lg) {
+      max-width: 140px;
+      font: var(--font-s);
+    }
+  }
 }

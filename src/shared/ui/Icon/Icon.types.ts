@@ -9,4 +9,6 @@ export enum IconSize {
   SIZE_24 = 'icon-24',
   SIZE_28 = 'icon-28',
   SIZE_32 = 'icon-32',
+  SIZE_AVATAR_HEADER = 'icon-42',
+  SIZE_AVATAR_SETTINGS = 'icon-240',
 }

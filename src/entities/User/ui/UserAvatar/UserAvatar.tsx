@@ -9,6 +9,7 @@ import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
 import styles from './UserAvatar.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import { IUserAvatar } from '../../model/types/userAvatar.types';
+import useAuth from 'entities/User/model/services/useAuth/useAuth';
 
 type UserAvatarProps = {
   className?: string;
@@ -19,6 +20,7 @@ type UserAvatarProps = {
 const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
+  const { decodedIDToken } = useAuth();
 
   const mouseEnterHandler = () => {
     setIsHovered(true);
@@ -30,12 +32,12 @@ const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps
 
   if (theme === 'mobile') {
     return (
-      <Link
-        to={RoutePath.funnel}
-        className={classNames(styles.userAvatar, {}, [className])}
-      >
-        <Avatar size={30} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null}/>
-        <h2 className={styles.userAvatar__name}>{user ? user.name : 'Anonymous'}</h2>
+      <Link to={RoutePath.funnel} className={classNames(styles.userAvatar, {}, [className])}>
+        <Avatar size={42} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null} />
+        <section className={styles.userAvatar__infoWrapper}>
+          <h2 className={styles.userAvatar__name}>{user ? user.name : 'Anonymous'}</h2>
+          <h3 className={styles.userAvatar__camp}> {decodedIDToken?.camp_name}</h3>
+        </section>
       </Link>
     );
   }
@@ -46,8 +48,11 @@ const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
-      <h2 className={styles.userAvatar__name}>{user ? user.name : 'Anonymous'}</h2>
-      <Avatar size={isTablet? 30 : 40} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null}/>
+      <section className={styles.userAvatar__infoWrapper}>
+        <h2 className={styles.userAvatar__name}>{user ? user.name : 'Anonymous'}</h2>
+        <h3 className={styles.userAvatar__camp}> {decodedIDToken?.camp_name}</h3>
+      </section>
+      <Avatar size={isTablet ? 30 : 40} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null} />
       {isHovered && <UserAvatarTooltip onClick={mouseLeaveHandler} />}
     </div>
   );
