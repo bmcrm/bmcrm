@@ -1,0 +1,14 @@
+.inventoryCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .title {
+    text-transform: uppercase;
+  }
+  & .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 345px);
+    justify-content: space-between;
+    gap: 25px;
+  }
+}

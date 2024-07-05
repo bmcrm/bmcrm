@@ -1,0 +1,51 @@
+.card {
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  & section {
+    border-top: 1px solid rgba(139, 16, 62, 0.3);
+    width: 100%;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+  }
+}
+
+.title {
+  font-size: 16px;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.badge {
+  border-radius: 100px;
+  background: rgba(193, 193, 193, 0.2);
+  padding: 2px 5px;
+}
+.info {
+  display: flex;
+  gap: 10px;
+  &__totalPrice {
+    align-self: flex-start;
+  }
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  align-self: flex-end;
+  & button:nth-child(1) {
+    color: #71e938;
+  }
+  & button:nth-child(2) {
+    color: #b62b2b;
+  }
+}
