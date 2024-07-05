@@ -39,27 +39,17 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
       <ul className={styles.userTooltip__list}>
         <li>
           <Link
-            to={`${RoutePath.camp_overview}${decodedIDToken?.camp_id}`}
-            className={classNames(styles.userTooltip__link, {}, [])}
-            onClick={onClick}
-          >
-            <Icon icon={<CampIcon/>} size={IconSize.SIZE_24}/>
-            <span className={styles.text}>My Camp</span>
-          </Link>
-        </li>
-        <li>
-          <Link
             to={RoutePath.settings_account}
             className={classNames(styles.userTooltip__link, {}, [])}
             onClick={onClick}
           >
-            <Icon icon={<SettingsIcon/>} size={IconSize.SIZE_24}/>
+            <Icon icon={<SettingsIcon />} size={IconSize.SIZE_24} />
             <span className={styles.text}>Setting</span>
           </Link>
         </li>
         <li>
           <Link to={RoutePath.sign_in} className={styles.userTooltip__link} onClick={handleLogout}>
-            <Icon icon={<LogoutIcon/>} size={IconSize.SIZE_24}/>
+            <Icon icon={<LogoutIcon />} size={IconSize.SIZE_24} />
             <span className={styles.text}>Log out</span>
           </Link>
         </li>

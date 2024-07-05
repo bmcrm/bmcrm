@@ -10,6 +10,7 @@ export type NavLinkType = {
 
 export enum CustomNavLinkTheme {
   HEADER = 'link--header',
+  CAMP = 'link--camp',
   SETTINGS = 'link--settings',
   LOGOUT = 'link--logout',
   ICON = 'link--icon',
