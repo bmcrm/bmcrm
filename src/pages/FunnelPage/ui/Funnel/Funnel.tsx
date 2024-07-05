@@ -29,14 +29,17 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
     setOpenIndex(prevIndex => (prevIndex === index ? null : index));
   };
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (openIndex !== null) {
-      const tooltip = tooltipRefs.current[openIndex];
-      if (tooltip && !tooltip.contains(event.target as Node)) {
-        setOpenIndex(null);
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (openIndex !== null) {
+        const tooltip = tooltipRefs.current[openIndex];
+        if (tooltip && !tooltip.contains(event.target as Node)) {
+          setOpenIndex(null);
+        }
       }
-    }
-  }, [openIndex]);
+    },
+    [openIndex]
+  );
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
@@ -56,8 +59,7 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
     {
       count: campers[CamperRole.QUALIFIED],
       color: ProgressColors.ORANGE_DARK,
-      description:
-        'People who have already registered or have shown a specific level of interest',
+      description: 'People who have already registered or have shown a specific level of interest',
     },
     {
       count: campers[CamperRole.INTENT],
@@ -80,24 +82,21 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
         const barWidth = prevCount ? (item.count / prevCount) * 100 : 100;
 
         return (
-          <li
-            key={index}
-            className={styles.funnel__item}
-          >
+          <li key={index} className={styles.funnel__item}>
             <Progress
               count={item.count}
               color={item.color}
               barWidth={`${barWidth}%`}
               symbol={isTablet}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 handleToggle(index);
               }}
             />
             <div
-              ref={el => tooltipRefs.current[index] = el}
+              ref={el => (tooltipRefs.current[index] = el)}
               className={classNames(styles.funnel__tooltip, { [styles.show]: openIndex === index }, [])}
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             >
               <p className={styles.text}>{item.description}</p>
             </div>

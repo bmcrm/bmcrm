@@ -16,20 +16,14 @@ type CustomTextareaProps = {
 };
 
 const CustomTextarea = memo((props: CustomTextareaProps) => {
-  const {
-    className,
-    name,
-    placeholder,
-    label,
-    disabled,
-    readonly,
-  } = props;
+  const { className, name, placeholder, label, disabled, readonly } = props;
 
   return (
     <label className={classNames(styles.label, {}, [className])}>
       {label && <p>{label}</p>}
       <Field
         as={'textarea'}
+        rows={3}
         className={styles.textarea}
         name={name}
         readOnly={readonly}
