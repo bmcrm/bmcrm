@@ -3,12 +3,12 @@ import FunnelPage from 'pages/FunnelPage';
 import FinancesPage from 'pages/FinancesPage';
 import InventoryPage from 'pages/InventoryPage';
 import ShiftsPage from 'pages/ShiftsPage';
-import NotFoundPage from 'pages/NotFoundPage';
 import DashboardPage from 'pages/DashboardPage';
 import SignInPage from 'pages/SignInPage';
 import SignUpOwnerPage from 'pages/SignUpTCOPage';
 import ResetPassPage from 'pages/ResetPassPage';
 import CampOverviewPage from 'pages/CampOverviewPage';
+import NotFound from 'widgets/CampNotFound';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -90,6 +90,11 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
   },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,
-    element: <NotFoundPage />,
+    element: (
+      <NotFound textRedirect='GO BACK' redirectTo={RoutePath.funnel}>
+        <h1>Ooops...</h1>
+        <h2>This page is not found!</h2>
+      </NotFound>
+    ),
   },
 };

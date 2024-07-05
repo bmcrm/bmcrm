@@ -8,19 +8,19 @@ import Container from 'shared/ui/Container/Container';
 import { CampOverview, type ICamp, useCamp } from 'entities/Camp';
 import { CamperSignUpForm, type IUserRegisterData, useAuth } from 'entities/User';
 import FormLoader from 'features/FormLoader';
-import CampNotFound from 'widgets/CampNotFound';
 import AuthFormTemplate from 'features/AuthFormTemplate';
 import AlreadyRegisteredBlock from 'features/AlreadyRegisteredBlock';
 
 import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
+import NotFound from 'widgets/CampNotFound';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading, isLoggedIn } = useAuth();
   const { isLoading, isError, getCamp } = useCamp();
   const [camp, setCamp] = useState<ICamp>();
-  const { id }  = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const scrollTarget = useRef<HTMLDivElement>(null);
 
@@ -64,17 +64,22 @@ const CampOverviewPage = memo(() => {
         <Container>
           <strong className={styles.logo}>
             <Link to={RoutePath.funnel} className={styles.logo__link}>
-              <Logo/>
+              <Logo />
             </Link>
           </strong>
         </Container>
       </header>
       <main className={classNames(styles.page, { [styles.error]: !!isError }, [])}>
-        {isError && <CampNotFound/>}
+        {isError && (
+          <NotFound textRedirect='CREATE A CAMP AND ACCOUNT' redirectTo={RoutePath.sign_up}>
+            <h1>Such a camp doesn't exist!</h1>
+            <p>Want to create it? Click the button below!</p>
+          </NotFound>
+        )}
         {!isError && (
           <section className={classNames(styles.overview, {}, [])}>
             <Container>
-              <CampOverview camp={camp || null} isLoading={isLoading} scrollTarget={scrollTarget}/>
+              <CampOverview camp={camp || null} isLoading={isLoading} scrollTarget={scrollTarget} />
             </Container>
           </section>
         )}
@@ -82,11 +87,11 @@ const CampOverviewPage = memo(() => {
           <section className={styles.register} ref={scrollTarget}>
             <Container>
               {isLoggedIn ? (
-                <AlreadyRegisteredBlock camp={camp || null}/>
+                <AlreadyRegisteredBlock camp={camp || null} />
               ) : (
                 <AuthFormTemplate badge={'Register to Join the Camp'}>
-                  <CamperSignUpForm className={styles.form} onSubmit={submitHandler}/>
-                  {authIsLoading && <FormLoader/>}
+                  <CamperSignUpForm className={styles.form} onSubmit={submitHandler} />
+                  {authIsLoading && <FormLoader />}
                 </AuthFormTemplate>
               )}
             </Container>

@@ -1,3 +1,3 @@
-import CampNotFound from './ui/CampNotFound';
+import NotFound from './ui/NotFound';
 
-export default CampNotFound;
+export default NotFound;
