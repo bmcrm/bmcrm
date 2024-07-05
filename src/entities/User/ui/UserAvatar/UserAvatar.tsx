@@ -48,6 +48,10 @@ const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
     >
+      <section className={styles.userAvatar__infoWrapper}>
+        <h2 className={styles.userAvatar__name}>{user ? user.name : 'Anonymous'}</h2>
+        <h3 className={styles.userAvatar__camp}> {decodedIDToken?.camp_name}</h3>
+      </section>
       <Avatar size={isTablet ? 30 : 40} alt={user ? user.name : 'avatar'} src={user ? user.avatar : null} />
       {isHovered && <UserAvatarTooltip onClick={mouseLeaveHandler} />}
     </div>
