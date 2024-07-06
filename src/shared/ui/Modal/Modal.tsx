@@ -40,9 +40,12 @@ const Modal = (props: ModalProps) => {
     e.stopPropagation();
   };
 
-  const onKeydown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') closeHandler();
-  }, [closeHandler]);
+  const onKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeHandler();
+    },
+    [closeHandler]
+  );
 
   useEffect(() => {
     if (isOpen) {
