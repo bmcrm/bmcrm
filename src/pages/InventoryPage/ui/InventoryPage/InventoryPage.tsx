@@ -44,9 +44,11 @@ const InventoryPage = memo(() => {
           />
         ))}
       </div>
-      <Modal isOpen={isOpen} onClose={toggle}>
-        {typeModal === 'addCategory' ? <AddCategoryForm onClose={toggle} /> : <AddInventoryForm onClose={toggle} />}
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={toggle}>
+          {typeModal === 'addCategory' ? <AddCategoryForm onClose={toggle} /> : <AddInventoryForm onClose={toggle} />}
+        </Modal>
+      )}
     </section>
   );
 });
