@@ -4,7 +4,7 @@ import { fetchInventory } from 'shared/api/fetchInventory/fetchInventory';
 import { AxiosError } from 'axios';
 import { IInventoryItem } from '../../types/types';
 
-interface CamperState {
+interface InventoryState {
   isLoading: boolean;
   inventory: IInventoryItem[];
   inventoryCount: number;
@@ -17,7 +17,7 @@ interface CamperState {
   deleteItem(id: string): Promise<IInventoryItem>;
 }
 
-const useCampers = create<CamperState>()(
+const useInventory = create<InventoryState>()(
   devtools(set => ({
     isLoading: false,
     isError: null,
@@ -97,4 +97,4 @@ const useCampers = create<CamperState>()(
   }))
 );
 
-export default useCampers;
+export default useInventory;
