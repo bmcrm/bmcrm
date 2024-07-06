@@ -4,6 +4,7 @@ import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 
 import styles from './AddCategoryForm.module.scss';
+import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
 type AddCategoryFormProps = {
   onClose: () => void;
 };
@@ -23,9 +24,20 @@ const AddCategoryForm = memo(({ onClose }: AddCategoryFormProps) => {
         <div className={styles.form__inner}>
           <CustomInput name={'category'} label={'Category name'} placeholder={'Free time'} />
         </div>
-        <Button type={'submit'} className={'m-centred'}>
-          Save
-        </Button>
+        <div className={styles.buttons}>
+          <Button type={'submit'} className={'m-centred'}>
+            Save
+          </Button>
+          <Button
+            color={ButtonColor.RUBY}
+            theme={ButtonTheme.OUTLINE}
+            onClick={onClose}
+            type={'button'}
+            className={'m-centred'}
+          >
+            Cancel
+          </Button>
+        </div>
       </Form>
     </Formik>
   );

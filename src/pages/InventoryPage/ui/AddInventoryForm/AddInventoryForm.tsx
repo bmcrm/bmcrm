@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik';
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import styles from './AddInventoryForm.module.scss';
+import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
 
 type AddInventoryFormProps = {
   onClose: () => void;
@@ -31,9 +32,20 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
           <CustomInput name={'price'} label={'Price'} placeholder={'120'} />
           <CustomInput name={'quantity'} label={'Quantity'} placeholder={'5'} />
         </div>
-        <Button type={'submit'} className={'m-centred'}>
-          Save
-        </Button>
+        <div className={styles.buttons}>
+          <Button type={'submit'} className={'m-centred'}>
+            Save
+          </Button>
+          <Button
+            color={ButtonColor.RUBY}
+            theme={ButtonTheme.OUTLINE}
+            onClick={onClose}
+            type={'button'}
+            className={'m-centred'}
+          >
+            Cancel
+          </Button>
+        </div>
       </Form>
     </Formik>
   );

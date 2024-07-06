@@ -10,3 +10,11 @@
     gap: 15px;
   }
 }
+.buttons {
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  button {
+    margin: 0;
+  }
+}
