@@ -6,6 +6,5 @@ export interface IInventoryItem {
   totalPrice: number;
   category: string;
   image?: string;
-  SOID: string;
   id: string;
 }

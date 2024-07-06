@@ -23,7 +23,7 @@ test.beforeAll(async () => {
     TEMP_PASSWORD_RES,
     NEW_PASSWORD_RES,
     USER_ROLE_RES,
-    TABLE_NAME_RES
+    TABLE_NAME_RES,
   ] = await Promise.all([
     getParameter('/campers/cognito_user_pool_id'),
     getParameter('/campers/cognito_client_pool_id'),
@@ -32,7 +32,7 @@ test.beforeAll(async () => {
     getParameter('/webapp/test/password_temp'),
     getParameter('/webapp/test/password_new'),
     getParameter('/webapp/test/user_role'),
-    getParameter('/campers/ddb_table_name')
+    getParameter('/campers/ddb_table_name'),
   ]);
 
   TEST_COGNITO_POOL_ID = TEST_COGNITO_POOL_ID_RES;
@@ -80,8 +80,10 @@ test('successful login and show details modal, edit and save user data, close de
   await expect(page.locator('text=Campers Notes')).toBeVisible();
   await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
   await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
+  await page.waitForTimeout(1000);
   await page.locator('textarea[name="about_me"]').fill('my new about me');
   await page.locator('textarea[name="history.0.value"]').fill('my new note');
+  await page.waitForTimeout(1000);
   await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
   await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
   const addSocialBtn = page.locator('._btn_ii6bv_56');
