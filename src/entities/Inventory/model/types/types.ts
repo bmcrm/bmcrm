@@ -3,9 +3,12 @@ export interface IInventoryItem {
   description: string;
   quantity: number;
   price: number;
-  totalPrice: number;
   category: string;
-  image?: string;
-  SOID: string;
-  id: string;
+  images?: string[];
+  id?: string;
+  camp_id: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
 }
