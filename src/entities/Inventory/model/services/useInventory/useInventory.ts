@@ -11,90 +11,78 @@ interface InventoryState {
   isError: string | null | Error | AxiosError;
   resetError: () => void;
   getItems(): Promise<void>;
-  getItem(id: string): Promise<IInventoryItem | null>;
-  updateItem(item: Partial<IInventoryItem>, id: string): Promise<IInventoryItem>;
-  createItem(item: Partial<IInventoryItem>): Promise<IInventoryItem>;
-  deleteItem(id: string): Promise<IInventoryItem>;
+  getItem(id: string): Promise<void>;
+  updateItem(item: Partial<IInventoryItem>, id: string): Promise<void>;
+  createItem(item: Partial<IInventoryItem>): Promise<void>;
+  deleteItem(id: string): Promise<void>;
 }
 
 const useInventory = create<InventoryState>()(
-  devtools(set => ({
-    isLoading: false,
-    isError: null,
-    inventoryCount: 0,
-    inventory: [],
-    resetError: () => set({ isError: null }),
-    getItems: async () => {
+  devtools(set => {
+    const fetchWrapper = async (asyncFn: () => Promise<void>): Promise<void> => {
       try {
         set({ isLoading: true });
-        const response = await fetchInventory({ method: 'get' });
-
-        set({ inventory: response.data, inventoryCount: response.data.length });
+        await asyncFn();
       } catch (error) {
         set({ isError: error as AxiosError });
       } finally {
         set({ isLoading: false });
       }
-    },
-    getItem: async id => {
-      try {
-        set({ isLoading: true });
-        const response = await fetchInventory({ method: 'get', endpoint: id });
+    };
 
-        return response?.data || null;
-      } catch (error) {
-        set({ isError: error as AxiosError });
-      } finally {
-        set({ isLoading: false });
-      }
-    },
-    updateItem: async (item, id) => {
-      try {
-        set({ isLoading: true });
-        const response = await fetchInventory({
-          method: 'patch',
-          endpoint: id,
-          payload: item,
-        });
+    return {
+      isLoading: false,
+      isError: null,
+      inventoryCount: 0,
+      inventory: [],
+      resetError: () => set({ isError: null }),
 
-        return response.data;
-      } catch (error) {
-        set({ isError: error as AxiosError });
-      } finally {
-        set({ isLoading: false });
-      }
-    },
-    createItem: async item => {
-      try {
-        set({ isLoading: true });
-        const response = await fetchInventory({
-          method: 'post',
-          payload: item,
-        });
+      getItems: () =>
+        fetchWrapper(async () => {
+          const response = await fetchInventory({ method: 'get' });
+          set({ inventory: response.data, inventoryCount: response.data.length });
+        }),
 
-        return response.data;
-      } catch (error) {
-        set({ isError: error as AxiosError });
-      } finally {
-        set({ isLoading: false });
-      }
-    },
-    deleteItem: async id => {
-      try {
-        set({ isLoading: true });
-        const response = await fetchInventory({
-          method: 'delete',
-          endpoint: id,
-        });
+      getItem: id =>
+        fetchWrapper(async () => {
+          const response = await fetchInventory({ method: 'get', endpoint: id });
+          return response?.data || null;
+        }) as Promise<void>,
 
-        return response.data;
-      } catch (error) {
-        set({ isError: error as AxiosError });
-      } finally {
-        set({ isLoading: false });
-      }
-    },
-  }))
+      updateItem: (item, id) =>
+        fetchWrapper(async () => {
+          const response = await fetchInventory({
+            method: 'patch',
+            endpoint: id,
+            payload: item,
+          });
+          set({
+            inventory: useInventory.getState().inventory.map(invItem => (invItem.id === id ? response.data : invItem)),
+          });
+        }),
+
+      createItem: item =>
+        fetchWrapper(async () => {
+          const response = await fetchInventory({
+            method: 'post',
+            payload: item,
+          });
+          set({ inventory: [...useInventory.getState().inventory, response.data] });
+        }),
+
+      deleteItem: id =>
+        fetchWrapper(async () => {
+          await fetchInventory({
+            method: 'delete',
+            endpoint: id,
+          });
+          set({
+            inventory: useInventory.getState().inventory.filter(invItem => invItem.id !== id),
+            inventoryCount: useInventory.getState().inventoryCount - 1,
+          });
+        }),
+    };
+  })
 );
 
 export default useInventory;

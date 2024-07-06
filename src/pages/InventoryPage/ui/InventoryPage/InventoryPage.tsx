@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import styles from './InventoryPage.module.scss';
 import Button from 'shared/ui/Button/Button';
 import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
@@ -8,7 +8,13 @@ import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import Modal from 'shared/ui/Modal/Modal';
 import AddCategoryForm from 'entities/Inventory/ui/AddCategoryForm/AddCategoryForm';
 import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
+import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 const InventoryPage = memo(() => {
+  const { getItems, inventory } = useInventory();
+  useEffect(() => {
+    getItems();
+  }, [getItems]);
+
   const { toggle, isOpen } = useToggle();
   const [typeModal, setTypeModal] = useState('');
   const handleOpenAddCategory = () => {
@@ -20,7 +26,7 @@ const InventoryPage = memo(() => {
     setTypeModal('addInventory');
   };
 
-  const categoriesFromMock = [...new Set(inventoryMockData.map(item => item.category))];
+  const categoriesFromMock = [...new Set(inventory.map(item => item.category))];
   return (
     <section className={styles.inventory}>
       <div className={styles.top_options_btns}>
@@ -34,7 +40,7 @@ const InventoryPage = memo(() => {
           <InventoryCategories
             key={category}
             title={category}
-            items={inventoryMockData.filter(item => item.category === category)}
+            items={inventory.filter(item => item.category === category)}
           />
         ))}
       </div>

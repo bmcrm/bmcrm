@@ -4,11 +4,13 @@ import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import styles from './AddInventoryForm.module.scss';
 import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
+import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 
 type AddInventoryFormProps = {
   onClose: () => void;
 };
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
+  const { createItem } = useInventory();
   return (
     <Formik
       initialValues={{
@@ -18,8 +20,9 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
         price: '',
         quantity: '',
       }}
-      onSubmit={values => {
-        console.log(values);
+      onSubmit={(values, options) => {
+        createItem({ ...values, price: Number(values.price), quantity: Number(values.quantity) });
+        options.resetForm();
         onClose();
       }}
       enableReinitialize
@@ -29,8 +32,8 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
           <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
           <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
           <CustomInput name={'category'} label={'Category'} placeholder={'Kitchen'} />
-          <CustomInput name={'price'} label={'Price'} placeholder={'120'} />
-          <CustomInput name={'quantity'} label={'Quantity'} placeholder={'5'} />
+          <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
+          <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
         </div>
         <div className={styles.buttons}>
           <Button type={'submit'} className={'m-centred'}>
