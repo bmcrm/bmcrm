@@ -11,7 +11,15 @@
   & .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-
     gap: 25px;
+    @media (width < $xxl) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (width < $xl) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (width < $md) {
+      grid-template-columns: 1fr;
+    }
   }
 }
