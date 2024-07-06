@@ -38,25 +38,26 @@ const FunnelCard = memo((props: FunnelCardProps) => {
   return (
     <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
       {title && (
-        <div
-          className={classNames(styles.card__head, { [styles.pointer]: isAllCardIcon }, [])}
-          onClick={handleClick}
-        >
+        <div className={classNames(styles.card__head, { [styles.pointer]: isAllCardIcon }, [])} onClick={handleClick}>
           <h3>{title}</h3>
-          {isAllCardIcon && <Icon icon={<FullSizeIcon/>} size={IconSize.SIZE_20} className={styles.card__icon}/>}
+          {isAllCardIcon && <Icon icon={<FullSizeIcon />} size={IconSize.SIZE_20} className={styles.card__icon} />}
         </div>
       )}
       {isOpen && (
         <Modal isOpen={isOpen} onClose={close}>
-          <FunnelCardAll users={users} title={title}/>
+          <FunnelCardAll users={users} title={title} />
         </Modal>
       )}
       {isLoading && <FormLoader className={'m-centred'} />}
-      <ul className={styles.card__content}>
-        {slicedUsers.map(user => (
-          <FunnelCardItem key={user.email} user={user}/>
-        ))}
-      </ul>
+      {slicedUsers.length > 0 ? (
+        <ul className={styles.card__content}>
+          {slicedUsers.map(user => (
+            <FunnelCardItem key={user.email} user={user} />
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.card__empty__text}>Nobody's rocking this status.</p>
+      )}
     </div>
   );
 });

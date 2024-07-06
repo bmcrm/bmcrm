@@ -2,7 +2,7 @@
 
 .details {
   display: grid;
-  gap: 30px;
+  gap: 20px;
   width: 780px;
   max-width: 100%;
 
@@ -62,7 +62,7 @@
       }
     }
   }
-  
+
   .btn-cancel {
     @media (hover: hover) {
       &:hover {
@@ -79,7 +79,6 @@
   }
 
   .textarea {
-    height: 120px;
     font-weight: 500;
   }
 
@@ -307,9 +306,5 @@
         background-color: var(--color-secondary-bg);
       }
     }
-
-
-
-
   }
 }
