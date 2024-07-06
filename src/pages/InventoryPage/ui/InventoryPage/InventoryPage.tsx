@@ -3,7 +3,6 @@ import styles from './InventoryPage.module.scss';
 import Button from 'shared/ui/Button/Button';
 import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
 import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/InventoryCategories';
-import { inventoryMockData } from './inventoryMockData';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import Modal from 'shared/ui/Modal/Modal';
 import AddCategoryForm from 'entities/Inventory/ui/AddCategoryForm/AddCategoryForm';
