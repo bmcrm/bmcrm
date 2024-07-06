@@ -30,7 +30,7 @@ const InventoryPage = memo(() => {
   return (
     <section className={styles.inventory}>
       <div className={styles.top_options_btns}>
-        <Button onClick={handleOpenAddCategory} theme={ButtonTheme.OUTLINE} color={ButtonColor.RUBY}>
+        <Button disabled onClick={handleOpenAddCategory} theme={ButtonTheme.OUTLINE} color={ButtonColor.RUBY}>
           Add category
         </Button>
         <Button onClick={handleOpenAddInventory}>Add inventory</Button>

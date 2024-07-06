@@ -5,6 +5,7 @@ import Button from 'shared/ui/Button/Button';
 import styles from './AddInventoryForm.module.scss';
 import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
+import { createItemSchema } from 'shared/const/schemas/validations';
 
 type AddInventoryFormProps = {
   onClose: () => void;
@@ -13,12 +14,13 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const { createItem } = useInventory();
   return (
     <Formik
+      validationSchema={createItemSchema}
       initialValues={{
         title: '',
         description: '',
         category: '',
-        price: '',
-        quantity: '',
+        price: 1,
+        quantity: 1,
       }}
       onSubmit={(values, options) => {
         createItem({ ...values, price: Number(values.price), quantity: Number(values.quantity) });

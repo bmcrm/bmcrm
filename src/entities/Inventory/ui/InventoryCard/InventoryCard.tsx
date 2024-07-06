@@ -2,13 +2,10 @@ import clsx from 'clsx';
 import styles from './InventoryCard.module.scss';
 import Inventory from 'shared/assets/images/inventory/inventory.png';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
-interface InventoryCardProps {
-  title: string;
-  description: string;
-  quantity: number;
-  price: number;
-}
-export const InventoryCard = ({ id, title, description, quantity, price }: InventoryCardProps) => {
+import { IInventoryItem } from 'entities/Inventory/model/types/types';
+
+export const InventoryCard = (props: IInventoryItem) => {
+  const { title, description, quantity, price, id } = props;
   const { deleteItem } = useInventory();
   return (
     <li className={styles.card}>
@@ -22,8 +19,8 @@ export const InventoryCard = ({ id, title, description, quantity, price }: Inven
         </div>
         <p className={clsx(styles.info__totalPrice, styles.badge)}>${quantity * price} total price</p>
         <div className={styles.actions}>
-          <button>Copy</button>
-          <button onClick={() => deleteItem(id)}>Remove</button>
+          <button>Edit</button>
+          <button onClick={() => deleteItem(id!)}>Remove</button>
         </div>
       </section>
     </li>
