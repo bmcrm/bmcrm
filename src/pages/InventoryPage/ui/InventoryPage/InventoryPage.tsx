@@ -25,24 +25,37 @@ const InventoryPage = memo(() => {
     setTypeModal('addInventory');
   };
 
-  const categoriesFromMock = [...new Set(inventory.map(item => item.category))];
+  const categoriesFromInventory = [...new Set(inventory.map(item => item.category))];
   return (
     <section className={styles.inventory}>
-      <div className={styles.top_options_btns}>
-        <Button disabled onClick={handleOpenAddCategory} theme={ButtonTheme.OUTLINE} color={ButtonColor.RUBY}>
-          Add category
-        </Button>
-        <Button onClick={handleOpenAddInventory}>Add inventory</Button>
-      </div>
-      <div className={styles.categories}>
-        {categoriesFromMock.map(category => (
-          <InventoryCategories
-            key={category}
-            title={category}
-            items={inventory.filter(item => item.category === category)}
+      {categoriesFromInventory.length > 0 && (
+        <div className={styles.top_options_btns}>
+          <Button disabled onClick={handleOpenAddCategory} theme={ButtonTheme.OUTLINE} color={ButtonColor.RUBY}>
+            Add category
+          </Button>
+          <Button onClick={handleOpenAddInventory}>Add inventory</Button>
+        </div>
+      )}
+      {categoriesFromInventory.length ? (
+        <div className={styles.categories}>
+          {categoriesFromInventory.map(category => (
+            <InventoryCategories
+              key={category}
+              title={category}
+              items={inventory.filter(item => item.category === category)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className={styles.no_items}>
+          <img
+            src='https://cdni.iconscout.com/illustration/premium/thumb/sorry-item-not-found-3328225-2809510.png'
+            alt='no data'
           />
-        ))}
-      </div>
+          <h2>Inventory is empty...</h2>
+          <Button onClick={handleOpenAddInventory}>Add!</Button>
+        </div>
+      )}
       {isOpen && (
         <Modal isOpen={isOpen} onClose={toggle}>
           {typeModal === 'addCategory' ? <AddCategoryForm onClose={toggle} /> : <AddInventoryForm onClose={toggle} />}
