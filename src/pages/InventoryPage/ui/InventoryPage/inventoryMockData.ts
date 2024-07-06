@@ -1,4 +1,4 @@
-import { IInventoryItem } from './types';
+import { IInventoryItem } from 'entities/Inventory/model/types/types';
 
 export const inventoryMockData: IInventoryItem[] = [
   {
