@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { fetchCampers } from 'shared/api/fetchCampers/fetchCampers';
+import { fetchInventory } from 'shared/api/fetchInventory/fetchInventory';
 import { AxiosError } from 'axios';
 import { IInventoryItem } from '../../types/types';
 
 interface CamperState {
   isLoading: boolean;
   inventory: IInventoryItem[];
+  inventoryCount: number;
   isError: string | null | Error | AxiosError;
   resetError: () => void;
   getItems(): Promise<void>;
@@ -20,25 +21,25 @@ const useCampers = create<CamperState>()(
   devtools(set => ({
     isLoading: false,
     isError: null,
+    inventoryCount: 0,
     inventory: [],
     resetError: () => set({ isError: null }),
-    getCampers: async () => {
+    getItems: async () => {
       try {
         set({ isLoading: true });
-        const response = await fetchCampers({ method: 'get' });
+        const response = await fetchInventory({ method: 'get' });
 
-        set({ campers: response.data, campersCount: response.data.length });
+        set({ inventory: response.data, inventoryCount: response.data.length });
       } catch (error) {
-        console.error(error);
         set({ isError: error as AxiosError });
       } finally {
         set({ isLoading: false });
       }
     },
-    getCamper: async email => {
+    getItem: async id => {
       try {
         set({ isLoading: true });
-        const response = await fetchCampers({ method: 'get', endpoint: email });
+        const response = await fetchInventory({ method: 'get', endpoint: id });
 
         return response?.data || null;
       } catch (error) {
@@ -47,13 +48,43 @@ const useCampers = create<CamperState>()(
         set({ isLoading: false });
       }
     },
-    updateCamper: async (email, data) => {
+    updateItem: async (item, id) => {
       try {
         set({ isLoading: true });
-        const response = await fetchCampers({
+        const response = await fetchInventory({
           method: 'patch',
-          endpoint: email,
-          payload: { ...data, email: email },
+          endpoint: id,
+          payload: item,
+        });
+
+        return response.data;
+      } catch (error) {
+        set({ isError: error as AxiosError });
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    createItem: async item => {
+      try {
+        set({ isLoading: true });
+        const response = await fetchInventory({
+          method: 'post',
+          payload: item,
+        });
+
+        return response.data;
+      } catch (error) {
+        set({ isError: error as AxiosError });
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    deleteItem: async id => {
+      try {
+        set({ isLoading: true });
+        const response = await fetchInventory({
+          method: 'delete',
+          endpoint: id,
         });
 
         return response.data;

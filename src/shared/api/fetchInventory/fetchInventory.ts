@@ -11,7 +11,7 @@ interface IFetchInventory {
   payload?: Partial<IInventoryItem>;
 }
 
-export const fetchCampers = (props: IFetchInventory) => {
+export const fetchInventory = (props: IFetchInventory) => {
   const { endpoint, payload, method } = props;
   const url = `https://api.${mode}.bmcrm.camp/inventory${endpoint ? `/${endpoint}` : ''}`;
   const idToken = useAuth.getState().idToken;
