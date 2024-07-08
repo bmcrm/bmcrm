@@ -69,6 +69,7 @@ test('successful login', async ({ page }) => {
   await expect(page).toHaveURL(FUNNEL_URL);
   await expect(page.locator('text=Invite')).toBeVisible();
 });
+
 //TODO: fix test
 // test('successful login and show details modal, edit and save user data, close details modal', async ({ page }) => {
 //   await page.fill('input[name="email"]', TEST_EMAIL);
@@ -108,6 +109,8 @@ test('successful login', async ({ page }) => {
 //   await page.press('body', 'Escape');
 //   await page.waitForTimeout(3000);
 // });
+
+
 
 test('unsuccessful login with incorrect credentials', async ({ page }) => {
   await page.fill('input[name="email"]', 'incorrect_email@example.com');
