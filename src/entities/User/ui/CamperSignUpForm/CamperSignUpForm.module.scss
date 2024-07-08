@@ -3,7 +3,7 @@
 .form {
   display: flex;
   align-items: flex-start;
-  gap: 90px;
+  gap: 30px;
 
   @media (width < $lg) {
     flex-direction: column;
