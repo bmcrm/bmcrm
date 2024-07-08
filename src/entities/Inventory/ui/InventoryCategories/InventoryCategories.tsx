@@ -1,6 +1,6 @@
 import { InventoryCard } from '../InventoryCard/InventoryCard';
 
-import { IInventoryItem } from '../InventoryPage/types';
+import { IInventoryItem } from '../../model/types/types';
 import styles from './InventoryCategories.module.scss';
 
 interface InventoryCategoriesProps {

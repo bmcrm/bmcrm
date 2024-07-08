@@ -126,5 +126,13 @@ export const campSettingsSchema = yup.object().shape({
   camp_description: yup.string().transform((_, originalValue) => originalValue.trim()),
 });
 
+export const createItemSchema = yup.object().shape({
+  title: yup.string().required('Title is required'),
+  description: yup.string().required('Description is required'),
+  price: yup.number().min(1, 'Price must be at least 1$'),
+  category: yup.string().required('Category is required'),
+
+});
+
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
 export type InviteMemberFormData = yup.InferType<typeof inviteMemberSchema>;
