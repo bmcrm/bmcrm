@@ -80,8 +80,10 @@ test('successful login and show details modal, edit and save user data, close de
   await expect(page.locator('text=Campers Notes')).toBeVisible();
   await expect(page.locator('textarea[name="about_me"]')).toBeVisible();
   await expect(page.locator('textarea[name="history.0.value"]')).toBeVisible();
+  await page.waitForTimeout(1000);
   await page.locator('textarea[name="about_me"]').fill('my new about me');
   await page.locator('textarea[name="history.0.value"]').fill('my new note');
+  await page.waitForTimeout(1000);
   await expect(page.locator('textarea[name="about_me"]')).toHaveValue('my new about me');
   await expect(page.locator('textarea[name="history.0.value"]')).toHaveValue('my new note');
   const addSocialBtn = page.locator('._btn_ii6bv_56');
