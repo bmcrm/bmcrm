@@ -17,6 +17,7 @@ import { type ICamp } from '../../model/types/camp.types';
 import { ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import LocationIcon from 'shared/assets/icons/location_icon.svg';
 import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
+import CampIcon from 'shared/assets/icons/camp_icon.svg';
 import BlurIcon from 'shared/assets/icons/blur_icon.svg';
 import { ANIMATION_DELAY } from 'shared/const/global/global';
 
@@ -72,7 +73,22 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
     content = (
       <>
         <h1 className={styles.camp__title}>{camp?.camp_name || 'Camp Name will be here'}</h1>
-        <h2 className={styles.camp__subtitle}>Campers {campersCounter}</h2>
+        <div className={styles.camp_info}>
+          <h2 className={styles.camp__subtitle}>Campers {campersCounter}</h2>
+          {camp?.camp_website && (
+            <Link to={camp.camp_website}>
+              <p className={styles.camp_website}>
+                Website
+                <Icon
+                  className={styles.camp__icon}
+                  icon={<RedirectIcon />}
+                  size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28}
+                />
+              </p>
+            </Link>
+          )}
+        </div>
+
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30} />
           <div className={styles.camp__desc}>
@@ -87,18 +103,10 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
             )}
 
             {!isLoggedIn && (
-              <div className={styles.camp__btn__signup}>
-                <Button onClick={closeModalHandler} fluid>
-                  <div className='wave'></div>
-                  SIGN UP
-                </Button>
-              </div>
-            )}
-            {camp?.camp_website && (
-              <Link to={camp.camp_website} className={styles.camp__btn}>
-                Camp website
-                <Icon icon={<RedirectIcon />} size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28} />
-              </Link>
+              <Button onClick={closeModalHandler} className={styles.camp__btn}>
+                Join the Camp
+                <Icon icon={<CampIcon />} size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_20} />
+              </Button>
             )}
           </div>
         </div>

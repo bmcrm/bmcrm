@@ -19,27 +19,15 @@
     }
   }
   &__camp {
-    max-width: 220px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font: var(--font-xs);
-    font-weight: 600;
-    @media (width < $lg) {
-      max-width: 140px;
-      font: var(--font-xxs);
-    }
+    color: #767676;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
   }
   &__name {
-    max-width: 220px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font: var(--font-l);
-
-    @media (width < $lg) {
-      max-width: 140px;
-      font: var(--font-s);
-    }
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
   }
 }

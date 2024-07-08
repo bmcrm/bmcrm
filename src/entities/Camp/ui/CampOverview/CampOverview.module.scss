@@ -1,8 +1,4 @@
 @import 'breakpoints';
-.camp__btn__signup {
-  width: 250px;
-  margin: 50px auto;
-}
 
 .camp {
   &__title {
@@ -123,21 +119,41 @@
   &__btn {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 15px;
     width: 100%;
-    max-width: 190px;
+    max-width: 250px;
     margin-top: auto;
     padding: 10px 20px;
     border-radius: 100px;
     background-color: var(--color-orange-dark);
-    transition: 0.2s ease;
-    font: var(--font-m);
+    font: var(--font-l);
     color: var(--color-white);
-
-    @media (hover: hover) {
-      &:hover {
-        scale: 1.05;
-      }
+    border: none;
+    &:hover {
+      box-shadow: none;
     }
   }
+}
+
+.camp_website {
+  display: flex;
+  gap: 5px;
+}
+.camp_info {
+  margin-top: 20px;
+  margin-bottom: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  font: var(--font-l);
+  text-align: center;
+  @media (width < $md) {
+    font: var(--font-s);
+    font-weight: 500;
+    text-align: left;
+  }
+}
+.camp__icon {
+  color: #c1c1c1;
 }

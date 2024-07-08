@@ -97,26 +97,27 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     };
   }, []);
 
-  const submitHandler = useCallback(async (values: Partial<ICamper>) => {
-    toggleReadonly();
-    const trimmedValues = trimFields(values);
+  const submitHandler = useCallback(
+    async (values: Partial<ICamper>) => {
+      toggleReadonly();
+      const trimmedValues = trimFields(values);
 
-    const data = {
-      ...trimmedValues,
-      ...(values.role !== CamperRole.TCO && decodedIDToken?.role === CamperRole.TCO ? { role: values.role } : {})
-    };
+      const data = {
+        ...trimmedValues,
+        ...(values.role !== CamperRole.TCO && decodedIDToken?.role === CamperRole.TCO ? { role: values.role } : {}),
+      };
 
-    const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
+      const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
 
-    if (updatedCamper) {
-      if (camper?.role !== updatedCamper.role) {
-        setIsEdited(true);
+      if (updatedCamper) {
+        if (camper?.role !== updatedCamper.role) {
+          setIsEdited(true);
+        }
+
+        setCamper(updatedCamper);
       }
-
-      setCamper(updatedCamper);
-    }
-  },
-  [camper?.role, camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
+    },
+    [camper?.role, camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
   const initialValues = useMemo(
@@ -159,7 +160,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
     .filter(role => role !== CamperRole.TCO)
     .map(role => ({
       value: role,
-      content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+      content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase(),
     }));
 
   const closeDetailsHandler = () => {
@@ -206,7 +207,12 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                 </div>
                 <ul className={styles.details__socials}>
                   {socialIcons.map((icon, i) => (
-                    <SocialIconItem key={i} social={icon} readonly={isReadonly} onRemove={() => onRemoveSocialHandler(i)}/>
+                    <SocialIconItem
+                      key={i}
+                      social={icon}
+                      readonly={isReadonly}
+                      onRemove={() => onRemoveSocialHandler(i)}
+                    />
                   ))}
                   {!isReadonly && socialIcons.length < 5 && (
                     <li>
@@ -227,7 +233,9 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               </div>
               <div className={styles.details__headInfo}>
                 {!isTablet && (
-                  <a href={`mailto: ${camper?.email}`} className={styles.email}>{camper?.email}</a>
+                  <a href={`mailto: ${camper?.email}`} className={styles.email}>
+                    {camper?.email}
+                  </a>
                 )}
                 <div className={styles.details__headDesc}>
                   {camper?.city && <p>{camper?.city}</p>}
@@ -239,14 +247,12 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
             </section>
             <section className={styles.status}>
               {(isReadonly || decodedIDToken?.role !== CamperRole.TCO || camper?.role === CamperRole.TCO) && (
-                <p
-                  className={classNames(styles.status__role, { [styles.tco]: camper?.role === CamperRole.TCO }, [])}
-                >
+                <p className={classNames(styles.status__role, { [styles.tco]: camper?.role === CamperRole.TCO }, [])}>
                   {camper?.role}
                 </p>
               )}
               {!isReadonly && decodedIDToken?.role === CamperRole.TCO && camper?.role !== CamperRole.TCO && (
-                <CustomSelect name={'role'} options={selectOptions} className={styles.status__select}/>
+                <CustomSelect name={'role'} options={selectOptions} className={styles.status__select} />
               )}
             </section>
             <section>
@@ -254,7 +260,12 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               {isReadonly ? (
                 <p className={styles.text}>{camper?.about_me}</p>
               ) : (
-                <CustomTextarea name={'about_me'} readonly={isReadonly} className={styles.textarea}/>
+                <CustomTextarea
+                  placeholder='Write....'
+                  name={'about_me'}
+                  readonly={isReadonly}
+                  className={styles.textarea}
+                />
               )}
             </section>
             <section>
@@ -268,7 +279,12 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
                         {isReadonly ? (
                           <p className={styles.text}>{item.value}</p>
                         ) : index === 0 ? (
-                          <CustomTextarea name={`history.${index}.value`} readonly={isReadonly} className={styles.textarea}/>
+                          <CustomTextarea
+                            placeholder='Write....'
+                            name={`history.${index}.value`}
+                            readonly={isReadonly}
+                            className={styles.textarea}
+                          />
                         ) : (
                           <p className={styles.text}>{item.value}</p>
                         )}

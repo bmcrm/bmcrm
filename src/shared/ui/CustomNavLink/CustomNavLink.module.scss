@@ -5,13 +5,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font: var(--font-l);
+  font: var(--font-m);
 
   @media (width < $lg) {
-    font: var(--font-s);
+    font: var(--font-xs);
   }
   @media (width < $md) {
-    font: var(--font-m);
+    font: var(--font-s);
   }
 
   &:after {

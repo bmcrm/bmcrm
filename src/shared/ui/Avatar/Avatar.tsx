@@ -1,7 +1,7 @@
 import styles from './Avatar.module.scss';
 import { CSSProperties, memo, useMemo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import AnonymousAvatar from 'shared/assets/images/avatars/anonymous.png';
+import AnonymousAvatar from 'shared/assets/images/avatars/avatar.png';
 import { IconSize } from '../Icon/Icon.types';
 
 type AvatarProps = {

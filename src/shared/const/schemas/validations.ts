@@ -59,7 +59,8 @@ export const confirmResetPassSchema = yup.object().shape({
 });
 
 export const addSocialSchema = yup.object().shape({
-  url: yup.string()
+  url: yup
+    .string()
     .required('URL is required!')
     .matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
 });
@@ -78,11 +79,16 @@ export const camperRegistrationSchema = yup.object().shape({
     .transform((_, originalValue) => originalValue.trim()),
   playa_name: yup.string().transform((_, originalValue) => originalValue.trim()),
   about_me: yup.string().transform((_, originalValue) => originalValue.trim()),
-  email: yup.string().email('Invalid email address').required('Email is required').transform((_, originalValue) => originalValue.trim()),
+  email: yup
+    .string()
+    .email('Invalid email address')
+    .required('Email is required')
+    .transform((_, originalValue) => originalValue.trim()),
   social_links: yup.array().of(
-    yup.string()
+    yup
+      .string()
       .matches(socialRegex, 'URL must be in the format https://*social*/*user*')
-      .transform((_, originalValue) => originalValue.trim()),
+      .transform((_, originalValue) => originalValue.trim())
   ),
   password: yup
     .string()
@@ -110,20 +116,14 @@ export const userSettingsSchema = yup.object().shape({
 export const campSettingsSchema = yup.object().shape({
   camp_name: yup
     .string()
-    .required('Camp name is required')
     .min(3, 'Camp name must be at least 3 characters')
     .transform((_, originalValue) => originalValue.trim()),
-  city: yup
-    .string()
-    .required('City is required')
-    .transform((_, originalValue) => originalValue.trim()),
+  city: yup.string().transform((_, originalValue) => originalValue.trim()),
   camp_website: yup
     .string()
     .matches(urlRegex, 'Invalid website address')
     .transform((_, originalValue) => originalValue.trim()),
-  camp_description: yup
-    .string()
-    .transform((_, originalValue) => originalValue.trim()),
+  camp_description: yup.string().transform((_, originalValue) => originalValue.trim()),
 });
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;
