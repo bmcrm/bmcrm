@@ -1,12 +1,12 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 840px;
+  width: 60vw;
   gap: 15px;
   &__inner {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
   }
 }
 .buttons {

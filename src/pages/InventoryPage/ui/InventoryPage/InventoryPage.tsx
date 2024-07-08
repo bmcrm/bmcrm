@@ -7,13 +7,18 @@ import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import Modal from 'shared/ui/Modal/Modal';
 import AddInventoryForm from '../AddInventoryForm/AddInventoryForm';
 const InventoryPage = memo(() => {
+  const { getItems, inventory } = useInventory();
+  useEffect(() => {
+    getItems();
+  }, [getItems]);
+
   const { toggle, isOpen } = useToggle();
 
   const handleOpenAddInventory = () => {
     toggle();
   };
 
-  const categoriesFromMock = [...new Set(inventoryMockData.map(item => item.category))];
+  const categoriesFromInventory = [...new Set(inventory.map(item => item.category))];
   return (
     <section className={styles.inventory}>
       <div className={styles.top_options_btns}>

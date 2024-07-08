@@ -24,6 +24,7 @@ test.beforeAll(async () => {
     NEW_PASSWORD_RES,
     USER_ROLE_RES,
     TABLE_NAME_RES,
+    TABLE_NAME_RES,
   ] = await Promise.all([
     getParameter('/campers/cognito_user_pool_id'),
     getParameter('/campers/cognito_client_pool_id'),
@@ -32,6 +33,7 @@ test.beforeAll(async () => {
     getParameter('/webapp/test/password_temp'),
     getParameter('/webapp/test/password_new'),
     getParameter('/webapp/test/user_role'),
+    getParameter('/campers/ddb_table_name'),
     getParameter('/campers/ddb_table_name'),
   ]);
 

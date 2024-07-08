@@ -61,6 +61,8 @@ export const confirmResetPassSchema = yup.object().shape({
 export const addSocialSchema = yup.object().shape({
   url: yup
     .string()
+  url: yup
+    .string()
     .required('URL is required!')
     .matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
 });
@@ -84,10 +86,18 @@ export const camperRegistrationSchema = yup.object().shape({
     .email('Invalid email address')
     .required('Email is required')
     .transform((_, originalValue) => originalValue.trim()),
+  email: yup
+    .string()
+    .email('Invalid email address')
+    .required('Email is required')
+    .transform((_, originalValue) => originalValue.trim()),
   social_links: yup.array().of(
     yup
       .string()
+    yup
+      .string()
       .matches(socialRegex, 'URL must be in the format https://*social*/*user*')
+      .transform((_, originalValue) => originalValue.trim())
       .transform((_, originalValue) => originalValue.trim())
   ),
   password: yup
