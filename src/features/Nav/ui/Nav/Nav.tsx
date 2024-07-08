@@ -30,7 +30,7 @@ const Nav = memo((props: NavProps) => {
   };
   const campLink = {
     path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}`,
-    text: 'My Camp',
+    text: 'Camp',
     icon: <CampIcon />,
   };
 
@@ -39,8 +39,8 @@ const Nav = memo((props: NavProps) => {
       <div className={styles.nav__inner} onClick={onContentClick}>
         {isMobile && <UserAvatar theme={'mobile'} user={user} />}
         <ul className={styles.nav__list}>
-          <li className={styles.my_camp_link}>
-            <CustomNavLink theme={CustomNavLinkTheme.CAMP} link={campLink} />
+          <li>
+            <CustomNavLink link={campLink} />
           </li>
           {useMemo(
             () =>
