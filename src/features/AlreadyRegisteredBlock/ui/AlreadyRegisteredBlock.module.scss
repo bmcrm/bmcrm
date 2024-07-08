@@ -1,66 +1,74 @@
 @import 'breakpoints';
-
+.wrapper {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(3px);
+  z-index: 111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .item {
-	display: grid;
-	grid-template-columns: minmax(300px, 1fr) minmax(150px, 250px);
-	align-items: center;
-	gap: 90px;
-	width: 100%;
-	max-width: 760px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 30px 50px;
-	border-radius: 20px;
-	border: 1px solid #D2D2D2;
-	background-color: var(--color-secondary-bg);
-	box-shadow: 0 2px 60px 0 rgba(0, 0, 0, .1);
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(150px, 250px);
+  align-items: center;
+  gap: 90px;
+  width: 100%;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px 50px;
+  border-radius: 20px;
+  border: 1px solid #d2d2d2;
+  background-color: var(--color-secondary-bg);
+  box-shadow: 0 2px 60px 0 rgba(0, 0, 0, 0.1);
 
-	@media (width < $md) {
-		grid-template-columns: 1fr;
-		padding: 20px;
-	}
+  @media (width < $md) {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
 
-	&__content {
-		display: grid;
-		gap: 20px;
-	}
+  &__content {
+    display: grid;
+    gap: 20px;
+  }
 
-	&__caption {
-		font: var(--font-l);
-	}
+  &__caption {
+    font: var(--font-l);
+  }
 }
 
 .tco {
-	display: grid;
-	gap: 5px;
+  display: grid;
+  gap: 5px;
 
-	&__name {
-		font: var(--font-m);
-		font-weight: 500;
-	}
+  &__name {
+    font: var(--font-m);
+    font-weight: 500;
+  }
 
-	&__data {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 10px;
-		padding: 10px 20px;
-		border-radius: 8px;
-		border: 2px solid var(--color-input-orange);
-		cursor: pointer;
-		overflow: hidden;
+  &__data {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--color-input-orange);
+    cursor: pointer;
+    overflow: hidden;
 
-		&:active {
-			border-color: var(--color-orange-dark);
-		}
+    &:active {
+      border-color: var(--color-orange-dark);
+    }
 
-		p {
-			font: var(--font-s);
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
+    p {
+      font: var(--font-s);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-			max-width: calc(100% - 30px);
-		}
-	}
+      max-width: calc(100% - 30px);
+    }
+  }
 }

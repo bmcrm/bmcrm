@@ -15,6 +15,7 @@ import styles from './CampOverviewPage.module.scss';
 import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 import NotFound from 'widgets/CampNotFound';
+import clsx from 'clsx';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading, isLoggedIn } = useAuth();
@@ -86,14 +87,11 @@ const CampOverviewPage = memo(() => {
         {!isLoading && !isError && (
           <section className={styles.register} ref={scrollTarget}>
             <Container>
-              {isLoggedIn ? (
-                <AlreadyRegisteredBlock camp={camp || null} />
-              ) : (
-                <AuthFormTemplate badge={'Register to Join the Camp'}>
-                  <CamperSignUpForm className={styles.form} onSubmit={submitHandler} />
-                  {authIsLoading && <FormLoader />}
-                </AuthFormTemplate>
-              )}
+              <AuthFormTemplate badge={'Register to Join the Camp'}>
+                <CamperSignUpForm className={clsx(styles.form, isLoggedIn && styles.blur)} onSubmit={submitHandler} />
+                {authIsLoading && <FormLoader />}
+                {isLoggedIn && <AlreadyRegisteredBlock camp={camp || null} />}
+              </AuthFormTemplate>
             </Container>
           </section>
         )}
