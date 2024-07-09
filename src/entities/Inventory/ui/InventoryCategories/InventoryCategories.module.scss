@@ -10,6 +10,7 @@
   }
   & .cards {
     display: grid;
+    justify-content: center;
     grid-template-columns: repeat(auto-fit, 245px);
     gap: 25px;
   }
