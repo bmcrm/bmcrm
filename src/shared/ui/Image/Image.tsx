@@ -2,7 +2,7 @@ import { CSSProperties, memo } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
 
 import styles from './Image.module.scss';
-import DefaultCampImg from 'shared/assets/images/camp-overview/default-camp.jpg';
+import DefaultCampImg from 'shared/assets/images/camp-overview/default-camp.png';
 
 type ImageProps = {
   className?: string;
@@ -15,15 +15,7 @@ type ImageProps = {
 };
 
 const Image = memo((props: ImageProps) => {
-  const {
-    className,
-    src,
-    alt = 'image description',
-    width,
-    maxWidth,
-    borderRadius,
-    customStyles,
-  } = props;
+  const { className, src, alt = 'image description', width, maxWidth, borderRadius, customStyles } = props;
 
   const customStyle: CSSProperties = {
     width,
@@ -35,7 +27,7 @@ const Image = memo((props: ImageProps) => {
   return (
     <div className={classNames(styles.image, {}, [className])} style={customStyle}>
       <picture>
-        <img src={src || DefaultCampImg} alt={alt}/>
+        <img src={src || DefaultCampImg} alt={alt} />
       </picture>
     </div>
   );
