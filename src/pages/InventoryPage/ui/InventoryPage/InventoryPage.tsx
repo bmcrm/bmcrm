@@ -1,11 +1,12 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import styles from './InventoryPage.module.scss';
 import Button from 'shared/ui/Button/Button';
-import { InventoryCategories } from '../InventoryCategories/InventoryCategories';
-import { inventoryMockData } from './inventoryMockData';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
 import Modal from 'shared/ui/Modal/Modal';
-import AddInventoryForm from '../AddInventoryForm/AddInventoryForm';
+import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
+import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/InventoryCategories';
+import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
+
 const InventoryPage = memo(() => {
   const { getItems, inventory } = useInventory();
   useEffect(() => {
@@ -25,11 +26,11 @@ const InventoryPage = memo(() => {
         <Button onClick={handleOpenAddInventory}>Add inventory</Button>
       </div>
       <div className={styles.categories}>
-        {categoriesFromMock.map(category => (
+        {categoriesFromInventory.map(category => (
           <InventoryCategories
             key={category}
             title={category}
-            items={inventoryMockData.filter(item => item.category === category)}
+            items={inventory.filter(item => item.category === category)}
           />
         ))}
       </div>
