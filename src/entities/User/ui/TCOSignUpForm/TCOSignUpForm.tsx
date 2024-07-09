@@ -57,8 +57,8 @@ const TCOSignUpForm = memo(({ onSubmit }: TCOSignUpFormProps) => {
             </section>
             <section>
               <div className={styles.flex}>
-                <CustomInput name='first_name' placeholder='Cole' label='First Name' />
-                <CustomInput name='last_name' placeholder='Sprouse' label='Last Name' />
+                <CustomInput name='first_name' placeholder='Larry' label='First Name' />
+                <CustomInput name='last_name' placeholder='Harvey' label='Last Name' />
               </div>
               {inputsData.map(input => (
                 <CustomInput value={values[input.name]} key={input.name} {...input} />

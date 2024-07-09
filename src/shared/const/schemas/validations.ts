@@ -89,6 +89,7 @@ export const camperRegistrationSchema = yup.object().shape({
       .string()
       .matches(socialRegex, 'URL must be in the format https://*social*/*user*')
       .transform((_, originalValue) => originalValue.trim())
+      .transform((_, originalValue) => originalValue.trim())
   ),
   password: yup
     .string()
@@ -116,13 +117,9 @@ export const userSettingsSchema = yup.object().shape({
 export const campSettingsSchema = yup.object().shape({
   camp_name: yup
     .string()
-    .required('Camp name is required')
     .min(3, 'Camp name must be at least 3 characters')
     .transform((_, originalValue) => originalValue.trim()),
-  city: yup
-    .string()
-    .required('City is required')
-    .transform((_, originalValue) => originalValue.trim()),
+  city: yup.string().transform((_, originalValue) => originalValue.trim()),
   camp_website: yup
     .string()
     .matches(urlRegex, 'Invalid website address')
@@ -135,7 +132,6 @@ export const createItemSchema = yup.object().shape({
   description: yup.string().required('Description is required'),
   price: yup.number().min(1, 'Price must be at least 1$'),
   category: yup.string().required('Category is required'),
-  quantity: yup.number().min(1, 'Quantity must be at least 1pc'),
 });
 
 export type RegistrationFormData = yup.InferType<typeof registrationSchema>;

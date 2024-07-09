@@ -24,29 +24,23 @@ const AlreadyRegisteredBlock = memo(({ camp }: AlreadyRegisteredBlockProps) => {
       toast.error('Failed to copy!', { duration: 2000, position: 'top-right' });
     }
   };
-  
+
   return (
-    <div className={styles.item}>
-      <div className={styles.item__content}>
-        <p className={styles.item__caption}>
-          You are already a part of the camp
-        </p>
-        <p>
-          If you have questions reach out to the camp TCO  via mail
-        </p>
-        <div className={styles.tco}>
-          {camp?.tco_fullname && (
-            <h3 className={styles.tco__name}>
-              {camp.tco_fullname}
-            </h3>
-          )}
-          <div className={styles.tco__data} onClick={() => handleCopyClick(camp?.tco as string)}>
-            <p>{camp?.tco}</p>
-            <Icon icon={<CopyIcon/>} size={IconSize.SIZE_20}/>
+    <div className={styles.wrapper}>
+      <div className={styles.item}>
+        <div className={styles.item__content}>
+          <p className={styles.item__caption}>You are already a part of the camp</p>
+          <p>If you have questions reach out to the camp TCO via mail</p>
+          <div className={styles.tco}>
+            {camp?.tco_fullname && <h3 className={styles.tco__name}>{camp.tco_fullname}</h3>}
+            <div className={styles.tco__data} onClick={() => handleCopyClick(camp?.tco as string)}>
+              <p>{camp?.tco}</p>
+              <Icon icon={<CopyIcon />} size={IconSize.SIZE_20} />
+            </div>
           </div>
         </div>
+        {!isMobile && <Image src={DesertImg} alt={'desert'} />}
       </div>
-      {!isMobile && <Image src={DesertImg} alt={'desert'}/>}
     </div>
   );
 });

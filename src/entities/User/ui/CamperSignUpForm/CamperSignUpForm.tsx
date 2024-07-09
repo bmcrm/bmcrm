@@ -31,8 +31,11 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
   const [tooltipsVisible, setTooltipsVisible] = useState<boolean[]>(initialData.social_links.map(() => false));
 
   useEffect(() => {
-    setTooltipsVisible(values => values.length !== initialData.social_links.length
-      ? new Array(initialData.social_links.length).fill(false) : values);
+    setTooltipsVisible(values =>
+      values.length !== initialData.social_links.length
+        ? new Array(initialData.social_links.length).fill(false)
+        : values
+    );
   }, []);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
   }, [tooltipsVisible]);
 
   const handleTooltipToggle = (index: number) => {
-    setTooltipsVisible((prevState) => {
+    setTooltipsVisible(prevState => {
       const newState = [...prevState];
       newState[index] = !newState[index];
       return newState;
@@ -105,7 +108,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                               disabled={arr.length > 4}
                             >
                               <span className={styles.tooltip__icon}>
-                                <Icon icon={<PlusIcon/>} size={IconSize.SIZE_10}/>
+                                <Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
                               </span>
                               Add link
                             </Button>
@@ -121,7 +124,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                               disabled={arr.length < 2}
                             >
                               <span className={styles.tooltip__icon}>
-                                <Icon icon={<MinusIcon/>} size={IconSize.SIZE_10}/>
+                                <Icon icon={<MinusIcon />} size={IconSize.SIZE_10} />
                               </span>
                               Delete
                             </Button>
@@ -133,7 +136,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                           className={styles.social__btn}
                           onClick={() => handleTooltipToggle(index)}
                         >
-                          <Icon icon={<ThreeDotIcon/>} size={IconSize.SIZE_20}/>
+                          <Icon icon={<ThreeDotIcon />} size={IconSize.SIZE_20} />
                         </Button>
                         <CustomInput
                           name={`social_links.${index}`}
@@ -145,14 +148,18 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                   </>
                 )}
               </FieldArray>
-              <CustomTextarea name={'about_me'} placeholder={'Burner from 2021. Working in IT, 29 y.o.'} label={'About you'}/>
+              <CustomTextarea
+                name={'about_me'}
+                placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
+                label={'About you'}
+              />
             </div>
             <div className={styles.form__item}>
               <div className={styles.form__row}>
-                <CustomInput name={'first_name'} placeholder={'Cole'} label={'First Name'}/>
-                <CustomInput name={'last_name'} placeholder={'Sprouse'} label={'Last Name'}/>
+                <CustomInput name={'first_name'} placeholder={'Cole'} label={'First Name'} />
+                <CustomInput name={'last_name'} placeholder={'Sprouse'} label={'Last Name'} />
               </div>
-              <CustomInput name={'email'} placeholder={'cole@gmail.com'} label={'Email'} type={'email'}/>
+              <CustomInput name={'email'} placeholder={'cole@gmail.com'} label={'Email'} type={'email'} />
               <CustomInput
                 name={'password'}
                 placeholder={'∗∗∗∗∗∗∗∗'}
@@ -162,9 +169,10 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
                 errors={validateErrors(values.password)}
                 register
               />
-              <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
+              <CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
               <Button type='submit' fluid>
-                <Camp/>SIGN UP
+                <Camp />
+                SIGN UP
               </Button>
             </div>
           </Form>
