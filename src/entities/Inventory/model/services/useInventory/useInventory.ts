@@ -61,11 +61,14 @@ const useInventory = create<InventoryState>()(
           });
         }),
 
-      createItem: item =>
+      createItem: (item: FormData) =>
         fetchWrapper(async () => {
           const response = await fetchInventory({
             method: 'post',
-            payload: item,
+            payload: item as Partial<IInventoryItem>,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
           });
           set({ inventory: [...useInventory.getState().inventory, response.data] });
         }),

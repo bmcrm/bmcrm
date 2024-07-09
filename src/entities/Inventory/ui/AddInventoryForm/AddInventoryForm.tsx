@@ -1,17 +1,72 @@
-import { memo } from 'react';
+import { createRef, memo, useState } from 'react';
 import { Form, Formik } from 'formik';
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import styles from './AddInventoryForm.module.scss';
-import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
+import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 import { createItemSchema } from 'shared/const/schemas/validations';
+import { IInventoryItem } from 'entities/Inventory/model/types/types';
+
+type FormValues = {
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  quantity: number;
+  images: FileList | null;
+};
 
 type AddInventoryFormProps = {
   onClose: () => void;
 };
+
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
+  const fileRef = createRef<HTMLInputElement>();
   const { createItem } = useInventory();
+  const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
+
+  const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('category', values.category);
+    formData.append('price', String(values.price));
+    formData.append('quantity', String(values.quantity));
+
+    if (values.images) {
+      Array.from(values.images).forEach(image => {
+        if (image.type === 'image/jpeg' || image.type === 'image/png') {
+          formData.append('images', image);
+        }
+      });
+    }
+
+    await createItem(formData as unknown as IInventoryItem);
+    options.resetForm();
+    onClose();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      const newPreviews = newFiles.map(file => ({
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }));
+      setImagePreviews([...imagePreviews, ...newPreviews]);
+
+      // Reset the file input value to allow re-selection of the same files
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const updatedPreviews = [...imagePreviews];
+    updatedPreviews.splice(index, 1);
+    setImagePreviews(updatedPreviews);
+  };
+
   return (
     <Formik
       validationSchema={createItemSchema}
@@ -21,12 +76,9 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
         category: '',
         price: 1,
         quantity: 1,
+        images: null,
       }}
-      onSubmit={(values, options) => {
-        createItem({ ...values, price: Number(values.price), quantity: Number(values.quantity) });
-        options.resetForm();
-        onClose();
-      }}
+      onSubmit={handleSubmit}
       enableReinitialize
     >
       <Form className={styles.form}>
@@ -34,19 +86,50 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
           <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
           <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
           <CustomInput name={'category'} label={'Category'} placeholder={'Kitchen'} />
-          <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
-          <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
+          <div className={styles.form__flex}>
+            <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
+            <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
+          </div>
+
+          <CustomInput
+            readonly
+            className={styles.form__image}
+            name={'image'}
+            label={'Photo'}
+            onClick={() => {
+              fileRef.current?.click();
+            }}
+            placeholder={'Select or drag a photo'}
+          />
         </div>
-        <div className={styles.buttons}>
-          <Button type={'submit'} className={'m-centred'}>
-            Save
-          </Button>
+        <div className={styles.imagePreviewContainer}>
+          {imagePreviews.map((preview, index) => (
+            <div key={index} className={styles.imagePreviewItem}>
+              <div className={styles.imagePreview}>
+                <img width={80} src={preview.previewUrl} alt={`Preview ${index}`} />
+                <button type='button' className={styles.removeImageButton} onClick={() => handleRemoveImage(index)}>
+                  x
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <input
+          className={styles.file__input}
+          ref={fileRef}
+          type='file'
+          multiple
+          accept='image/jpeg,image/png'
+          onChange={handleFileChange}
+        />
+        <div className={styles.details__buttons}>
+          <Button type={'submit'}>Save</Button>
           <Button
-            color={ButtonColor.RUBY}
-            theme={ButtonTheme.OUTLINE}
+            className={styles.btnCancel}
+            theme={ButtonTheme.CLEAR}
+            size={ButtonSize.TEXT}
+            color={ButtonColor.NEUTRAL}
             onClick={onClose}
-            type={'button'}
-            className={'m-centred'}
           >
             Cancel
           </Button>
