@@ -21,6 +21,7 @@ interface CustomInputProps {
   disabled?: boolean;
   errors?: { [key: string]: string | boolean }[];
   readonly?: boolean;
+  onClick?: () => void;
 }
 
 const CustomInput = memo((props: CustomInputProps) => {
@@ -35,6 +36,7 @@ const CustomInput = memo((props: CustomInputProps) => {
     type = 'text',
     label,
     readonly,
+    onClick = () => {},
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +65,7 @@ const CustomInput = memo((props: CustomInputProps) => {
         </Tooltip>
       )}
       <Field
+        onClick={onClick}
         disabled={disabled}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

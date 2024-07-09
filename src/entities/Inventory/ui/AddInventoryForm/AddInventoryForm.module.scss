@@ -2,10 +2,15 @@
   display: flex;
   flex-direction: column;
   width: 60vw;
+  max-width: 840px;
   gap: 15px;
   &__inner {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+  }
+  &__flex {
+    display: flex;
     gap: 20px;
   }
 }
@@ -16,4 +21,52 @@
   button {
     margin: 0;
   }
+}
+.details__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  .btnCancel {
+    &:hover {
+      color: var(--color-black);
+    }
+  }
+}
+.form__image input {
+  height: 60px;
+  cursor: pointer;
+  &::placeholder {
+    text-align: center;
+  }
+}
+.file__input {
+  visibility: hidden;
+}
+.imagePreviewContainer {
+  display: flex;
+  gap: 10px;
+}
+.imagePreview {
+  position: relative;
+  overflow: hidden;
+  & img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+}
+.removeImageButton {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--color-white);
+  color: red;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
