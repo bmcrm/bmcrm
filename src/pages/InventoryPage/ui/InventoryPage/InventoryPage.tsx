@@ -6,6 +6,7 @@ import Modal from 'shared/ui/Modal/Modal';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/InventoryCategories';
 import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
+import Container from 'shared/ui/Container/Container';
 
 const InventoryPage = memo(() => {
   const { getItems, inventory } = useInventory();
@@ -22,21 +23,23 @@ const InventoryPage = memo(() => {
   const categoriesFromInventory = [...new Set(inventory.map(item => item.category))];
   return (
     <section className={styles.inventory}>
-      <div className={styles.top_options_btns}>
-        <Button onClick={handleOpenAddInventory}>Add inventory</Button>
-      </div>
-      <div className={styles.categories}>
-        {categoriesFromInventory.map(category => (
-          <InventoryCategories
-            key={category}
-            title={category}
-            items={inventory.filter(item => item.category === category)}
-          />
-        ))}
-      </div>
-      <Modal isOpen={isOpen} onClose={toggle}>
-        <AddInventoryForm onClose={toggle} />
-      </Modal>
+      <Container fluid>
+        <div className={styles.top_options_btns}>
+          <Button onClick={handleOpenAddInventory}>Add inventory</Button>
+        </div>
+        <div className={styles.categories}>
+          {categoriesFromInventory.map(category => (
+            <InventoryCategories
+              key={category}
+              title={category}
+              items={inventory.filter(item => item.category === category)}
+            />
+          ))}
+        </div>
+        <Modal isOpen={isOpen} onClose={toggle}>
+          <AddInventoryForm onClose={toggle} />
+        </Modal>
+      </Container>
     </section>
   );
 });

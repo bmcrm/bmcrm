@@ -71,14 +71,16 @@ const FunnelPage = memo(() => {
               [CamperRole.CAMPER]: roles[CamperRole.CAMPER].length,
             }}
           />
-          <Button onClick={open} className={styles.funnel__btn}>Invite</Button>
-          {isOpen && <InviteUserModal isOpen={isOpen} onClose={close}/>}
+          <Button onClick={open} className={styles.funnel__btn}>
+            Invite
+          </Button>
+          {isOpen && <InviteUserModal isOpen={isOpen} onClose={close} />}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]}/>
-          <FunnelCard title={'Qualified'} users={roles[CamperRole.QUALIFIED]}/>
-          <FunnelCard title={'Intent'} users={roles[CamperRole.INTENT]}/>
-          <FunnelCard title={'Campers'} fluid={!isTablet} users={roles[CamperRole.CAMPER]} maxUsers={12}/>
+          <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]} />
+          <FunnelCard title={'Qualified'} users={roles[CamperRole.QUALIFIED]} />
+          <FunnelCard title={'Intent'} users={roles[CamperRole.INTENT]} />
+          <FunnelCard title={'Campers'} fluid={!isTablet} users={roles[CamperRole.CAMPER]} maxUsers={12} />
         </div>
       </Container>
     </section>

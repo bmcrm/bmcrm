@@ -6,12 +6,33 @@ import styles from './AddInventoryForm.module.scss';
 import { ButtonColor, ButtonTheme } from 'shared/ui/Button/Button.types';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 import { createItemSchema } from 'shared/const/schemas/validations';
+import { IInventoryItem } from 'entities/Inventory/model/types/types';
+
+type FormValues = {
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  quantity: number;
+};
 
 type AddInventoryFormProps = {
   onClose: () => void;
 };
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const { createItem } = useInventory();
+  const handleSubmit = (values: FormValues, options: { resetForm: () => void }) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('category', values.category);
+    formData.append('price', String(values.price));
+    formData.append('quantity', String(values.quantity));
+
+    createItem(formData as unknown as IInventoryItem);
+    options.resetForm();
+    onClose();
+  };
   return (
     <Formik
       validationSchema={createItemSchema}
@@ -22,11 +43,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
         price: 1,
         quantity: 1,
       }}
-      onSubmit={(values, options) => {
-        createItem({ ...values, price: Number(values.price), quantity: Number(values.quantity) });
-        options.resetForm();
-        onClose();
-      }}
+      onSubmit={handleSubmit}
       enableReinitialize
     >
       <Form className={styles.form}>

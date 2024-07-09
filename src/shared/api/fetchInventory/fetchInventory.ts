@@ -9,6 +9,7 @@ interface IFetchInventory {
   method: 'get' | 'post' | 'patch' | 'delete';
   endpoint?: string;
   payload?: Partial<IInventoryItem>;
+  headers?: Record<string, string>;
 }
 
 export const fetchInventory = (props: IFetchInventory) => {

@@ -1,16 +1,5 @@
 @import 'breakpoints';
-.inventory {
-  padding: 0 200px;
-  @media (width < $xxl) {
-    padding: 0 150px;
-  }
-  @media (width < $xl) {
-    padding: 0 100px;
-  }
-  @media (width < $md) {
-    padding: 0 50px;
-  }
-}
+
 .no_items {
   display: flex;
   justify-content: center;
