@@ -13,8 +13,8 @@ type FormValues = {
   title: string;
   description: string;
   category: string;
-  price: number;
-  quantity: number;
+  price: string;
+  quantity: string;
 };
 
 type AddInventoryFormProps = {
@@ -74,8 +74,8 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
         title: '',
         description: '',
         category: '',
-        price: 1,
-        quantity: 1,
+        price: '',
+        quantity: '',
       }}
       onSubmit={handleSubmit}
       enableReinitialize
@@ -87,7 +87,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
             <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
             <CustomInput name={'category'} label={'Category'} placeholder={'Kitchen'} />
             <div className={styles.form__flex}>
-              <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
+              <CustomInput name={'price'} type='number' label={'Price (1 pc)'} placeholder={'$120'} />
               <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
             </div>
 
