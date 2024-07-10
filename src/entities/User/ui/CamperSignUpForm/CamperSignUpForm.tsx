@@ -156,10 +156,10 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
             </div>
             <div className={styles.form__item}>
               <div className={styles.form__row}>
-                <CustomInput name={'first_name'} placeholder={'Cole'} label={'First Name'} />
-                <CustomInput name={'last_name'} placeholder={'Sprouse'} label={'Last Name'} />
+                <CustomInput name={'first_name'} placeholder={'Larry'} label={'First Name'} />
+                <CustomInput name={'last_name'} placeholder={'Harvey'} label={'Last Name'} />
               </div>
-              <CustomInput name={'email'} placeholder={'cole@gmail.com'} label={'Email'} type={'email'} />
+              <CustomInput name={'email'} placeholder={'larry@gmail.com'} label={'Email'} type={'email'} />
               <CustomInput
                 name={'password'}
                 placeholder={'∗∗∗∗∗∗∗∗'}

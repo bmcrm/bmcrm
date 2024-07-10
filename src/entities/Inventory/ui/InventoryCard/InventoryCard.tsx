@@ -5,11 +5,11 @@ import useInventory from 'entities/Inventory/model/services/useInventory/useInve
 import { IInventoryItem } from 'entities/Inventory/model/types/types';
 
 export const InventoryCard = (props: IInventoryItem) => {
-  const { title, description, quantity, price, id } = props;
+  const { title, description, quantity, price, id, images } = props;
   const { deleteItem } = useInventory();
   return (
     <li className={styles.card}>
-      <img src={Inventory} alt='inventory image' />
+      <img src={images?.length ? images[1] : Inventory} alt='inventory image' />
       <section>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>
