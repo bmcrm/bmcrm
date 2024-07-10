@@ -9,6 +9,7 @@ import { createItemSchema } from 'shared/const/schemas/validations';
 import { IInventoryItem } from 'entities/Inventory/model/types/types';
 import Icon from 'shared/ui/Icon/Icon';
 import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
+import toast from 'react-hot-toast';
 type FormValues = {
   title: string;
   description: string;
@@ -51,10 +52,17 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      const newPreviews = newFiles.map(file => ({
-        file,
-        previewUrl: URL.createObjectURL(file),
-      }));
+      const newPreviews = newFiles.reduce((acc, file) => {
+        if (file.size <= 5 * 1024 * 1024) {
+          acc.push({
+            file,
+            previewUrl: URL.createObjectURL(file),
+          });
+        } else {
+          toast.error('Each image must be less than 5MB.');
+        }
+        return acc;
+      }, [] as { file: File; previewUrl: string }[]);
       setImagePreviews([...imagePreviews, ...newPreviews]);
 
       e.target.value = '';
