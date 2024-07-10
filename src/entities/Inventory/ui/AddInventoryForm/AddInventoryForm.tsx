@@ -44,7 +44,6 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     } catch (error) {
       console.error('Error creating item:', error);
     }
-
     options.resetForm();
     onClose();
   };
