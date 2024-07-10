@@ -8,8 +8,13 @@ import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/I
 import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
 import Container from 'shared/ui/Container/Container';
 import NotFound from 'shared/assets/images/inventory/notFound.png';
+import FormLoader from 'features/FormLoader';
 const InventoryPage = memo(() => {
-  const { getItems, inventory } = useInventory();
+  const { getItems, inventory, isLoading } = useInventory(state => ({
+    getItems: state.getItems,
+    inventory: state.inventory,
+    isLoading: state.isLoading,
+  }));
   useEffect(() => {
     getItems();
   }, [getItems]);
@@ -20,7 +25,8 @@ const InventoryPage = memo(() => {
     toggle();
   };
 
-  const categoriesFromInventory = [...new Set(inventory.map(item => item.category))];
+  const categoriesFromInventory = [...new Set(inventory?.map(item => item.category))];
+  if (isLoading && !inventory.length) return <FormLoader />;
   return (
     <section className={styles.inventory}>
       <Container fluid>
@@ -35,7 +41,7 @@ const InventoryPage = memo(() => {
               <InventoryCategories
                 key={category}
                 title={category}
-                items={inventory.filter(item => item.category === category)}
+                items={inventory.filter(item => item?.category === category)}
               />
             ))
           ) : (

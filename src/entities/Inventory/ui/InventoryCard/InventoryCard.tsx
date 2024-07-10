@@ -4,9 +4,14 @@ import Inventory from 'shared/assets/images/inventory/inventory.png';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 import { IInventoryItem } from 'entities/Inventory/model/types/types';
 
-export const InventoryCard = (props: IInventoryItem) => {
-  const { title, description, quantity, price, id, images } = props;
+interface InventoryCardProps {
+  handleOpenEditInventory: (id: string) => void;
+  item: IInventoryItem;
+}
+export const InventoryCard = ({ item, handleOpenEditInventory }: InventoryCardProps) => {
+  const { title, description, quantity, price, id, images } = item;
   const { deleteItem } = useInventory();
+
   return (
     <li className={styles.card}>
       <div className={styles.image}>
@@ -22,7 +27,7 @@ export const InventoryCard = (props: IInventoryItem) => {
         </div>
         <p className={clsx(styles.info__totalPrice, styles.badge)}>${quantity * price} total price</p>
         <div className={styles.actions}>
-          <button>Edit</button>
+          <button onClick={() => handleOpenEditInventory(id!)}>Edit</button>
           <button onClick={() => deleteItem(id!)}>Remove</button>
         </div>
       </section>

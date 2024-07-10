@@ -15,7 +15,6 @@ const SettingsAccount = memo(() => {
 
   useEffect(() => {
     if (isError) {
-      console.log(isError);
       errorHandler(isError as AxiosError);
     }
 
@@ -34,11 +33,13 @@ const SettingsAccount = memo(() => {
 
   return (
     <ContentWrapper className={'mt-25'}>
-      {isLoading && <FormLoader/>}
+      {isLoading && <FormLoader />}
       <div className={styles.inner}>
-        <UserSettingsForm onSubmit={onSubmitHandler}/>
+        <UserSettingsForm onSubmit={onSubmitHandler} />
       </div>
-      <Link to={RoutePath.reset_pass} className={styles.btnReset}>Reset password</Link>
+      <Link to={RoutePath.reset_pass} className={styles.btnReset}>
+        Reset password
+      </Link>
     </ContentWrapper>
   );
 });

@@ -11,7 +11,7 @@ interface InventoryState {
   isError: string | null | Error | AxiosError;
   resetError: () => void;
   getItems(): Promise<void>;
-  getItem(id: string): Promise<void>;
+  getItem(id: string): Promise<IInventoryItem>;
   updateItem(item: Partial<IInventoryItem>, id: string): Promise<void>;
   createItem(item: Partial<IInventoryItem>): Promise<void>;
   deleteItem(id: string): Promise<void>;
@@ -43,21 +43,24 @@ const useInventory = create<InventoryState>()(
           set({ inventory: response.data, inventoryCount: response.data.length });
         }),
 
-      getItem: id =>
-        fetchWrapper(async () => {
+      getItem: async id => {
+        try {
+          set({ isLoading: true });
           const response = await fetchInventory({ method: 'get', endpoint: id });
           return response?.data || null;
-        }) as Promise<void>,
+        } catch (error) {
+          set({ isError: error as AxiosError });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
       updateItem: (item, id) =>
         fetchWrapper(async () => {
-          const response = await fetchInventory({
+          await fetchInventory({
             method: 'patch',
             endpoint: id,
             payload: item,
-          });
-          set({
-            inventory: useInventory.getState().inventory.map(invItem => (invItem.id === id ? response.data : invItem)),
           });
         }),
 
