@@ -14,7 +14,6 @@ type FormValues = {
   category: string;
   price: number;
   quantity: number;
-  images: FileList | null;
 };
 
 type AddInventoryFormProps = {
@@ -34,15 +33,16 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     formData.append('price', String(values.price));
     formData.append('quantity', String(values.quantity));
 
-    if (values.images) {
-      Array.from(values.images).forEach(image => {
-        if (image.type === 'image/jpeg' || image.type === 'image/png') {
-          formData.append('images', image);
-        }
-      });
+    imagePreviews.forEach(preview => {
+      formData.append('images', preview.file);
+    });
+
+    try {
+      await createItem(formData as unknown as IInventoryItem);
+    } catch (error) {
+      console.error('Error creating item:', error);
     }
 
-    await createItem(formData as unknown as IInventoryItem);
     options.resetForm();
     onClose();
   };
@@ -56,7 +56,6 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       }));
       setImagePreviews([...imagePreviews, ...newPreviews]);
 
-      // Reset the file input value to allow re-selection of the same files
       e.target.value = '';
     }
   };
@@ -76,65 +75,69 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
         category: '',
         price: 1,
         quantity: 1,
-        images: null,
       }}
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      <Form className={styles.form}>
-        <div className={styles.form__inner}>
-          <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
-          <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
-          <CustomInput name={'category'} label={'Category'} placeholder={'Kitchen'} />
-          <div className={styles.form__flex}>
-            <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
-            <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
-          </div>
-
-          <CustomInput
-            readonly
-            className={styles.form__image}
-            name={'image'}
-            label={'Photo'}
-            onClick={() => {
-              fileRef.current?.click();
-            }}
-            placeholder={'Select or drag a photo'}
-          />
-        </div>
-        <div className={styles.imagePreviewContainer}>
-          {imagePreviews.map((preview, index) => (
-            <div key={index} className={styles.imagePreviewItem}>
-              <div className={styles.imagePreview}>
-                <img width={80} src={preview.previewUrl} alt={`Preview ${index}`} />
-                <button type='button' className={styles.removeImageButton} onClick={() => handleRemoveImage(index)}>
-                  x
-                </button>
-              </div>
+      {({ setFieldValue }) => (
+        <Form className={styles.form}>
+          <div className={styles.form__inner}>
+            <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
+            <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
+            <CustomInput name={'category'} label={'Category'} placeholder={'Kitchen'} />
+            <div className={styles.form__flex}>
+              <CustomInput name={'price'} type='number' label={'Price'} placeholder={'120'} />
+              <CustomInput name={'quantity'} type='number' label={'Quantity'} placeholder={'5'} />
             </div>
-          ))}
-        </div>
-        <input
-          className={styles.file__input}
-          ref={fileRef}
-          type='file'
-          multiple
-          accept='image/jpeg,image/png'
-          onChange={handleFileChange}
-        />
-        <div className={styles.details__buttons}>
-          <Button type={'submit'}>Save</Button>
-          <Button
-            className={styles.btnCancel}
-            theme={ButtonTheme.CLEAR}
-            size={ButtonSize.TEXT}
-            color={ButtonColor.NEUTRAL}
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-        </div>
-      </Form>
+
+            <CustomInput
+              readonly
+              className={styles.form__image}
+              name={'image'}
+              label={'Photo'}
+              onClick={() => {
+                fileRef.current?.click();
+              }}
+              placeholder={'Select or drag a photo'}
+            />
+          </div>
+          <div className={styles.imagePreviewContainer}>
+            {imagePreviews.map((preview, index) => (
+              <div key={index} className={styles.imagePreviewItem}>
+                <div className={styles.imagePreview}>
+                  <img width={80} src={preview.previewUrl} alt={`Preview ${index}`} />
+                  <button type='button' className={styles.removeImageButton} onClick={() => handleRemoveImage(index)}>
+                    x
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <input
+            className={styles.file__input}
+            ref={fileRef}
+            type='file'
+            multiple
+            accept='image/jpeg,image/png'
+            onChange={e => {
+              handleFileChange(e);
+              setFieldValue('images', e.target.files);
+            }}
+          />
+          <div className={styles.details__buttons}>
+            <Button type={'submit'}>Save</Button>
+            <Button
+              className={styles.btnCancel}
+              theme={ButtonTheme.CLEAR}
+              size={ButtonSize.TEXT}
+              color={ButtonColor.NEUTRAL}
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Form>
+      )}
     </Formik>
   );
 });
