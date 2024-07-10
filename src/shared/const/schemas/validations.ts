@@ -130,7 +130,8 @@ export const campSettingsSchema = yup.object().shape({
 export const createItemSchema = yup.object().shape({
   title: yup.string().required('Title is required'),
   description: yup.string().required('Description is required'),
-  price: yup.number().min(1, 'Price must be at least 1$'),
+  price: yup.number().required('Price is required').min(1, 'Price must be at least 1$'),
+  quantity: yup.number().required('Quantity is required').min(1, 'Quantity must be at least 1'),
   category: yup.string().required('Category is required'),
 });
 

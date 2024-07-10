@@ -7,7 +7,7 @@ import useInventory from 'entities/Inventory/model/services/useInventory/useInve
 import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/InventoryCategories';
 import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
 import Container from 'shared/ui/Container/Container';
-
+import NotFound from 'shared/assets/images/inventory/notFound.png';
 const InventoryPage = memo(() => {
   const { getItems, inventory } = useInventory();
   useEffect(() => {
@@ -24,17 +24,27 @@ const InventoryPage = memo(() => {
   return (
     <section className={styles.inventory}>
       <Container fluid>
-        <div className={styles.top_options_btns}>
-          <Button onClick={handleOpenAddInventory}>Add inventory</Button>
-        </div>
+        {categoriesFromInventory.length ? (
+          <div className={styles.top_options_btns}>
+            <Button onClick={handleOpenAddInventory}>Add inventory</Button>
+          </div>
+        ) : null}
         <div className={styles.categories}>
-          {categoriesFromInventory.map(category => (
-            <InventoryCategories
-              key={category}
-              title={category}
-              items={inventory.filter(item => item.category === category)}
-            />
-          ))}
+          {categoriesFromInventory.length ? (
+            categoriesFromInventory.map(category => (
+              <InventoryCategories
+                key={category}
+                title={category}
+                items={inventory.filter(item => item.category === category)}
+              />
+            ))
+          ) : (
+            <div className={styles.no_items}>
+              <img src={NotFound} alt='no data' />
+              <h2>Inventory is empty...</h2>
+              <Button onClick={handleOpenAddInventory}>Add!</Button>
+            </div>
+          )}
         </div>
         <Modal isOpen={isOpen} onClose={toggle}>
           <AddInventoryForm onClose={toggle} />

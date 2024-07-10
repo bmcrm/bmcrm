@@ -50,23 +50,18 @@
 .imagePreview {
   position: relative;
   overflow: hidden;
+  border-radius: 6px;
+  width: 94px;
+  height: 87px;
   & img {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 }
 .removeImageButton {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: var(--color-white);
-  color: red;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: -1px;
+  right: -1px;
   cursor: pointer;
 }

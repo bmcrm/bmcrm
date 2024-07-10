@@ -92,8 +92,8 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
     path: RoutePath.not_found,
     element: (
       <NotFound textRedirect='GO BACK' redirectTo={RoutePath.funnel}>
-        <h1>Ooops...</h1>
-        <h2>This page is not found!</h2>
+        <h2>Ooops...</h2>
+        <h1>This page is not found!</h1>
       </NotFound>
     ),
   },

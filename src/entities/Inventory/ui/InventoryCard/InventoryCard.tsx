@@ -9,7 +9,10 @@ export const InventoryCard = (props: IInventoryItem) => {
   const { deleteItem } = useInventory();
   return (
     <li className={styles.card}>
-      <img src={images?.length ? images[0] : Inventory} alt='inventory image' />
+      <div className={styles.image}>
+        <img src={images?.length ? images[0] : Inventory} alt='inventory image' />
+      </div>
+
       <section>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.description}>{description}</p>

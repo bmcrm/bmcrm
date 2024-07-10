@@ -1,7 +1,7 @@
 @import 'breakpoints';
 .wrapper {
   position: absolute;
-  inset: 0;
+  inset: -3px;
   backdrop-filter: blur(3px);
   z-index: 111;
   display: flex;
