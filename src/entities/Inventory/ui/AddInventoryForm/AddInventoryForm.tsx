@@ -7,7 +7,8 @@ import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.ty
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 import { createItemSchema } from 'shared/const/schemas/validations';
 import { IInventoryItem } from 'entities/Inventory/model/types/types';
-
+import Icon from 'shared/ui/Icon/Icon';
+import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
 type FormValues = {
   title: string;
   description: string;
@@ -107,7 +108,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
                 <div className={styles.imagePreview}>
                   <img width={80} src={preview.previewUrl} alt={`Preview ${index}`} />
                   <button type='button' className={styles.removeImageButton} onClick={() => handleRemoveImage(index)}>
-                    x
+                    <Icon icon={<DeleteItemPreview />} />
                   </button>
                 </div>
               </div>
