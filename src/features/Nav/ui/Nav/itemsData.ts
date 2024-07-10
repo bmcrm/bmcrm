@@ -25,6 +25,5 @@ export const navItemsList: NavLinkType[] = [
   {
     path: RoutePath.inventory,
     text: 'Inventory',
-    disabled: true,
   },
 ];
