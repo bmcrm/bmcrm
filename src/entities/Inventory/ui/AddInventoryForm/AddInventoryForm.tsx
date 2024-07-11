@@ -102,7 +102,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       const newPreviews = newFiles.reduce((acc, file) => {
-        if (file.size <= 10 * 1024 * 1024) {
+        if (file.size <= 5 * 1024 * 1024) {
           acc.push({
             file,
             previewUrl: URL.createObjectURL(file),
