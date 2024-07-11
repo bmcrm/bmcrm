@@ -19,7 +19,7 @@ const SignInPage = memo(() => {
 
   useEffect(() => {
     if (error) {
-      errorHandler(error, 'SignInPage', JSON.stringify(credentials));
+      errorHandler(error, 'SignInPage', JSON.stringify({ email: credentials?.email }));
     }
 
     return resetError();
