@@ -20,6 +20,7 @@ import Camp from 'shared/assets/icons/camp.svg';
 import ThreeDotIcon from 'shared/assets/icons/three-dot_icon.svg';
 import PlusIcon from 'shared/assets/icons/plus_icon.svg';
 import MinusIcon from 'shared/assets/icons/minus_icon.svg';
+import socialLinksParser from 'shared/lib/socialLinkParser/socialLinkParser.ts';
 
 type CamperSignUpFormProps = {
   className?: string;
@@ -61,6 +62,10 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
   };
 
   const onSubmitHandler = (values: ICamperRegisterForm, { resetForm }: { resetForm: () => void }) => {
+    const userSocials = values.social_links && !values.social_links?.every(link => link === '')
+      ? socialLinksParser(values.social_links)
+      : [];
+
     const data: IUserRegisterData = {
       first_name: values.first_name.trim(),
       last_name: values.last_name.trim(),
@@ -68,7 +73,7 @@ const CamperSignUpForm = memo((props: CamperSignUpFormProps) => {
       email: values.email.trim(),
       password: values.password.trim(),
       about_me: values.about_me?.trim(),
-      social_links: values.social_links?.join(', '),
+      social_links: userSocials,
       role: CamperRole.LEAD,
     };
 

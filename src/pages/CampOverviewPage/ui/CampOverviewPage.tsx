@@ -47,6 +47,7 @@ const CampOverviewPage = memo(() => {
 
   const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
+
     const response = await register(data);
 
     if (response) {
