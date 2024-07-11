@@ -5,7 +5,7 @@ export interface IInventoryItem {
   price: number;
   category: string;
   images?: string[];
-  id?: string;
+  id: string;
   camp_id: string;
   createdAt?: string;
   updatedAt?: string;

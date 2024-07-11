@@ -5,12 +5,18 @@ import Icon from 'shared/ui/Icon/Icon';
 import EditIcon from 'shared/assets/icons/edit_icon.svg';
 import DeleteIcon from 'shared/assets/icons/delete.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
+import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 interface InventoryDetailsModalProps {
   item: IInventoryItem;
   onClose: () => void;
 }
 export const InventoryDetailsModal = ({ item, onClose }: InventoryDetailsModalProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { deleteItem } = useInventory();
+
+  if (!item) {
+    return null;
+  }
   return (
     <section className={styles.inventoryDetailsModal}>
       <div>
@@ -34,7 +40,9 @@ export const InventoryDetailsModal = ({ item, onClose }: InventoryDetailsModalPr
           <p className={styles.badge}>${item?.quantity * item?.price} total price</p>
         </div>
         <div className={styles.actions}>
-          <Icon icon={<DeleteIcon />} size={IconSize.SIZE_24} />
+          <button onClick={() => deleteItem(item?.id)}>
+            <Icon icon={<DeleteIcon />} size={IconSize.SIZE_24} />
+          </button>
         </div>
       </div>
     </section>
