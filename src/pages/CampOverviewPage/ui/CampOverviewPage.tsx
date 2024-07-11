@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 import { classNames } from 'shared/lib/classNames/classNames';
@@ -16,6 +16,7 @@ import { RoutePath } from 'app/providers/AppRouter';
 import Logo from 'shared/assets/icons/logo.svg';
 import NotFound from 'widgets/CampNotFound';
 import clsx from 'clsx';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading, isLoggedIn } = useAuth();
@@ -24,10 +25,10 @@ const CampOverviewPage = memo(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const scrollTarget = useRef<HTMLDivElement>(null);
-
+  const location = useLocation();
   useEffect(() => {
     if (error) {
-      errorHandler(error);
+      errorHandler(error, `${location.pathname}`);
     }
 
     return resetError();
@@ -48,7 +49,10 @@ const CampOverviewPage = memo(() => {
   const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
     const response = await register(data);
-
+    logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as camper', {
+      email: values.email,
+      camp_id: values.camp_id,
+    });
     if (response) {
       toast.success(
         'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',

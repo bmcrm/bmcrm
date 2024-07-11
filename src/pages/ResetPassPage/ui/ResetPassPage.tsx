@@ -44,37 +44,43 @@ const ResetPassPage = memo(() => {
 
   useEffect(() => {
     if (error) {
-      errorHandler(error);
+      errorHandler(error, 'ResetPassPage');
     }
 
     return resetError();
   }, [error, resetError]);
 
-  const handleStepOneSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-    const trimEmail = values.email.trim();
-    const response = await initResetPass({ email: trimEmail });
+  const handleStepOneSubmit = useCallback(
+    async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
+      const trimEmail = values.email.trim();
+      const response = await initResetPass({ email: trimEmail });
 
-    if (response) {
-      setEmail(trimEmail);
-      resetForm();
-      setStep(2);
-    }
-  }, [initResetPass]);
+      if (response) {
+        setEmail(trimEmail);
+        resetForm();
+        setStep(2);
+      }
+    },
+    [initResetPass]
+  );
 
-  const handleStepTwoSubmit = useCallback(async (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => {
-    const data: IConfirmResetPass = {
-      confirm_code: values.confirm_code.trim(),
-      password_new: values.password_new.trim(),
-      email: email,
-    };
+  const handleStepTwoSubmit = useCallback(
+    async (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => {
+      const data: IConfirmResetPass = {
+        confirm_code: values.confirm_code.trim(),
+        password_new: values.password_new.trim(),
+        email: email,
+      };
 
-    const response = await confirmResetPass(data);
+      const response = await confirmResetPass(data);
 
-    if (response) {
-      resetForm();
-      setStep(3);
-    }
-  }, [confirmResetPass, email]);
+      if (response) {
+        resetForm();
+        setStep(3);
+      }
+    },
+    [confirmResetPass, email]
+  );
 
   const btnStepThreeHandler = useCallback(() => {
     navigate(RoutePath.sign_in, { replace: true });
@@ -85,19 +91,17 @@ const ResetPassPage = memo(() => {
   return (
     <AuthPageTemplate>
       <ResetPassFormTemplate badge={badgeLabel} desc={descLabel} background={bg}>
-        {isLoading && <FormLoader/>}
-        {
-          step === 1
-            ? <ResetPassStepOne onSubmit={handleStepOneSubmit}/>
-            : step === 2
-              ? <ResetPassStepTwo onSubmit={handleStepTwoSubmit}/>
-              : (
-                <Button onClick={btnStepThreeHandler} fluid>
-                  <Icon icon={<Camp />} size={IconSize.SIZE_20} />
-                  BACK TO SIGN IN
-                </Button>
-              )
-        }
+        {isLoading && <FormLoader />}
+        {step === 1 ? (
+          <ResetPassStepOne onSubmit={handleStepOneSubmit} />
+        ) : step === 2 ? (
+          <ResetPassStepTwo onSubmit={handleStepTwoSubmit} />
+        ) : (
+          <Button onClick={btnStepThreeHandler} fluid>
+            <Icon icon={<Camp />} size={IconSize.SIZE_20} />
+            BACK TO SIGN IN
+          </Button>
+        )}
       </ResetPassFormTemplate>
     </AuthPageTemplate>
   );

@@ -10,6 +10,9 @@ import { IInventoryItem } from 'entities/Inventory/model/types/types';
 import Icon from 'shared/ui/Icon/Icon';
 import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
 import toast from 'react-hot-toast';
+import { useAuth } from 'entities/User';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+
 type FormValues = {
   title: string;
   description: string;
@@ -26,23 +29,69 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const fileRef = createRef<HTMLInputElement>();
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
-
-  const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
-    const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('category', values.category);
-    formData.append('price', String(values.price));
-    formData.append('quantity', String(values.quantity));
-
-    imagePreviews.forEach(preview => {
-      formData.append('images', preview.file);
+  const { idToken: token, decodedIDToken } = useAuth();
+  const getPresignedUrl = async (fileName: string) => {
+    const response = await fetch('https://api.dev.bmcrm.camp/inventory/upload', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify({ fileName }),
     });
 
+    const data = await response.json();
+    return data.uploadURL;
+  };
+
+  const uploadFileToS3 = async (file: File, uploadURL: string) => {
+    const result = await fetch(uploadURL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/png',
+      },
+      body: file,
+    });
+
+    if (!result.ok) {
+      throw new Error('File upload failed');
+    }
+  };
+
+  const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
+    const uploadedImageUrls: string[] = [];
+
+    for (const preview of imagePreviews) {
+      const uploadURL = await getPresignedUrl(preview.file.name);
+      await uploadFileToS3(preview.file, uploadURL);
+      uploadedImageUrls.push(uploadURL.split('?')[0]);
+    }
+    console.log(uploadedImageUrls);
+
+    const inventoryItem: Partial<IInventoryItem> = {
+      title: values.title,
+      description: values.description,
+      category: values.category,
+      price: parseFloat(values.price),
+      quantity: parseInt(values.quantity, 10),
+      images: uploadedImageUrls,
+      createdAt: new Date().toISOString(),
+    };
+    console.log(inventoryItem);
+
     try {
-      await createItem(formData as unknown as IInventoryItem);
+      await createItem(inventoryItem);
+
+      logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
+        camp_id: decodedIDToken?.camp_id,
+        user: decodedIDToken?.email,
+        item: inventoryItem,
+      });
+
+      toast.success('Item created successfully!');
     } catch (error) {
       console.error('Error creating item:', error);
+      toast.error('Error creating item.');
     }
     options.resetForm();
     onClose();
@@ -52,7 +101,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       const newPreviews = newFiles.reduce((acc, file) => {
-        if (file.size <= 5 * 1024 * 1024) {
+        if (file.size <= 10 * 1024 * 1024) {
           acc.push({
             file,
             previewUrl: URL.createObjectURL(file),

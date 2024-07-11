@@ -12,7 +12,7 @@ const SettingsCamp = memo(() => {
 
   useEffect(() => {
     if (isError) {
-      errorHandler(isError as AxiosError);
+      errorHandler(isError as AxiosError, 'SettingsCamp');
     }
 
     return resetError();
@@ -30,8 +30,8 @@ const SettingsCamp = memo(() => {
 
   return (
     <ContentWrapper className={'mt-25'}>
-      {isLoading && <FormLoader/>}
-      <CampSettingsForm onSubmit={onSubmitHandler}/>
+      {isLoading && <FormLoader />}
+      <CampSettingsForm onSubmit={onSubmitHandler} />
     </ContentWrapper>
   );
 });

@@ -22,38 +22,43 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
 
   useEffect(() => {
     if (error) {
-      errorHandler(error);
+      errorHandler(error, 'InviteUserModal');
     }
 
     return resetError();
   }, [error, resetError]);
 
-  const handleSubmit = useCallback(async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-    const trimmedInviteEmail = values.email.trim();
+  const handleSubmit = useCallback(
+    async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
+      const trimmedInviteEmail = values.email.trim();
 
-    const response = await invite({
-      email: trimmedInviteEmail,
-      camp_id: decodedIDToken!.camp_id,
-      idToken,
-    });
+      const response = await invite({
+        email: trimmedInviteEmail,
+        camp_id: decodedIDToken!.camp_id,
+        idToken,
+      });
 
-    if (response) {
-      onClose();
-      resetForm();
-      toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
-    }
-  }, [decodedIDToken, idToken, invite, onClose]);
+      if (response) {
+        onClose();
+        resetForm();
+        toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
+      }
+    },
+    [decodedIDToken, idToken, invite, onClose]
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={styles.inviteModal}>
-        {isLoading && <FormLoader/>}
+        {isLoading && <FormLoader />}
         <h2 className={styles.title}>Invite User by Email</h2>
         <p className={styles.subtitle}>Please enter the email address of the user you want to invite</p>
         <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '' }}>
           <Form className={styles.inviteModal__form}>
-            <CustomInput name={'email'} placeholder={'Email'}/>
-            <Button type={'submit'} className={'m-centred'}>Send Invitation</Button>
+            <CustomInput name={'email'} placeholder={'Email'} />
+            <Button type={'submit'} className={'m-centred'}>
+              Send Invitation
+            </Button>
           </Form>
         </Formik>
       </div>
