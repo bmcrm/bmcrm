@@ -8,6 +8,7 @@ import FormLoader from 'features/FormLoader';
 import AuthPageTemplate from 'features/AuthPageTemplate';
 import AuthFormTemplate from 'features/AuthFormTemplate';
 import { RoutePath } from 'app/providers/AppRouter';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 
 const SignUpTCOPage = memo(() => {
   const { register, isLoading, error, resetError } = useAuth();
@@ -15,25 +16,30 @@ const SignUpTCOPage = memo(() => {
 
   useEffect(() => {
     if (error) {
-      errorHandler(error);
+      errorHandler(error, 'SignUpTCOPage');
     }
 
     return resetError();
   }, [error, resetError]);
 
-  const submitHandler = useCallback(async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
-    const response = await register(values);
+  const submitHandler = useCallback(
+    async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
+      const response = await register(values);
 
-    if (response) {
-      toast.success(
-        'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
-        { duration: 5000, position: 'top-center' }
-      );
-      resetForm();
-      navigate(RoutePath.sign_in, { replace: true });
-    }
-  },
-  [navigate, register]
+      if (response) {
+        toast.success(
+          'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
+          { duration: 5000, position: 'top-center' }
+        );
+        logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as TCO', {
+          email: values.email,
+          camp_id: values.camp_id,
+        });
+        resetForm();
+        navigate(RoutePath.sign_in, { replace: true });
+      }
+    },
+    [navigate, register]
   );
 
   return (

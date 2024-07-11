@@ -51,6 +51,10 @@ export const signUpUser = async (data: IUserRegisterData) => {
     Username: data.email,
     Password: data.password,
     UserAttributes: userAttributes,
+    ClientMetadata: {
+      about_me: data?.about_me || '',
+      social_links: JSON.stringify(data?.social_links),
+    },
   };
 
   return await cognitoClient.send(new SignUpCommand(params));

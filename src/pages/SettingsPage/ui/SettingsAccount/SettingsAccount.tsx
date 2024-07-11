@@ -15,7 +15,7 @@ const SettingsAccount = memo(() => {
 
   useEffect(() => {
     if (isError) {
-      errorHandler(isError as AxiosError);
+      errorHandler(isError as AxiosError, 'SettingsAccount');
     }
 
     return resetError();
