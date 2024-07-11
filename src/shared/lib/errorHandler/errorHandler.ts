@@ -2,6 +2,7 @@ import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito
 import toast from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
 import { AxiosError } from 'axios';
+import { logger, LogLevel, LogSource } from '../logger/logger';
 
 enum ErrorNames {
   USER_NOT_FOUND = 'UserNotFoundException',
@@ -21,10 +22,21 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
 };
 
-const errorHandler = (error: CognitoIdentityProviderServiceException | AxiosError | Error) => {
+const errorHandler = (
+  error: CognitoIdentityProviderServiceException | AxiosError | Error,
+  page: string = '',
+  details: string = ''
+) => {
   let errorMessage = errorsNames[error.name as ErrorNames];
   Sentry.captureMessage(`${error.name}: ${error.message}`);
-
+  logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
+    error: JSON.stringify(error),
+    stack: error.stack,
+    name: error.name,
+    message: error.message,
+    page,
+    details,
+  });
   if (!errorMessage && error.message) {
     for (const key in ErrorNames) {
       if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {
