@@ -12,6 +12,7 @@ import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
 import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
 import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+import { EnvConfigs } from 'shared/config/env/env';
 
 type FormValues = {
   title: string;
@@ -24,14 +25,14 @@ type FormValues = {
 type AddInventoryFormProps = {
   onClose: () => void;
 };
-
+const mode = EnvConfigs.BMCRM_ENV;
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const fileRef = createRef<HTMLInputElement>();
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
   const { idToken: token, decodedIDToken } = useAuth();
   const getPresignedUrl = async (fileName: string) => {
-    const response = await fetch('https://api.dev.bmcrm.camp/inventory/upload', {
+    const response = await fetch(`https://api.${mode}.bmcrm.camp/inventory/upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
