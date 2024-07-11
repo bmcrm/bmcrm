@@ -7,15 +7,16 @@ import { IInventoryItem } from 'entities/Inventory/model/types/types';
 interface InventoryCardProps {
   handleOpenEditInventory: (id: string) => void;
   item: IInventoryItem;
+  showInfo?: (item: IInventoryItem) => void;
 }
-export const InventoryCard = ({ item, handleOpenEditInventory }: InventoryCardProps) => {
+export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: InventoryCardProps) => {
   const { title, description, quantity, price, id, images } = item;
   const { deleteItem } = useInventory();
 
   return (
     <li className={styles.card}>
       <div className={styles.image}>
-        <img src={images?.length ? images[0] : Inventory} alt='inventory image' />
+        <img onClick={() => showInfo?.(item)} src={images?.length ? images[0] : Inventory} alt='inventory image' />
       </div>
 
       <section>
