@@ -6,10 +6,9 @@ import CustomNavLink from 'shared/ui/CustomNavLink/CustomNavLink';
 import { type IUserAvatar, useAuth, UserAvatar } from 'entities/User';
 
 import { RoutePath } from 'app/providers/AppRouter';
-import { navItemsList } from './itemsData';
+import { navItemsList } from './itemsData.tsx';
 import { CustomNavLinkTheme } from 'shared/ui/CustomNavLink/CustomNavLink.types';
 import styles from './Nav.module.scss';
-import CampIcon from 'shared/assets/icons/camp_monocolor.svg';
 import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
 import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
 
@@ -28,28 +27,30 @@ const Nav = memo((props: NavProps) => {
   const mods: Mods = {
     [styles.open]: isOpen,
   };
-  const campLink = {
-    path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}`,
-    text: 'Camp',
-    icon: <CampIcon />,
-  };
 
   return (
     <nav className={classNames(styles.nav, mods, [className])} onClick={onClick}>
       <div className={styles.nav__inner} onClick={onContentClick}>
         {isMobile && <UserAvatar theme={'mobile'} user={user} />}
         <ul className={styles.nav__list}>
-          <li>
-            <CustomNavLink link={campLink} />
-          </li>
           {useMemo(
             () =>
-              navItemsList.map(item => (
-                <li key={item.path}>
-                  <CustomNavLink link={item} />
-                </li>
-              )),
-            []
+              navItemsList.map(item => {
+                if (item.text === 'Camp') {
+                  return (
+                    <li key={item.path}>
+                      <CustomNavLink link={{ text: item.text, icon: item.icon, path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}` }}/>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item.path}>
+                    <CustomNavLink link={item}/>
+                  </li>
+                );
+              }),
+            [decodedIDToken?.camp_id]
           )}
           {isMobile && (
             <>
