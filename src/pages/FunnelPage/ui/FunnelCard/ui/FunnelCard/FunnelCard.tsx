@@ -49,15 +49,15 @@ const FunnelCard = memo((props: FunnelCardProps) => {
         </Modal>
       )}
       {isLoading && <FormLoader className={'m-centred'} />}
-      {slicedUsers.length > 0 ? (
-        <ul className={styles.card__content}>
-          {slicedUsers.map(user => (
-            <FunnelCardItem key={user.email} user={user} />
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.card__empty__text}>Nobody's rocking this status.</p>
-      )}
+      <ul className={styles.card__content}>
+        {slicedUsers.length > 0 && slicedUsers.map(user => (
+          <FunnelCardItem key={user.email} user={user} />
+        )) || (
+          <li className={styles.card__empty}>
+            Nobody's rocking this status.
+          </li>
+        )}
+      </ul>
     </div>
   );
 });

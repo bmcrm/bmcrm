@@ -1,4 +1,4 @@
-import { CamperRole } from 'entities/Camper';
+import { CamperRole, type CamperSocial } from 'entities/Camper';
 
 export interface ICamperRegisterForm {
   [key: string]: string | boolean | string[] | undefined;
@@ -31,7 +31,7 @@ export interface IUserRegisterData {
   camp_name?: string;
   camp_website?: string;
   about_me?: string;
-  social_links?: string;
+  social_links?: CamperSocial[];
 }
 
 export interface ILoginData {
