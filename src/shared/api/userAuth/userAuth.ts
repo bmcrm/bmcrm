@@ -24,6 +24,7 @@ import {
 } from 'entities/User';
 
 import axiosInstance from 'shared/config/axios';
+import socialLinksParser from 'shared/lib/socialLinkParser/socialLinkParser';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
@@ -46,11 +47,25 @@ export const signUpUser = async (data: IUserRegisterData) => {
     { Name: 'custom:city', Value: data.city || '' },
   ];
 
+  const socialTransformedData = () => {
+    if (!data?.social_links) {
+      return JSON.stringify([]);
+    }
+    if (data?.social_links?.includes(', ')) {
+      return JSON.stringify(socialLinksParser(data.social_links.split(', ')));
+    }
+    return JSON.stringify(socialLinksParser(data?.social_links));
+  };
+
   const params: SignUpCommandInput = {
     ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
     Username: data.email,
     Password: data.password,
     UserAttributes: userAttributes,
+    ClientMetadata: {
+      about_me: data?.about_me || '',
+      social_links: data?.social_links ? socialTransformedData() : JSON.stringify([]),
+    },
   };
 
   return await cognitoClient.send(new SignUpCommand(params));
