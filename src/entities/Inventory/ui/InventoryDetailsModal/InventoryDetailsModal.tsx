@@ -8,9 +8,9 @@ import { IconSize } from 'shared/ui/Icon/Icon.types';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
 interface InventoryDetailsModalProps {
   item: IInventoryItem;
-  onClose: () => void;
+  onClose?: () => void;
 }
-export const InventoryDetailsModal = ({ item, onClose }: InventoryDetailsModalProps) => {
+export const InventoryDetailsModal = ({ item }: InventoryDetailsModalProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { deleteItem } = useInventory();
 
