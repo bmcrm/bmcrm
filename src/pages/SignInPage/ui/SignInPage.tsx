@@ -19,11 +19,11 @@ const SignInPage = memo(() => {
 
   useEffect(() => {
     if (error) {
-      errorHandler(error);
+      errorHandler(error, 'SignInPage', JSON.stringify(credentials));
     }
 
     return resetError();
-  }, [error, resetError]);
+  }, [error, resetError, credentials]);
 
   const handleSubmit = useCallback(
     async (values: ILoginData, { resetForm }: { resetForm: () => void }) => {
@@ -54,9 +54,7 @@ const SignInPage = memo(() => {
       <AuthFormTemplate badge={'Sign in to your account'} background decor>
         <UserSignInForm onSubmit={handleSubmit} />
         {isLoading && <FormLoader />}
-        {isOpen && (
-          <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />
-        )}
+        {isOpen && <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />}
       </AuthFormTemplate>
     </AuthPageTemplate>
   );
