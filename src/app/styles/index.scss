@@ -5,3 +5,14 @@
 @import 'offsets/margins';
 @import 'app';
 @import 'pattern';
+
+// .swiper-pagination-bullet {
+//   background-color: blue !important;
+// }
+.swiper-pagination {
+  position: absolute !important;
+  bottom: 0 !important;
+}
+.swiper-cube .swiper-cube-shadow:before {
+  background: none !important;
+}

@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
 import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 import { EnvConfigs } from 'shared/config/env/env';
+import FormLoader from 'features/FormLoader';
 
 type FormValues = {
   title: string;
@@ -28,6 +29,7 @@ type AddInventoryFormProps = {
 const mode = EnvConfigs.BMCRM_ENV;
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const fileRef = createRef<HTMLInputElement>();
+  const [isUploading, setIsUploading] = useState(false);
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
   const { idToken: token, decodedIDToken } = useAuth();
@@ -61,7 +63,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 
   const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
     const uploadedImageUrls: string[] = [];
-
+    setIsUploading(true);
     for (const preview of imagePreviews) {
       const uploadURL = await getPresignedUrl(preview.file.name);
       await uploadFileToS3(preview.file, uploadURL);
@@ -94,6 +96,8 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       console.error('Error creating item:', error);
       toast.error('Error creating item.');
     }
+    setIsUploading(false);
+
     options.resetForm();
     onClose();
   };
@@ -139,6 +143,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     >
       {({ setFieldValue }) => (
         <Form className={styles.form}>
+          {isUploading && <FormLoader />}
           <div className={styles.form__inner}>
             <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
             <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
