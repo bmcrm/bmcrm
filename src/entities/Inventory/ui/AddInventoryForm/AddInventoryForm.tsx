@@ -103,6 +103,10 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (imagePreviews.length >= 4) {
+      toast.error('You can only upload up to 4 images.');
+      return;
+    }
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       const newPreviews = newFiles.reduce((acc, file) => {
@@ -161,7 +165,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
               onClick={() => {
                 fileRef.current?.click();
               }}
-              placeholder={'Select or drag a photo'}
+              placeholder={'Select a photo'}
             />
           </div>
           <div className={styles.imagePreviewContainer}>
@@ -183,8 +187,13 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
             multiple
             accept='image/jpeg,image/png'
             onChange={e => {
-              handleFileChange(e);
-              setFieldValue('images', e.target.files);
+              if (e.target.files !== null && e.target.files.length > 4) {
+                toast.error('You can only upload up to 4 images.');
+                e.target.value = '';
+              } else {
+                handleFileChange(e);
+                setFieldValue('images', e.target.files);
+              }
             }}
           />
           <div className={styles.details__buttons}>

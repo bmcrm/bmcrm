@@ -57,8 +57,8 @@ export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: Inven
         <div className={styles.info}>
           <p className={clsx(styles.info__quantity, styles.badge)}>{quantity} quantity</p>
           <p className={clsx(styles.info__price, styles.badge)}>${price} price 1pc</p>
+          <p className={clsx(styles.info__totalPrice, styles.badge)}>${quantity * price} total price</p>
         </div>
-        <p className={clsx(styles.info__totalPrice, styles.badge)}>${quantity * price} total price</p>
         <div className={styles.actions}>
           <button onClick={() => handleOpenEditInventory(id!)}>Edit</button>
           <button onClick={() => deleteItem(id!)}>Remove</button>

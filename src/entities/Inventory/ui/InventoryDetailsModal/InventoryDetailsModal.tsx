@@ -1,11 +1,11 @@
 import { IInventoryItem } from 'entities/Inventory/model/types/types';
-import styles from './InventoryDetailsModal.module.css';
+import styles from './InventoryDetailsModal.module.scss';
 import { useState } from 'react';
 import Icon from 'shared/ui/Icon/Icon';
-import EditIcon from 'shared/assets/icons/edit_icon.svg';
 import DeleteIcon from 'shared/assets/icons/delete.svg';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
+import { Swiper, SwiperSlide } from 'swiper/react';
 interface InventoryDetailsModalProps {
   item: IInventoryItem;
   onClose?: () => void;
@@ -24,14 +24,20 @@ export const InventoryDetailsModal = ({ item }: InventoryDetailsModalProps) => {
           <img src={item?.images![currentImageIndex]} alt='inventory image' />
         </div>
         <div className={styles.imgGallery}>
-          {item?.images?.map((image, index) => (
-            <img src={image} alt='inventory image' key={image} onClick={() => setCurrentImageIndex(index)} />
-          ))}
+          <div className={styles.scroll}>
+            <Swiper grabCursor={true} className={styles.swiper} spaceBetween={10} slidesPerView={3}>
+              {item?.images?.map((image, index) => (
+                <SwiperSlide key={image}>
+                  <img src={image} alt='inventory image' key={image} onClick={() => setCurrentImageIndex(index)} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
       </div>
       <div className={styles.itemInfo}>
         <p className={styles.title}>
-          <span>{item?.title}</span> <Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
+          <span>{item?.title}</span>
         </p>
         <p>{item?.description}</p>
         <div className={styles.countInfo}>
