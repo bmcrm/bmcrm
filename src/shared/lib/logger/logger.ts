@@ -11,8 +11,10 @@ export enum LogSource {
   CAMPERS = 'CAMPERS',
   INVENTORY = 'INVENTORY',
 }
+
 const mode = EnvConfigs.BMCRM_ENV;
-export const logger = (level: LogLevel, source: LogSource, message: string, context: Record<string, unknown>) => {
+export const logger = (level: LogLevel, source: LogSource, message: string, context?: Record<string, unknown>) => {
+  if (mode !== 'prod') return;
   axios.post(`https://api.${mode}.bmcrm.camp/eventlog`, {
     level,
     source,

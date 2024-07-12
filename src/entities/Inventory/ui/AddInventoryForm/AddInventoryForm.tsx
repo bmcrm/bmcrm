@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from 'entities/User';
 import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 import { EnvConfigs } from 'shared/config/env/env';
+import FormLoader from 'features/FormLoader';
 
 type FormValues = {
   title: string;
@@ -28,6 +29,7 @@ type AddInventoryFormProps = {
 const mode = EnvConfigs.BMCRM_ENV;
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const fileRef = createRef<HTMLInputElement>();
+  const [isUploading, setIsUploading] = useState(false);
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
   const { idToken: token, decodedIDToken } = useAuth();
@@ -61,7 +63,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 
   const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
     const uploadedImageUrls: string[] = [];
-
+    setIsUploading(true);
     for (const preview of imagePreviews) {
       const uploadURL = await getPresignedUrl(preview.file.name);
       await uploadFileToS3(preview.file, uploadURL);
@@ -86,7 +88,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
         camp_id: decodedIDToken?.camp_id,
         user: decodedIDToken?.email,
-        item: inventoryItem,
+        imageCount: inventoryItem.images?.length,
       });
 
       toast.success('Item created successfully!');
@@ -94,11 +96,17 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       console.error('Error creating item:', error);
       toast.error('Error creating item.');
     }
+    setIsUploading(false);
+
     options.resetForm();
     onClose();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (imagePreviews.length >= 4) {
+      toast.error('You can only upload up to 4 images.');
+      return;
+    }
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       const newPreviews = newFiles.reduce((acc, file) => {
@@ -139,6 +147,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
     >
       {({ setFieldValue }) => (
         <Form className={styles.form}>
+          {isUploading && <FormLoader />}
           <div className={styles.form__inner}>
             <CustomInput name={'title'} label={'Title'} placeholder={'Knife for cutting'} />
             <CustomInput name={'description'} label={'Description'} placeholder={'This knife is nice'} />
@@ -156,7 +165,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
               onClick={() => {
                 fileRef.current?.click();
               }}
-              placeholder={'Select or drag a photo'}
+              placeholder={'Select a photo'}
             />
           </div>
           <div className={styles.imagePreviewContainer}>
@@ -178,8 +187,13 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
             multiple
             accept='image/jpeg,image/png'
             onChange={e => {
-              handleFileChange(e);
-              setFieldValue('images', e.target.files);
+              if (e.target.files !== null && e.target.files.length > 4) {
+                toast.error('You can only upload up to 4 images.');
+                e.target.value = '';
+              } else {
+                handleFileChange(e);
+                setFieldValue('images', e.target.files);
+              }
             }}
           />
           <div className={styles.details__buttons}>

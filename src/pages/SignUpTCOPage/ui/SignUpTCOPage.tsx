@@ -32,7 +32,7 @@ const SignUpTCOPage = memo(() => {
           { duration: 5000, position: 'top-center' }
         );
         logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as TCO', {
-          email: values.email,
+          user: values.email,
           camp_id: values.camp_id,
         });
         resetForm();

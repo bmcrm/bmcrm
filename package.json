@@ -29,6 +29,7 @@
     "react-hot-toast": "^2.4.1",
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.23.1",
+    "swiper": "^11.1.4",
     "yup": "^1.4.0",
     "zustand": "^4.5.2"
   },

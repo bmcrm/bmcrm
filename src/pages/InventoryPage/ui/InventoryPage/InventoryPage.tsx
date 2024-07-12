@@ -9,6 +9,7 @@ import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventor
 import Container from 'shared/ui/Container/Container';
 import NotFound from 'shared/assets/images/inventory/notFound.png';
 import FormLoader from 'features/FormLoader';
+import { ToTopButton } from 'widgets/ToTopButton/ToTopButton';
 const InventoryPage = memo(() => {
   const { getItems, inventory, isLoading } = useInventory(state => ({
     getItems: state.getItems,
@@ -29,6 +30,7 @@ const InventoryPage = memo(() => {
   if (isLoading && !inventory.length) return <FormLoader />;
   return (
     <section className={styles.inventory}>
+      <ToTopButton />
       <Container fluid>
         {categoriesFromInventory.length ? (
           <div className={styles.top_options_btns}>

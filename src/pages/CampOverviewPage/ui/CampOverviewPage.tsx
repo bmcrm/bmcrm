@@ -26,6 +26,7 @@ const CampOverviewPage = memo(() => {
   const navigate = useNavigate();
   const scrollTarget = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
   useEffect(() => {
     if (error) {
       errorHandler(error, `${location.pathname}`);
@@ -51,8 +52,8 @@ const CampOverviewPage = memo(() => {
 
     const response = await register(data);
     logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as camper', {
-      email: values.email,
-      camp_id: values.camp_id,
+      user: values.email,
+      camp_id: id,
     });
     if (response) {
       toast.success(
