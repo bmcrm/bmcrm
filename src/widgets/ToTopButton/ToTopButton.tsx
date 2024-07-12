@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import s from './ToTopButton.module.scss';
 import clsx from 'clsx';
+import Icon from 'shared/ui/Icon/Icon';
+import ArrowUp from 'shared/assets/icons/arrow-top.svg';
 export const ToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -21,7 +23,7 @@ export const ToTopButton = () => {
 
   return (
     <button onClick={scrollToTop} className={clsx(s.btnToTop, !isVisible && s.hidden)}>
-      up
+      <Icon icon={<ArrowUp />} />
     </button>
   );
 };
