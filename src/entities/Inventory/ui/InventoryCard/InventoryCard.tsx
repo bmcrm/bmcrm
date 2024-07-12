@@ -16,7 +16,7 @@ interface InventoryCardProps {
   showInfo?: (item: IInventoryItem) => void;
 }
 export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: InventoryCardProps) => {
-  const { title, description, quantity, price, id, images } = item;
+  const { title, description, quantity, price, id, images = [] } = item;
   const { deleteItem } = useInventory();
 
   return (
@@ -37,7 +37,7 @@ export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: Inven
           modules={[EffectCreative]}
           className={styles.swiper}
           spaceBetween={10}
-          slidesPerView={2}
+          slidesPerView={images?.length > 1 ? 2 : 1}
         >
           {images?.map(image => (
             <SwiperSlide key={image}>

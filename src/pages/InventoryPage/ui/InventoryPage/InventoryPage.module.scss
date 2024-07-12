@@ -1,5 +1,7 @@
 @import 'breakpoints';
-
+.inventory {
+  position: relative;
+}
 .no_items {
   display: flex;
   justify-content: center;
