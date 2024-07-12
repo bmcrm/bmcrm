@@ -88,7 +88,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
         camp_id: decodedIDToken?.camp_id,
         user: decodedIDToken?.email,
-        item: inventoryItem,
+        imageCount: inventoryItem.images?.length,
       });
 
       toast.success('Item created successfully!');

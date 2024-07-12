@@ -52,7 +52,7 @@ const CampOverviewPage = memo(() => {
 
     const response = await register(data);
     logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as camper', {
-      email: values.email,
+      user: values.email,
       camp_id: id,
     });
     if (response) {

@@ -11,6 +11,7 @@ import FormLoader from 'features/FormLoader';
 import styles from './InviteUserModal.module.scss';
 import { inviteMemberSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 
 interface InviteUserFormProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
         onClose();
         resetForm();
         toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
+        logger(LogLevel.INFO, LogSource.WEBAPP, 'New user invited');
       }
     },
     [decodedIDToken, idToken, invite, onClose]
