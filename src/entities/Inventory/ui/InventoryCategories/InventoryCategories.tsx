@@ -32,7 +32,7 @@ export const InventoryCategories = ({ title, items = [] }: InventoryCategoriesPr
       <div className={clsx(items.length <= 4 ? styles.templateGridNormal : styles.cards)}>
         {items?.map(item => (
           <InventoryCard
-            showInfo={handleOpenView}
+            showInfo={() => handleOpenView(item)}
             handleOpenEditInventory={handleOpenEditInventory}
             key={item.id}
             item={item}

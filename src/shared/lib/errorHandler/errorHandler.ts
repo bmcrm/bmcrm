@@ -11,6 +11,7 @@ enum ErrorNames {
   USER_ALREADY_EXIST = 'UsernameExistsException',
   CAMP_ID_ALREADY_EXIST = 'CampIdExistsException',
   INVALID_CODE = 'CodeMismatchException',
+  INVALID_PASSWORD = 'InvalidPasswordException',
 }
 
 const errorsNames: { [key in ErrorNames]: string } = {
@@ -20,6 +21,7 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.USER_ALREADY_EXIST]: 'User already exist!',
   [ErrorNames.CAMP_ID_ALREADY_EXIST]: 'Such Camp ID already exists, please choose another one!',
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
+  [ErrorNames.INVALID_PASSWORD]: 'Please, add to your password special character! [!@#$%^&*()]',
 };
 
 const errorHandler = (

@@ -13,7 +13,7 @@ import { EffectCreative } from 'swiper/modules';
 interface InventoryCardProps {
   handleOpenEditInventory: (id: string) => void;
   item: IInventoryItem;
-  showInfo?: (item: IInventoryItem) => void;
+  showInfo?: () => void;
 }
 export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: InventoryCardProps) => {
   const { title, description, quantity, price, id, images = [] } = item;
@@ -41,13 +41,13 @@ export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: Inven
         >
           {images?.map(image => (
             <SwiperSlide key={image}>
-              <img src={image} alt='inventory image' onClick={() => showInfo?.(item)} />
+              <img src={image} alt='inventory image' onClick={showInfo} />
             </SwiperSlide>
           ))}
         </Swiper>
       ) : (
         <div className={styles.image}>
-          <img onClick={() => showInfo?.(item)} src={Inventory} alt='inventory image' />
+          <img onClick={showInfo} src={Inventory} alt='inventory image' />
         </div>
       )}
 
