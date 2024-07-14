@@ -19,6 +19,7 @@ interface IRoles {
   [CamperRole.QUALIFIED]: ICamper[];
   [CamperRole.INTENT]: ICamper[];
   [CamperRole.CAMPER]: ICamper[];
+  [CamperRole.COORG]: ICamper[];
 }
 
 const FunnelPage = memo(() => {
@@ -31,6 +32,7 @@ const FunnelPage = memo(() => {
     [CamperRole.QUALIFIED]: [],
     [CamperRole.INTENT]: [],
     [CamperRole.CAMPER]: [],
+    [CamperRole.COORG]: [],
   });
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const FunnelPage = memo(() => {
       const qualified = campers.filter(camper => camper.role === CamperRole.QUALIFIED);
       const intent = campers.filter(camper => camper.role === CamperRole.INTENT);
       const campersRole = campers.filter(camper => camper.role === CamperRole.CAMPER);
+      const coorg = campers.filter(camper => camper.role === CamperRole.COORG);
 
       if (tco) {
         campersRole.unshift(tco);
@@ -55,6 +58,7 @@ const FunnelPage = memo(() => {
         qualified,
         intent,
         camper: campersRole,
+        'co-organizer': coorg,
       });
     }
   }, [campers]);
@@ -80,7 +84,12 @@ const FunnelPage = memo(() => {
           <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]} />
           <FunnelCard title={'Qualified'} users={roles[CamperRole.QUALIFIED]} />
           <FunnelCard title={'Intent'} users={roles[CamperRole.INTENT]} />
-          <FunnelCard title={'Campers'} fluid={!isTablet} users={roles[CamperRole.CAMPER]} maxUsers={12} />
+          <FunnelCard
+            title={'Campers'}
+            fluid={!isTablet}
+            users={[...roles[CamperRole.CAMPER], ...roles[CamperRole.COORG]]}
+            maxUsers={12}
+          />
         </div>
       </Container>
     </section>
