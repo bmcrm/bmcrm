@@ -19,6 +19,7 @@ export const registrationSchema = yup.object().shape({
     .min(8, 'Minimum 8 character')
     .matches(/[A-Z]/, 'Uppercase letters')
     .matches(/[0-9]/, 'Numbers')
+    .matches(/[!@#$%^&*]/, 'Special character')
     .required('Password is required'),
 });
 
