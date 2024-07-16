@@ -6,6 +6,7 @@ import {
   loginUser,
   logoutUser,
   refreshUserTokens,
+  signUp,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
@@ -17,7 +18,6 @@ import { type IInviteData, type ILoginData, type IUserRegisterData } from 'entit
 import { jwtDecode } from 'jwt-decode';
 import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
 import type { IConfirmEmail, IConfirmResetPass, IIDToken, ILoggedUser } from '../../types/auth.types';
-import axiosInstance from 'shared/config/axios';
 
 interface IAuthState {
   isLoggedIn: boolean;
@@ -55,7 +55,7 @@ const useAuth = create<IAuthState>()(
         register: async credentials => {
           try {
             set({ isLoading: true });
-            await axiosInstance.post('https://api.dev.bmcrm.camp/campers/create', credentials);
+            await signUp(credentials);
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
             throw error;
