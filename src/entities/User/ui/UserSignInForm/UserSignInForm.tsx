@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Form, Formik, FormikHelpers } from 'formik';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
@@ -21,11 +21,12 @@ type SignInFormProps = {
 
 const UserSignInForm = memo(({ onSubmit, initialValues }: SignInFormProps) => {
   const ref = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
   useEffect(() => {
-    if (initialValues.email && initialValues.password) {
+    if (location.state?.email && location.state?.password) {
       ref.current?.click();
     }
-  }, []);
+  }, [location.state?.email, location.state?.password]);
   return (
     <Formik validationSchema={signInSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
