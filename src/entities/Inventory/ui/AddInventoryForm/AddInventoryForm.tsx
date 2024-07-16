@@ -69,7 +69,6 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       await uploadFileToS3(preview.file, uploadURL);
       uploadedImageUrls.push(uploadURL.split('?')[0]);
     }
-    console.log(uploadedImageUrls);
 
     const inventoryItem: Partial<IInventoryItem> = {
       title: values.title,
@@ -80,7 +79,6 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       images: uploadedImageUrls,
       createdAt: new Date().toISOString(),
     };
-    console.log(inventoryItem);
 
     try {
       await createItem(inventoryItem);

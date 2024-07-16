@@ -23,25 +23,48 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
   [ErrorNames.INVALID_PASSWORD]: 'Please, add to your password special character! [!@#$%^&*()]',
 };
-
+interface CustomError extends Error {
+  response?: {
+    data?: {
+      name: string;
+    };
+  };
+}
 const errorHandler = (
-  error: CognitoIdentityProviderServiceException | AxiosError | Error,
+  error: CognitoIdentityProviderServiceException | AxiosError | Error | CustomError,
   page: string = '',
-  details: string = ''
+  details: string = '',
+  user: string = ''
 ) => {
+  const isAxiosError = (error: unknown): error is AxiosError => {
+    return (error as AxiosError).isAxiosError !== undefined;
+  };
+  const isCustomError = (error: unknown): error is CustomError => {
+    return (error as CustomError).name !== undefined;
+  };
   let errorMessage = errorsNames[error.name as ErrorNames];
   Sentry.captureMessage(`${error.name}: ${error.message}`);
-  logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
-    error: JSON.stringify(error),
-    stack: error.stack,
-    name: error.name,
-    message: error.message,
-    page,
-    details,
-  });
+  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
+    logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
+      user,
+      message: error.message,
+      page,
+      details,
+    });
+  }
+
+  if (!isCustomError(error)) {
+    console.error('Unknown error type:', error);
+    return;
+  }
   if (!errorMessage && error.message) {
     for (const key in ErrorNames) {
       if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {
+        errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
+        break;
+      }
+
+      if (isAxiosError(error) && error.response?.data?.name.includes(ErrorNames[key as keyof typeof ErrorNames])) {
         errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
         break;
       }
@@ -51,8 +74,9 @@ const errorHandler = (
   if (!errorMessage) {
     errorMessage = 'Oops, something went wrong! Try again later!';
   }
-
-  toast.error(errorMessage, { duration: 4000, position: 'top-center' });
+  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
+    toast.error(errorMessage, { duration: 4000, position: 'top-center' });
+  }
 };
 
 export default errorHandler;

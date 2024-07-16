@@ -1,12 +1,12 @@
-import { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { memo, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Form, Formik, FormikHelpers } from 'formik';
 
 import CustomInput from 'shared/ui/CustomInput/CustomInput';
 import Button from 'shared/ui/Button/Button';
 import Icon from 'shared/ui/Icon/Icon';
 
-import { inputsData, initialValues } from './inputsData';
+import { inputsData } from './inputsData';
 import { IconSize } from 'shared/ui/Icon/Icon.types';
 import { RoutePath } from 'app/providers/AppRouter';
 import { signInSchema } from 'shared/const/schemas/validations';
@@ -15,10 +15,18 @@ import styles from './UserSignInForm.module.scss';
 import Camp from 'shared/assets/icons/camp.svg';
 
 type SignInFormProps = {
+  initialValues: ILoginData;
   onSubmit: (values: ILoginData, formikHelpers: FormikHelpers<ILoginData>) => void;
 };
 
-const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
+const UserSignInForm = memo(({ onSubmit, initialValues }: SignInFormProps) => {
+  const ref = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.email && location.state?.password) {
+      ref.current?.click();
+    }
+  }, [location.state?.email, location.state?.password]);
   return (
     <Formik validationSchema={signInSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
@@ -28,7 +36,7 @@ const UserSignInForm = memo(({ onSubmit }: SignInFormProps) => {
         <Link to={RoutePath.reset_pass} className={styles.link}>
           Forgot Password?
         </Link>
-        <Button type='submit' className={styles.btn} fluid>
+        <Button ref={ref} type='submit' className={styles.btn} fluid>
           <Icon icon={<Camp />} size={IconSize.SIZE_20} />
           LOG IN
         </Button>

@@ -24,9 +24,9 @@ const SignUpTCOPage = memo(() => {
 
   const submitHandler = useCallback(
     async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
-      const response = await register(values);
+      try {
+        await register(values);
 
-      if (response) {
         toast.success(
           'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
           { duration: 5000, position: 'top-center' }
@@ -36,7 +36,10 @@ const SignUpTCOPage = memo(() => {
           camp_id: values.camp_id,
         });
         resetForm();
-        navigate(RoutePath.sign_in, { replace: true });
+
+        navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
+      } catch {
+        return null;
       }
     },
     [navigate, register]

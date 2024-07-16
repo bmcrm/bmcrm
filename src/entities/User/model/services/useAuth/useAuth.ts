@@ -4,8 +4,8 @@ import {
   initResetPassword,
   inviteUser,
   loginUser,
-  logoutUser, refreshUserTokens,
-  signUpUser,
+  logoutUser,
+  refreshUserTokens,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
@@ -17,6 +17,7 @@ import { type IInviteData, type ILoginData, type IUserRegisterData } from 'entit
 import { jwtDecode } from 'jwt-decode';
 import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
 import type { IConfirmEmail, IConfirmResetPass, IIDToken, ILoggedUser } from '../../types/auth.types';
+import axiosInstance from 'shared/config/axios';
 
 interface IAuthState {
   isLoggedIn: boolean;
@@ -54,9 +55,10 @@ const useAuth = create<IAuthState>()(
         register: async credentials => {
           try {
             set({ isLoading: true });
-            return await signUpUser(credentials);
+            await axiosInstance.post('https://api.dev.bmcrm.camp/campers/create', credentials);
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
+            throw error;
           } finally {
             set({ isLoading: false });
           }
@@ -149,7 +151,7 @@ const useAuth = create<IAuthState>()(
         },
         updateTokens: async refreshToken => {
           try {
-            const newTokens =  await refreshUserTokens(refreshToken);
+            const newTokens = await refreshUserTokens(refreshToken);
 
             if (newTokens) {
               const decodedIDToken = jwtDecode<IIDToken>(newTokens.IdToken as string);
