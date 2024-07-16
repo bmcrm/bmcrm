@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import styles from './Button.module.scss';
 import { ButtonHTMLAttributes } from 'react';
 import { ButtonColor, ButtonSize, ButtonTheme } from './Button.types.ts';

@@ -6,7 +6,6 @@ import {
   loginUser,
   logoutUser,
   refreshUserTokens,
-  signUpUser,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
