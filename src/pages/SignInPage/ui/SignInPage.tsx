@@ -10,6 +10,7 @@ import { type ILoginData, useAuth, UserSignInForm } from 'entities/User';
 import { UserConfirmModal } from 'features/UserConfirmModal';
 import FormLoader from 'features/FormLoader';
 import { RoutePath } from 'app/providers/AppRouter';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 
 const SignInPage = memo(() => {
   const navigate = useNavigate();
@@ -41,6 +42,9 @@ const SignInPage = memo(() => {
         resetForm();
         navigate(RoutePath.funnel, { replace: true });
       } catch (e) {
+        if (e instanceof CognitoIdentityProviderServiceException && e.name !== 'UserNotConfirmedException') {
+          logger(LogLevel.ERROR, LogSource.WEBAPP, 'Login error', { user: values.email });
+        }
         if (e instanceof CognitoIdentityProviderServiceException && e.name === 'UserNotConfirmedException') {
           setCredentials(() => ({
             email: data.email,

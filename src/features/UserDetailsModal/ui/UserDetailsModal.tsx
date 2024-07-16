@@ -27,6 +27,7 @@ import EditIcon from 'icons/edit_icon.svg';
 import CheckIcon from 'icons/check.svg';
 import ClockIcon from 'icons/clock.svg';
 import PlusIcon from 'icons/plus_icon.svg';
+import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 
 interface UserDetailsModalProps {
   camperEmail: string | null;
@@ -62,6 +63,11 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
         if (currentCamper) {
           setCamper(currentCamper);
           setSocialIcons(currentCamper.social_links || []);
+        } else {
+          logger(LogLevel.ERROR, LogSource.WEBAPP, 'Camper not found', {
+            user: camperEmail,
+            camp_id: decodedIDToken!.camp_id,
+          });
         }
       }
     };
