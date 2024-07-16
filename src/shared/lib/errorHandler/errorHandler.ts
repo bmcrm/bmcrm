@@ -27,14 +27,13 @@ const errorsNames: { [key in ErrorNames]: string } = {
 const errorHandler = (
   error: CognitoIdentityProviderServiceException | AxiosError | Error,
   page: string = '',
-  details: string = ''
+  details: string = '',
+  user: string = ''
 ) => {
   let errorMessage = errorsNames[error.name as ErrorNames];
   Sentry.captureMessage(`${error.name}: ${error.message}`);
   logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
-    error: JSON.stringify(error),
-    stack: error.stack,
-    name: error.name,
+    user,
     message: error.message,
     page,
     details,
@@ -51,8 +50,9 @@ const errorHandler = (
   if (!errorMessage) {
     errorMessage = 'Oops, something went wrong! Try again later!';
   }
-
-  toast.error(errorMessage, { duration: 4000, position: 'top-center' });
+  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
+    toast.error(errorMessage, { duration: 4000, position: 'top-center' });
+  }
 };
 
 export default errorHandler;

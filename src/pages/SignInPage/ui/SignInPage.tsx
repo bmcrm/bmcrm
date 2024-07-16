@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import errorHandler from 'shared/lib/errorHandler/errorHandler';
 import { useToggle } from 'shared/hooks/useToggle/useToggle';
@@ -16,12 +16,16 @@ const SignInPage = memo(() => {
   const [credentials, setCredentials] = useState<ILoginData | null>(null);
   const { login, isLoading, error, resetError } = useAuth();
   const { isOpen, open, close } = useToggle();
-
+  const location = useLocation();
+  const signInCredentials = location?.state as ILoginData;
+  const initialValues = {
+    email: signInCredentials?.email || '',
+    password: signInCredentials?.password || '',
+  };
   useEffect(() => {
     if (error) {
       errorHandler(error, 'SignInPage', JSON.stringify({ email: credentials?.email }));
     }
-
     return resetError();
   }, [error, resetError, credentials]);
 
@@ -52,7 +56,7 @@ const SignInPage = memo(() => {
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background decor>
-        <UserSignInForm onSubmit={handleSubmit} />
+        <UserSignInForm onSubmit={handleSubmit} initialValues={initialValues} />
         {isLoading && <FormLoader />}
         {isOpen && <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />}
       </AuthFormTemplate>

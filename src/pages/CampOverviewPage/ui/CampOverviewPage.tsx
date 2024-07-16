@@ -50,18 +50,22 @@ const CampOverviewPage = memo(() => {
   const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
 
-    const response = await register(data);
-    logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as camper', {
-      user: values.email,
-      camp_id: id,
-    });
-    if (response) {
-      toast.success(
-        'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
-        { duration: 5000, position: 'top-center' }
-      );
-      resetForm();
-      navigate(RoutePath.sign_in, { replace: true });
+    try {
+      const response = await register(data);
+      logger(LogLevel.INFO, LogSource.WEBAPP, 'New user registered as camper', {
+        user: values.email,
+        camp_id: id,
+      });
+      if (response) {
+        toast.success(
+          'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
+          { duration: 5000, position: 'top-center' }
+        );
+        resetForm();
+        navigate(RoutePath.sign_in, { replace: true });
+      }
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.', { duration: 4000, position: 'top-center' });
     }
   };
 

@@ -10,18 +10,9 @@ import {
   GlobalSignOutCommand,
   InitiateAuthCommand,
   InitiateAuthCommandInput,
-  SignUpCommand,
-  SignUpCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
-import {
-  type IConfirmEmail,
-  type IConfirmResetPass,
-  type IInviteData,
-  type ILoginData,
-  type IUserRegisterData,
-  useAuth,
-} from 'entities/User';
+import { type IConfirmEmail, type IConfirmResetPass, type IInviteData, type ILoginData, useAuth } from 'entities/User';
 
 import axiosInstance from 'shared/config/axios';
 
@@ -30,35 +21,6 @@ const cognitoClient = new CognitoIdentityProviderClient({
 });
 
 const mode = EnvConfigs.BMCRM_ENV;
-
-export const signUpUser = async (data: IUserRegisterData) => {
-  const userAttributes = [
-    { Name: 'email', Value: data.email },
-    { Name: 'custom:created_at', Value: new Date().getTime().toString() },
-    { Name: 'updated_at', Value: new Date().getTime().toString() },
-    { Name: 'custom:first_name', Value: data.first_name },
-    { Name: 'custom:last_name', Value: data.last_name },
-    { Name: 'custom:playa_name', Value: data.playa_name },
-    { Name: 'custom:role', Value: data.role },
-    { Name: 'custom:camp_id', Value: data.camp_id },
-    { Name: 'custom:camp_website', Value: data.camp_website || '' },
-    { Name: 'custom:camp_name', Value: data.camp_name || '' },
-    { Name: 'custom:city', Value: data.city || '' },
-  ];
-
-  const params: SignUpCommandInput = {
-    ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-    Username: data.email,
-    Password: data.password,
-    UserAttributes: userAttributes,
-    ClientMetadata: {
-      about_me: data?.about_me || '',
-      social_links: JSON.stringify(data?.social_links),
-    },
-  };
-
-  return await cognitoClient.send(new SignUpCommand(params));
-};
 
 export const inviteUser = async (data: IInviteData): Promise<unknown> => {
   return await axiosInstance.post(`https://api.${mode}.bmcrm.camp/campers`, data, {

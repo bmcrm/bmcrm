@@ -4,15 +4,19 @@ const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/
 const socialRegex = /^https:\/\/.+\/.+$/;
 
 export const registrationSchema = yup.object().shape({
-  camp_name: yup.string().required('Camp name is required').min(3, 'Camp name must be at least 3 characters'),
+  camp_name: yup
+    .string()
+    .required('Camp name is required')
+    .min(3, 'Camp name must be at least 3 characters')
+    .max(32, 'Less than 32 characters'),
   camp_id: yup.string().required('Camp ID is required'),
   role: yup.string(),
-  city: yup.string().required('City is required'),
-  camp_website: yup.string().matches(urlRegex, 'Invalid website address'),
+  city: yup.string().max(32, 'Less than 32 characters').required('City is required'),
+  camp_website: yup.string().matches(urlRegex, 'Invalid website address').max(32, 'Less than 32 characters'),
   accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
   first_name: yup.string().required('Field is required').max(32, 'First name must be less than 32 characters'),
   last_name: yup.string().required('Field is required').max(32, 'Last name must be less than 32 characters'),
-  playa_name: yup.string(),
+  playa_name: yup.string().max(24, 'Less than 24 characters'),
   email: yup.string().trim().email('Invalid email address').required('Email is required'),
   password: yup
     .string()
@@ -78,8 +82,14 @@ export const camperRegistrationSchema = yup.object().shape({
     .required('Field is required')
     .max(32, 'Last name must be less than 32 characters')
     .transform((_, originalValue) => originalValue.trim()),
-  playa_name: yup.string().transform((_, originalValue) => originalValue.trim()),
-  about_me: yup.string().transform((_, originalValue) => originalValue.trim()),
+  playa_name: yup
+    .string()
+    .max(24, 'Less than 24 characters')
+    .transform((_, originalValue) => originalValue.trim()),
+  about_me: yup
+    .string()
+    .max(256, 'Less than 256 characters')
+    .transform((_, originalValue) => originalValue.trim()),
   email: yup
     .string()
     .email('Invalid email address')

@@ -1,3 +1,4 @@
+import React, { forwardRef } from 'react';
 import styles from './Button.module.scss';
 import { ButtonHTMLAttributes } from 'react';
 import { ButtonColor, ButtonSize, ButtonTheme } from './Button.types.ts';
@@ -11,7 +12,7 @@ type ButtonProps = {
   fluid?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button = (props: ButtonProps) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     children,
     className,
@@ -29,10 +30,10 @@ const Button = (props: ButtonProps) => {
   const additional: Additional = [className, styles[theme], styles[size], styles[color]];
 
   return (
-    <button type={type} className={classNames(styles.btn, mods, additional)} {...otherProps}>
+    <button ref={ref} type={type} className={classNames(styles.btn, mods, additional)} {...otherProps}>
       {children}
     </button>
   );
-};
+});
 
 export default Button;
