@@ -18,7 +18,6 @@ import { type IInviteData, type ILoginData, type IUserRegisterData } from 'entit
 import { jwtDecode } from 'jwt-decode';
 import tokenNormalize from 'shared/lib/tokenNormalize/tokenNormalize';
 import type { IConfirmEmail, IConfirmResetPass, IIDToken, ILoggedUser } from '../../types/auth.types';
-import axiosInstance from 'shared/config/axios';
 
 interface IAuthState {
   isLoggedIn: boolean;
