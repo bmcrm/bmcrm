@@ -10,40 +10,27 @@
     posthog.init('phc_s9uMgN2H8nBAM7cAame1yQbV6OTnKHYRAelvewHj9mI',{api_host:'https://eu.i.posthog.com', person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
         })
 </script>
-  <!-- begin Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8KVKZRPR06"></script>
-  <script>
- if(window.location.hostname === 'https://app.bmcrm.camp'){
-      window.dataLayer = window.dataLayer || [];
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LWWDLJ8YB6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      function gtag() {
-        dataLayer.push(arguments);
-      }
+  gtag('config', 'G-LWWDLJ8YB6');
+</script>
 
-      gtag('js', new Date());
-      gtag('config', 'G-8KVKZRPR06');}
-  </script>
-  <!-- end Google tag (gtag.js) -->
-
-  <!-- BEGIN PLERDY CODE -->
-  <script type="text/javascript" defer data-plerdy_code='1'>
-    if(window.location.hostname === 'https://app.bmcrm.camp'){
-      var _protocol = "https:" == document.location.protocol ? "https://" : "http://";
-      _site_hash_code = "5332d078c20b1d4e7c64d8b4b4411545", _suid = 51928,
-        plerdyScript = document.createElement("script");
-      plerdyScript.setAttribute("defer", ""), plerdyScript.dataset.plerdymainscript = "plerdymainscript",
-        plerdyScript.src = "https://a.plerdy.com/public/js/click/main.js?v=" + Math.random();
-      var plerdymainscript = document.querySelector("[data-plerdymainscript='plerdymainscript']");
-      plerdymainscript && plerdymainscript.parentNode.removeChild(plerdymainscript);
-      try {
-        document.head.appendChild(plerdyScript)
-      } catch (t) {
-        console.log(t, "unable add script tag")
-      }
-    }
-      
-  </script>
-  <!-- END PLERDY CODE -->
+<!-- BEGIN PLERDY CODE -->
+<script type="text/javascript" defer data-plerdy_code='1'>
+  var _protocol="https:"==document.location.protocol?"https://":"http://";
+  _site_hash_code = "5332d078c20b1d4e7c64d8b4b4411545",_suid=51928, plerdyScript=document.createElement("script");
+  plerdyScript.setAttribute("defer",""),plerdyScript.dataset.plerdymainscript="plerdymainscript",
+  plerdyScript.src="https://a.plerdy.com/public/js/click/main.js?v="+Math.random();
+  var plerdymainscript=document.querySelector("[data-plerdymainscript='plerdymainscript']");
+  plerdymainscript&&plerdymainscript.parentNode.removeChild(plerdymainscript);
+  try{document.head.appendChild(plerdyScript)}catch(t){console.log(t,"unable add script tag")}
+</script>
+<!-- END PLERDY CODE -->
 </head>
 <body>
 <div id="root"></div>

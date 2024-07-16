@@ -49,6 +49,7 @@ const CampOverviewPage = memo(() => {
 
   const submitHandler = async (values: IUserRegisterData, resetForm: () => void) => {
     const data = { ...values, camp_id: id };
+    const { password, email, ...logData } = data;
 
     try {
       await register(data);
@@ -64,6 +65,10 @@ const CampOverviewPage = memo(() => {
       resetForm();
       navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
     } catch {
+      logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
+        user: values.email,
+        ...logData,
+      });
       return null;
     }
   };

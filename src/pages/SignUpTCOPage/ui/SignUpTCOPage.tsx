@@ -24,6 +24,7 @@ const SignUpTCOPage = memo(() => {
 
   const submitHandler = useCallback(
     async (values: IUserRegisterData, { resetForm }: { resetForm: () => void }) => {
+      const { password, email, ...logData } = values;
       try {
         await register(values);
 
@@ -39,6 +40,11 @@ const SignUpTCOPage = memo(() => {
 
         navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
       } catch {
+        logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
+          user: values.email,
+          camp_id: values.camp_id,
+          ...logData,
+        });
         return null;
       }
     },
