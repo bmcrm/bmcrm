@@ -14,6 +14,7 @@ import { useAuth } from 'entities/User';
 import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
 import { EnvConfigs } from 'shared/config/env/env';
 import FormLoader from 'features/FormLoader';
+import imageCompression from 'browser-image-compression'; // Импортируем библиотеку
 
 type FormValues = {
   title: string;
@@ -33,6 +34,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
   const { idToken: token, decodedIDToken } = useAuth();
+
   const getPresignedUrl = async (fileName: string) => {
     const response = await fetch(`https://api.${mode}.bmcrm.camp/inventory/upload`, {
       method: 'POST',
@@ -64,6 +66,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const handleSubmit = async (values: FormValues, options: { resetForm: () => void }) => {
     const uploadedImageUrls: string[] = [];
     setIsUploading(true);
+
     for (const preview of imagePreviews) {
       const uploadURL = await getPresignedUrl(preview.file.name);
       await uploadFileToS3(preview.file, uploadURL);
@@ -94,32 +97,46 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
       console.error('Error creating item:', error);
       toast.error('Error creating item.');
     }
-    setIsUploading(false);
 
+    setIsUploading(false);
     options.resetForm();
     onClose();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (imagePreviews.length >= 4) {
       toast.error('You can only upload up to 4 images.');
       return;
     }
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      const newPreviews = newFiles.reduce((acc, file) => {
-        if (file.size <= 5 * 1024 * 1024) {
-          acc.push({
-            file,
-            previewUrl: URL.createObjectURL(file),
-          });
-        } else {
-          toast.error('Each image must be less than 5MB.');
-        }
-        return acc;
-      }, [] as { file: File; previewUrl: string }[]);
-      setImagePreviews([...imagePreviews, ...newPreviews]);
+      const newPreviews = await Promise.all(
+        newFiles.map(async file => {
+          if (file.size <= 5 * 1024 * 1024) {
+            try {
+              const options = {
+                maxSizeMB: 0.5,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
+                initialQuality: 0.75,
+              };
+              const compressedFile = await imageCompression(file, options);
+              return {
+                file: compressedFile,
+                previewUrl: URL.createObjectURL(compressedFile),
+              };
+            } catch (error) {
+              toast.error('Error compressing image');
+              console.error('Error compressing image:', error);
+            }
+          } else {
+            toast.error('Each image must be less than 5MB.');
+            return null;
+          }
+        })
+      );
 
+      setImagePreviews([...imagePreviews, ...(newPreviews.filter(Boolean) as { file: File; previewUrl: string }[])]);
       e.target.value = '';
     }
   };

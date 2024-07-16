@@ -20,6 +20,7 @@
     "@sentry/tracing": "^7.114.0",
     "@sentry/vite-plugin": "^2.19.0",
     "axios": "^1.7.2",
+    "browser-image-compression": "^2.0.2",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "formik": "^2.4.6",
