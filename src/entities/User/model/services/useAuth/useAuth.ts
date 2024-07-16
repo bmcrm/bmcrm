@@ -6,6 +6,7 @@ import {
   loginUser,
   logoutUser,
   refreshUserTokens,
+  signUp,
 } from 'shared/api/userAuth/userAuth';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
@@ -55,7 +56,7 @@ const useAuth = create<IAuthState>()(
         register: async credentials => {
           try {
             set({ isLoading: true });
-            await axiosInstance.post('https://api.dev.bmcrm.camp/campers/create', credentials);
+            await signUp(credentials);
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
             throw error;

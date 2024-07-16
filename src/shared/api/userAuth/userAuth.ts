@@ -12,9 +12,17 @@ import {
   InitiateAuthCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { EnvConfigs } from 'shared/config/env/env';
-import { type IConfirmEmail, type IConfirmResetPass, type IInviteData, type ILoginData, useAuth } from 'entities/User';
+import {
+  type IConfirmEmail,
+  type IConfirmResetPass,
+  type IInviteData,
+  type ILoginData,
+  IUserRegisterData,
+  useAuth,
+} from 'entities/User';
 
 import axiosInstance from 'shared/config/axios';
+import { ITCORegisterForm } from 'entities/User/model/types/auth.types';
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: EnvConfigs.AWS_REGION,
@@ -28,6 +36,9 @@ export const inviteUser = async (data: IInviteData): Promise<unknown> => {
       Authorization: useAuth.getState().idToken,
     },
   });
+};
+export const signUp = async (credentials: ITCORegisterForm | IUserRegisterData) => {
+  await axiosInstance.post(`https://api.${mode}.bmcrm.camp/campers/create`, credentials);
 };
 
 export const loginUser = async ({ email, password }: ILoginData) => {
