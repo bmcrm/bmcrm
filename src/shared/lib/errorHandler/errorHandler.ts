@@ -23,13 +23,25 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
   [ErrorNames.INVALID_PASSWORD]: 'Please, add to your password special character! [!@#$%^&*()]',
 };
-
+interface CustomError extends Error {
+  response?: {
+    data?: {
+      name: string;
+    };
+  };
+}
 const errorHandler = (
-  error: CognitoIdentityProviderServiceException | AxiosError | Error,
+  error: CognitoIdentityProviderServiceException | AxiosError | Error | CustomError,
   page: string = '',
   details: string = '',
   user: string = ''
 ) => {
+  const isAxiosError = (error: unknown): error is AxiosError => {
+    return (error as AxiosError).isAxiosError !== undefined;
+  };
+  const isCustomError = (error: unknown): error is CustomError => {
+    return (error as CustomError).name !== undefined;
+  };
   let errorMessage = errorsNames[error.name as ErrorNames];
   Sentry.captureMessage(`${error.name}: ${error.message}`);
   if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
@@ -41,9 +53,18 @@ const errorHandler = (
     });
   }
 
+  if (!isCustomError(error)) {
+    console.error('Unknown error type:', error);
+    return;
+  }
   if (!errorMessage && error.message) {
     for (const key in ErrorNames) {
       if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {
+        errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
+        break;
+      }
+
+      if (isAxiosError(error) && error.response?.data?.name.includes(ErrorNames[key as keyof typeof ErrorNames])) {
         errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
         break;
       }

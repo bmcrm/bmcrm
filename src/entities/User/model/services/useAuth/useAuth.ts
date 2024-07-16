@@ -58,6 +58,7 @@ const useAuth = create<IAuthState>()(
             await axiosInstance.post('https://api.dev.bmcrm.camp/campers/create', credentials);
           } catch (error) {
             set({ error: error as CognitoIdentityProviderServiceException });
+            throw error;
           } finally {
             set({ isLoading: false });
           }

@@ -63,8 +63,8 @@ const CampOverviewPage = memo(() => {
       );
       resetForm();
       navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
-    } catch (error) {
-      toast.error('Something went wrong. Please try again.', { duration: 4000, position: 'top-center' });
+    } catch {
+      return null;
     }
   };
 

@@ -38,8 +38,8 @@ const SignUpTCOPage = memo(() => {
         resetForm();
 
         navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
-      } catch (error) {
-        toast.error('Failed to register!', { duration: 2000, position: 'top-right' });
+      } catch {
+        return null;
       }
     },
     [navigate, register]
