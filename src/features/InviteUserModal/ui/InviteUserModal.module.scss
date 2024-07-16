@@ -3,7 +3,24 @@
 .invite-modal {
   width: 490px;
   max-width: 100%;
-
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-neutral);
+  }
+  .copy__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .copy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--color-neutral);
+  }
   .title {
     font: var(--font-m);
     font-weight: 500;

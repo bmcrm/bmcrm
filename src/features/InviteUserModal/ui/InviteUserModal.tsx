@@ -12,6 +12,9 @@ import styles from './InviteUserModal.module.scss';
 import { inviteMemberSchema } from 'shared/const/schemas/validations';
 import { useAuth } from 'entities/User';
 import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+import Icon from 'shared/ui/Icon/Icon';
+import CopyIcon from 'shared/assets/icons/copy.svg';
+import { IconSize } from 'shared/ui/Icon/Icon.types';
 
 interface InviteUserFormProps {
   isOpen: boolean;
@@ -28,7 +31,14 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
 
     return resetError();
   }, [error, resetError]);
-
+  const handleCopyClick = async (value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success('Copied!', { duration: 2000, position: 'top-right' });
+    } catch {
+      toast.error('Failed to copy!', { duration: 2000, position: 'top-right' });
+    }
+  };
   const handleSubmit = useCallback(
     async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
       const trimmedInviteEmail = values.email.trim();
@@ -61,6 +71,17 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
         <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '' }}>
           <Form className={styles.inviteModal__form}>
             <CustomInput name={'email'} placeholder={'Email'} />
+            <div className={styles.divider} />
+            <div className={styles.copy__wrapper}>
+              <h4>Invite user by link</h4>
+              <button
+                className={styles.copy}
+                type='button'
+                onClick={() => handleCopyClick(`${window.location.origin}/id/${decodedIDToken!.camp_id}`)}
+              >
+                Copy link <Icon size={IconSize.SIZE_28} icon={<CopyIcon />} />
+              </button>
+            </div>
             <Button type={'submit'} className={'m-centred'}>
               Send Invitation
             </Button>
