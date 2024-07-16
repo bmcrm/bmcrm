@@ -32,12 +32,15 @@ const errorHandler = (
 ) => {
   let errorMessage = errorsNames[error.name as ErrorNames];
   Sentry.captureMessage(`${error.name}: ${error.message}`);
-  logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
-    user,
-    message: error.message,
-    page,
-    details,
-  });
+  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
+    logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
+      user,
+      message: error.message,
+      page,
+      details,
+    });
+  }
+
   if (!errorMessage && error.message) {
     for (const key in ErrorNames) {
       if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {

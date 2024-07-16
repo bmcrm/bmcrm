@@ -43,7 +43,10 @@ const InviteUserModal = memo(({ isOpen, onClose }: InviteUserFormProps) => {
         onClose();
         resetForm();
         toast.success(`Invite sent to ${values.email}`, { duration: 2000, position: 'top-right' });
-        logger(LogLevel.INFO, LogSource.WEBAPP, 'New user invited');
+        logger(LogLevel.INFO, LogSource.WEBAPP, 'New user invited', {
+          user: values.email,
+          camp_id: decodedIDToken!.camp_id,
+        });
       }
     },
     [decodedIDToken, idToken, invite, onClose]
