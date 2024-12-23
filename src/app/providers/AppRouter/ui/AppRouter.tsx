@@ -3,9 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
 import { AppRouterProps, routeConfig, RoutePath } from '../config/routeConfig';
 import RequireAuth from './RequireAuth';
-import PageLoader from 'features/PageLoader';
-import Header from 'widgets/Header';
-import { SettingsAccount, SettingsCamp, SettingsPage } from 'pages/SettingsPage';
+import PageLoader from '@features/PageLoader';
+import Header from '@widgets/Header';
+import { SettingsAccount, SettingsCamp, SettingsPage } from '@pages/SettingsPage';
 
 const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 

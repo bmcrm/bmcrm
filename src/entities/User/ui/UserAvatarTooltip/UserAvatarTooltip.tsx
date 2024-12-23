@@ -1,16 +1,13 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { classNames } from 'shared/lib/classNames/classNames';
-import useAuth from 'entities/User/model/services/useAuth/useAuth';
-
-import Tooltip from 'shared/ui/Tooltip/Tooltip';
-import Icon from 'shared/ui/Icon/Icon';
-
+import { classNames } from '@shared/lib/classNames';
+import { Tooltip } from '@shared/ui/Tooltip';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { useLogout } from '../../hooks/useLogout';
+import { RoutePath } from '@app/providers/AppRouter';
 import styles from './UserAvatarTooltip.module.scss';
-import { RoutePath } from 'app/providers/AppRouter';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import SettingsIcon from 'shared/assets/icons/settings_icon.svg';
-import LogoutIcon from 'shared/assets/icons/logout_icon.svg';
+import SettingsIcon from '@shared/assets/icons/settings_icon.svg';
+import LogoutIcon from '@shared/assets/icons/logout_icon.svg';
 
 type UserAvatarTooltipProps = {
   className?: string;
@@ -18,11 +15,11 @@ type UserAvatarTooltipProps = {
 };
 
 const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) => {
-  const { logout, accessToken } = useAuth();
+  const { mutate: logout } = useLogout();
 
   const handleLogout = () => {
     onClick?.();
-    logout(accessToken);
+    logout();
   };
 
   return (

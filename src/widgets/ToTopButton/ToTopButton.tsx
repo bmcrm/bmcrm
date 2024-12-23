@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import s from './ToTopButton.module.scss';
-import clsx from 'clsx';
-import Icon from 'shared/ui/Icon/Icon';
-import ArrowUp from 'shared/assets/icons/arrow-top.svg';
+import { useState, useEffect, useCallback } from 'react';
+import { classNames } from '@shared/lib/classNames';
+import Icon from '@shared/ui/Icon/ui/Icon.tsx';
+import styles from './ToTopButton.module.scss';
+import ArrowUp from '@shared/assets/icons/arrow-top.svg';
+
 export const ToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -11,18 +12,18 @@ export const ToTopButton = () => {
       const scrollY = window.scrollY;
       setIsVisible(scrollY >= 300);
     };
+
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scroll({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   return (
-    <button onClick={scrollToTop} className={clsx(s.btnToTop, !isVisible && s.hidden)}>
+    <button onClick={scrollToTop} className={classNames(styles.btnToTop, { [styles.hidden]: !isVisible }, [])}>
       <Icon icon={<ArrowUp />} />
     </button>
   );

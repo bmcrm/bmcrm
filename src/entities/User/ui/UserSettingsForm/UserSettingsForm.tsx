@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import useAuth from '../../model/services/useAuth/useAuth';
-import { type ICamper, useCampers } from 'entities/Camper';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import Avatar from 'shared/ui/Avatar/Avatar.tsx';
-import Button from 'shared/ui/Button/Button.tsx';
-import { userSettingsSchema } from 'shared/const/schemas/validations';
-import { inputsData } from './inputsData';
+import { type ICamper, useCampers } from '@entities/Camper';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { Avatar } from '@shared/ui/Avatar';
+import { Button } from '@shared/ui/Button';
+import { userState } from '../../model/state/userState';
+import { userSettingsSchema } from '@shared/const/validationSchemas';
+import { inputsData } from '../../model/data/UserSettingsForm.data';
 import styles from './UserSettingsForm.module.scss';
 
 type UserSettingsFormProps = {
@@ -14,7 +14,7 @@ type UserSettingsFormProps = {
 };
 
 const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
-  const { decodedIDToken } = useAuth();
+  const { tokens: { decodedIDToken } } = userState();
   const { getCamper } = useCampers();
   const [userEmail, setUserEmail] = useState('');
   const [initialData, setInitialData] = useState<Partial<ICamper>>({

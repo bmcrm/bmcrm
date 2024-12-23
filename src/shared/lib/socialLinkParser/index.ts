@@ -1,0 +1,1 @@
+export { socialLinksParser } from './socialLinkParser';

@@ -2,7 +2,7 @@ import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito
 import toast from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
 import { AxiosError } from 'axios';
-import { logger, LogLevel, LogSource } from '../logger/logger';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 
 enum ErrorNames {
   USER_NOT_FOUND = 'UserNotFoundException',
@@ -23,6 +23,7 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_CODE]: 'Invalid verification code provided, please try again!',
   [ErrorNames.INVALID_PASSWORD]: 'Please, add to your password special character! [!@#$%^&*()]',
 };
+
 interface CustomError extends Error {
   response?: {
     data?: {
@@ -30,7 +31,8 @@ interface CustomError extends Error {
     };
   };
 }
-const errorHandler = (
+
+export const errorHandler = (
   error: CognitoIdentityProviderServiceException | AxiosError | Error | CustomError,
   page: string = '',
   details: string = '',
@@ -78,5 +80,3 @@ const errorHandler = (
     toast.error(errorMessage, { duration: 4000, position: 'top-center' });
   }
 };
-
-export default errorHandler;

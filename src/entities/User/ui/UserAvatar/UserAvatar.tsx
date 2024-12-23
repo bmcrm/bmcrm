@@ -1,15 +1,13 @@
 import { memo, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
-import { classNames } from 'shared/lib/classNames/classNames';
-
-import Avatar from 'shared/ui/Avatar/Avatar';
+import { useMedia } from '@shared/hooks/useMedia';
+import { classNames } from '@shared/lib/classNames';
+import { Avatar } from '@shared/ui/Avatar';
 import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
-
+import { RoutePath } from '@app/providers/AppRouter';
+import { userState } from '../../model/state/userState';
+import { IUserAvatar } from '../../model/types/UserAvatar.types';
 import styles from './UserAvatar.module.scss';
-import { RoutePath } from 'app/providers/AppRouter';
-import { IUserAvatar } from '../../model/types/userAvatar.types';
-import useAuth from 'entities/User/model/services/useAuth/useAuth';
 
 type UserAvatarProps = {
   className?: string;
@@ -19,8 +17,8 @@ type UserAvatarProps = {
 
 const UserAvatar = memo(({ className, user, theme = 'default' }: UserAvatarProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { decodedIDToken } = useAuth();
+  const { isTablet } = useMedia();
+  const { tokens: { decodedIDToken } } = userState();
 
   const mouseEnterHandler = () => {
     setIsHovered(true);

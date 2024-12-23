@@ -1,15 +1,14 @@
 import { createRef, memo, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import Button from 'shared/ui/Button/Button';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import styles from './EditInventoryForm.module.scss';
-import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
-import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
-import { createItemSchema } from 'shared/const/schemas/validations';
-import { IInventoryItem } from 'entities/Inventory/model/types/types';
-import Icon from 'shared/ui/Icon/Icon';
+import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
+import { createItemSchema } from '@shared/const/validationSchemas';
+import { IInventoryItem } from '@entities/Inventory/model/types/types';
+import { Icon } from '@shared/ui/Icon';
 import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
-import FormLoader from 'features/FormLoader';
+import { FormLoader } from '@features/FormLoader';
 type FormValues = {
   title: string;
   description: string;

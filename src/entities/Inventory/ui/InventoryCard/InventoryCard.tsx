@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import styles from './InventoryCard.module.scss';
-import Inventory from 'shared/assets/images/inventory/inventory.png';
-import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
-import { IInventoryItem } from 'entities/Inventory/model/types/types';
+import Inventory from '@shared/assets/images/inventory/inventory.png';
+import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
+import { IInventoryItem } from '@entities/Inventory/model/types/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';

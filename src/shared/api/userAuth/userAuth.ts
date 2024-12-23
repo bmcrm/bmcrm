@@ -1,3 +1,4 @@
+/*
 import {
   AuthFlowType,
   CognitoIdentityProviderClient,
@@ -37,6 +38,7 @@ export const inviteUser = async (data: IInviteData): Promise<unknown> => {
     },
   });
 };
+
 export const signUp = async (credentials: ITCORegisterForm | IUserRegisterData) => {
   await axiosInstance.post(`https://api.${mode}.bmcrm.camp/campers/create`, credentials);
 };
@@ -108,3 +110,4 @@ export const refreshUserTokens = async (refreshToken: string) => {
 
   return response.AuthenticationResult;
 };
+*/

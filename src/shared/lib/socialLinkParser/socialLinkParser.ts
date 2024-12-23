@@ -1,7 +1,7 @@
-import { type CamperSocial } from 'entities/Camper';
-import { SocialIconsEnum } from 'shared/ui/SocialIconItem/SocialIconItem.types';
+import { type CamperSocial } from '@entities/Camper';
+import { SocialIconsEnum } from '@features/SocialIconItem';
 
-const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
+export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
   const socialNetworks = Object.values(SocialIconsEnum);
   const urlsArray = Array.isArray(urls) ? urls : [urls];
 
@@ -14,5 +14,3 @@ const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
     };
   });
 };
-
-export default socialLinksParser;

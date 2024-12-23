@@ -1,25 +1,21 @@
-import { memo, RefObject } from 'react';
+import { memo, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { useMediaQuery } from 'react-responsive';
-import { useAuth } from 'entities/User';
-import { useCampers } from 'entities/Camper';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-
-import Skeleton from 'shared/ui/Skeleton/Skeleton';
-import Image from 'shared/ui/Image/Image';
-import Icon from 'shared/ui/Icon/Icon';
-import Button from 'shared/ui/Button/Button';
-import CampersCountModal from 'features/CampersCountModal';
-
+import { useCampers } from '@entities/Camper';
+import { useMedia } from '@shared/hooks/useMedia';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Skeleton } from '@shared/ui/Skeleton';
+import { Image } from '@shared/ui/Image';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import CampersCountModal from '@features/CampersCountModal';
+import { userState } from '@entities/User';
+import type { ICamp } from '../../model/types/Camp.types';
+import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './CampOverview.module.scss';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { type ICamp } from '../../model/types/camp.types';
-import { ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
-import LocationIcon from 'shared/assets/icons/location_icon.svg';
-import RedirectIcon from 'shared/assets/icons/arrow-redirect.svg';
-import CampIcon from 'shared/assets/icons/camp_icon.svg';
-import BlurIcon from 'shared/assets/icons/blur_icon.svg';
-import { ANIMATION_DELAY } from 'shared/const/global/global';
+import LocationIcon from '@shared/assets/icons/location_icon.svg';
+import RedirectIcon from '@shared/assets/icons/arrow-redirect.svg';
+import CampIcon from '@shared/assets/icons/camp_icon.svg';
+import BlurIcon from '@shared/assets/icons/blur_icon.svg';
 
 type CampOverviewProps = {
   camp: ICamp | null;
@@ -28,9 +24,8 @@ type CampOverviewProps = {
 };
 
 const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOverviewProps) => {
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { isLoggedIn } = useAuth();
+  const { isMobile, isTablet } = useMedia();
+  const { isLoggedIn } = userState();
   const { campersCount } = useCampers();
   const { isOpen, open, close } = useToggle();
   let content = (
@@ -55,7 +50,7 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
 
     setTimeout(() => {
       scrollTarget.current?.scrollIntoView({ behavior: 'smooth' });
-    }, ANIMATION_DELAY);
+    }, MODAL_ANIMATION_DELAY);
   };
 
   const campersCounter = isLoggedIn ? (

@@ -1,15 +1,15 @@
 import { memo, useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { Form, Formik } from 'formik';
-import { useAuth } from 'entities/User';
-import useCamp from '../../model/services/useCamp/useCamp';
-import { type ICamp } from '../../model/types/camp.types';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import CustomTextarea from 'shared/ui/CustomTextarea/CustomTextarea';
-import Image from 'shared/ui/Image/Image';
-import Button from 'shared/ui/Button/Button';
-import { campSettingsSchema } from 'shared/const/schemas/validations';
-import { inputsData } from './inputsData';
+import { useMedia } from '@shared/hooks/useMedia';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { CustomTextarea } from '@shared/ui/CustomTextarea';
+import { Image } from '@shared/ui/Image';
+import { Button } from '@shared/ui/Button';
+import { useGetCamp } from '../../hooks/useGetCamp';
+import { userState } from '@entities/User';
+import { campSettingsSchema } from '@shared/const/validationSchemas';
+import { inputsData } from '../../model/data/CampSettingsForm.data';
+import type { ICamp } from '../../model/types/Camp.types';
 import styles from './CampSettingsForm.module.scss';
 
 type CampSettingsFormProps = {
@@ -17,9 +17,8 @@ type CampSettingsFormProps = {
 };
 
 const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-  const { decodedIDToken } = useAuth();
-  const { getCamp } = useCamp();
+  const { isMobile } = useMedia();
+  const { tokens: { decodedIDToken } } = userState();
   const [campID, setCampID] = useState('');
   const [initialData, setInitialData] = useState<Partial<ICamp>>({
     camp_name: '',
@@ -28,6 +27,7 @@ const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
     camp_description: '',
     camp_id: '',
   });
+  const { data: currentCamp, isSuccess } = useGetCamp(campID);
 
   useEffect(() => {
     const getCampID = async () => {
@@ -40,25 +40,17 @@ const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
   }, [campID, decodedIDToken]);
 
   useEffect(() => {
-    const fetchCamp = async () => {
-      if (campID) {
-        const currentCamp = await getCamp(campID);
-
-        if (currentCamp) {
-          setInitialData(prevState => ({
-            ...prevState,
-            camp_name: currentCamp.camp_name || '',
-            city: currentCamp.city || '',
-            camp_website: currentCamp.camp_website || '',
-            camp_description: currentCamp.camp_description || '',
-            camp_id: currentCamp.camp_id,
-          }));
-        }
-      }
-    };
-
-    void fetchCamp();
-  }, [campID, getCamp]);
+    if (isSuccess) {
+      setInitialData(prevState => ({
+        ...prevState,
+        camp_name: currentCamp?.camp_name || '',
+        city: currentCamp?.city || '',
+        camp_website: currentCamp?.camp_website || '',
+        camp_description: currentCamp?.camp_description || '',
+        camp_id: currentCamp?.camp_id,
+      }));
+    }
+  }, [isSuccess]);
 
   return (
     <Formik
