@@ -82,12 +82,6 @@ export interface IConfirmResetPass {
   password_new: string;
 }
 
-export interface IInviteData {
-  email: string;
-  camp_id: string;
-  idToken: string;
-}
-
 export interface IInitResetPassData {
   email: string;
 }

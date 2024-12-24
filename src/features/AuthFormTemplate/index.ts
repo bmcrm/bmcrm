@@ -1,3 +1,1 @@
-import AuthFormTemplate from './ui/AuthFormTemplate';
-
-export default AuthFormTemplate;
+export { default as AuthFormTemplate } from './ui/AuthFormTemplate';

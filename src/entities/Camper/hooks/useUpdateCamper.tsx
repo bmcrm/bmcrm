@@ -4,7 +4,7 @@ import { camperApi } from '../api/camperApi';
 import { camperKeys } from '../model/const/camperKeys';
 import type { ICamper } from '../model/types/Camper.types';
 
-const useUpdatePractice = () => {
+const useUpdateCamper = () => {
 	const queryClient = useQueryClient();
 
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
@@ -31,10 +31,10 @@ const useUpdatePractice = () => {
 			}
 			errorHandler(error);
 		},
-		onSettled: (data) => queryClient.invalidateQueries({ queryKey: camperKeys.currentCamper(data?.email!) }),
+		onSettled: (_, __, variables) => queryClient.invalidateQueries({ queryKey: camperKeys.currentCamper(variables.email!) }),
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };
 };
 
-export { useUpdatePractice };
+export { useUpdateCamper };

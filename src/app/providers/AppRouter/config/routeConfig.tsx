@@ -1,14 +1,14 @@
 import type { RouteProps } from 'react-router-dom';
-import FunnelPage from '@pages/FunnelPage';
-import FinancesPage from '@pages/FinancesPage';
-import InventoryPage from '@pages/InventoryPage';
-import ShiftsPage from '@pages/ShiftsPage';
-import DashboardPage from '@pages/DashboardPage';
-import SignInPage from '@pages/SignInPage';
-import SignUpOwnerPage from '@pages/SignUpTCOPage';
-import ResetPassPage from '@pages/ResetPassPage';
-import CampOverviewPage from '@pages/CampOverviewPage';
-import NotFound from '@widgets/CampNotFound';
+import { FunnelPage } from '@pages/FunnelPage';
+import { FinancesPage } from '@pages/FinancesPage';
+import { InventoryPage } from '@pages/InventoryPage';
+import { ShiftsPage } from '@pages/ShiftsPage';
+import { DashboardPage } from '@pages/DashboardPage';
+import { SignInPage } from '@pages/SignInPage';
+import { SignUpTCOPage } from '@pages/SignUpTCOPage';
+import { ResetPassPage } from '@pages/ResetPassPage';
+import { CampOverviewPage } from '@pages/CampOverviewPage';
+import { NotFound } from '@widgets/CampNotFound';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -74,7 +74,7 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
   },
   [AppRoutes.SIGN_UP]: {
     path: RoutePath.sign_up,
-    element: <SignUpOwnerPage />,
+    element: <SignUpTCOPage />,
   },
   [AppRoutes.SIGN_IN]: {
     path: RoutePath.sign_in,

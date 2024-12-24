@@ -1,4 +1,10 @@
 export { useGetCampers } from './hooks/useGetCampers';
-export { useUpdatePractice } from './hooks/useUpdateCamper';
+export { useUpdateCamper } from './hooks/useUpdateCamper';
+export { useInviteCamper } from './hooks/useInviteCamper';
 
-export { type ICamper, type CamperSocial, CamperRole } from './model/types/Camper.types';
+export {
+	type ICamper,
+	type CamperSocial,
+	type IInviteCamperData,
+	CamperRole,
+} from './model/types/Camper.types';

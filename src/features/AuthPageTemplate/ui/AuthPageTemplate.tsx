@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import Container from 'shared/ui/Container/Container';
+import type { ReactNode } from 'react';
+import { classNames } from '@shared/lib/classNames';
+import { Container } from '@shared/ui/Container';
 import styles from './AuthPageTemplate.module.scss';
 
 type AuthPageTemplateProps = {
@@ -8,14 +8,12 @@ type AuthPageTemplateProps = {
   children?: ReactNode;
 };
 
-const AuthPageTemplate = ({ className, children }: AuthPageTemplateProps) => {
-  return (
-    <section className={classNames(styles.authPage, {}, [className])}>
-      <Container>
-        {children}
-      </Container>
-    </section>
-  );
-};
+const AuthPageTemplate = ({ className, children }: AuthPageTemplateProps) => (
+  <section className={classNames(styles.authPage, {}, [className])}>
+    <Container>
+      {children}
+    </Container>
+  </section>
+);
 
 export default AuthPageTemplate;

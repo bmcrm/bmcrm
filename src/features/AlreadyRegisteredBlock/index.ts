@@ -1,3 +1,1 @@
-import AlreadyRegisteredBlock from './ui/AlreadyRegisteredBlock';
-
-export default AlreadyRegisteredBlock;
+export { default as AlreadyRegisteredBlock } from './ui/AlreadyRegisteredBlock';

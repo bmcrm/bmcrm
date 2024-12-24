@@ -1,33 +1,26 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik';
-import dateNormalize from 'shared/lib/dateNormalize/dateNormalize';
-import { useMediaQuery } from 'react-responsive';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-import errorHandler from 'shared/lib/errorHandler/errorHandler';
-import { AxiosError } from 'axios';
-import { useAuth } from 'entities/User';
-
-import Icon from 'shared/ui/Icon/Icon';
-import Avatar from 'shared/ui/Avatar/Avatar';
-import Button from 'shared/ui/Button/Button';
-import FormLoader from 'features/FormLoader';
-import SocialIconItem from 'shared/ui/SocialIconItem/SocialIconItem';
-import AddSocialModal from 'features/AddSocialModal';
-import Modal from 'shared/ui/Modal/Modal';
-import CustomTextarea from 'shared/ui/CustomTextarea/CustomTextarea';
-import CustomSelect from 'shared/ui/CustomSelect/CustomSelect';
-
+import { Field, Form, Formik, FieldArray, type FormikHelpers } from 'formik';
+import { useMedia } from '@shared/hooks/useMedia';
+import { classNames } from '@shared/lib/classNames';
+import { dateNormalize } from '@shared/lib/dateNormalize';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { Avatar } from '@shared/ui/Avatar';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { FormLoader } from '@features/FormLoader';
+import { SocialIconItem } from '@features/SocialIconItem';
+import { AddSocialModal } from '@features/AddSocialModal';
+import { Modal } from '@shared/ui/Modal';
+import { CustomTextarea } from '@shared/ui/CustomTextarea';
+import { CustomSelect } from '@shared/ui/CustomSelect';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
+import { userState } from '@entities/User';
+import { CamperRole, CamperSocial, ICamper, useGetCampers, useUpdateCamper } from '@entities/Camper';
 import styles from './UserDetailsModal.module.scss';
-import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { CamperRole, CamperSocial, ICamper } from 'entities/Camper';
-import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
-import EditIcon from 'icons/edit_icon.svg';
-import CheckIcon from 'icons/check.svg';
-import ClockIcon from 'icons/clock.svg';
-import PlusIcon from 'icons/plus_icon.svg';
-import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+import EditIcon from '@shared/assets/icons/edit_icon.svg';
+import CheckIcon from '@shared/assets/icons/check.svg';
+import ClockIcon from '@shared/assets/icons/clock.svg';
+import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 
 interface UserDetailsModalProps {
   camperEmail: string | null;
@@ -37,43 +30,26 @@ interface UserDetailsModalProps {
 
 const UserDetailsModal = memo((props: UserDetailsModalProps) => {
   const { camperEmail, isDetailsOpen, onDetailsClose } = props;
-  const [camper, setCamper] = useState<ICamper | null>(null);
   const [socialIcons, setSocialIcons] = useState<CamperSocial[]>([]);
   const [isReadonly, setIsReadonly] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
   const { isOpen, open, close } = useToggle();
-  const { getCamper, updateCamper, isError, resetError, getCampers, isLoading } = useCampers();
-  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
+  const { isTablet } = useMedia();
+  const { data: camper, isLoading: isGetLoading } = useGetCampers({ camperEmail }) as { data: ICamper | undefined, isLoading: boolean };
+  const { mutate: updateCamper, isPending: isUpdatePending } = useUpdateCamper();
+  const { tokens: { decodedIDToken } } = userState();
   const currentYear = new Date().getFullYear();
-  const { decodedIDToken } = useAuth();
+  const isLoading = isGetLoading || isUpdatePending;
 
   useEffect(() => {
-    if (isError) {
-      errorHandler(isError as AxiosError, 'UserDetailsModal');
+    if (camper) {
+      setSocialIcons(camper.social_links || []);
+    } else {
+      logger(LogLevel.ERROR, LogSource.WEBAPP, 'Camper not found', {
+        user: camperEmail,
+        camp_id: decodedIDToken!.camp_id,
+      });
     }
-
-    return resetError();
-  }, [isError, resetError]);
-
-  useEffect(() => {
-    const fetchCamper = async () => {
-      if (camperEmail) {
-        const currentCamper = await getCamper(camperEmail);
-
-        if (currentCamper) {
-          setCamper(currentCamper);
-          setSocialIcons(currentCamper.social_links || []);
-        } else {
-          logger(LogLevel.ERROR, LogSource.WEBAPP, 'Camper not found', {
-            user: camperEmail,
-            camp_id: decodedIDToken!.camp_id,
-          });
-        }
-      }
-    };
-
-    void fetchCamper();
-  }, [camperEmail, getCamper]);
+  }, [camper, camperEmail, decodedIDToken]);
 
   const firstLastName =
     camper?.first_name && camper?.last_name ? `${camper?.first_name} ${camper?.last_name}` : undefined;
@@ -113,20 +89,13 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
         ...(values.role !== CamperRole.TCO && decodedIDToken?.role === CamperRole.TCO ? { role: values.role } : {}),
       };
 
-      const updatedCamper = await updateCamper(camperEmail!, { ...data, social_links: socialIcons });
-
-      if (updatedCamper) {
-        if (camper?.role !== updatedCamper.role) {
-          setIsEdited(true);
-        }
-
-        setCamper(updatedCamper);
-      }
+      updateCamper({ ...data, social_links: socialIcons, email: camperEmail! });
+      onDetailsClose();
     },
-    [camper?.role, camperEmail, decodedIDToken?.role, socialIcons, toggleReadonly, trimFields, updateCamper]
+    [camperEmail, decodedIDToken?.role, onDetailsClose, socialIcons, toggleReadonly, trimFields, updateCamper]
   );
 
-  const initialValues = useMemo(
+  const initialValues: Partial<ICamper> = useMemo(
     () => ({
       about_me: camper?.about_me || '',
       history: camper?.history?.map(item => ({
@@ -169,16 +138,8 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
       content: role.charAt(0).toUpperCase() + role.slice(1).toLowerCase(),
     }));
 
-  const closeDetailsHandler = () => {
-    if (isEdited) {
-      void getCampers();
-    }
-
-    onDetailsClose();
-  };
-
   return (
-    <Modal isOpen={isDetailsOpen} onClose={closeDetailsHandler}>
+    <Modal isOpen={isDetailsOpen} onClose={onDetailsClose}>
       <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
         {({ resetForm }) => (
           <Form className={classNames(styles.details, {}, [])}>
@@ -279,7 +240,7 @@ const UserDetailsModal = memo((props: UserDetailsModalProps) => {
               <FieldArray name='history'>
                 {() => (
                   <ul className={styles.details__history}>
-                    {initialValues.history.map((item, index) => (
+                    {initialValues?.history?.map((item, index) => (
                       <li key={index} className={styles.details__historyItem}>
                         <Field type={'text'} readOnly={true} name={`history.${index}.year`} className={styles.year} />
                         {isReadonly ? (

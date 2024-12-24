@@ -1,21 +1,18 @@
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-
-import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
-import Modal from 'shared/ui/Modal/Modal';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import Button from 'shared/ui/Button/Button';
-import Icon from 'shared/ui/Icon/Icon';
-import FormLoader from 'features/FormLoader';
-
+import { AuthBadge } from '@shared/ui/AuthBadge';
+import { Modal } from '@shared/ui/Modal';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { Button } from '@shared/ui/Button';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { FormLoader } from '@features/FormLoader';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
+import { useRegistration, type IConfirmRegistration, type ILoginData, IRegisterStage, useLogin } from '@entities/User';
+import { RoutePath } from '@app/providers/AppRouter';
+import { confirmUserSchema } from '@shared/const/validationSchemas';
 import styles from './UserConfirmModal.module.scss';
-import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { confirmUserSchema } from 'shared/const/schemas/validations';
-import { type IConfirmEmail, type ILoginData, useAuth } from 'entities/User';
-import { RoutePath } from 'app/providers/AppRouter';
-import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+import CampIcon from '@shared/assets/icons/camp.svg';
 
 type UserConfirmModalProps = {
   isOpen: boolean;
@@ -23,26 +20,30 @@ type UserConfirmModalProps = {
   credentials: ILoginData | null;
 };
 
-const UserConfirmModal = (props: UserConfirmModalProps) => {
+const UserConfirmModal = memo((props: UserConfirmModalProps) => {
   const { isOpen, onClose, credentials } = props;
-  const { confirmEmail, isLoading, login } = useAuth();
   const navigate = useNavigate();
+  const { mutateAsync: confirmEmail, isPending: isRegistrationPending } = useRegistration();
+  const { mutateAsync: login, isPending: isLoginPending } = useLogin();
+  const isLoading = isRegistrationPending || isLoginPending;
 
   const onSubmit = useCallback(
     async (values: { code: string }) => {
-      const data: IConfirmEmail = {
-        email: credentials!.email,
-        code: values.code.trim(),
-      };
+      if (credentials) {
+        const data: IConfirmRegistration = {
+          email: credentials.email,
+          code: values.code.trim(),
+        };
 
-      const response = await confirmEmail(data);
-
-      if (response?.$metadata.httpStatusCode === 200) {
+        await confirmEmail({
+          stage: IRegisterStage.CONFIRMATION,
+          data,
+        });
         onClose();
-        await login(credentials!);
+        await login(credentials);
         navigate(RoutePath.funnel, { replace: true });
         logger(LogLevel.INFO, LogSource.WEBAPP, 'User confirmed', {
-          user: credentials!.email,
+          user: credentials.email,
         });
       }
     },
@@ -57,7 +58,7 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
           <p>Please check your email to verify your account.</p>
           <CustomInput name={'code'} placeholder={'--- ---'} label={'Code'} />
           <Button type={'submit'} fluid className={'mt-15'}>
-            <Icon icon={<Camp />} size={IconSize.SIZE_20} />
+            <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
             VERIFY
           </Button>
         </Form>
@@ -65,6 +66,6 @@ const UserConfirmModal = (props: UserConfirmModalProps) => {
       {isLoading && <FormLoader />}
     </Modal>
   );
-};
+});
 
 export default UserConfirmModal;

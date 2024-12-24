@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import Icon from '@shared/ui/Icon/ui/Icon.tsx';
 import styles from './ToTopButton.module.scss';
 import ArrowUp from '@shared/assets/icons/arrow-top.svg';
 
-export const ToTopButton = () => {
+const ToTopButton = memo(() => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -27,4 +27,6 @@ export const ToTopButton = () => {
       <Icon icon={<ArrowUp />} />
     </button>
   );
-};
+});
+
+export default ToTopButton;

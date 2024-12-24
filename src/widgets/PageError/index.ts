@@ -1,3 +1,1 @@
-import PageError from './ui/PageError';
-
-export { PageError };
+export { default as PageError } from './ui/PageError';

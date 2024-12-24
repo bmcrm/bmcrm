@@ -1,32 +1,24 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { classNames } from 'shared/lib/classNames/classNames';
-
+import { memo, useCallback, useEffect, useState, type MouseEvent } from 'react';
+import { useMedia } from '@shared/hooks/useMedia';
+import { useToggle } from '@shared/hooks/useToggle';
+import { classNames } from '@shared/lib/classNames';
 import { Link } from 'react-router-dom';
-import { Nav } from 'features/Nav';
-import Hamburger from 'features/Hamburger';
-import { useAuth, UserAvatar, IUserAvatar } from 'entities/User';
-
-import { RoutePath } from 'app/providers/AppRouter';
-import Logo from 'shared/assets/icons/logo.svg';
+import { Nav } from '@features/Nav';
+import { Hamburger } from '@features/Hamburger';
+import { userState, UserAvatar, type IUserAvatar } from '@entities/User';
+import { RoutePath } from '@app/providers/AppRouter';
 import styles from './Header.module.scss';
-import { useToggle } from 'shared/hooks/useToggle/useToggle.tsx';
+import Logo from '@shared/assets/icons/logo.svg';
 
 type HeaderProps = {
   className?: string;
 };
 
 const Header = memo(({ className }: HeaderProps) => {
-  const { isLoggedIn, idToken, decodeIDToken, decodedIDToken } = useAuth();
+  const { tokens: { decodedIDToken }  } = userState();
   const [user, setUser] = useState<IUserAvatar | null>(null);
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+  const { isMobile } = useMedia();
   const { isOpen, toggle, close } = useToggle();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      decodeIDToken(idToken);
-    }
-  }, [isLoggedIn, idToken, decodeIDToken]);
 
   useEffect(() => {
     if (decodedIDToken) {
@@ -57,7 +49,7 @@ const Header = memo(({ className }: HeaderProps) => {
     };
   }, [isOpen]);
 
-  const onContentClick = useCallback((e: React.MouseEvent) => {
+  const onContentClick = useCallback((e: MouseEvent) => {
     e.stopPropagation();
   }, []);
 

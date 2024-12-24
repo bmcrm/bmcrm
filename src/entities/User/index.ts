@@ -19,6 +19,6 @@ export type {
   ILoginData,
   IConfirmRegistration,
   IConfirmResetPass,
-  IInviteData,
 } from './model/types/User.types';
 export type { IUserAvatar } from './model/types/UserAvatar.types';
+export { IRegisterStage } from './model/types/UseRegistration.types';

@@ -1,5 +1,5 @@
-import { RoutePath } from 'app/providers/AppRouter';
-import { NavLinkType } from 'shared/ui/CustomNavLink/CustomNavLink.types.ts';
+import { RoutePath } from '@app/providers/AppRouter';
+import type { NavLinkType } from '@shared/ui/CustomNavLink';
 
 export const settingNavItemsList: NavLinkType[] = [
   {

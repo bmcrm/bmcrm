@@ -1,13 +1,12 @@
-import { memo } from 'react';
-import socialLinksParser from 'shared/lib/socialLinkParser/socialLinkParser';
-import Modal from 'shared/ui/Modal/Modal';
+import { memo, useCallback } from 'react';
 import { Form, Formik } from 'formik';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import Button from 'shared/ui/Button/Button';
-
+import { socialLinksParser } from '@shared/lib/socialLinkParser';
+import { Modal } from '@shared/ui/Modal';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { Button } from '@shared/ui/Button';
+import { addSocialSchema } from '@shared/const/validationSchemas';
+import type { CamperSocial } from '@entities/Camper';
 import styles from './AddSocialModal.module.scss';
-import { CamperSocial } from 'entities/Camper';
-import { addSocialSchema } from 'shared/const/schemas/validations';
 
 type AddSocialModalProps = {
   isOpen: boolean;
@@ -16,17 +15,13 @@ type AddSocialModalProps = {
 };
 
 const AddSocialModal = memo((props: AddSocialModalProps) => {
-  const {
-    isOpen,
-    onClose,
-    onSubmit,
-  } = props;
+  const { isOpen, onClose, onSubmit } = props;
 
-  const onSubmitHandler = (values: { url: string }) => {
+  const onSubmitHandler = useCallback((values: { url: string }) => {
     const data = socialLinksParser(values.url);
 
     onSubmit(data[0]);
-  };
+  }, [onSubmit]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

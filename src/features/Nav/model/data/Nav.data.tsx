@@ -1,6 +1,6 @@
-import { RoutePath } from 'app/providers/AppRouter';
-import { NavLinkType } from 'shared/ui/CustomNavLink/CustomNavLink.types';
-import CampIcon from 'shared/assets/icons/camp_monocolor.svg';
+import { RoutePath } from '@app/providers/AppRouter';
+import type { NavLinkType } from '@shared/ui/CustomNavLink';
+import CampIcon from '@shared/assets/icons/camp_monocolor.svg';
 
 export const navItemsList: NavLinkType[] = [
   // {
@@ -11,7 +11,7 @@ export const navItemsList: NavLinkType[] = [
   {
     path: '',
     text: 'Camp',
-    icon: <CampIcon/>,
+    icon: <CampIcon />,
   },
   {
     path: RoutePath.funnel,

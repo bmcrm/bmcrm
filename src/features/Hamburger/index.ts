@@ -1,3 +1,1 @@
-import Hamburger from './ui/Hamburger';
-
-export default Hamburger;
+export { default as Hamburger } from './ui/Hamburger';

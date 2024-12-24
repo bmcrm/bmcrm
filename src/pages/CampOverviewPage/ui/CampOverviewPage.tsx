@@ -1,22 +1,19 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import errorHandler from 'shared/lib/errorHandler/errorHandler';
-import { classNames } from 'shared/lib/classNames/classNames';
-
-import Container from 'shared/ui/Container/Container';
-import { CampOverview, type ICamp, useCamp } from 'entities/Camp';
-import { CamperSignUpForm, type IUserRegisterData, useAuth } from 'entities/User';
-import FormLoader from 'features/FormLoader';
-import AuthFormTemplate from 'features/AuthFormTemplate';
-import AlreadyRegisteredBlock from 'features/AlreadyRegisteredBlock';
-
-import styles from './CampOverviewPage.module.scss';
-import { RoutePath } from 'app/providers/AppRouter';
-import Logo from 'shared/assets/icons/logo.svg';
-import NotFound from 'widgets/CampNotFound';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
+import { classNames } from '@shared/lib/classNames';
+import { Container } from '@shared/ui/Container';
+import { CampOverview, type ICamp } from '@entities/Camp';
+import { CamperRegisterForm, type IUserRegisterData } from '@entities/User';
+import { FormLoader } from '@features/FormLoader';
+import { AuthFormTemplate } from '@features/AuthFormTemplate';
+import { AlreadyRegisteredBlock } from '@features/AlreadyRegisteredBlock';
+import { RoutePath } from '@app/providers/AppRouter';
+import { NotFound } from '@widgets/CampNotFound';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
+import styles from './CampOverviewPage.module.scss';
+import Logo from '@shared/assets/icons/logo.svg';
+import { useToast } from '@shared/hooks/useToast';
 
 const CampOverviewPage = memo(() => {
   const { register, error, resetError, isLoading: authIsLoading, isLoggedIn } = useAuth();
@@ -25,15 +22,7 @@ const CampOverviewPage = memo(() => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const scrollTarget = useRef<HTMLDivElement>(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    if (error) {
-      errorHandler(error, `${location.pathname}`);
-    }
-
-    return resetError();
-  }, [error, resetError]);
+  const { success } = useToast();
 
   useEffect(() => {
     const fetchCamp = async () => {
@@ -58,10 +47,7 @@ const CampOverviewPage = memo(() => {
         camp_id: id,
       });
 
-      toast.success(
-        'Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.',
-        { duration: 5000, position: 'top-center' }
-      );
+      success('Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.');
       resetForm();
       navigate(RoutePath.sign_in, { replace: true, state: { email: values.email, password: values.password } });
     } catch {
@@ -102,7 +88,7 @@ const CampOverviewPage = memo(() => {
           <section className={styles.register} ref={scrollTarget}>
             <Container>
               <AuthFormTemplate badge={'Register to Join the Camp'}>
-                <CamperSignUpForm className={clsx(styles.form, isLoggedIn && styles.blur)} onSubmit={submitHandler} />
+                <CamperRegisterForm className={clsx(styles.form, isLoggedIn && styles.blur)} onSubmit={submitHandler} />
                 {authIsLoading && <FormLoader />}
                 {isLoggedIn && <AlreadyRegisteredBlock camp={camp || null} />}
               </AuthFormTemplate>

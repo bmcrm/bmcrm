@@ -1,9 +1,4 @@
-import ResetPassStepOne from './ui/ResetPassStepOne/ResetPassStepOne';
-import ResetPassStepTwo from './ui/ResetPassStepTwo/ResetPassStepTwo';
-import { type IResetPassStepTwo } from './model/types/resetPass.types';
+export { default as ResetPassStepOne } from './ui/ResetPassStepOne/ResetPassStepOne';
+export { default as ResetPassStepTwo } from './ui/ResetPassStepTwo/ResetPassStepTwo';
 
-export {
-  ResetPassStepOne,
-  ResetPassStepTwo,
-  IResetPassStepTwo,
-};
+export type { IResetPassStepTwo } from './model/types/ResetPass.types';

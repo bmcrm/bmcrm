@@ -1,3 +1,1 @@
-import { SignUpTCOPage } from './ui/SignUpTCOPage.async';
-
-export default SignUpTCOPage;
+export { SignUpTCOPage } from './ui/SignUpTCOPage.async';

@@ -1,3 +1,1 @@
-import { ResetPassPage } from './ui/ResetPassPage.async';
-
-export default ResetPassPage;
+export { ResetPassPage } from './ui/ResetPassPage.async';

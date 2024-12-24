@@ -35,3 +35,9 @@ export interface ICamper {
   updated_at: string | number;
   created_at: string | number;
 }
+
+export interface IInviteCamperData {
+  email: string;
+  camp_id: string;
+  idToken: string;
+}

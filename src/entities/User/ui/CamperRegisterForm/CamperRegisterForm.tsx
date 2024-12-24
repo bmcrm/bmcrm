@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { FieldArray, Form, Formik } from 'formik';
+import { classNames } from '@shared/lib/classNames';
 import { socialLinksParser } from '@shared/lib/socialLinkParser';
 import { CustomInput, validateErrors } from '@shared/ui/CustomInput';
 import { CustomTextarea } from '@shared/ui/CustomTextarea';
@@ -18,11 +19,12 @@ import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type CamperRegisterFormProps = {
+	className: string;
 	onSubmit: (values: IUserRegisterData, resetForm: () => void) => void;
 };
 
 const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
-	const { onSubmit } = props;
+	const { onSubmit, className } = props;
 	const [tooltipsVisible, setTooltipsVisible] = useState<boolean[]>(initialData.social_links.map(() => false));
 
 	useEffect(() => {
@@ -82,7 +84,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 	return (
 		<Formik validationSchema={camperRegistrationSchema} initialValues={initialData} onSubmit={onSubmitHandler}>
 			{({ values }) => (
-				<Form className={styles.form}>
+				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__item}>
 						<CustomInput name={'playa_name'} placeholder={'Playa Name'} label={'Playa Name'}/>
 						<FieldArray name={'social_links'}>

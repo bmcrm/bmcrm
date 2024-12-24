@@ -8,7 +8,7 @@ import Button from 'shared/ui/Button/Button';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard';
 import Container from 'shared/ui/Container/Container';
-import InviteUserModal from 'features/InviteUserModal';
+import InviteUserModal from 'features/InviteCamperModal';
 
 import styles from './FunnelPage.module.scss';
 import { CamperRole, ICamper } from 'entities/Camper';

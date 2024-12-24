@@ -7,7 +7,7 @@ import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { CamperSocial } from '@entities/Camper';
 import { SocialIcons, SocialIconsEnum } from '../model/types/SocialIconItem.types';
 import styles from './SocialIconItem.module.scss';
-import MinusIcon from 'icons/minus_icon.svg';
+import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type SocialIconItemProps = {
   social: CamperSocial;

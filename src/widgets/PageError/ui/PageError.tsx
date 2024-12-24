@@ -1,6 +1,6 @@
-import styles from './PageError.module.scss';
 import { memo } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
+import { classNames } from '@shared/lib/classNames';
+import styles from './PageError.module.scss';
 
 type PageErrorProps = {
   className?: string;

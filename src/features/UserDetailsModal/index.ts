@@ -1,3 +1,1 @@
-import UserDetailsModal from './ui/UserDetailsModal';
-
-export default UserDetailsModal;
+export { default as UserDetailsModal } from './ui/UserDetailsModal';

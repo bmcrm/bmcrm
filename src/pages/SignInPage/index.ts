@@ -1,3 +1,1 @@
-import { SignInPage } from './ui/SignInPage.async';
-
-export default SignInPage;
+export { SignInPage } from './ui/SignInPage.async';
