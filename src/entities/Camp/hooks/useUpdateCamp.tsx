@@ -4,7 +4,7 @@ import { campApi } from '../api/campApi';
 import { campKeys } from '../model/const/campKeys';
 import type { ICamp } from '../model/types/Camp.types.ts';
 
-const useUpdatePractice = () => {
+const useUpdateCamp = () => {
 	const queryClient = useQueryClient();
 
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
@@ -37,4 +37,4 @@ const useUpdatePractice = () => {
 	return { mutate, mutateAsync, isPending, isSuccess, isError };
 };
 
-export { useUpdatePractice };
+export { useUpdateCamp };

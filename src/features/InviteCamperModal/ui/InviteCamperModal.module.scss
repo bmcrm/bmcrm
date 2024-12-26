@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .invite-modal {
   width: 490px;
@@ -32,7 +32,7 @@
   .subtitle {
     font: var(--font-s);
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       width: 100%;
     }
 

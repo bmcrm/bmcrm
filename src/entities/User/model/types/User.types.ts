@@ -1,21 +1,21 @@
 import { CamperRole, type CamperSocial } from '@entities/Camper';
 
-export interface ICamperRegisterForm {
-  [key: string]: string | boolean | string[] | undefined;
-  accept: boolean;
+export interface ICamperRegistrationData {
   first_name: string;
   last_name: string;
   playa_name: string;
   email: string;
   password: string;
   about_me?: string;
-  social_links?: string[];
+  social_links?: CamperSocial[];
+  accept: boolean;
+  role?: CamperRole;
 }
 
-export interface ITCORegisterForm extends ICamperRegisterForm {
+export interface ITCORegistrationData extends ICamperRegistrationData {
+  camp_id: string;
   city: string;
   camp_name: string;
-  camp_id: string;
   camp_website: string;
 }
 
@@ -25,13 +25,19 @@ export interface IUserRegisterData {
   playa_name: string;
   email: string;
   password: string;
-  role: CamperRole;
+  about_me?: string;
+  social_links?: CamperSocial[];
   camp_id?: string;
   city?: string;
   camp_name?: string;
   camp_website?: string;
-  about_me?: string;
-  social_links?: CamperSocial[];
+
+  role: CamperRole;
+}
+
+export interface IConfirmRegistration {
+  code: string;
+  email: string;
 }
 
 export interface ILoginData {
@@ -71,8 +77,7 @@ export interface ILoggedUser {
   RefreshToken?: string;
 }
 
-export interface IConfirmRegistration {
-  code: string;
+export interface IInitResetPassData {
   email: string;
 }
 
@@ -80,10 +85,6 @@ export interface IConfirmResetPass {
   confirm_code: string;
   email: string;
   password_new: string;
-}
-
-export interface IInitResetPassData {
-  email: string;
 }
 
 export interface IConfirmResetPassData {

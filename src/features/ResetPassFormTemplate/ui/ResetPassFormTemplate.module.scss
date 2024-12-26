@@ -14,7 +14,7 @@
 	box-shadow: 0 5px 60px 0 rgba(0, 0, 0, .2);
 	overflow: hidden;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		max-width: max-content;
 	}
 
@@ -41,10 +41,10 @@
 			background-position: center;
 			background-repeat: no-repeat;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				right: 0;
 			}
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				display: none;
 			}
 		}
@@ -64,10 +64,10 @@
 			background-position: center;
 			background-repeat: no-repeat;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				opacity: .5;
 			}
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				display: none;
 			}
 		}

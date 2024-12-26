@@ -4,7 +4,7 @@ import { classNames, type Mods } from '@shared/lib/classNames';
 import { CustomNavLink } from '@shared/ui/CustomNavLink';
 import { UserAvatar, type IUserAvatar, userState } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
-import { navItemsList } from '../../model/data/Nav.data';
+import { navItemsList } from '../model/data/Nav.data';
 import { CustomNavLinkTheme } from '@shared/ui/CustomNavLink';
 import styles from './Nav.module.scss';
 import SettingsIcon from '@shared/assets/icons/settings_icon.svg';

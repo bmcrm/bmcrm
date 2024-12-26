@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { FieldArray, Form, Formik } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { socialLinksParser } from '@shared/lib/socialLinkParser';
-import { CustomInput, validateErrors } from '@shared/ui/CustomInput';
+import { CustomInput } from '@shared/ui/CustomInput';
 import { CustomTextarea } from '@shared/ui/CustomTextarea';
 import { CustomCheckbox } from '@shared/ui/CustomCheckbox';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
@@ -171,7 +171,6 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 							label={'Password'}
 							type={'password'}
 							value={values.password}
-							errors={validateErrors(values.password)}
 							register
 						/>
 						<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>

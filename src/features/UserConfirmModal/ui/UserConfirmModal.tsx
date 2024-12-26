@@ -8,7 +8,7 @@ import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { FormLoader } from '@features/FormLoader';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
-import { useRegistration, type IConfirmRegistration, type ILoginData, IRegisterStage, useLogin } from '@entities/User';
+import { useRegistration, useLogin, type IConfirmRegistration, type ILoginData, IRegistrationStage } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
 import { confirmUserSchema } from '@shared/const/validationSchemas';
 import styles from './UserConfirmModal.module.scss';
@@ -36,7 +36,7 @@ const UserConfirmModal = memo((props: UserConfirmModalProps) => {
         };
 
         await confirmEmail({
-          stage: IRegisterStage.CONFIRMATION,
+          stage: IRegistrationStage.CONFIRMATION,
           data,
         });
         onClose();

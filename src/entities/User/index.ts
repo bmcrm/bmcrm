@@ -16,9 +16,10 @@ export { default as UserSettingsForm } from './ui/UserSettingsForm/UserSettingsF
 export type {
   IIDToken,
   IUserRegisterData,
+  ITCORegistrationData,
   ILoginData,
   IConfirmRegistration,
   IConfirmResetPass,
 } from './model/types/User.types';
 export type { IUserAvatar } from './model/types/UserAvatar.types';
-export { IRegisterStage } from './model/types/UseRegistration.types';
+export { IRegistrationStage } from './model/types/UseRegistration.types';

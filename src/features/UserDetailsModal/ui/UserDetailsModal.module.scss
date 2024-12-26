@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .details {
   display: grid;
@@ -6,7 +6,7 @@
   width: 780px;
   max-width: 100%;
 
-  @media (width < $lg) {
+  @media (width < breakpoints.$lg) {
     gap: 15px;
   }
 
@@ -16,7 +16,7 @@
     font: var(--font-l);
     font-weight: 500;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       padding-bottom: 5px;
       font: var(--font-s);
       font-weight: 500;
@@ -36,7 +36,7 @@
     + * {
       margin-top: 15px;
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         margin-top: 10px;
       }
     }
@@ -50,7 +50,7 @@
     font-weight: 500;
     white-space: pre-wrap;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       font: var(--font-xs);
     }
   }
@@ -86,7 +86,7 @@
     grid-row-start: 1;
     grid-row-end: 3;
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       grid-row-end: 2;
     }
   }
@@ -97,7 +97,7 @@
     align-items: flex-start;
     gap: 5px 20px;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       grid-template-columns: 70px 1fr;
     }
 
@@ -106,7 +106,7 @@
       justify-content: space-between;
       gap: 15px;
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         flex-direction: column;
         align-items: flex-end;
         gap: 10px;
@@ -116,10 +116,10 @@
     &-info {
       width: 100%;
 
-      @media (width < $lg) {
+      @media (width < breakpoints.$lg) {
         max-width: 300px;
       }
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         max-width: 100%;
         grid-column-start: 1;
         grid-column-end: 3;
@@ -154,7 +154,7 @@
       gap: 15px;
       flex-grow: 1;
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         flex-direction: column;
         align-items: flex-end;
         gap: 5px;
@@ -174,14 +174,14 @@
         font: var(--font-xxl);
         font-weight: 500;
 
-        @media (width < $lg) {
+        @media (width < breakpoints.$lg) {
           max-width: calc(300 * 100vw / 768);
           font: var(--font-l);
         }
-        @media (width < $md) {
+        @media (width < breakpoints.$md) {
           max-width: calc(170 * 100vw / 375);
         }
-        @media (width < $xs) {
+        @media (width < breakpoints.$xs) {
           max-width: calc(120 * 100vw / 320);
         }
       }
@@ -197,7 +197,7 @@
       p {
         font: var(--font-s);
 
-        @media (width < $lg) {
+        @media (width < breakpoints.$lg) {
           font: var(--font-xs);
         }
       }
@@ -210,7 +210,7 @@
     flex-shrink: 0;
     gap: 15px;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       gap: 10px;
     }
   }
@@ -225,7 +225,7 @@
       gap: 10px;
       font-weight: 500;
 
-      @media (width < $lg) {
+      @media (width < breakpoints.$lg) {
         font: var(--font-xs);
       }
 
@@ -268,7 +268,7 @@
       text-transform: uppercase;
     }
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       margin-left: auto;
       margin-right: auto;
       padding: 2px 7px;
@@ -283,7 +283,7 @@
   &__select {
     max-width: 150px;
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       margin-left: auto;
       margin-right: auto;
     }
@@ -296,7 +296,7 @@
       font-weight: 500;
       color: var(--color-white);
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         padding: 2px 7px;
         font: var(--font-xs);
       }

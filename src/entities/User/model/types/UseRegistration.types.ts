@@ -1,11 +1,12 @@
-import type { IUserRegisterData, IConfirmRegistration } from './User.types';
+import type { IConfirmRegistration, ICamperRegistrationData, ITCORegistrationData } from './User.types';
 
-export enum IRegisterStage {
-	REGISTRATION = 'registration',
+export enum IRegistrationStage {
+	REGISTRATION_TCO = 'registrationTCO',
+	REGISTRATION_CAMPER = 'registrationCamper',
 	CONFIRMATION = 'confirmation',
 }
 
 export interface IRegisterPayload {
-	stage: IRegisterStage;
-	data: IUserRegisterData | IConfirmRegistration;
+	stage: IRegistrationStage;
+	data: ITCORegistrationData | ICamperRegistrationData | IConfirmRegistration;
 }

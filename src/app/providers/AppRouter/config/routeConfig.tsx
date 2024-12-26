@@ -4,8 +4,8 @@ import { FinancesPage } from '@pages/FinancesPage';
 import { InventoryPage } from '@pages/InventoryPage';
 import { ShiftsPage } from '@pages/ShiftsPage';
 import { DashboardPage } from '@pages/DashboardPage';
-import { SignInPage } from '@pages/SignInPage';
-import { SignUpTCOPage } from '@pages/SignUpTCOPage';
+import { LoginPage } from '@pages/LoginPage';
+import { RegisterTCOPage } from '@pages/RegisterTCOPage';
 import { ResetPassPage } from '@pages/ResetPassPage';
 import { CampOverviewPage } from '@pages/CampOverviewPage';
 import { NotFound } from '@widgets/CampNotFound';
@@ -23,8 +23,8 @@ export enum AppRoutes {
   SETTINGS = 'settings',
   SETTINGS_ACCOUNT = 'settings_account',
   SETTINGS_CAMP = 'settings_camp',
-  SIGN_UP = 'sign_up',
-  SIGN_IN = 'sign_in',
+  REGISTRATION = 'registration',
+  LOGIN = 'login',
   RESET_PASS = 'reset_pass',
   CAMP_OVERVIEW = 'camp_overview',
   NOT_FOUND = 'not_found',
@@ -39,8 +39,8 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.SETTINGS]: '/settings',
   [AppRoutes.SETTINGS_ACCOUNT]: '/settings/account',
   [AppRoutes.SETTINGS_CAMP]: '/settings/camp',
-  [AppRoutes.SIGN_UP]: '/signup',
-  [AppRoutes.SIGN_IN]: '/login',
+  [AppRoutes.REGISTRATION]: '/registration',
+  [AppRoutes.LOGIN]: '/login',
   [AppRoutes.RESET_PASS]: '/reset-password',
   [AppRoutes.CAMP_OVERVIEW]: '/id/',
   [AppRoutes.NOT_FOUND]: '*',
@@ -72,13 +72,13 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
     element: <ShiftsPage />,
     authOnly: true,
   },
-  [AppRoutes.SIGN_UP]: {
-    path: RoutePath.sign_up,
-    element: <SignUpTCOPage />,
+  [AppRoutes.REGISTRATION]: {
+    path: RoutePath.registration,
+    element: <RegisterTCOPage />,
   },
-  [AppRoutes.SIGN_IN]: {
-    path: RoutePath.sign_in,
-    element: <SignInPage />,
+  [AppRoutes.LOGIN]: {
+    path: RoutePath.login,
+    element: <LoginPage />,
   },
   [AppRoutes.RESET_PASS]: {
     path: RoutePath.reset_pass,

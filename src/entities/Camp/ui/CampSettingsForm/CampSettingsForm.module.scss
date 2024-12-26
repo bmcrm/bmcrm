@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .form {
 
@@ -8,18 +8,18 @@
 		justify-content: space-between;
 		gap: 30px;
 
-		@media (width < $lg) {
+		@media (width < breakpoints.$lg) {
 			flex-direction: column;
 			align-items: center;
 		}
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			gap: 20px;
 		}
 
 		+ button {
 			margin-top: 40px;
 
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				margin-top: 20px;
 			}
 		}
@@ -31,7 +31,7 @@
 		width: 100%;
 		max-width: 475px;
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			gap: 10px;
 			padding: 15px;
 			border-radius: 10px;

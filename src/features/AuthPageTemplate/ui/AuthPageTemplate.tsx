@@ -10,9 +10,7 @@ type AuthPageTemplateProps = {
 
 const AuthPageTemplate = ({ className, children }: AuthPageTemplateProps) => (
   <section className={classNames(styles.authPage, {}, [className])}>
-    <Container>
-      {children}
-    </Container>
+    <Container>{children}</Container>
   </section>
 );
 

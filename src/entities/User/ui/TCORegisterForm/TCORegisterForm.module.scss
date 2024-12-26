@@ -1,26 +1,23 @@
-@import 'breakpoints';
-
-.flex {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
+@use '@app/styles/breakpoints';
 
 .form {
-  & section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px 20px;
+
+  @media (width < breakpoints.$md) {
+    grid-template-columns: 1fr;
+  }
+
+  &__inner {
     display: flex;
     flex-direction: column;
     gap: 25px;
   }
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  row-gap: 20px;
-  column-gap: 30px;
-  .checkbox {
-    border-radius: 4px;
-    border: 1px solid var(--color-ruby-light);
-  }
-  @media (width < $md) {
-    grid-template-columns: 1fr;
+
+  &__row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
   }
 }

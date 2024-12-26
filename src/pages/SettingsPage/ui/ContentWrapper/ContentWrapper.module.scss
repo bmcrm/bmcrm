@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .content {
 	position: relative;
@@ -6,11 +6,11 @@
 	border-radius: 20px;
 	background: var(--color-secondary-bg);
 
-	@media (width < $lg) {
+	@media (width < breakpoints.$lg) {
 		padding: 15px;
 		border-radius: 10px;
 	}
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		margin-bottom: 40px;
 		padding: 0;
 		border-radius: 10px;

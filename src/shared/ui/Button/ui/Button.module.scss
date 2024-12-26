@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .btn {
   position: relative;
@@ -97,12 +97,12 @@
     font: var(--font-l);
     font-weight: 700;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       padding: 2px 40px;
       font: var(--font-s);
       font-weight: 700;
     }
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       padding-left: 20px;
       padding-right: 20px;
     }

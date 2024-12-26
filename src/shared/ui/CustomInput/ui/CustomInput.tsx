@@ -1,63 +1,67 @@
-import { memo, useState } from 'react';
-import { ErrorMessage, Field } from 'formik';
-import clsx from 'clsx';
+import { memo, useState, useEffect, type InputHTMLAttributes } from 'react';
+import { Field, useFormikContext, ErrorMessage, type FormikValues } from 'formik';
+import { classNames } from '@shared/lib/classNames';
+import { createSlug } from '@shared/lib/createSlug';
 import { Icon } from '@shared/ui/Icon';
 import { Tooltip } from '@shared/ui/Tooltip';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
+import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { validatePassword } from '../lib/validatePassword';
+import { CustomInputTheme } from '../model/types/CustomInput.types';
 import styles from './CustomInput.module.scss';
 import Accept from '@shared/assets/icons/accept.svg';
 import Cross from '@shared/assets/icons/cross.svg';
 import EyeOpen from '@shared/assets/icons/eye_open.svg';
 import EyeClose from '@shared/assets/icons/eye_closed.svg';
 
-interface CustomInputProps {
-  name: string;
+interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
-  placeholder?: string;
+  theme?: CustomInputTheme;
   type?: string;
-  register?: boolean;
   label?: string;
-  value?: string | boolean | string[] | undefined;
-  disabled?: boolean;
-  errors?: { [key: string]: string | boolean }[];
-  readonly?: boolean;
-  onClick?: () => void;
+  controlledInputName?: string;
 }
 
 const CustomInput = memo((props: CustomInputProps) => {
   const {
     className,
-    disabled,
-    name,
-    errors,
-    value,
-    placeholder,
-    register,
+    theme = CustomInputTheme.DEFAULT,
     type = 'text',
     label,
-    readonly,
-    onClick = () => {},
+    controlledInputName,
+    ...rest
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const validateDone = errors?.filter(error => !error.valid).length;
+  const { values, setFieldValue } = useFormikContext<FormikValues>();
+  const isPassword = theme === CustomInputTheme.PASSWORD;
+  const isControlled = theme === CustomInputTheme.CONTROLLED;
+  const errors = isPassword ? validatePassword(values.password) : null;
+  const isValid = errors?.filter(error => !error.valid).length;
+
+  useEffect(() => {
+    if (isControlled && controlledInputName && rest.name) {
+      const campId = createSlug(values[rest.name]);
+      void setFieldValue(controlledInputName, campId);
+    }
+  }, [controlledInputName, isControlled, rest.name, setFieldValue, values]);
 
   return (
-    <label className={clsx(styles.label, className)}>
-      {label && <p>{label}</p>}
-      {type === 'password' && value && isFocused && !!validateDone && (
+    <label className={classNames(styles.input, {}, [className])}>
+      {label && <p className={styles.input__caption}>{label}</p>}
+      {isPassword && isFocused && !!isValid && (
         <Tooltip
           className={styles.tooltip}
           properties={{
             top: '-100px',
             left: '60%',
             transform: 'translateX(-50%)',
-            width: '287px',
+            width: '290px',
           }}
         >
           <ul>
-            {errors?.map((error, idx) => (
-              <li className={clsx(styles.errorText, error.valid ? styles.valid : styles.invalid)} key={idx}>
+            {errors?.map((error, i) => (
+              <li className={classNames(styles.tooltip__item, { [styles.valid]: error.valid }, [])} key={i}>
                 <Icon icon={error.valid ? <Accept /> : <Cross />} /> {error.message}
               </li>
             ))}
@@ -65,24 +69,23 @@ const CustomInput = memo((props: CustomInputProps) => {
         </Tooltip>
       )}
       <Field
-        onClick={onClick}
-        disabled={disabled}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        autoComplete='off'
-        className={styles.input}
-        name={name}
+        className={styles.input__field}
         type={isOpen ? 'text' : type}
-        placeholder={placeholder}
-        readOnly={readonly}
+        {...rest}
       />
-
-      {type === 'password' && (
-        <button type='button' className={styles.eye} onClick={() => setIsOpen(!isOpen)}>
+      {isPassword && (
+        <Button
+          className={styles.input__btn}
+          theme={ButtonTheme.CLEAR}
+          size={ButtonSize.TEXT}
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <Icon icon={isOpen ? <EyeOpen /> : <EyeClose />} />
-        </button>
+        </Button>
       )}
-      {!register && <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />}
+      {!isPassword && <ErrorMessage name={rest.name ?? ''} render={msg => <CustomErrorMessage message={msg} />} />}
     </label>
   );
 });

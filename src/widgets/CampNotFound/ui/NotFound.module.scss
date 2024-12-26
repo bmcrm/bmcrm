@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .notFound {
 	position: relative;
@@ -11,7 +11,7 @@
 	background-position: top center;
 	background-repeat: no-repeat;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		background-image: url('images/camp-overview/bg_404_mobile.png');
 		background-size: cover;
 	}
@@ -29,7 +29,7 @@
 		background-position: center;
 		background-repeat: no-repeat;
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			display: none;
 		}
 	}
@@ -47,7 +47,7 @@
 		background-position: center;
 		background-repeat: no-repeat;
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			left: 30px;
 			bottom: 40px;
 			width: 80px;
@@ -57,7 +57,7 @@
 		&.animate {
 			animation: tumbleweedAnim 3s ease-in-out forwards;
 
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				animation: tumbleweedAnim_mobile 3s ease-in-out forwards;
 			}
 		}
@@ -80,7 +80,7 @@
 	backdrop-filter: blur(10px);
 	text-align: center;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		padding: 15px;
 	}
 
@@ -88,7 +88,7 @@
 		font: var(--font-xl);
 		font-weight: 500;
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			font: var(--font-m);
 			font-weight: 500;
 		}
@@ -96,14 +96,14 @@
 	p {
 		font: var(--font-l);
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			font: var(--font-xs);
 		}
 	}
 }
 
 .btn {
-	@media (width < $xs) {
+	@media (width < breakpoints.$xs) {
 		font: var(--font-xs);
 		font-weight: 500;
 	}

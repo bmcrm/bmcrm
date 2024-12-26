@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import { type ICamper, useCampers } from '@entities/Camper';
+import { type ICamper, useGetCampers } from '@entities/Camper';
 import { CustomInput } from '@shared/ui/CustomInput';
 import { Avatar } from '@shared/ui/Avatar';
 import { Button } from '@shared/ui/Button';
@@ -15,8 +15,7 @@ type UserSettingsFormProps = {
 
 const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
   const { tokens: { decodedIDToken } } = userState();
-  const { getCamper } = useCampers();
-  const [userEmail, setUserEmail] = useState('');
+  const { data: currentCamper } = useGetCampers({camperEmail: decodedIDToken?.email}) as { data: ICamper | undefined };
   const [initialData, setInitialData] = useState<Partial<ICamper>>({
     first_name: '',
     last_name: '',
@@ -25,34 +24,16 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
   });
 
   useEffect(() => {
-    const getEmail = async () => {
-      if (decodedIDToken && userEmail !== decodedIDToken.email) {
-        setUserEmail(decodedIDToken.email);
-      }
-    };
-
-    void getEmail();
-  }, [decodedIDToken, userEmail]);
-
-  useEffect(() => {
-    const fetchCamper = async () => {
-      if (userEmail) {
-        const currentCamper = await getCamper(userEmail);
-
-        if (currentCamper) {
-          setInitialData(prevState => ({
-            ...prevState,
-            first_name: currentCamper.first_name || '',
-            last_name: currentCamper.last_name || '',
-            playa_name: currentCamper.playa_name || '',
-            email: currentCamper.email,
-          }));
-        }
-      }
-    };
-
-    void fetchCamper();
-  }, [getCamper, userEmail]);
+    if (currentCamper) {
+      setInitialData(prevState => ({
+        ...prevState,
+        first_name: currentCamper.first_name || '',
+        last_name: currentCamper.last_name || '',
+        playa_name: currentCamper.playa_name || '',
+        email: currentCamper.email,
+      }));
+    }
+  }, [currentCamper]);
 
   return (
     <Formik validationSchema={userSettingsSchema} initialValues={initialData} onSubmit={onSubmit} enableReinitialize>

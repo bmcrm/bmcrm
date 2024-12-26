@@ -1,4 +1,4 @@
-export const validateErrors = (field: string | undefined) => {
+export const validatePassword = (field: string | undefined) => {
   if (!field) return [];
   return [
     {

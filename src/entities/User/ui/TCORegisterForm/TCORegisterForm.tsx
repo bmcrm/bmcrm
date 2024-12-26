@@ -1,25 +1,25 @@
 import { memo, useCallback } from 'react';
 import { Form, Formik, type FormikHelpers } from 'formik';
 import { Link } from 'react-router-dom';
-import { CustomInput, CustomInputControlled, validateErrors } from '@shared/ui/CustomInput';
+import { CustomInput } from '@shared/ui/CustomInput';
 import { Button } from '@shared/ui/Button';
 import { CustomCheckbox } from '@shared/ui/CustomCheckbox';
-import { initialData, inputsData } from '../../model/data/TCORegisterForm.data';
+import { initialData, leftInputs, rightInputs } from '../../model/data/TCORegisterForm.data';
 import { registrationSchema } from '@shared/const/validationSchemas';
 import { RoutePath } from '@app/providers/AppRouter';
-import type { ITCORegisterForm, IUserRegisterData } from '../../model/types/User.types';
 import { CamperRole } from '@entities/Camper';
+import type { ITCORegistrationData } from '../../model/types/User.types';
 import styles from './TCORegisterForm.module.scss';
 import CampIcon from '@shared/assets/icons/camp.svg';
 
 interface TCORegisterFormProps {
-	onSubmit: (values: IUserRegisterData, formikHelpers: FormikHelpers<ITCORegisterForm>) => void;
+	handleSubmit: (values: ITCORegistrationData, resetForm: () => void) => void;
 }
 
-const TCORegisterForm = memo(({ onSubmit }: TCORegisterFormProps) => {
+const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 	const onSubmitHandler = useCallback(
-		(values: ITCORegisterForm, formikHelpers: FormikHelpers<ITCORegisterForm>) => {
-			const data: IUserRegisterData = {
+		(values: ITCORegistrationData, { resetForm }: FormikHelpers<ITCORegistrationData>) => {
+			const data: ITCORegistrationData = {
 				camp_name: values.camp_name.trim(),
 				camp_id: values.camp_id.trim(),
 				camp_website: values.camp_website.trim(),
@@ -29,61 +29,46 @@ const TCORegisterForm = memo(({ onSubmit }: TCORegisterFormProps) => {
 				playa_name: values.playa_name.trim(),
 				email: values.email.trim(),
 				password: values.password.trim(),
+				accept: values.accept,
 				role: CamperRole.TCO,
 			};
 
-			onSubmit(data, formikHelpers);
+			handleSubmit(data, resetForm);
 		},
-		[onSubmit]
+		[handleSubmit]
 	);
 
 	return (
-		<Formik validationSchema={registrationSchema} onSubmit={onSubmitHandler} initialValues={initialData}>
-			{({ values, setFieldValue }) => (
-				<Form className={styles.form}>
-					<section>
-						<CustomInputControlled
-							setFieldValue={setFieldValue}
-							value={values.camp_name}
-							name="camp_name"
-							placeholder="Sparkle Unicorns"
-							label="Name your camp"
-						/>
-						<CustomInput name="camp_id" disabled placeholder="sparkle-unicorns" label="Camp ID"/>
-						<CustomInput name="city" placeholder="Miami" label="Hometown"/>
-						<CustomInput name="camp_website" placeholder="www.sparkle-unicorns.org" label="Website"/>
-					</section>
-					<section>
-						<div className={styles.flex}>
-							<CustomInput name="first_name" placeholder="Larry" label="First Name"/>
-							<CustomInput name="last_name" placeholder="Harvey" label="Last Name"/>
-						</div>
-						{inputsData.map(input => (
-							<CustomInput value={values[input.name]} key={input.name} {...input} />
-						))}
+		<Formik initialValues={initialData} validationSchema={registrationSchema} onSubmit={onSubmitHandler}>
+			<Form className={styles.form}>
+				<div className={styles.form__inner}>
+					{leftInputs.map((input) => (
 						<CustomInput
-							placeholder="Min. 8 characters"
-							value={values.password}
-							errors={validateErrors(values.password)}
-							name="password"
-							label="Password"
-							type="password"
-							register
+							key={input.name}
+							{...input}
 						/>
-						<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
-						<Button type="submit" fluid>
-							<CampIcon/>
-							SIGN UP
-						</Button>
-						<p className="redirect-link redirect-link--ruby">
-							Already have an account?{' '}
-							<Link className="link" to={RoutePath.sign_in}>
-								Sign in
-							</Link>
-						</p>
-					</section>
-				</Form>
-			)}
+					))}
+				</div>
+				<div className={styles.form__inner}>
+					<div className={styles.form__row}>
+						{rightInputs.name.map((input) => (
+							<CustomInput key={input.name} {...input} />
+						))}
+					</div>
+					{rightInputs.rest.map((input) => (
+						<CustomInput key={input.name} {...input} />
+					))}
+					<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
+					<Button type={'submit'} fluid>
+						<CampIcon />
+						SIGN UP
+					</Button>
+					<p className={'redirect-link redirect-link--ruby'}>
+						Already have an account?{' '}
+						<Link className={'link'} to={RoutePath.login}>Sign in</Link>
+					</p>
+				</div>
+			</Form>
 		</Formik>
 	);
 });

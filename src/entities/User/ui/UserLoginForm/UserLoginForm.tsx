@@ -19,11 +19,13 @@ type UserLoginFormProps = {
 const UserLoginForm = memo(({ onSubmit, initialValues }: UserLoginFormProps) => {
   const ref = useRef<HTMLButtonElement>(null);
   const location = useLocation();
+
   useEffect(() => {
     if (location.state?.email && location.state?.password) {
       ref.current?.click();
     }
   }, [location.state?.email, location.state?.password]);
+
   return (
     <Formik validationSchema={signInSchema} onSubmit={onSubmit} initialValues={initialValues}>
       <Form className={styles.form}>
@@ -33,13 +35,13 @@ const UserLoginForm = memo(({ onSubmit, initialValues }: UserLoginFormProps) => 
         <Link to={RoutePath.reset_pass} className={styles.link}>
           Forgot Password?
         </Link>
-        <Button ref={ref} type='submit' className={styles.btn} fluid>
+        <Button ref={ref} type={'submit'} className={styles.btn} fluid>
           <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
           LOG IN
         </Button>
         <p className='redirect-link redirect-link--orange'>
-          Don't have an account yet? <br className='br-md' />
-          <Link className='link' to={RoutePath.sign_up}>
+          Don't have an account yet? <br className={'br-md'} />
+          <Link className={'link'} to={RoutePath.registration}>
             Register and create a camp
           </Link>
         </p>

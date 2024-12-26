@@ -1,7 +1,7 @@
-@import 'reset';
-@import 'fonts';
-@import 'variables/global';
-@import 'breakpoints';
-@import 'offsets/margins';
-@import 'app';
-@import 'pattern';
+@use 'reset';
+@use 'fonts';
+@use 'variables/global';
+@use 'breakpoints';
+@use 'offsets/margins';
+@use 'app';
+@use 'pattern';

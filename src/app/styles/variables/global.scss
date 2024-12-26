@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '../breakpoints';
 
 :root {
   // colors
@@ -62,7 +62,7 @@
 
   // tablet
 
-  @media (width < $lg) {
+  @media (width < breakpoints.$lg) {
 
     // container
 
@@ -71,7 +71,7 @@
 
   // mobile
 
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
 
     // container
 

@@ -1,4 +1,4 @@
-@import '../../../app/styles/breakpoints';
+@use '@app/styles/breakpoints';
 
 .auth-page {
 	display: flex;
@@ -10,7 +10,7 @@
 	background-color: var(--color-white);
 	overflow: hidden;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		align-items: flex-start;
 	}
 }

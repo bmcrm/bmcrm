@@ -1,26 +1,33 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@shared/hooks/useToast';
 import { errorHandler } from '@shared/lib/errorHandler';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 import { userApi } from '../api/userApi';
-import { IRegisterStage, type IRegisterPayload, } from '../model/types/UseRegistration.types';
-import type { IUserRegisterData, IConfirmRegistration } from '../model/types/User.types';
+import { type IRegisterPayload, IRegistrationStage } from '../model/types/UseRegistration.types';
+import type { IConfirmRegistration, ITCORegistrationData, ICamperRegistrationData } from '../model/types/User.types';
 
 const useRegistration = () => {
 	const { success } = useToast();
 
 	const stages: {
-		[Key in IRegisterStage]: {
-			api: (data: Key extends IRegisterStage.REGISTRATION
-				? IUserRegisterData
-				: IConfirmRegistration) => Promise<unknown>;
+		[Key in IRegistrationStage]: {
+			api: (data: Key extends IRegistrationStage.REGISTRATION_TCO
+				? ITCORegistrationData
+				: Key extends IRegistrationStage.REGISTRATION_CAMPER
+					? ICamperRegistrationData
+					: IConfirmRegistration) => Promise<unknown>;
 			toast: () => void;
 		};
 	} = {
-		[IRegisterStage.REGISTRATION]: {
+		[IRegistrationStage.REGISTRATION_TCO]: {
+			api: userApi.registration,
+			toast: () => success('Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.'),
+		},
+		[IRegistrationStage.REGISTRATION_CAMPER]: {
 			api: userApi.registration,
 			toast: () => success('Check your email!'),
 		},
-		[IRegisterStage.CONFIRMATION]: {
+		[IRegistrationStage.CONFIRMATION]: {
 			api: userApi.confirmRegistration,
 			toast: () => success('Signed Up!'),
 		},
@@ -33,9 +40,21 @@ const useRegistration = () => {
 		},
 		onSuccess: (_, variables) => {
 			const { toast } = stages[variables.stage];
+			const isTCO = variables.stage === IRegistrationStage.REGISTRATION_TCO;
+
 			toast();
+			logger(LogLevel.INFO, LogSource.WEBAPP, `New user registered as ${isTCO ? 'TCO' : 'Camper'}`, {
+				user: variables.data.email,
+				...(isTCO ? { camp_id: (variables.data as ITCORegistrationData).camp_id } : {}),
+			});
 		},
-		onError: (error) => errorHandler(error),
+		onError: (error, variables) => {
+			errorHandler(error);
+			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
+				user: variables.data.email,
+				...variables.data,
+			});
+		},
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };

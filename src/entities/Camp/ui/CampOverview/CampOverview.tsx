@@ -1,14 +1,14 @@
 import { memo, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { useCampers } from '@entities/Camper';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Skeleton } from '@shared/ui/Skeleton';
 import { Image } from '@shared/ui/Image';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
-import CampersCountModal from '@features/CampersCountModal';
+import { CampersCountModal } from '@features/CampersCountModal';
 import { userState } from '@entities/User';
+import { useGetCampers, type ICamper } from '@entities/Camper';
 import type { ICamp } from '../../model/types/Camp.types';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './CampOverview.module.scss';
@@ -25,9 +25,10 @@ type CampOverviewProps = {
 
 const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOverviewProps) => {
   const { isMobile, isTablet } = useMedia();
-  const { isLoggedIn } = userState();
-  const { campersCount } = useCampers();
   const { isOpen, open, close } = useToggle();
+  const { data: campers } = useGetCampers() as { data: ICamper[] | undefined  };
+  const { isLoggedIn } = userState();
+
   let content = (
     <>
       <Skeleton width={300} height={42} className={'m-centred'} />
@@ -54,7 +55,7 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
   };
 
   const campersCounter = isLoggedIn ? (
-    campersCount || '0'
+    campers?.length || '0'
   ) : (
     <>
       <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} onClick={open}>

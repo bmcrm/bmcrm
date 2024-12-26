@@ -14,13 +14,13 @@ import {
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { EnvConfigs } from '@shared/config/env';
 import axiosInstance from '@shared/config/axios';
-import type {
+import {
+	ICamperRegistrationData,
 	IConfirmRegistration,
 	IConfirmResetPassData,
 	IInitResetPassData,
 	ILoginData,
-	ITCORegisterForm,
-	IUserRegisterData,
+	ITCORegistrationData,
 } from '../model/types/User.types';
 
 const cognitoClient = new CognitoIdentityProviderClient({
@@ -30,7 +30,7 @@ const cognitoClient = new CognitoIdentityProviderClient({
 const mode = EnvConfigs.BMCRM_ENV;
 
 export const userApi = {
-	registration: async (credentials: ITCORegisterForm | IUserRegisterData) => {
+	registration: async (credentials: ITCORegistrationData | ICamperRegistrationData) => {
 		const endpoint = `https://api.${mode}.bmcrm.camp/campers/create`;
 		const headers = createAuthHeaders();
 

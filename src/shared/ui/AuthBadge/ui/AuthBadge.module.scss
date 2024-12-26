@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .badge {
 	width: 100%;
@@ -13,7 +13,7 @@
 		font-weight: 500;
 		color: var(--color-white);
 
-		@media (width < $lg) {
+		@media (width < breakpoints.$lg) {
 			font: var(--font-s);
 			font-weight: 500;
 		}

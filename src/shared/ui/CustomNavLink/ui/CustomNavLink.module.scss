@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .link {
   position: relative;
@@ -7,10 +7,10 @@
   gap: 10px;
   font: var(--font-m);
 
-  @media (width < $lg) {
+  @media (width < breakpoints.$lg) {
     font: var(--font-xs);
   }
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     font: var(--font-s);
   }
 
@@ -25,7 +25,7 @@
     transition: width 0.2s ease-in-out;
     background-color: var(--color-ruby-dark);
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       height: 1px;
     }
   }
@@ -55,18 +55,18 @@
     }
   }
   &--header {
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       padding-bottom: 15px;
       border-bottom: 1px solid var(--color-neutral);
     }
 
     &.active {
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         color: var(--color-ruby-dark);
       }
 
       &:after {
-        @media (width < $md) {
+        @media (width < breakpoints.$md) {
           display: block;
           width: 6px;
           height: 6px;
@@ -80,7 +80,7 @@
     }
   }
   &--logout {
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       padding-bottom: 0;
       border-bottom: none;
       font: var(--font-xs);
@@ -92,25 +92,25 @@
     }
   }
   &--settings {
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       font: var(--font-xs);
       font-weight: 500;
     }
   }
   &--icon {
     &:after {
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         display: none;
       }
     }
 
     &.active {
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         color: var(--color-ruby-dark);
       }
 
       &:after {
-        @media (width < $md) {
+        @media (width < breakpoints.$md) {
           display: block;
           width: 6px;
           height: 6px;

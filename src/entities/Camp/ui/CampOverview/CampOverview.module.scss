@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .camp {
   &__title {
@@ -6,7 +6,7 @@
     font-weight: 500;
     text-align: center;
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       font: var(--font-l);
       font-weight: 500;
       text-align: left;
@@ -15,7 +15,7 @@
     + .camp__subtitle {
       margin-top: 10px;
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         margin-top: 0;
       }
     }
@@ -29,10 +29,10 @@
     font: var(--font-l);
     text-align: center;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       font: var(--font-s);
     }
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       justify-content: flex-start;
       font: var(--font-xs);
       text-align: left;
@@ -41,14 +41,14 @@
     + .camp__row {
       margin-top: 30px;
 
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         margin-top: 20px;
       }
     }
   }
 
   &__text {
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       font: var(--font-xs);
     }
   }
@@ -61,10 +61,10 @@
     grid-template-columns: minmax(300px, 515px) 1fr;
     gap: 25px;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       grid-template-columns: minmax(200px, 300px) 1fr;
     }
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       display: flex;
       flex-direction: column-reverse;
     }
@@ -83,12 +83,12 @@
       background-position: center;
       background-repeat: no-repeat;
 
-      @media (width < $lg) {
+      @media (width < breakpoints.$lg) {
         width: 137px;
         height: 158px;
         right: 0;
       }
-      @media (width < $md) {
+      @media (width < breakpoints.$md) {
         display: none;
       }
     }
@@ -100,7 +100,7 @@
     flex-direction: column;
     gap: 25px;
 
-    @media (width < $md) {
+    @media (width < breakpoints.$md) {
       width: 100%;
       gap: 20px;
     }
@@ -111,7 +111,7 @@
     align-items: center;
     gap: 5px;
 
-    @media (width < $lg) {
+    @media (width < breakpoints.$lg) {
       font: var(--font-xs);
     }
   }
@@ -148,7 +148,7 @@
   gap: 25px;
   font: var(--font-l);
   text-align: center;
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     font: var(--font-s);
     font-weight: 500;
     text-align: left;

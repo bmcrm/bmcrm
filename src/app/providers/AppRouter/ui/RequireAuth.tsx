@@ -8,7 +8,7 @@ const RequireAuth = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
 
   if (!isLoggedIn) {
-    return <Navigate to={RoutePath.sign_in} state={{ from: location }} replace />;
+    return <Navigate to={RoutePath.login} state={{ from: location }} replace />;
   }
 
   return children;

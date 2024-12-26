@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .form {
 	display: grid;
@@ -6,11 +6,11 @@
 	width: 100%;
 	max-width: 400px;
 
-	@media (width < $lg) {
+	@media (width < breakpoints.$lg) {
 		max-width: 320px;
 		gap: 20px;
 	}
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		max-width: 100%;
 	}
 }
@@ -19,7 +19,7 @@
 	font: var(--font-s);
 	font-weight: 600;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		font: var(--font-xs);
 		font-weight: 600;
 	}

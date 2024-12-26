@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 .error {
   color: var(--color-ruby-dark);
 
@@ -11,7 +11,7 @@
   position: absolute;
   bottom: -25px;
   left: 10px;
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     bottom: -25px;
     left: 0px;
   }

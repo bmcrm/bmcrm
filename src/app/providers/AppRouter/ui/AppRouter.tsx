@@ -1,4 +1,4 @@
-import { memo, ReactNode, Suspense, useCallback } from 'react';
+import { memo, Suspense, useCallback, type ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
 import { AppRouterProps, routeConfig, RoutePath } from '../config/routeConfig';
