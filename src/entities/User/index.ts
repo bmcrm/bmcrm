@@ -8,18 +8,20 @@ export { useRefreshTokens } from './hooks/useRefreshTokens';
 
 export { default as CamperRegisterForm } from './ui/CamperRegisterForm/CamperRegisterForm';
 export { default as TCORegisterForm } from './ui/TCORegisterForm/TCORegisterForm';
-export { default as UserAvatar } from './ui/UserAvatar/UserAvatar';
-export { default as UserAvatarTooltip } from './ui/UserAvatarTooltip/UserAvatarTooltip';
 export { default as UserLoginForm } from './ui/UserLoginForm/UserLoginForm';
 export { default as UserSettingsForm } from './ui/UserSettingsForm/UserSettingsForm';
+export { default as InitStageForm } from './ui/ResetPassForm/InitStageForm/InitStageForm';
+export { default as ConfirmStageForm } from './ui/ResetPassForm/ConfirmStageForm/ConfirmStageForm';
 
 export type {
   IIDToken,
-  IUserRegisterData,
+  ICamperRegistrationData,
   ITCORegistrationData,
   ILoginData,
   IConfirmRegistration,
-  IConfirmResetPass,
+  IInitResetPassData,
+  IConfirmResetPassData,
 } from './model/types/User.types';
-export type { IUserAvatar } from './model/types/UserAvatar.types';
 export { IRegistrationStage } from './model/types/UseRegistration.types';
+export { IResetPassStages } from './model/types/UseResetPassword.types';
+export type { IConfirmResetPass } from './model/types/ResetPass.types';

@@ -8,7 +8,6 @@ import { UserLoginForm, useLogin, type ILoginData } from '@entities/User';
 import { UserConfirmModal } from '@features/UserConfirmModal';
 import { FormLoader } from '@features/FormLoader';
 import { RoutePath } from '@app/providers/AppRouter';
-import { logger, LogLevel, LogSource } from '@shared/lib/logger/logger';
 
 const LoginPage = memo(() => {
   const navigate = useNavigate();
@@ -16,7 +15,6 @@ const LoginPage = memo(() => {
   const [credentials, setCredentials] = useState<ILoginData | null>(null);
   const { isOpen, open, close } = useToggle();
   const { mutateAsync: login, isPending } = useLogin();
-
   const signInCredentials = location?.state as ILoginData;
   const initialValues = {
     email: signInCredentials?.email || '',
@@ -35,9 +33,6 @@ const LoginPage = memo(() => {
         resetForm();
         navigate(RoutePath.funnel, { replace: true });
       } catch (e) {
-        if (e instanceof CognitoIdentityProviderServiceException && e.name !== 'UserNotConfirmedException') {
-          logger(LogLevel.ERROR, LogSource.WEBAPP, 'Login error', { user: values.email });
-        }
         if (e instanceof CognitoIdentityProviderServiceException && e.name === 'UserNotConfirmedException') {
           setCredentials(() => ({
             email: data.email,

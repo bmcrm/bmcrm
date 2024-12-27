@@ -1,21 +1,23 @@
 import { memo, useEffect } from 'react';
 import styles from './InventoryPage.module.scss';
-import Button from 'shared/ui/Button/Button';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-import Modal from 'shared/ui/Modal/Modal';
-import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
-import { InventoryCategories } from 'entities/Inventory/ui/InventoryCategories/InventoryCategories';
-import AddInventoryForm from 'entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
-import Container from 'shared/ui/Container/Container';
-import NotFound from 'shared/assets/images/inventory/notFound.png';
-import FormLoader from 'features/FormLoader';
-import { ToTopButton } from 'widgets/ToTopButton/ToTopButton';
+import { Button } from '@shared/ui/Button';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Modal } from '@shared/ui/Modal';
+import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
+import { InventoryCategories } from '@entities/Inventory/ui/InventoryCategories/InventoryCategories';
+import AddInventoryForm from '@entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
+import { Container } from '@shared/ui/Container';
+import NotFound from '@shared/assets/images/inventory/notFound.png';
+import { FormLoader } from '@features/FormLoader';
+import { ToTopButton } from '@widgets/ToTopButton';
+
 const InventoryPage = memo(() => {
   const { getItems, inventory, isLoading } = useInventory(state => ({
     getItems: state.getItems,
     inventory: state.inventory,
     isLoading: state.isLoading,
   }));
+
   useEffect(() => {
     getItems();
   }, [getItems]);

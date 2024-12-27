@@ -1,17 +1,14 @@
-import { memo, useEffect, useState } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-import useCampers from 'entities/Camper/model/services/useCampers/useCampers';
-import { useMediaQuery } from 'react-responsive';
-
-import Button from 'shared/ui/Button/Button';
+import { useEffect, useState } from 'react';
+import { classNames } from '@shared/lib/classNames';
+import { useMedia } from '@shared/hooks/useMedia';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Button } from '@shared/ui/Button';
+import { Container } from '@shared/ui/Container';
+import { InviteCamperModal } from '@features/InviteCamperModal';
 import Funnel from '../Funnel/Funnel';
 import FunnelCard from '../FunnelCard/ui/FunnelCard/FunnelCard';
-import Container from 'shared/ui/Container/Container';
-import InviteUserModal from 'features/InviteCamperModal';
-
+import { useGetCampers, type ICamper, CamperRole } from '@entities/Camper';
 import styles from './FunnelPage.module.scss';
-import { CamperRole, ICamper } from 'entities/Camper';
 
 interface IRoles {
   [CamperRole.TCO]: ICamper | undefined;
@@ -22,10 +19,11 @@ interface IRoles {
   [CamperRole.COORG]: ICamper[];
 }
 
-const FunnelPage = memo(() => {
+const FunnelPage = () => {
   const { isOpen, open, close } = useToggle();
-  const isTablet = useMediaQuery({ query: '(max-width: 1023px)' });
-  const { campers, getCampers } = useCampers();
+  const { isTablet } = useMedia();
+  const { data: campers } = useGetCampers() as { data: ICamper[] };
+
   const [roles, setRoles] = useState<IRoles>({
     [CamperRole.TCO]: undefined,
     [CamperRole.LEAD]: [],
@@ -36,11 +34,7 @@ const FunnelPage = memo(() => {
   });
 
   useEffect(() => {
-    void getCampers();
-  }, [getCampers]);
-
-  useEffect(() => {
-    if (campers.length > 0) {
+    if (campers && campers.length > 0) {
       const tco = campers.find(camper => camper.role === CamperRole.TCO);
       const lead = campers.filter(camper => camper.role === CamperRole.LEAD);
       const qualified = campers.filter(camper => camper.role === CamperRole.QUALIFIED);
@@ -78,7 +72,7 @@ const FunnelPage = memo(() => {
           <Button onClick={open} className={styles.funnel__btn}>
             Invite
           </Button>
-          {isOpen && <InviteUserModal isOpen={isOpen} onClose={close} />}
+          {isOpen && <InviteCamperModal isOpen={isOpen} onClose={close} />}
         </div>
         <div className={styles.funnel__content}>
           <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]} />
@@ -94,6 +88,6 @@ const FunnelPage = memo(() => {
       </Container>
     </section>
   );
-});
+};
 
 export default FunnelPage;

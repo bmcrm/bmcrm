@@ -7,7 +7,7 @@ import useInventory from '@entities/Inventory/model/services/useInventory/useInv
 import { createItemSchema } from '@shared/const/validationSchemas';
 import { IInventoryItem } from '@entities/Inventory/model/types/types';
 import { Icon } from '@shared/ui/Icon';
-import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
+import DeleteItemPreview from '@shared/assets/icons/deleteImage.svg';
 import toast from 'react-hot-toast';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 import { EnvConfigs } from '@shared/config/env';
@@ -172,7 +172,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
             </div>
 
             <CustomInput
-              readonly
+              readOnly
               className={styles.form__image}
               name={'image'}
               label={'Photo'}

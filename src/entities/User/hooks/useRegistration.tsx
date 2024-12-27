@@ -25,7 +25,7 @@ const useRegistration = () => {
 		},
 		[IRegistrationStage.REGISTRATION_CAMPER]: {
 			api: userApi.registration,
-			toast: () => success('Check your email!'),
+			toast: () => success('Sign-up successful! We have sent you a verification code to your email, it is valid for 24 hours.'),
 		},
 		[IRegistrationStage.CONFIRMATION]: {
 			api: userApi.confirmRegistration,

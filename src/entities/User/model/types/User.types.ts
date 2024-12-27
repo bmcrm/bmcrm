@@ -19,28 +19,22 @@ export interface ITCORegistrationData extends ICamperRegistrationData {
   camp_website: string;
 }
 
-export interface IUserRegisterData {
-  first_name: string;
-  last_name: string;
-  playa_name: string;
-  email: string;
-  password: string;
-  about_me?: string;
-  social_links?: CamperSocial[];
-  camp_id?: string;
-  city?: string;
-  camp_name?: string;
-  camp_website?: string;
-
-  role: CamperRole;
-}
-
 export interface IConfirmRegistration {
   code: string;
   email: string;
 }
 
 export interface ILoginData {
+  email: string;
+  password: string;
+}
+
+export interface IInitResetPassData {
+  email: string;
+}
+
+export interface IConfirmResetPassData {
+  code: string;
   email: string;
   password: string;
 }
@@ -69,26 +63,4 @@ export interface IIDToken {
   sub: string;
   token_use: string;
   updated_at: number;
-}
-
-export interface ILoggedUser {
-  AccessToken?: string;
-  IdToken?: string;
-  RefreshToken?: string;
-}
-
-export interface IInitResetPassData {
-  email: string;
-}
-
-export interface IConfirmResetPass {
-  confirm_code: string;
-  email: string;
-  password_new: string;
-}
-
-export interface IConfirmResetPassData {
-  code: string;
-  email: string;
-  password: string;
 }

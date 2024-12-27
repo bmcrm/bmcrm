@@ -1,16 +1,13 @@
 import { memo, useState } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-
-import Avatar from 'shared/ui/Avatar/Avatar';
-import Icon from 'shared/ui/Icon/Icon';
-import UserDetailsModal from 'features/UserDetailsModal';
-
+import { classNames } from '@shared/lib/classNames';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Avatar } from '@shared/ui/Avatar';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { UserDetailsModal } from '@features/UserDetailsModal';
+import type { ICamper } from '@entities/Camper';
 import styles from './FunnerCardItem.module.scss';
-import { ICamper } from 'entities/Camper/model/types/camper.types';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import ClockIcon from 'shared/assets/icons/clock.svg';
-import CheckIcon from 'shared/assets/icons/check.svg';
+import ClockIcon from '@shared/assets/icons/clock.svg';
+import CheckIcon from '@shared/assets/icons/check.svg';
 
 type FunnerCardItemProps = {
   className?: string;

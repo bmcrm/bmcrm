@@ -1,9 +1,8 @@
 import { memo } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-
+import { classNames } from '@shared/lib/classNames';
+import FunnelCardItem from '../../../FunnelCardItem/FunnelCardItem';
+import type { ICamper } from '@entities/Camper';
 import styles from './FunnelCardAll.module.scss';
-import { ICamper } from 'entities/Camper';
-import FunnelCardItem from 'pages/FunnelPage/ui/FunnelCardItem/FunnelCardItem';
 
 type FunnelCardAllProps = {
   className?: string;

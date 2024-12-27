@@ -1,107 +1,87 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import errorHandler from 'shared/lib/errorHandler/errorHandler';
-
-import AuthPageTemplate from 'features/AuthPageTemplate';
-import { ResetFormBg, ResetPassFormTemplate } from 'features/ResetPassFormTemplate';
-import { ResetPassStepOne, ResetPassStepTwo, type IResetPassStepTwo } from 'features/ResetPassForm';
-import Button from 'shared/ui/Button/Button';
-import Icon from 'shared/ui/Icon/Icon';
-import FormLoader from 'features/FormLoader';
-
-import Camp from 'icons/camp.svg';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import { RoutePath } from 'app/providers/AppRouter';
-import { type IConfirmResetPass, useAuth } from 'entities/User';
-
-type Step = 1 | 2 | 3;
-
-interface ITextData {
-  badge: Record<Step, string>;
-  desc: Record<Step, string | null>;
-}
-
-const textData: ITextData = {
-  badge: {
-    1: 'Reset Password',
-    2: 'Create a New Password',
-    3: 'Your password has been successfully reset',
-  },
-  desc: {
-    1: 'Enter your email address and we will send a link to reset password',
-    2: null,
-    3: 'You can now log in with your new credentials',
-  },
-};
+import { AuthPageTemplate } from '@features/AuthPageTemplate';
+import { ResetPassFormTemplate, ResetFormBg } from '@features/ResetPassFormTemplate';
+import { InitStageForm, ConfirmStageForm, type IConfirmResetPass } from '@entities/User';
+import { Button } from '@shared/ui/Button';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { FormLoader } from '@features/FormLoader';
+import { RoutePath } from '@app/providers/AppRouter';
+import {
+  useResetPassword,
+  IResetPassStages,
+  type IConfirmResetPassData,
+  type IInitResetPassData,
+} from '@entities/User';
+import CampIcon from '@shared/assets/icons/camp.svg';
 
 const ResetPassPage = memo(() => {
-  const [step, setStep] = useState<Step>(1);
-  const [email, setEmail] = useState('');
   const navigate = useNavigate();
-  const badgeLabel = textData.badge[step];
-  const descLabel = textData.desc[step];
-  const { initResetPass, confirmResetPass, isLoading, error, resetError } = useAuth();
+  const [stage, setStage] = useState<IResetPassStages>(IResetPassStages.INIT);
+  const [email, setEmail] = useState('');
+  const { mutateAsync: resetPass, isPending } = useResetPassword();
 
-  useEffect(() => {
-    if (error) {
-      errorHandler(error, 'ResetPassPage');
-    }
-
-    return resetError();
-  }, [error, resetError]);
-
-  const handleStepOneSubmit = useCallback(
-    async (values: { email: string }, { resetForm }: { resetForm: () => void }) => {
-      const trimEmail = values.email.trim();
-      const response = await initResetPass({ email: trimEmail });
-
-      if (response) {
-        setEmail(trimEmail);
-        resetForm();
-        setStep(2);
-      }
+  const handleInit = useCallback(
+    async (values: IInitResetPassData, { resetForm }: { resetForm: () => void }) => {
+      const data = { email: values.email.trim() };
+      setEmail(values.email.trim());
+      await resetPass({ stage: IResetPassStages.INIT, data });
+      resetForm();
+      setStage(IResetPassStages.CONFIRM);
     },
-    [initResetPass]
+    [resetPass]
   );
 
-  const handleStepTwoSubmit = useCallback(
-    async (values: IResetPassStepTwo, { resetForm }: { resetForm: () => void }) => {
-      const data: IConfirmResetPass = {
-        confirm_code: values.confirm_code.trim(),
-        password_new: values.password_new.trim(),
-        email: email,
+  const handleConfirm = useCallback(
+    async (values: IConfirmResetPass, { resetForm }: { resetForm: () => void }) => {
+      const data: IConfirmResetPassData = {
+        code: values.confirm_code.trim(),
+        password: values.password.trim(),
+        email,
       };
 
-      const response = await confirmResetPass(data);
-
-      if (response) {
-        resetForm();
-        setStep(3);
-      }
+      await resetPass({ stage: IResetPassStages.CONFIRM, data });
+      resetForm();
+      setStage(IResetPassStages.SUCCESS);
     },
-    [confirmResetPass, email]
+    [email, resetPass]
   );
 
-  const btnStepThreeHandler = useCallback(() => {
-    navigate(RoutePath.sign_in, { replace: true });
+  const handeSuccess = useCallback(() => {
+    navigate(RoutePath.login, { replace: true });
   }, [navigate]);
 
-  const bg = step === 3 ? ResetFormBg.SUN : ResetFormBg.KEY;
+  const stageConfig = {
+    [IResetPassStages.INIT]: {
+      badge: 'Reset Password',
+      desc: 'Enter your email address and we will send a link to reset password',
+      bg: ResetFormBg.KEY,
+      content: <InitStageForm onSubmit={handleInit} />,
+    },
+    [IResetPassStages.CONFIRM]: {
+      badge: 'Create a New Password',
+      desc: null,
+      bg: ResetFormBg.KEY,
+      content: <ConfirmStageForm onSubmit={handleConfirm} />,
+    },
+    [IResetPassStages.SUCCESS]: {
+      badge: 'Your password has been successfully reset',
+      desc: 'You can now log in with your new credentials',
+      bg: ResetFormBg.SUN,
+      content: (
+        <Button onClick={handeSuccess} fluid>
+          <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
+          BACK TO SIGN IN
+        </Button>
+      ),
+    },
+  }[stage];
 
   return (
     <AuthPageTemplate>
-      <ResetPassFormTemplate badge={badgeLabel} desc={descLabel} background={bg}>
-        {isLoading && <FormLoader />}
-        {step === 1 ? (
-          <ResetPassStepOne onSubmit={handleStepOneSubmit} />
-        ) : step === 2 ? (
-          <ResetPassStepTwo onSubmit={handleStepTwoSubmit} />
-        ) : (
-          <Button onClick={btnStepThreeHandler} fluid>
-            <Icon icon={<Camp />} size={IconSize.SIZE_20} />
-            BACK TO SIGN IN
-          </Button>
-        )}
+      <ResetPassFormTemplate badge={stageConfig.badge} desc={stageConfig.desc} background={stageConfig.bg}>
+        {isPending && <FormLoader />}
+        {stageConfig.content}
       </ResetPassFormTemplate>
     </AuthPageTemplate>
   );

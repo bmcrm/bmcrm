@@ -29,7 +29,7 @@ const ResetPassFormTemplate = (props: ResetPassFormTemplateProps) => {
       <div className={styles.wrapper__inner}>
         {desc && <p className={styles.desc}>{desc}</p>}
         {children}
-        <Link to={RoutePath.sign_in} className={styles.link}>Back to Sign In</Link>
+        <Link to={RoutePath.login} className={styles.link}>Back to Sign In</Link>
       </div>
     </div>
   );

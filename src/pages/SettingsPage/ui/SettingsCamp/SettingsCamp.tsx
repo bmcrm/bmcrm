@@ -1,39 +1,23 @@
-import { memo, useEffect } from 'react';
-import { CampSettingsForm, type ICamp, useCamp } from 'entities/Camp';
-import { useAuth } from 'entities/User';
+import { memo, useCallback } from 'react';
+import { CampSettingsForm, useUpdateCamp, type ICamp } from '@entities/Camp';
 import ContentWrapper from '../../ui/ContentWrapper/ContentWrapper';
-import FormLoader from 'features/FormLoader';
-import errorHandler from 'shared/lib/errorHandler/errorHandler.ts';
-import { AxiosError } from 'axios';
+import { FormLoader } from '@features/FormLoader';
 
 const SettingsCamp = memo(() => {
-  const { updateCamp, isLoading, isError, resetError } = useCamp();
-  const { refreshToken, updateTokens } = useAuth();
+	const { mutate: updateCamp, isPending } = useUpdateCamp();
 
-  useEffect(() => {
-    if (isError) {
-      errorHandler(isError as AxiosError, 'SettingsCamp');
-    }
+	const handleSubmit = useCallback(
+		(values: Partial<ICamp>) => {
+			updateCamp(values);
+		},
+		[updateCamp]);
 
-    return resetError();
-  }, [isError, resetError]);
-
-  const onSubmitHandler = async (values: Partial<ICamp>) => {
-    const { camp_id, ...data } = values;
-
-    const response = await updateCamp(values.camp_id!, data);
-
-    if (response) {
-      await updateTokens(refreshToken);
-    }
-  };
-
-  return (
-    <ContentWrapper className={'mt-25'}>
-      {isLoading && <FormLoader />}
-      <CampSettingsForm onSubmit={onSubmitHandler} />
-    </ContentWrapper>
-  );
+	return (
+		<ContentWrapper className={'mt-25'}>
+			{isPending && <FormLoader/>}
+			<CampSettingsForm onSubmit={handleSubmit} />
+		</ContentWrapper>
+	);
 });
 
 export default SettingsCamp;

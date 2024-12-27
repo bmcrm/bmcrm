@@ -7,8 +7,9 @@ import useInventory from '@entities/Inventory/model/services/useInventory/useInv
 import { createItemSchema } from '@shared/const/validationSchemas';
 import { IInventoryItem } from '@entities/Inventory/model/types/types';
 import { Icon } from '@shared/ui/Icon';
-import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
+import DeleteItemPreview from '@shared/assets/icons/deleteImage.svg';
 import { FormLoader } from '@features/FormLoader';
+
 type FormValues = {
   title: string;
   description: string;

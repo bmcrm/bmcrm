@@ -79,18 +79,6 @@
       }
     }
   }
-  &--logout {
-    @media (width < breakpoints.$md) {
-      padding-bottom: 0;
-      border-bottom: none;
-      font: var(--font-xs);
-      color: var(--color-neutral);
-
-      &:after {
-        display: none;
-      }
-    }
-  }
   &--settings {
     @media (width < breakpoints.$md) {
       font: var(--font-xs);

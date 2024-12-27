@@ -1,3 +1,5 @@
+import { CustomInputTheme } from '@shared/ui/CustomInput';
+
 export const inputsData = [
   {
     name: 'confirm_code',
@@ -6,10 +8,11 @@ export const inputsData = [
     type: 'text',
   },
   {
-    name: 'password_new',
+    name: 'password',
     placeholder: '∗∗∗∗∗∗∗∗',
     label: 'New Password',
     type: 'password',
+    theme: CustomInputTheme.PASSWORD,
   },
   {
     name: 'password_confirm',
@@ -21,6 +24,6 @@ export const inputsData = [
 
 export const initialValues = {
   confirm_code: '',
-  password_new: '',
+  password: '',
   password_confirm: '',
 };

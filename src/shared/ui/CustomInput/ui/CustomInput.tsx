@@ -85,7 +85,7 @@ const CustomInput = memo((props: CustomInputProps) => {
           <Icon icon={isOpen ? <EyeOpen /> : <EyeClose />} />
         </Button>
       )}
-      {!isPassword && <ErrorMessage name={rest.name ?? ''} render={msg => <CustomErrorMessage message={msg} />} />}
+      <ErrorMessage name={rest.name ?? ''} render={msg => <CustomErrorMessage message={msg} />} />
     </label>
   );
 });
