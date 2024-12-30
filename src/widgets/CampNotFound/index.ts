@@ -1,3 +1,1 @@
-import NotFound from './ui/NotFound';
-
-export default NotFound;
+export { default as NotFound } from './ui/NotFound';

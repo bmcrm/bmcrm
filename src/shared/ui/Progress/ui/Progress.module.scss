@@ -1,0 +1,91 @@
+@use '@app/styles/breakpoints';
+
+.progress {
+	width: 100%;
+	max-width: 105px;
+
+	@media (width < breakpoints.$lg) {
+		max-width: 75px;
+	}
+
+	&__caption {
+		padding-left: 10px;
+		font: var(--font-s);
+
+		@media (width < breakpoints.$lg) {
+			padding-left: 8px;
+			font: var(--font-xs);
+		}
+
+		.small {
+			font: var(--font-xxs);
+		}
+	}
+
+	&__bar {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 2px;
+		border-radius: 5px;
+		margin-top: 1px;
+
+		.bar {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			height: 100%;
+			border-radius: inherit;
+		}
+	}
+
+	&.orange-light {
+		.progress__bar {
+			background-color: rgba(254, 202, 92, .2);
+
+			.bar {
+				background-color: var(--color-orange-light);
+			}
+		}
+		.symbol {
+			color: var(--color-orange-light);
+		}
+	}
+	&.orange-dark {
+		.progress__bar {
+			background-color: rgba(254, 145, 42, .2);
+
+			.bar {
+				background-color: var(--color-orange-dark);
+			}
+		}
+		.symbol {
+			color: var(--color-orange-dark);
+		}
+	}
+	&.ruby-light {
+		.progress__bar {
+			background-color: rgba(229, 64, 81, .2);
+
+			.bar {
+				background-color: var(--color-ruby-light);
+			}
+		}
+		.symbol {
+			color: var(--color-ruby-light);
+		}
+	}
+	&.ruby-dark {
+		.progress__bar {
+			background-color: rgba(139, 16, 62, .2);
+
+			.bar {
+				background-color: var(--color-ruby-dark);
+			}
+		}
+		.symbol {
+			color: var(--color-ruby-dark);
+		}
+	}
+}

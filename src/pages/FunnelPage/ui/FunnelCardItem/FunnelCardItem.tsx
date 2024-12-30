@@ -1,16 +1,13 @@
 import { memo, useState } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import { useToggle } from 'shared/hooks/useToggle/useToggle';
-
-import Avatar from 'shared/ui/Avatar/Avatar';
-import Icon from 'shared/ui/Icon/Icon';
-import UserDetailsModal from 'features/UserDetailsModal';
-
+import { classNames } from '@shared/lib/classNames';
+import { useToggle } from '@shared/hooks/useToggle';
+import { Avatar } from '@shared/ui/Avatar';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
+import type { ICamper } from '@entities/Camper';
 import styles from './FunnerCardItem.module.scss';
-import { ICamper } from 'entities/Camper/model/types/camper.types';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import ClockIcon from 'shared/assets/icons/clock.svg';
-import CheckIcon from 'shared/assets/icons/check.svg';
+import ClockIcon from '@shared/assets/icons/clock.svg';
+import CheckIcon from '@shared/assets/icons/check.svg';
 
 type FunnerCardItemProps = {
   className?: string;
@@ -33,7 +30,7 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
         onClick={clickHandler}
         className={classNames(styles.cardItem, {}, [className])}
       >
-        <Avatar alt={user.avatar} size={30}/>
+        <Avatar alt={user.avatar} size={30} />
         <p className={styles.cardItem__name}>{userName}</p>
         <Icon
           className={'ml-a'}
@@ -42,7 +39,9 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
           style={{ color: user.email_confirmed ? '#4ECB71' : '#C1C1C1' }}
         />
       </li>
-      {isOpen && <UserDetailsModal camperEmail={camperEmail} isDetailsOpen={isOpen} onDetailsClose={close}/>}
+      {isOpen && camperEmail && (
+        <CamperDetailsModal camperEmail={camperEmail} isDetailsOpen={isOpen} onDetailsClose={close} />
+      )}
     </>
   );
 });

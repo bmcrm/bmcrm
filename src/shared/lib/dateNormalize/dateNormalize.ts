@@ -1,3 +1,1 @@
-const dateNormalize = (date: string) => new Date(date).toLocaleDateString();
-
-export default dateNormalize;
+export const dateNormalize = (date: string) => new Date(date).toLocaleDateString();

@@ -1,0 +1,115 @@
+@use '@app/styles/breakpoints';
+
+.link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: var(--font-m);
+
+  @media (width < breakpoints.$lg) {
+    font: var(--font-xs);
+  }
+  @media (width < breakpoints.$md) {
+    font: var(--font-s);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    transition: width 0.2s ease-in-out;
+    background-color: var(--color-ruby-dark);
+
+    @media (width < breakpoints.$md) {
+      height: 1px;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      &:after {
+        width: 100%;
+      }
+    }
+  }
+
+  &.active {
+    &:after {
+      width: 100%;
+    }
+  }
+  &.disabled {
+    pointer-events: none;
+    color: var(--color-neutral);
+  }
+  &--camp {
+    &:hover {
+      &:after {
+        width: 0%;
+      }
+    }
+  }
+  &--header {
+    @media (width < breakpoints.$md) {
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--color-neutral);
+    }
+
+    &.active {
+      @media (width < breakpoints.$md) {
+        color: var(--color-ruby-dark);
+      }
+
+      &:after {
+        @media (width < breakpoints.$md) {
+          display: block;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          top: 10px;
+          left: unset;
+          right: 0;
+          bottom: unset;
+        }
+      }
+    }
+  }
+  &--settings {
+    @media (width < breakpoints.$md) {
+      font: var(--font-xs);
+      font-weight: 500;
+    }
+  }
+  &--icon {
+    &:after {
+      @media (width < breakpoints.$md) {
+        display: none;
+      }
+    }
+
+    &.active {
+      @media (width < breakpoints.$md) {
+        color: var(--color-ruby-dark);
+      }
+
+      &:after {
+        @media (width < breakpoints.$md) {
+          display: block;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          top: 50%;
+          left: unset;
+          right: 0;
+          bottom: unset;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}

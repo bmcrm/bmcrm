@@ -1,0 +1,23 @@
+@use '@app/styles/breakpoints';
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px 20px;
+
+  @media (width < breakpoints.$md) {
+    grid-template-columns: 1fr;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+}

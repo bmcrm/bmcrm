@@ -1,46 +1,35 @@
-import * as Sentry from '@sentry/react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppRouter, RoutePath } from 'app/providers/AppRouter';
-import { useAuth } from 'entities/User';
-import { useCampers } from 'entities/Camper';
+import { useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { isTokenExpired } from '@shared/lib/isTokenExpired';
+import { AppLayout } from '@app/layouts/AppLayout';
+import { useLocalStorage } from '@shared/hooks/useLocalStorage';
+import { useRefreshTokens, userState } from '@entities/User';
 
 const App = () => {
-  const { decodedIDToken, updateTokens, refreshToken, error, resetState, isLoggedIn } = useAuth();
-  const { getCampers } = useCampers();
-  const navigate = useNavigate();
+  const initialCheckRef = useRef(false);
+  const { resetState, isLoggedIn, tokens: { decodedIDToken, refreshToken } } = userState();
+  const { clearStorage } = useLocalStorage();
+  const { mutate: refreshTokens } = useRefreshTokens();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    const checkAndRefreshToken = async () => {
-      const now = Math.floor(Date.now() / 1000);
-      const exp = decodedIDToken?.exp;
-
-      if (exp && now > exp) {
-        updateTokens(refreshToken);
+    const checkAndRefreshTokens = () => {
+      if (decodedIDToken && isTokenExpired(decodedIDToken.exp)) {
+        resetState();
+        clearStorage();
+        queryClient.clear();
+      } else if (isLoggedIn && refreshToken) {
+        refreshTokens(refreshToken);
       }
     };
 
-    void checkAndRefreshToken();
-  }, [decodedIDToken?.exp, refreshToken, updateTokens]);
-
-  useEffect(() => {
-    if (error?.name === 'NotAuthorizedException') {
-      resetState();
-      navigate(RoutePath.sign_in, { replace: true });
+    if (!initialCheckRef.current) {
+      initialCheckRef.current = true;
+      checkAndRefreshTokens();
     }
-  }, [error?.name, navigate, resetState]);
+  }, [clearStorage, decodedIDToken, isLoggedIn, queryClient, refreshToken, refreshTokens, resetState]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      void getCampers();
-    }
-  }, [getCampers, isLoggedIn]);
-
-  return (
-    <div className='app'>
-      <AppRouter />
-    </div>
-  );
+  return <AppLayout />;
 };
 
-export default Sentry.withProfiler(App);
+export default App;

@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .funnel {
 	position: relative;
@@ -9,12 +9,12 @@
 	gap: 15px;
 	padding-top: 50px;
 
-	@media (width < $lg) {
+	@media (width < breakpoints.$lg) {
 		max-width: 346px;
 		padding-bottom: 20px;
 		gap: 21px;
 	}
-	@media (width < $xs) {
+	@media (width < breakpoints.$xs) {
 		padding-top: 35px;
 		padding-bottom: 10px;
 		gap: 17px;
@@ -26,20 +26,20 @@
 		z-index: -1;
 		top: 0;
 		left: 20%;
-		background-image: url('images/funnel/funnel.png');
+		background-image: url('@shared/assets/images/funnel/funnel.png');
 		background-size: contain;
 		background-position: center;
 		background-repeat: no-repeat;
 		width: 312px;
 		height: 278px;
 
-		@media (width < $lg) {
+		@media (width < breakpoints.$lg) {
 			left: unset;
 			right: 0;
 			width: 240px;
 			height: 214px;
 		}
-		@media (width < $xs) {
+		@media (width < breakpoints.$xs) {
 			width: 204px;
 			height: 178px;
 		}
@@ -56,11 +56,11 @@
 			padding-left: 30px;
 			padding-right: 30px;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				padding-left: 24px;
 				padding-right: 0;
 			}
-			@media (width < $xs) {
+			@media (width < breakpoints.$xs) {
 				padding-left: 15px;
 			}
 		}
@@ -68,11 +68,11 @@
 			padding-left: 60px;
 			padding-right: 60px;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				padding-left: 48px;
 				padding-right: 0;
 			}
-			@media (width < $xs) {
+			@media (width < breakpoints.$xs) {
 				padding-left: 30px;
 			}
 		}
@@ -80,11 +80,11 @@
 			padding-left: 90px;
 			padding-right: 90px;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				padding-left: 72px;
 				padding-right: 0;
 			}
-			@media (width < $xs) {
+			@media (width < breakpoints.$xs) {
 				padding-left: 45px;
 			}
 		}
@@ -94,7 +94,7 @@
 		width: 100%;
 		max-width: 250px;
 
-		@media (width < $lg) {
+		@media (width < breakpoints.$lg) {
 			position: absolute;
 			z-index: -10;
 			top: calc(100% + 5px);
@@ -104,7 +104,7 @@
 			opacity: 0;
 			visibility: hidden;
 		}
-		@media (width < $xs) {
+		@media (width < breakpoints.$xs) {
 			max-width: 200px;
 		}
 

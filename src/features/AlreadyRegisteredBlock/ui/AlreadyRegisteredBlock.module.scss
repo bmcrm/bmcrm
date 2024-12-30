@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 .wrapper {
   position: absolute;
   inset: -3px;
@@ -23,7 +23,7 @@
   background-color: var(--color-secondary-bg);
   box-shadow: 0 2px 60px 0 rgba(0, 0, 0, 0.1);
 
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     grid-template-columns: 1fr;
     padding: 20px;
   }

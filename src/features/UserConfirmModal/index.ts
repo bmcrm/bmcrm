@@ -1,5 +1,1 @@
-import UserConfirmModal from './ui/UserConfirmModal';
-
-export {
-  UserConfirmModal,
-};
+export { default as UserConfirmModal } from './ui/UserConfirmModal';

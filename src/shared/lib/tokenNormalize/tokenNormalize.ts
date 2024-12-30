@@ -1,6 +1,6 @@
-import { IIDToken } from 'entities/User';
+import type { IIDToken } from '@entities/User';
 
-const tokenNormalize = (token: IIDToken): IIDToken => {
+export const tokenNormalize = (token: IIDToken): IIDToken => {
   const normalizedToken: Partial<IIDToken> = {};
 
   Object.keys(token).forEach(key => {
@@ -10,5 +10,3 @@ const tokenNormalize = (token: IIDToken): IIDToken => {
 
   return normalizedToken as IIDToken;
 };
-
-export default tokenNormalize;

@@ -1,31 +1,27 @@
-import useAuth from './model/services/useAuth/useAuth';
-import UserAvatar from './ui/UserAvatar/UserAvatar';
-import UserSignInForm from './ui/UserSignInForm/UserSignInForm';
-import TCOSignUpForm from './ui/TCOSignUpForm/TCOSignUpForm';
-import CamperSignUpForm from './ui/CamperSignUpForm/CamperSignUpForm';
-import UserSettingsForm from './ui/UserSettingsForm/UserSettingsForm';
-import type {
-  IUserRegisterData,
-  ILoginData,
-  IIDToken,
-  IConfirmEmail,
-  IConfirmResetPass,
-  IInviteData,
-} from './model/types/auth.types';
-import type { IUserAvatar } from './model/types/userAvatar.types';
+export { userState } from './model/state/userState';
 
-export {
-  useAuth,
-  UserAvatar,
-  UserSignInForm,
-  TCOSignUpForm,
-  CamperSignUpForm,
-  UserSettingsForm,
+export { useRegistration } from './hooks/useRegistration';
+export { useLogin } from './hooks/useLogin';
+export { useLogout } from './hooks/useLogout';
+export { useResetPassword } from './hooks/useResetPassword';
+export { useRefreshTokens } from './hooks/useRefreshTokens';
+
+export { default as CamperRegisterForm } from './ui/CamperRegisterForm/CamperRegisterForm';
+export { default as TCORegisterForm } from './ui/TCORegisterForm/TCORegisterForm';
+export { default as UserLoginForm } from './ui/UserLoginForm/UserLoginForm';
+export { default as UserSettingsForm } from './ui/UserSettingsForm/UserSettingsForm';
+export { default as InitStageForm } from './ui/ResetPassForm/InitStageForm/InitStageForm';
+export { default as ConfirmStageForm } from './ui/ResetPassForm/ConfirmStageForm/ConfirmStageForm';
+
+export type {
   IIDToken,
-  IUserRegisterData,
+  ICamperRegistrationData,
+  ITCORegistrationData,
   ILoginData,
-  IUserAvatar,
-  IConfirmEmail,
-  IConfirmResetPass,
-  IInviteData,
-};
+  IConfirmRegistration,
+  IInitResetPassData,
+  IConfirmResetPassData,
+} from './model/types/User.types';
+export { IRegistrationStage } from './model/types/UseRegistration.types';
+export { IResetPassStages } from './model/types/UseResetPassword.types';
+export type { IConfirmResetPass } from './model/types/ResetPass.types';

@@ -1,3 +1,1 @@
-import CampersCountModal from './ui/CampersCountModal';
-
-export default CampersCountModal;
+export { default as CampersCountModal } from './ui/CampersCountModal';

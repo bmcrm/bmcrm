@@ -1,3 +1,1 @@
-import AuthPageTemplate from './ui/AuthPageTemplate';
-
-export default AuthPageTemplate;
+export { default as AuthPageTemplate } from './ui/AuthPageTemplate';

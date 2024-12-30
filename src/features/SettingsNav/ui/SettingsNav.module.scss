@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .nav {
 	width: 100%;
@@ -6,7 +6,7 @@
 	border-radius: 10px;
 	background-color: var(--color-secondary-bg);
 	
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		padding: 10px 15px;
 	}
 
@@ -15,7 +15,7 @@
 		align-items: center;
 		gap: 30px;
 
-		@media (width < $md) {
+		@media (width < breakpoints.$md) {
 			gap: 20px;
 		}
 	}

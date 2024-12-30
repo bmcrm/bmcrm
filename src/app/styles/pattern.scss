@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use 'breakpoints';
 
 // titles
 
@@ -40,14 +40,23 @@
 .br-lg {
   display: block;
 
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     display: none;
   }
 }
 .br-md {
   display: none;
 
-  @media (width < $md) {
+  @media (width < breakpoints.$md) {
     display: block;
   }
+}
+
+
+.swiper-pagination {
+  position: absolute !important;
+  bottom: 0 !important;
+}
+.swiper-cube .swiper-cube-shadow:before {
+  background: none !important;
 }

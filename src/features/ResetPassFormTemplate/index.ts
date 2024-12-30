@@ -1,7 +1,2 @@
-import ResetPassFormTemplate from './ui/ResetPassFormTemplate';
-import { ResetFormBg } from './model/types/resetPassFormTemplate.types';
-
-export {
-  ResetPassFormTemplate,
-  ResetFormBg,
-};
+export { default as ResetPassFormTemplate } from './ui/ResetPassFormTemplate';
+export { ResetFormBg } from './model/types/ResetPassFormTemplate.types';

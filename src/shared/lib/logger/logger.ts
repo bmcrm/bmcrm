@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { EnvConfigs } from 'shared/config/env/env';
+import { EnvConfigs } from '@shared/config/env';
+
 export enum LogLevel {
   INFO = 'INFO',
   WARN = 'WARN',
   ERROR = 'ERROR',
 }
+
 export enum LogSource {
   WEBAPP = 'WEBAPP',
   CAMPS = 'CAMPS',
@@ -13,9 +15,11 @@ export enum LogSource {
 }
 
 const mode = EnvConfigs.BMCRM_ENV;
+
 export const logger = (level: LogLevel, source: LogSource, message: string, context?: Record<string, unknown>) => {
   if (mode !== 'prod') return;
-  axios.post(`https://api.${mode}.bmcrm.camp/eventlog`, {
+
+  void axios.post(`https://api.${mode}.bmcrm.camp/eventlog`, {
     level,
     source,
     message,

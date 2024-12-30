@@ -1,3 +1,2 @@
-import Header from './ui/Header';
-
-export default Header;
+export { default as Header } from './ui/Header';
+export { HeaderTheme } from './model/types/Header.types';

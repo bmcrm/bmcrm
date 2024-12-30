@@ -1,7 +1,7 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .inner {
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		padding: 15px;
 		border-radius: 10px;
 		background: var(--color-secondary-bg);
@@ -20,7 +20,7 @@
 	text-align: center;
 	color: var(--color-orange-dark);
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		width: 100%;
 		padding: 8px 10px;
 		border-radius: 10px;

@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use '@app/styles/breakpoints';
 
 .card {
 	display: grid;
@@ -6,7 +6,7 @@
 	width: 975px;
 	max-width: 100%;
 
-	@media (width > $xxl) {
+	@media (width > breakpoints.$xxl) {
 		width: 80vw;
 	}
 

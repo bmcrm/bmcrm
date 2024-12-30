@@ -1,4 +1,4 @@
-@import '../../../app/styles/breakpoints';
+@use '@app/styles/breakpoints';
 
 .wrapper {
 	position: relative;
@@ -14,7 +14,7 @@
 	box-shadow: 0 5px 60px 0 rgba(0, 0, 0, .2);
 	overflow: hidden;
 
-	@media (width < $md) {
+	@media (width < breakpoints.$md) {
 		max-width: max-content;
 	}
 
@@ -36,15 +36,15 @@
 			display: block;
 			width: 285px;
 			height: 267px;
-			background-image: url('shared/assets/images/auth/key_bg.png');
+			background-image: url('@shared/assets/images/auth/key_bg.png');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				right: 0;
 			}
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				display: none;
 			}
 		}
@@ -59,15 +59,15 @@
 			display: block;
 			width: 514px;
 			height: 350px;
-			background-image: url('shared/assets/images/auth/sun_bg.png');
+			background-image: url('@shared/assets/images/auth/sun_bg.png');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
 
-			@media (width < $lg) {
+			@media (width < breakpoints.$lg) {
 				opacity: .5;
 			}
-			@media (width < $md) {
+			@media (width < breakpoints.$md) {
 				display: none;
 			}
 		}

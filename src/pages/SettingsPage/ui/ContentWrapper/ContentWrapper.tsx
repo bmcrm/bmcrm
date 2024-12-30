@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
+import type { ReactNode } from 'react';
+import { classNames } from '@shared/lib/classNames';
 import styles from './ContentWrapper.module.scss';
 
 type ContentWrapperProps = {
@@ -7,12 +7,8 @@ type ContentWrapperProps = {
   children?: ReactNode;
 };
 
-const ContentWrapper = ({ children, className }: ContentWrapperProps) => {
-  return (
-    <div className={classNames(styles.content, {}, [className])}>
-      {children}
-    </div>
-  );
-};
+const ContentWrapper = ({ children, className }: ContentWrapperProps) => (
+  <div className={classNames(styles.content, {}, [className])}>{children}</div>
+);
 
 export default ContentWrapper;

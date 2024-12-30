@@ -1,12 +1,10 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { classNames } from 'shared/lib/classNames/classNames';
-
-import AuthBadge from 'shared/ui/AuthBadge/AuthBadge';
-
+import { classNames } from '@shared/lib/classNames';
+import { AuthBadge } from '@shared/ui/AuthBadge';
+import { RoutePath } from '@app/providers/AppRouter';
+import { ResetFormBg } from '../model/types/ResetPassFormTemplate.types';
 import styles from './ResetPassFormTemplate.module.scss';
-import { RoutePath } from 'app/providers/AppRouter';
-import { ResetFormBg } from 'features/ResetPassFormTemplate/model/types/resetPassFormTemplate.types.ts';
 
 interface ResetPassFormTemplateProps {
   className?: string;
@@ -31,7 +29,7 @@ const ResetPassFormTemplate = (props: ResetPassFormTemplateProps) => {
       <div className={styles.wrapper__inner}>
         {desc && <p className={styles.desc}>{desc}</p>}
         {children}
-        <Link to={RoutePath.sign_in} className={styles.link}>Back to Sign In</Link>
+        <Link to={RoutePath.login} className={styles.link}>Back to Sign In</Link>
       </div>
     </div>
   );

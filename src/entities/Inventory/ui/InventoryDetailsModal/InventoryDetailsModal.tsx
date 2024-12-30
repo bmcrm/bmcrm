@@ -1,12 +1,11 @@
-import { IInventoryItem } from 'entities/Inventory/model/types/types';
+import { IInventoryItem } from '@entities/Inventory/model/types/types';
 import styles from './InventoryDetailsModal.module.scss';
 import { useState } from 'react';
-import Icon from 'shared/ui/Icon/Icon';
-import DeleteIcon from 'shared/assets/icons/delete.svg';
-import { IconSize } from 'shared/ui/Icon/Icon.types';
-import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
+import { Icon, IconSize } from '@shared/ui/Icon';
+import DeleteIcon from '@shared/assets/icons/delete.svg';
+import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Inventory from 'shared/assets/images/inventory/inventory.png';
+import Inventory from '@shared/assets/images/inventory/inventory.png';
 
 interface InventoryDetailsModalProps {
   item: IInventoryItem;

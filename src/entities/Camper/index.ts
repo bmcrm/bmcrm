@@ -1,9 +1,10 @@
-import { type ICamper, CamperRole, type CamperSocial } from './model/types/camper.types';
-import useCampers from './model/services/useCampers/useCampers';
+export { useGetCampers } from './hooks/useGetCampers';
+export { useUpdateCamper } from './hooks/useUpdateCamper';
+export { useInviteCamper } from './hooks/useInviteCamper';
 
 export {
-  useCampers,
-  ICamper,
-  CamperRole,
-  CamperSocial,
-};
+	type ICamper,
+	type CamperSocial,
+	type IInviteCamperData,
+	CamperRole,
+} from './model/types/Camper.types';

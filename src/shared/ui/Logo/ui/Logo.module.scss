@@ -1,0 +1,25 @@
+@use '@app/styles/breakpoints';
+
+.logo {
+	display: block;
+	width: 100%;
+	max-width: 144px;
+	flex-shrink: 0;
+
+	@media (width < breakpoints.$lg) {
+		max-width: 100px;
+	}
+	@media (width < breakpoints.$md) {
+		max-width: 80px;
+	}
+
+	&__link {
+		display: block;
+		width: 100%;
+
+		svg {
+			display: block;
+			width: 100%;
+		}
+	}
+}

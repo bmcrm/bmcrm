@@ -1,3 +1,1 @@
-import Nav from './ui/Nav/Nav';
-
-export { Nav };
+export { default as Nav } from './ui/Nav';

@@ -1,20 +1,19 @@
 import { createRef, memo, useState } from 'react';
 import { Form, Formik } from 'formik';
-import CustomInput from 'shared/ui/CustomInput/CustomInput';
-import Button from 'shared/ui/Button/Button';
+import { CustomInput } from '@shared/ui/CustomInput';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import styles from './AddInventoryForm.module.scss';
-import { ButtonColor, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button.types';
-import useInventory from 'entities/Inventory/model/services/useInventory/useInventory';
-import { createItemSchema } from 'shared/const/schemas/validations';
-import { IInventoryItem } from 'entities/Inventory/model/types/types';
-import Icon from 'shared/ui/Icon/Icon';
-import DeleteItemPreview from 'shared/assets/icons/deleteImage.svg';
+import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
+import { createItemSchema } from '@shared/const/validationSchemas';
+import { IInventoryItem } from '@entities/Inventory/model/types/types';
+import { Icon } from '@shared/ui/Icon';
+import DeleteItemPreview from '@shared/assets/icons/deleteImage.svg';
 import toast from 'react-hot-toast';
-import { useAuth } from 'entities/User';
-import { logger, LogLevel, LogSource } from 'shared/lib/logger/logger';
-import { EnvConfigs } from 'shared/config/env/env';
-import FormLoader from 'features/FormLoader';
-import imageCompression from 'browser-image-compression'; // Импортируем библиотеку
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
+import { EnvConfigs } from '@shared/config/env';
+import { FormLoader } from '@features/FormLoader';
+import imageCompression from 'browser-image-compression';
+import { userState } from '@entities/User';
 
 type FormValues = {
   title: string;
@@ -33,7 +32,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const { createItem } = useInventory();
   const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
-  const { idToken: token, decodedIDToken } = useAuth();
+  const { tokens: { idToken: token, decodedIDToken } } = userState();
 
   const getPresignedUrl = async (fileName: string) => {
     const response = await fetch(`https://api.${mode}.bmcrm.camp/inventory/upload`, {
@@ -173,7 +172,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
             </div>
 
             <CustomInput
-              readonly
+              readOnly
               className={styles.form__image}
               name={'image'}
               label={'Photo'}

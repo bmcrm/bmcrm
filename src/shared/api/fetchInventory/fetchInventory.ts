@@ -1,7 +1,7 @@
-import { EnvConfigs } from 'shared/config/env/env';
-import { useAuth } from 'entities/User';
-import axiosInstance from 'shared/config/axios';
-import type { IInventoryItem } from 'entities/Inventory/model/types/types';
+import { EnvConfigs } from '@shared/config/env';
+import axiosInstance from '@shared/config/axios';
+import type { IInventoryItem } from '@entities/Inventory/model/types/types';
+import { userState } from '@entities/User';
 
 const mode = EnvConfigs.BMCRM_ENV;
 
@@ -15,7 +15,7 @@ interface IFetchInventory {
 export const fetchInventory = (props: IFetchInventory) => {
   const { endpoint, payload, method } = props;
   const url = `https://api.${mode}.bmcrm.camp/inventory${endpoint ? `/${endpoint}` : ''}`;
-  const idToken = useAuth.getState().idToken;
+  const idToken = userState.getState().tokens?.idToken;
   const headers = {
     Authorization: idToken,
   };

@@ -1,0 +1,21 @@
+@use '@app/styles/breakpoints';
+
+.badge {
+	width: 100%;
+	max-width: max-content;
+	padding: 2px 20px;
+	border-radius: 8px;
+	background: var(--gradient-orange);
+
+	&__caption {
+		font: var(--font-l);
+		text-align: center;
+		font-weight: 500;
+		color: var(--color-white);
+
+		@media (width < breakpoints.$lg) {
+			font: var(--font-s);
+			font-weight: 500;
+		}
+	}
+}

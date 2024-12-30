@@ -1,6 +1,6 @@
-import { CSSProperties, memo } from 'react';
-import { classNames } from 'shared/lib/classNames/classNames';
-import Loader from 'shared/ui/Loader/Loader';
+import { memo, type CSSProperties } from 'react';
+import { classNames } from '@shared/lib/classNames';
+import { Loader } from '@shared/ui/Loader';
 import styles from './FormLoader.module.scss';
 
 type FormLoaderProps = {
@@ -8,12 +8,8 @@ type FormLoaderProps = {
   style?: CSSProperties;
 };
 
-const FormLoader = memo(({ className, style }: FormLoaderProps) => {
-  return (
-    <div className={classNames(styles.formLoader, {}, [className])} style={style}>
-      <Loader/>
-    </div>
-  );
-});
+const FormLoader = memo(({ className, style }: FormLoaderProps) => (
+  <div className={classNames(styles.formLoader, {}, [className])} style={style}><Loader/></div>
+));
 
 export default FormLoader;

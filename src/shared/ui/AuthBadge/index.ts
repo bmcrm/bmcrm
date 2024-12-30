@@ -1,0 +1,1 @@
+export { default as AuthBadge } from './ui/AuthBadge';

@@ -1,3 +1,1 @@
-import FormLoader from './ui/FormLoader';
-
-export default FormLoader;
+export { default as FormLoader } from './ui/FormLoader';

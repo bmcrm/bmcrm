@@ -1,17 +1,17 @@
-import { memo, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { classNames } from 'shared/lib/classNames/classNames';
-import Container from 'shared/ui/Container/Container';
-import Button from 'shared/ui/Button/Button';
+import { classNames } from '@shared/lib/classNames';
+import { Container } from '@shared/ui/Container';
+import { Button } from '@shared/ui/Button';
 import styles from './NotFound.module.scss';
 
 type NotFoundProps = {
   redirectTo: string;
   textRedirect: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
-const NotFound = memo(({ redirectTo, textRedirect, children }: NotFoundProps) => {
+
+const NotFound = ({ redirectTo, textRedirect, children }: NotFoundProps) => {
   const navigate = useNavigate();
   const [isAnimate, setIsAnimate] = useState(false);
 
@@ -19,9 +19,9 @@ const NotFound = memo(({ redirectTo, textRedirect, children }: NotFoundProps) =>
     setIsAnimate(true);
   }, []);
 
-  const onRedirectHandler = (target: string) => {
+  const onRedirectHandler = useCallback((target: string) => {
     navigate(target, { replace: true });
-  };
+  }, [navigate]);
 
   return (
     <section className={styles.notFound}>
@@ -36,6 +36,6 @@ const NotFound = memo(({ redirectTo, textRedirect, children }: NotFoundProps) =>
       <span className={classNames(styles.notFound__tumbleweed, { [styles.animate]: isAnimate }, [])} />
     </section>
   );
-});
+};
 
 export default NotFound;

@@ -1,0 +1,54 @@
+.input {
+  position: relative;
+  width: 100%;
+  color: var(--color-black);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &::placeholder {
+    color: var(--color-neutral);
+  }
+
+  &__caption {
+    font: var(--font-s);
+    font-weight: 500;
+  }
+
+  &__field {
+    width: 100%;
+    padding: 10px 20px;
+    border: 2px solid var(--color-input-orange);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(4px);
+    font: var(--font-size-s);
+    outline: none;
+  }
+
+  &__btn {
+    position: absolute;
+    right: 20px;
+    top: 70%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 15;
+  }
+}
+
+.tooltip {
+  z-index: 100;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font: var(--font-xs);
+    color: var(--color-ruby-dark);
+
+    &.valid {
+      color: #038f00;
+    }
+  }
+}

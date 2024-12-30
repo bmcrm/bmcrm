@@ -1,3 +1,1 @@
-import AddSocialModal from './ui/AddSocialModal';
-
-export default AddSocialModal;
+export { default as AddSocialModal } from './ui/AddSocialModal';
