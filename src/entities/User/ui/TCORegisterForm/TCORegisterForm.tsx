@@ -18,7 +18,7 @@ interface TCORegisterFormProps {
 
 const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 	const onSubmitHandler = useCallback(
-		(values: ITCORegistrationData, { resetForm }: FormikHelpers<ITCORegistrationData>) => {
+		(values: typeof initialData, { resetForm }: FormikHelpers<typeof initialData>) => {
 			const data: ITCORegistrationData = {
 				camp_name: values.camp_name.trim(),
 				camp_id: values.camp_id.trim(),
@@ -29,7 +29,7 @@ const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 				playa_name: values.playa_name.trim(),
 				email: values.email.trim(),
 				password: values.password.trim(),
-				accept: values.accept,
+				accept: Boolean(values.accept),
 				role: CamperRole.TCO,
 			};
 
@@ -43,10 +43,7 @@ const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 			<Form className={styles.form}>
 				<div className={styles.form__inner}>
 					{leftInputs.map((input) => (
-						<CustomInput
-							key={input.name}
-							{...input}
-						/>
+						<CustomInput key={input.name} {...input} />
 					))}
 				</div>
 				<div className={styles.form__inner}>

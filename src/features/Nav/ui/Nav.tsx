@@ -6,9 +6,9 @@ import { CustomNavLink, CustomNavLinkTheme } from '@shared/ui/CustomNavLink';
 import { UserAvatar, UserAvatarTheme } from '@features/UserAvatar';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { useLogout } from '@entities/User';
+import { useLogout, userState } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
-import { navItemsList } from '../model/data/Nav.data';
+import { generateNavList } from '../model/data/Nav.data';
 import styles from './Nav.module.scss';
 import SettingsIcon from '@shared/assets/icons/settings_icon.svg';
 import LogoutIcon from '@shared/assets/icons/logout_icon.svg';
@@ -24,6 +24,7 @@ const Nav = memo((props: NavProps) => {
 	const navRef = useRef<HTMLElement>(null);
 	const { isMobile } = useMedia();
 	const { mutate: logout } = useLogout();
+	const { tokens: { decodedIDToken } } = userState();
 	const mods: Mods = {
 		[styles.open]: isOpen,
 	};
@@ -46,11 +47,11 @@ const Nav = memo((props: NavProps) => {
 			<div className={styles.nav__inner}>
 				{isMobile && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose} />}
 				<ul className={styles.nav__list}>
-					{navItemsList.map(item => (
+					{decodedIDToken && (generateNavList(decodedIDToken.camp_id).map(item => (
 						<li key={item.path}>
 							<CustomNavLink link={item} onClick={handleCLose} />
 						</li>
-					))}
+					)))}
 					{isMobile && (
 						<>
 							<li>

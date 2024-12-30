@@ -12,32 +12,24 @@ const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 const AuthLayout = ({ children }: { children: ReactNode }) => (
   <>
     <Header />
-    <div className='main'>
-      <Suspense fallback={<PageLoader />}>
-        {children}
-      </Suspense>
-    </div>
+    <main className={'main'}>
+      <Suspense fallback={<PageLoader />}>{children}</Suspense>
+    </main>
   </>
 );
 
 const NonAuthLayout = ({ children }: { children: ReactNode }) => (
-  <Suspense fallback={<PageLoader />}>
-    {children}
-  </Suspense>
+  <Suspense fallback={<PageLoader />}>{children}</Suspense>
 );
 
 const AppRouter = memo(() => {
   const renderWithWrapper = useCallback((route: AppRouterProps) => {
     const element = route.authOnly ? (
       <RequireAuth>
-        <AuthLayout>
-          {route.element}
-        </AuthLayout>
+        <AuthLayout>{route.element}</AuthLayout>
       </RequireAuth>
     ) : (
-      <NonAuthLayout>
-        {route.element}
-      </NonAuthLayout>
+      <NonAuthLayout>{route.element}</NonAuthLayout>
     );
 
     return <Route key={route.path} path={route.path} element={element} />;

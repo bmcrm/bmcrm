@@ -1,4 +1,3 @@
-export { default as CampOverview } from './ui/CampOverview/CampOverview';
 export { default as CampSettingsForm } from './ui/CampSettingsForm/CampSettingsForm';
 
 export { useGetCamp } from './hooks/useGetCamp';

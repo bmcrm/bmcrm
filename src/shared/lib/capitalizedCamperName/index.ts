@@ -1,0 +1,1 @@
+export { capitalizedCamperName } from './capitalizedCamperName';

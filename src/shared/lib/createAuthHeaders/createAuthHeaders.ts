@@ -5,6 +5,6 @@ export const createAuthHeaders = () => {
 
   return {
     'Content-Type': 'application/json',
-    Authorization: idToken,
+    ...(idToken ? { Authorization: idToken } : {}),
   };
 };

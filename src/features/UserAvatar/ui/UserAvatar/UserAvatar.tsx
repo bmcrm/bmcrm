@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMedia } from '@shared/hooks/useMedia';
 import { classNames } from '@shared/lib/classNames';
+import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { Avatar } from '@shared/ui/Avatar';
 import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
 import { userState } from '@entities/User';
@@ -26,17 +27,7 @@ const UserAvatar = memo((props: UserAvatarProps) => {
 
     const { first_name, last_name, playa_name, email } = decodedIDToken;
 
-    const firstLastName = first_name && last_name ? `${first_name} ${last_name}` : null;
-    const name = playa_name || firstLastName || email;
-
-    console.log('first_name:', first_name);
-    console.log('last_name:', last_name);
-    console.log('name:', name);
-
-    return name
-      ?.split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
+    return capitalizedCamperName({ first_name, last_name, playa_name, email });
   }, [decodedIDToken]);
 
   const commonContent = (

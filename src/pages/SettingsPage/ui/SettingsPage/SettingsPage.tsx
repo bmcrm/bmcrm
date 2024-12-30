@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { classNames } from '@shared/lib/classNames';
 import { Outlet } from 'react-router-dom';
+import { classNames } from '@shared/lib/classNames';
 import { Container } from '@shared/ui/Container';
 import { SettingsNav } from '@features/SettingsNav';
 import styles from './SettingsPage.module.scss';
@@ -12,8 +12,8 @@ type SettingsPageProps = {
 const SettingsPage = memo(({ className }: SettingsPageProps) => (
   <section className={classNames(styles.settings, {}, [className])}>
     <Container className={styles.container}>
-      <SettingsNav/>
-      <Outlet/>
+      <SettingsNav />
+      <Outlet />
     </Container>
   </section>
 ));

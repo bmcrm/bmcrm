@@ -8,9 +8,9 @@ import { Icon, IconSize } from '@shared/ui/Icon';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { CampersCountModal } from '@features/CampersCountModal';
 import { userState } from '@entities/User';
-import { useGetCampers, type ICamper } from '@entities/Camper';
-import type { ICamp } from '../../model/types/Camp.types';
+import { useGetCampers } from '@entities/Camper';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
+import type { ICamp } from '@entities/Camp';
 import styles from './CampOverview.module.scss';
 import LocationIcon from '@shared/assets/icons/location_icon.svg';
 import RedirectIcon from '@shared/assets/icons/arrow-redirect.svg';
@@ -23,11 +23,11 @@ type CampOverviewProps = {
   scrollTarget: RefObject<HTMLDivElement>;
 };
 
-const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOverviewProps) => {
+const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps) => {
   const { isMobile, isTablet } = useMedia();
   const { isOpen, open, close } = useToggle();
-  const { data: campers } = useGetCampers() as { data: ICamper[] | undefined  };
   const { isLoggedIn } = userState();
+  const { data: campers } = useGetCampers({ enabled: isLoggedIn });
 
   let content = (
     <>
@@ -84,7 +84,6 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
             </Link>
           )}
         </div>
-
         <div className={styles.camp__row}>
           <Image borderRadius={isMobile ? 20 : 30} />
           <div className={styles.camp__desc}>
@@ -97,7 +96,6 @@ const CampOverview = memo(({ camp, isLoading = true, scrollTarget }: CampOvervie
                 {camp.city}
               </address>
             )}
-
             {!isLoggedIn && (
               <Button onClick={closeModalHandler} className={styles.camp__btn}>
                 Join the Camp

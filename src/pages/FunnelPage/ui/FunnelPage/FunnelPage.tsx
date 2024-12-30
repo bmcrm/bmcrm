@@ -22,7 +22,7 @@ interface IRoles {
 const FunnelPage = () => {
   const { isOpen, open, close } = useToggle();
   const { isTablet } = useMedia();
-  const { data: campers } = useGetCampers() as { data: ICamper[] };
+  const { data: campers, isLoading } = useGetCampers();
 
   const [roles, setRoles] = useState<IRoles>({
     [CamperRole.TCO]: undefined,
@@ -69,20 +69,19 @@ const FunnelPage = () => {
               [CamperRole.CAMPER]: roles[CamperRole.CAMPER].length,
             }}
           />
-          <Button onClick={open} className={styles.funnel__btn}>
-            Invite
-          </Button>
+          <Button onClick={open} className={styles.funnel__btn}>Invite</Button>
           {isOpen && <InviteCamperModal isOpen={isOpen} onClose={close} />}
         </div>
         <div className={styles.funnel__content}>
-          <FunnelCard title={'Leads'} users={roles[CamperRole.LEAD]} />
-          <FunnelCard title={'Qualified'} users={roles[CamperRole.QUALIFIED]} />
-          <FunnelCard title={'Intent'} users={roles[CamperRole.INTENT]} />
+          <FunnelCard title={'Leads'} isLoading={isLoading} users={roles[CamperRole.LEAD]} />
+          <FunnelCard title={'Qualified'} isLoading={isLoading} users={roles[CamperRole.QUALIFIED]} />
+          <FunnelCard title={'Intent'} isLoading={isLoading} users={roles[CamperRole.INTENT]} />
           <FunnelCard
             title={'Campers'}
             fluid={!isTablet}
             users={[...roles[CamperRole.CAMPER], ...roles[CamperRole.COORG]]}
             maxUsers={12}
+            isLoading={isLoading}
           />
         </div>
       </Container>

@@ -1,13 +1,10 @@
 import { RoutePath } from '@app/providers/AppRouter';
-import { userState } from '@entities/User';
 import type { NavLinkType } from '@shared/ui/CustomNavLink';
 import CampIcon from '@shared/assets/icons/camp_monocolor.svg';
 
-const { decodedIDToken } = userState.getState().tokens;
-
-export const navItemsList: NavLinkType[] = [
+export const generateNavList = (campID: string): NavLinkType[] => ([
   {
-    path: `${RoutePath.camp_overview}${decodedIDToken?.camp_id}`,
+    path: `${RoutePath.camp_overview}${campID}`,
     text: 'Camp',
     icon: <CampIcon />,
   },
@@ -28,5 +25,6 @@ export const navItemsList: NavLinkType[] = [
   {
     path: RoutePath.inventory,
     text: 'Inventory',
+    disabled: true,
   },
-];
+]);

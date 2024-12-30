@@ -6,8 +6,8 @@ import type { ICamp } from '../model/types/Camp.types';
 const mode = EnvConfigs.BMCRM_ENV;
 
 export const campApi = {
-	getCamp: async (campID?: string): Promise<ICamp> => {
-		const endpoint = `https://api.${mode}.bmcrm.camp/camps${campID ? `/${campID}` : ''}`;
+	getCamp: async (campID: string): Promise<ICamp> => {
+		const endpoint = `https://api.${mode}.bmcrm.camp/camps/${campID}`;
 		const headers = createAuthHeaders();
 
 		const response = await axiosInstance.get(endpoint, { headers });

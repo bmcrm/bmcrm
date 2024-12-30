@@ -10,28 +10,29 @@ const useUpdateCamper = () => {
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
 		mutationFn: camperApi.updateCamper,
 		onMutate: async (updatedCamper: Partial<ICamper>) => {
-			await queryClient.cancelQueries({ queryKey: camperKeys.currentCamper(updatedCamper.email!) });
+			await queryClient.cancelQueries({ queryKey: camperKeys.allCampers });
 
-			const previousCamper = queryClient.getQueryData<ICamper>(camperKeys.currentCamper(updatedCamper.email!));
+			const previousCampers = queryClient.getQueryData<ICamper[]>(camperKeys.allCampers);
 
-			queryClient.setQueryData<Partial<ICamper>>(camperKeys.currentCamper(updatedCamper.email!), (oldCamper) => {
-				if (!oldCamper) return oldCamper;
+			queryClient.setQueryData<ICamper[]>(camperKeys.allCampers, (oldCampers) => {
+				if (!oldCampers) return oldCampers;
 
-				return {
-					...oldCamper,
-					...updatedCamper,
-				};
+				return oldCampers.map((camper) =>
+					camper.email === updatedCamper.email
+						? { ...camper, ...updatedCamper }
+						: camper
+				);
 			});
 
-			return { previousCamper };
+			return { previousCampers };
 		},
 		onError: (error, _, context) => {
-			if (context?.previousCamper) {
-				queryClient.setQueryData(camperKeys.currentCamper(context.previousCamper.email), context.previousCamper);
+			if (context?.previousCampers) {
+				queryClient.setQueryData(camperKeys.allCampers, context.previousCampers);
 			}
 			errorHandler(error);
 		},
-		onSettled: (_, __, variables) => queryClient.invalidateQueries({ queryKey: camperKeys.currentCamper(variables.email!) }),
+		onSettled: () => queryClient.invalidateQueries({ queryKey: camperKeys.allCampers }),
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };

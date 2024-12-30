@@ -1,0 +1,14 @@
+.buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+}
+
+.btn-cancel {
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-black);
+		}
+	}
+}

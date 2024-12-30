@@ -6,13 +6,15 @@ import { Nav } from '@features/Nav';
 import { Hamburger } from '@features/Hamburger';
 import { Logo } from '@shared/ui/Logo';
 import { UserAvatar } from '@features/UserAvatar';
+import { HeaderTheme } from '../model/types/Header.types';
 import styles from './Header.module.scss';
 
 type HeaderProps = {
   className?: string;
+  theme?: HeaderTheme;
 };
 
-const Header = memo(({ className }: HeaderProps) => {
+const Header = memo(({ className, theme = HeaderTheme.DEFAULT }: HeaderProps) => {
   const { isMobile } = useMedia();
   const { isOpen, toggle, close } = useToggle();
 
@@ -20,9 +22,13 @@ const Header = memo(({ className }: HeaderProps) => {
     <header className={classNames(styles.header, {}, [className])}>
       <div className={styles.header__container}>
         <Logo />
-        <Nav isOpen={isMobile ? isOpen : true} handleCLose={close} />
-        {!isMobile && <UserAvatar />}
-        {isMobile && <Hamburger isOpen={isOpen} onClick={toggle} />}
+        {theme === HeaderTheme.DEFAULT && (
+          <>
+            <Nav isOpen={isMobile ? isOpen : true} handleCLose={close} />
+            {!isMobile && <UserAvatar />}
+            {isMobile && <Hamburger isOpen={isOpen} onClick={toggle} />}
+          </>
+        )}
       </div>
     </header>
   );

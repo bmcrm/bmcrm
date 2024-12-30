@@ -1,23 +1,23 @@
 import { memo, useCallback, useRef } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import clsx from 'clsx';
+import { useNavigate, useParams } from 'react-router-dom';
 import { classNames } from '@shared/lib/classNames';
 import { Container } from '@shared/ui/Container';
-import { CampOverview, useGetCamp } from '@entities/Camp';
-import {
-	CamperRegisterForm,
-	type ICamperRegistrationData,
-	IRegistrationStage,
-	useRegistration,
-	userState
-} from '@entities/User';
+import { Header, HeaderTheme } from '@widgets/Header';
+import { CampOverview } from '@features/CampOverview';
 import { FormLoader } from '@features/FormLoader';
 import { AuthFormTemplate } from '@features/AuthFormTemplate';
 import { AlreadyRegisteredBlock } from '@features/AlreadyRegisteredBlock';
-import { RoutePath } from '@app/providers/AppRouter';
 import { NotFound } from '@widgets/CampNotFound';
+import { useGetCamp } from '@entities/Camp';
+import {
+	userState,
+	CamperRegisterForm,
+	useRegistration,
+	type ICamperRegistrationData,
+	IRegistrationStage,
+} from '@entities/User';
+import { RoutePath } from '@app/providers/AppRouter';
 import styles from './CampOverviewPage.module.scss';
-import Logo from '@shared/assets/icons/logo.svg';
 
 const CampOverviewPage = memo(() => {
 	const scrollTarget = useRef<HTMLDivElement>(null);
@@ -29,24 +29,16 @@ const CampOverviewPage = memo(() => {
 
 	const submitHandler = useCallback(
 		async (values: ICamperRegistrationData, resetForm: () => void) => {
-			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data: values });
+			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data: { ...values, camp_id: id } });
 			resetForm();
 			navigate(RoutePath.login, { replace: true, state: { email: values.email, password: values.password } });
 		},
-		[navigate, registration]
+		[id, navigate, registration]
 	);
 
 	return (
 		<>
-			<header className={styles.header}>
-				<Container>
-					<strong className={styles.logo}>
-						<Link to={RoutePath.funnel} className={styles.logo__link}>
-							<Logo />
-						</Link>
-					</strong>
-				</Container>
-			</header>
+			<Header theme={HeaderTheme.OVERVIEW}/>
 			<main className={classNames(styles.page, { [styles.error]: isError }, [])}>
 				{isError && (
 					<NotFound textRedirect={'CREATE A CAMP AND ACCOUNT'} redirectTo={RoutePath.registration}>
@@ -65,7 +57,10 @@ const CampOverviewPage = memo(() => {
 					<section className={styles.register} ref={scrollTarget}>
 						<Container>
 							<AuthFormTemplate badge={'Register to Join the Camp'}>
-								<CamperRegisterForm className={clsx(styles.form, isLoggedIn && styles.blur)} onSubmit={submitHandler} />
+								<CamperRegisterForm
+									className={classNames(styles.form, { [styles.blur]: isLoggedIn }, [])}
+									onSubmit={submitHandler}
+								/>
 								{isPending && <FormLoader />}
 								{isLoggedIn && <AlreadyRegisteredBlock camp={camp || null} />}
 							</AuthFormTemplate>

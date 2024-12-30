@@ -10,20 +10,22 @@ const useUpdateCamp = () => {
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
 		mutationFn: campApi.updateCamp,
 		onMutate: async (updatedCamp: Partial<ICamp>) => {
-			await queryClient.cancelQueries({ queryKey: campKeys.currentCamp });
+			if (updatedCamp.camp_id) {
+				await queryClient.cancelQueries({ queryKey: campKeys.currentCamp(updatedCamp.camp_id) });
 
-			const previousCamp = queryClient.getQueryData<ICamp>(campKeys.currentCamp(updatedCamp.camp_id!));
+				const previousCamp = queryClient.getQueryData<ICamp>(campKeys.currentCamp(updatedCamp.camp_id));
 
-			queryClient.setQueryData<Partial<ICamp>>(campKeys.currentCamp(updatedCamp.camp_id!), (oldCamp) => {
-				if (!oldCamp) return oldCamp;
+				queryClient.setQueryData<Partial<ICamp>>(campKeys.currentCamp(updatedCamp.camp_id), (oldCamp) => {
+					if (!oldCamp) return oldCamp;
 
-				return {
-					...oldCamp,
-          ...updatedCamp,
-				};
-			});
+					return {
+						...oldCamp,
+						...updatedCamp,
+					};
+				});
 
-			return { previousCamp };
+				return { previousCamp };
+			}
 		},
 		onError: (error, _, context) => {
 			if (context?.previousCamp) {
@@ -31,7 +33,11 @@ const useUpdateCamp = () => {
 			}
 			errorHandler(error);
 		},
-		onSettled: () => queryClient.invalidateQueries({ queryKey: campKeys.currentCamp }),
+		onSettled: (_, __, variables) => {
+			if (variables.camp_id) {
+				void queryClient.invalidateQueries({ queryKey: campKeys.currentCamp(variables.camp_id) });
+			}
+		},
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };

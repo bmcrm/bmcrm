@@ -1,7 +1,6 @@
-import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
+import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
-import { AxiosError } from 'axios';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 
 enum ErrorNames {
@@ -24,59 +23,26 @@ const errorsNames: { [key in ErrorNames]: string } = {
   [ErrorNames.INVALID_PASSWORD]: 'Please, add to your password special character! [!@#$%^&*()]',
 };
 
-interface CustomError extends Error {
-  response?: {
-    data?: {
-      name: string;
-    };
-  };
-}
+export const errorHandler = (error: unknown) => {
+  let errorMessage = 'Oops, something went wrong! Try again later!';
 
-export const errorHandler = (
-  error: CognitoIdentityProviderServiceException | AxiosError | Error | CustomError,
-  page: string = '',
-  details: string = '',
-  user: string = ''
-) => {
-  const isAxiosError = (error: unknown): error is AxiosError => {
-    return (error as AxiosError).isAxiosError !== undefined;
-  };
-  const isCustomError = (error: unknown): error is CustomError => {
-    return (error as CustomError).name !== undefined;
-  };
-  let errorMessage = errorsNames[error.name as ErrorNames];
-  Sentry.captureMessage(`${error.name}: ${error.message}`);
-  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
-    logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, {
-      user,
-      message: error.message,
-      page,
-      details,
-    });
-  }
-
-  if (!isCustomError(error)) {
-    console.error('Unknown error type:', error);
-    return;
-  }
-  if (!errorMessage && error.message) {
-    for (const key in ErrorNames) {
-      if (error.message.includes(ErrorNames[key as keyof typeof ErrorNames])) {
-        errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
-        break;
-      }
-
-      if (isAxiosError(error) && error.response?.data?.name.includes(ErrorNames[key as keyof typeof ErrorNames])) {
-        errorMessage = errorsNames[ErrorNames[key as keyof typeof ErrorNames]];
-        break;
-      }
+  if (error instanceof Error) {
+    if (error.name in ErrorNames) {
+      errorMessage = errorsNames[error.name as ErrorNames];
+    } else if (isAxiosError(error) && error.response?.data?.name in ErrorNames) {
+      errorMessage = errorsNames[error.response?.data.name as ErrorNames];
+    } else if (error.message) {
+      errorMessage = error.message;
     }
+
+    Sentry.captureMessage(`${error.name || 'UnknownError'}: ${error.message}`);
+    logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, { message: error.message });
+  } else {
+    console.error('Unknown error object:', error);
   }
 
-  if (!errorMessage) {
-    errorMessage = 'Oops, something went wrong! Try again later!';
-  }
-  if (error.name !== ErrorNames.USER_NOT_CONFIRMED) {
-    toast.error(errorMessage, { duration: 4000, position: 'top-center' });
-  }
+  toast.error(errorMessage, {
+    duration: 4000,
+    position: 'top-right',
+  });
 };

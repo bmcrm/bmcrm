@@ -9,8 +9,8 @@ import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button'
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Tooltip } from '@shared/ui/Tooltip';
 import { camperRegistrationSchema } from '@shared/const/validationSchemas';
-import { initialData } from '../../model/data/CamperRegisterForm.data';
-import { type ICamperRegisterForm, type IUserRegisterData } from '../../model/types/User.types';
+import { initialData, inputs } from '../../model/data/CamperRegisterForm.data';
+import { type ICamperRegistrationData } from '../../model/types/User.types';
 import { CamperRole } from '@entities/Camper';
 import styles from './CamperRegisterForm.module.scss';
 import CampIcon from '@shared/assets/icons/camp.svg';
@@ -20,7 +20,7 @@ import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type CamperRegisterFormProps = {
 	className: string;
-	onSubmit: (values: IUserRegisterData, resetForm: () => void) => void;
+	onSubmit: (values: ICamperRegistrationData, resetForm: () => void) => void;
 };
 
 const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
@@ -38,14 +38,15 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as HTMLElement;
+
 			if (!target.closest(`.${styles.tooltip}`) && !target.closest(`.${styles.social__btn}`)) {
 				setTooltipsVisible(tooltipsVisible.map(() => false));
 			}
 		};
 
-		document.addEventListener('mousedown', handleClickOutside);
+		document.addEventListener('click', handleClickOutside);
 
-		return () => document.removeEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('click', handleClickOutside);
 	}, [tooltipsVisible]);
 
 	const handleTooltipToggle = useCallback(
@@ -60,12 +61,12 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 	);
 
 	const onSubmitHandler = useCallback(
-		(values: ICamperRegisterForm, { resetForm }: { resetForm: () => void }) => {
+		(values: typeof initialData, { resetForm }: { resetForm: () => void }) => {
 			const userSocials = values.social_links && !values.social_links?.every(link => link === '')
 				? socialLinksParser(values.social_links)
 				: [];
 
-			const data: IUserRegisterData = {
+			const data: ICamperRegistrationData = {
 				first_name: values.first_name.trim(),
 				last_name: values.last_name.trim(),
 				playa_name: values.playa_name.trim(),
@@ -74,6 +75,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 				about_me: values.about_me?.trim(),
 				social_links: userSocials,
 				role: CamperRole.LEAD,
+				accept: Boolean(values.accept),
 			};
 
 			onSubmit(data, resetForm);
@@ -90,7 +92,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 						<FieldArray name={'social_links'}>
 							{({ remove, push }) => (
 								<>
-									{values.social_links.map((_, index: number, arr) => (
+									{values?.social_links?.map((_, index: number, arr) => (
 										<div key={index} className={styles.social__wrapper}>
 											{tooltipsVisible[index] && (
 												<Tooltip
@@ -113,7 +115,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 														disabled={arr.length > 4}
 													>
                               <span className={styles.tooltip__icon}>
-                                <Icon icon={<PlusIcon/>} size={IconSize.SIZE_10}/>
+                                <Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
                               </span>
 														Add link
 													</Button>
@@ -129,7 +131,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 														disabled={arr.length < 2}
 													>
                               <span className={styles.tooltip__icon}>
-                                <Icon icon={<MinusIcon/>} size={IconSize.SIZE_10}/>
+                                <Icon icon={<MinusIcon />} size={IconSize.SIZE_10}/>
                               </span>
 														Delete
 													</Button>
@@ -145,8 +147,8 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 											</Button>
 											<CustomInput
 												name={`social_links.${index}`}
-												placeholder="https://www.facebook.com/"
-												label="Social media link"
+												placeholder={'https://www.facebook.com/'}
+												label={'Social media link'}
 											/>
 										</div>
 									))}
@@ -161,21 +163,16 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 					</div>
 					<div className={styles.form__item}>
 						<div className={styles.form__row}>
-							<CustomInput name={'first_name'} placeholder={'Larry'} label={'First Name'}/>
-							<CustomInput name={'last_name'} placeholder={'Harvey'} label={'Last Name'}/>
+							{inputs.name.map((input) => (
+								<CustomInput key={input.name} {...input} />
+							))}
 						</div>
-						<CustomInput name={'email'} placeholder={'larry@gmail.com'} label={'Email'} type={'email'}/>
-						<CustomInput
-							name={'password'}
-							placeholder={'∗∗∗∗∗∗∗∗'}
-							label={'Password'}
-							type={'password'}
-							value={values.password}
-							register
-						/>
-						<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage/>
-						<Button type="submit" fluid>
-							<CampIcon/>
+						{inputs.rest.map((input) => (
+							<CustomInput key={input.name} {...input} />
+						))}
+						<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
+						<Button type={'submit'} fluid>
+							<CampIcon />
 							SIGN UP
 						</Button>
 					</div>

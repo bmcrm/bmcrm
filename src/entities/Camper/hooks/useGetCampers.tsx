@@ -4,11 +4,24 @@ import { errorHandler } from '@shared/lib/errorHandler';
 import { camperKeys } from '../model/const/camperKeys';
 import { camperApi } from '../api/camperApi';
 
-const useGetCampers = ({ camperEmail }: { camperEmail?: string | null } = {}) => {
+type UseGetCampersProps = {
+  camperEmail?: string;
+	enabled?: boolean;
+}
+
+const useGetCampers = ({ camperEmail, enabled = true }: UseGetCampersProps = {}) => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery({
-		queryKey: camperEmail ? camperKeys.currentCamper(camperEmail) : camperKeys.allCampers,
-		queryFn: () => camperApi.getCampers(camperEmail),
+		queryKey: camperKeys.allCampers,
+		queryFn: () => camperApi.getCampers(),
+		select: (data) => {
+			if (!camperEmail) return data;
+
+			const camper = data.find((camper) => camper.email === camperEmail);
+
+			return camper ? [camper] : [];
+		},
 		staleTime: 5 * 60 * 1000,
+		enabled,
 	});
 
 	useEffect(() => {

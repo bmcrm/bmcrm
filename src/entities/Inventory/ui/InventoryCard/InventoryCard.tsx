@@ -4,17 +4,19 @@ import Inventory from '@shared/assets/images/inventory/inventory.png';
 import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
 import { IInventoryItem } from '@entities/Inventory/model/types/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-cube';
-
-import 'swiper/css/effect-creative';
 import { EffectCreative } from 'swiper/modules';
+
+import 'swiper/scss';
+import 'swiper/scss/pagination';
+import 'swiper/scss/effect-cube';
+import 'swiper/scss/effect-creative';
+
 interface InventoryCardProps {
   handleOpenEditInventory: (id: string) => void;
   item: IInventoryItem;
   showInfo?: () => void;
 }
+
 export const InventoryCard = ({ item, showInfo, handleOpenEditInventory }: InventoryCardProps) => {
   const { title, description, quantity, price, id, images = [] } = item;
   const { deleteItem } = useInventory();
