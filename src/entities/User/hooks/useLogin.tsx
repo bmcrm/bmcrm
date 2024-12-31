@@ -31,7 +31,9 @@ const useLogin = () => {
 			}
 		},
 		onError: (error, variables) => {
-			errorHandler(error);
+			if (error.name !== 'UserNotConfirmedException') {
+				errorHandler(error);
+			}
 
 			if (error instanceof CognitoIdentityProviderServiceException && error.name !== 'UserNotConfirmedException') {
 				logger(LogLevel.ERROR, LogSource.WEBAPP, 'Login error', { user: variables.email });
