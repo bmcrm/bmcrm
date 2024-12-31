@@ -49,7 +49,12 @@ const useRegistration = () => {
 			});
 		},
 		onError: (error, variables) => {
-			errorHandler(error);
+			if (error.name !== 'UserNotConfirmedException') {
+				errorHandler(error);
+			}
+
+			console.log('error: ', error);
+
 			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
 				user: variables.data.email,
 				...variables.data,
