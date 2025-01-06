@@ -1,0 +1,1 @@
+export { default as FilesInput } from './ui/FilesInput';

@@ -1,15 +1,18 @@
 @use '@app/styles/breakpoints';
+
 .inventory {
   position: relative;
-}
-.no_items {
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  height: 70vh;
-  gap: 10px;
+  flex-grow: 1;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 }
+
 .categories {
   display: flex;
   flex-direction: column;

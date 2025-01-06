@@ -1,6 +1,6 @@
 import { InventoryCard } from '../InventoryCard/InventoryCard';
 
-import { IInventoryItem } from '../../model/types/types';
+import { IInventoryItem } from '../../model/types/Inventory.types.ts';
 import styles from './InventoryCategories.module.scss';
 import clsx from 'clsx';
 import { useToggle } from '@shared/hooks/useToggle';

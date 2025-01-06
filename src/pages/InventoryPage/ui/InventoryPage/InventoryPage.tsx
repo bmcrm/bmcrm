@@ -1,69 +1,53 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import styles from './InventoryPage.module.scss';
 import { Button } from '@shared/ui/Button';
 import { useToggle } from '@shared/hooks/useToggle';
-import { Modal } from '@shared/ui/Modal';
-import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
 import { InventoryCategories } from '@entities/Inventory/ui/InventoryCategories/InventoryCategories';
-import AddInventoryForm from '@entities/Inventory/ui/AddInventoryForm/AddInventoryForm';
 import { Container } from '@shared/ui/Container';
-import NotFound from '@shared/assets/images/inventory/notFound.png';
 import { FormLoader } from '@features/FormLoader';
 import { ToTopButton } from '@widgets/ToTopButton';
+import { useGetInventory } from '@entities/Inventory';
+import { InventoryEmpty } from '../InventoryEmpty/InventoryEmpty';
+import { AddInventoryModal } from '@features/AddInventoryModal';
 
 const InventoryPage = memo(() => {
-  const { getItems, inventory, isLoading } = useInventory(state => ({
-    getItems: state.getItems,
-    inventory: state.inventory,
-    isLoading: state.isLoading,
-  }));
+	const { data: inventory, isLoading } = useGetInventory();
+	const { isOpen, open, close } = useToggle();
 
-  useEffect(() => {
-    getItems();
-  }, [getItems]);
+	const categoriesFromInventory = [...new Set(inventory?.map(item => item.category))];
 
-  const { toggle, isOpen } = useToggle();
+	if (isLoading && !inventory?.length) return <FormLoader />;
 
-  const handleOpenAddInventory = () => {
-    toggle();
-  };
+	return (
+		<section className={styles.inventory}>
+			{/*<ToTopButton/>*/}
+			<Container className={styles.inventory__container} fluid>
 
-  const categoriesFromInventory = [...new Set(inventory?.map(item => item.category))];
-  if (isLoading && !inventory.length) return <FormLoader />;
-  return (
-    <section className={styles.inventory}>
-      <ToTopButton />
-      <Container fluid>
-        {categoriesFromInventory.length ? (
-          <div className={styles.top_options_btns}>
-            <Button onClick={handleOpenAddInventory}>Add inventory</Button>
-          </div>
-        ) : null}
-        <div className={styles.categories}>
-          {categoriesFromInventory.length ? (
-            categoriesFromInventory.map(category => (
-              <InventoryCategories
-                key={category}
-                title={category}
-                items={inventory.filter(item => item?.category === category)}
-              />
-            ))
-          ) : (
-            <div className={styles.no_items}>
-              <img src={NotFound} alt='no data' />
-              <h2>Inventory is empty...</h2>
-              <Button onClick={handleOpenAddInventory}>Add!</Button>
-            </div>
-          )}
-        </div>
-        {isOpen && (
-          <Modal isOpen={isOpen} onClose={toggle}>
-            <AddInventoryForm onClose={toggle} />
-          </Modal>
-        )}
-      </Container>
-    </section>
-  );
+				{categoriesFromInventory.length > 0 && (
+					<div className={styles.top_options_btns}>
+						<Button onClick={open}>Add inventory</Button>
+					</div>
+				)}
+
+				{categoriesFromInventory.length > 0 ? (
+					<div className={styles.categories}>
+						{categoriesFromInventory.map(category => (
+							<InventoryCategories
+								key={category}
+								title={category}
+								items={inventory?.filter(item => item?.category === category)}
+							/>
+						))}
+					</div>
+				) : (
+					<InventoryEmpty handleAddInventory={open} />
+				)}
+
+				{isOpen && <AddInventoryModal isOpen={isOpen} onClose={close} />}
+
+			</Container>
+		</section>
+	);
 });
 
 export default InventoryPage;

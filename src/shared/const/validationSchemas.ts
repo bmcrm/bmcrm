@@ -145,7 +145,7 @@ export const campSettingsSchema = yup.object().shape({
   camp_description: yup.string().transform((_, originalValue) => originalValue.trim()),
 });
 
-export const createItemSchema = yup.object().shape({
+export const createInventoryItemSchema = yup.object().shape({
   title: yup.string().required('Title is required'),
   description: yup.string().required('Description is required'),
   price: yup.number().required('Price is required').min(1, 'Price must be at least 1$'),

@@ -14,6 +14,7 @@ import {
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { EnvConfigs } from '@shared/config/env';
 import axiosInstance from '@shared/config/axios';
+import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
 import {
 	ICamperRegistrationData,
 	IConfirmRegistration,
@@ -27,11 +28,9 @@ const cognitoClient = new CognitoIdentityProviderClient({
 	region: EnvConfigs.AWS_REGION,
 });
 
-const mode = EnvConfigs.BMCRM_ENV;
-
 export const userApi = {
 	registration: async (credentials: ITCORegistrationData | ICamperRegistrationData) => {
-		const endpoint = `https://api.${mode}.bmcrm.camp/campers/create`;
+		const endpoint = `${CAMPER_ENDPOINT}/create`;
 		const headers = createAuthHeaders();
 
 		const response = await axiosInstance.post(endpoint, credentials, { headers });

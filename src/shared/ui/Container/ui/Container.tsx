@@ -2,12 +2,16 @@ import type { HTMLProps } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import styles from './Container.module.scss';
 
-type ContainerProps = {
+interface ContainerProps extends HTMLProps<HTMLDivElement> {
   className?: string;
   fluid?: boolean;
-} & HTMLProps<HTMLElement>;
+}
 
-const Container = ({ className, children, fluid }: ContainerProps) =>
-  <div className={classNames(styles.container, { [styles.containerFluid]: fluid }, [className])}>{children}</div>;
+const Container = ({ className, children, fluid, ...rest }: ContainerProps) =>
+  <div
+    className={classNames(styles.container, { [styles.containerFluid]: fluid }, [className])}
+    {...rest}
+  >
+    {children}</div>;
 
 export default Container;

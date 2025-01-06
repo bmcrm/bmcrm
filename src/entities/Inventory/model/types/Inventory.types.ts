@@ -1,8 +1,8 @@
 export interface IInventoryItem {
   title: string;
   description: string;
-  quantity: number;
-  price: number;
+  quantity: number | string;
+  price: number | string;
   category: string;
   images?: string[];
   id: string;

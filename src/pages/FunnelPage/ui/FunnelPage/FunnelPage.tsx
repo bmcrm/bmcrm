@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Button } from '@shared/ui/Button';
@@ -58,7 +57,7 @@ const FunnelPage = () => {
   }, [campers]);
 
   return (
-    <section className={classNames(styles.funnel, {}, [])}>
+    <section className={styles.funnel}>
       <Container fluid>
         <div className={styles.funnel__head}>
           <Funnel

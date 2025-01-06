@@ -1,4 +1,4 @@
-import { IInventoryItem } from '@entities/Inventory/model/types/types';
+import { IInventoryItem } from '@entities/Inventory/model/types/Inventory.types.ts';
 import styles from './InventoryDetailsModal.module.scss';
 import { useState } from 'react';
 import { Icon, IconSize } from '@shared/ui/Icon';

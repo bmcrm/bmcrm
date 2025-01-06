@@ -1,6 +1,6 @@
 import { EnvConfigs } from '@shared/config/env';
 import axiosInstance from '@shared/config/axios';
-import type { IInventoryItem } from '@entities/Inventory/model/types/types';
+import type { IInventoryItem } from '@entities/Inventory/model/types/Inventory.types.ts';
 import { userState } from '@entities/User';
 
 const mode = EnvConfigs.BMCRM_ENV;
