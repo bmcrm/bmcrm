@@ -1,11 +1,10 @@
-import { memo, Suspense, useCallback, type ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
-import { AppRouterProps, routeConfig, RoutePath } from '../config/routeConfig';
-import RequireAuth from './RequireAuth';
-import { PageLoader } from '@features/PageLoader';
+import { routeConfig, type AppRouterProps } from '../config/routeConfig';
 import { Header } from '@widgets/Header';
-import { SettingsAccount, SettingsCamp, SettingsPage } from '@pages/SettingsPage';
+import { PageLoader } from '@features/PageLoader';
+import RequireAuth from './RequireAuth';
 
 const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
@@ -22,8 +21,8 @@ const NonAuthLayout = ({ children }: { children: ReactNode }) => (
   <Suspense fallback={<PageLoader />}>{children}</Suspense>
 );
 
-const AppRouter = memo(() => {
-  const renderWithWrapper = useCallback((route: AppRouterProps) => {
+const AppRouter = () => {
+  const renderWithWrapper = (route: AppRouterProps) => {
     const element = route.authOnly ? (
       <RequireAuth>
         <AuthLayout>{route.element}</AuthLayout>
@@ -32,33 +31,19 @@ const AppRouter = memo(() => {
       <NonAuthLayout>{route.element}</NonAuthLayout>
     );
 
-    return <Route key={route.path} path={route.path} element={element} />;
-  }, []);
+    return (
+      <Route key={route.path} path={route.path} element={element}>
+        {route.nested?.map(renderWithWrapper)}
+      </Route>
+    );
+  };
 
   return (
     <SentryRoutes>
       {Object.values(routeConfig).map(renderWithWrapper)}
-      <Route path={RoutePath.settings} element={(
-        <RequireAuth>
-          <AuthLayout>
-            <SettingsPage />
-          </AuthLayout>
-        </RequireAuth>
-      )}>
-        <Route path={RoutePath.settings_account} element={(
-          <Suspense fallback={<PageLoader />}>
-            <SettingsAccount />
-          </Suspense>
-        )} />
-        <Route path={RoutePath.settings_camp} element={(
-          <Suspense fallback={<PageLoader />}>
-            <SettingsCamp />
-          </Suspense>
-        )} />
-      </Route>
     </SentryRoutes>
   );
-});
+};
 
 export default AppRouter;
 
