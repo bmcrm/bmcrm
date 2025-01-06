@@ -75,24 +75,27 @@ npm run test-ct
 
 The project follows the Feature-Sliced Design (FSD) methodology, as well as the BEM (Block Element Modifier) methodology for SCSS.
 
-### Core Principles of FSD
+### Advantages of FSD
 
-- Entities: Domain models and business logic.
-- Features: User actions and business processes.
-- Shared: Reusable components and utilities.
-- App: Application-level initialization and configuration.
+- Uniformity: Since the structure is standardized, projects become more uniform, which makes onboarding new members easier for the team.
+- Stability in face of changes and refactoring: A module on one layer cannot use other modules on the same layer, or the layers above.
+  This allows you to make isolated modifications without unforeseen consequences to the rest of the app.
+- Controlled reuse of logic: Depending on the layer, you can make code very reusable or very local.
+  This keeps a balance between following the DRY principle and practicality.
+- Orientation to business and users needs: The app is split into business domains and usage of the business language is encouraged in naming, so that you can do useful product work without fully understanding all other unrelated parts of the project.
 
 ### Directory Structure
 
 ```bash
 src/
-├── app/               # Application initialization and configuration
-├── entities/          # Domain models and business logic
-├── features/          # User actions and business processes
-├── shared/            # Reusable components and utilities
-├── styles/            # Global styles and design tokens
-├── index.tsx          # Entry point
-└── assets/            # Static assets (e.g., images, fonts)
+├── app/               # Everything that makes the app run — routing, entrypoints, global styles, providers
+├── pages/             # Full pages or large parts of a page in nested routing
+├── widgets/           # Large self-contained chunks of functionality or UI
+├── features/          # Reused implementations of entire product features
+├── entities/          # Business entities that the project works with, like user or product
+├── shared/            # Reusable functionality
+├── __tests__/         # Global app tests
+└── index.tsx          # Entry point
 ```
 
 ## License
