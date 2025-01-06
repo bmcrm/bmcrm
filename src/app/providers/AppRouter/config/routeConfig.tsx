@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import type { RouteProps } from 'react-router-dom';
+import { PageLoader } from '@features/PageLoader';
 import { FunnelPage } from '@pages/FunnelPage';
 import { FinancesPage } from '@pages/FinancesPage';
 import { InventoryPage } from '@pages/InventoryPage';
@@ -9,9 +11,11 @@ import { RegisterTCOPage } from '@pages/RegisterTCOPage';
 import { ResetPassPage } from '@pages/ResetPassPage';
 import { CampOverviewPage } from '@pages/CampOverviewPage';
 import { NotFound } from '@widgets/CampNotFound';
+import { SettingsPage, SettingsAccount, SettingsCamp } from '@pages/SettingsPage';
 
 export type AppRouterProps = {
   authOnly?: boolean;
+  nested?: AppRouterProps[];
 } & RouteProps;
 
 export enum AppRoutes {
@@ -87,6 +91,29 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
   [AppRoutes.CAMP_OVERVIEW]: {
     path: `${RoutePath.camp_overview}:id`,
     element: <CampOverviewPage />,
+  },
+  [AppRoutes.SETTINGS]: {
+    path: RoutePath.settings,
+    element: <SettingsPage />,
+    authOnly: true,
+    nested: [
+      {
+        path: RoutePath.settings_account,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <SettingsAccount />
+          </Suspense>
+        ),
+      },
+      {
+        path: RoutePath.settings_camp,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <SettingsCamp />
+          </Suspense>
+        ),
+      },
+    ],
   },
   [AppRoutes.NOT_FOUND]: {
     path: RoutePath.not_found,
