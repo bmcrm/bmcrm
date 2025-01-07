@@ -46,7 +46,7 @@ export const InventoryDetailsModal = ({ item }: InventoryDetailsModalProps) => {
         <div className={styles.countInfo}>
           <p className={styles.badge}>{item?.quantity} quantity</p>
           <p className={styles.badge}>${item?.price} price 1pc</p>
-          <p className={styles.badge}>${item?.quantity * item?.price} total price</p>
+          <p className={styles.badge}>${+item?.quantity * +item?.price} total price</p>
         </div>
         <div className={styles.actions}>
           <button onClick={() => deleteItem(item?.id)}>

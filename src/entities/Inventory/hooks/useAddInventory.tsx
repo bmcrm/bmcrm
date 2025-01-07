@@ -21,7 +21,7 @@ const useAddInventory = () => {
 			const { files, ...rest } = item;
 			const uploadedImageUrls: string[] = [];
 
-			if (files) {
+			if (files && files.length > 0) {
 				for (const file of files) {
 					const uploadURL = await getPresignedUrl(file.name);
 					await uploadFileToS3({ file, uploadURL });
@@ -34,12 +34,11 @@ const useAddInventory = () => {
 				images: uploadedImageUrls,
 			};
 
-			console.log('inventoryItem:', inventoryItem);
-
 			return inventoryApi.addInventoryItem(inventoryItem);
 		},
 		onSuccess: (_, variables) => {
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
+			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
 			success('Item created successfully!');
 			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
 				camp_id: decodedIDToken?.camp_id,

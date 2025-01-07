@@ -69,7 +69,7 @@ const FunnelPage = () => {
             }}
           />
           <Button onClick={open} className={styles.funnel__btn}>Invite</Button>
-          {isOpen && <InviteCamperModal isOpen={isOpen} onClose={close} />}
+          <InviteCamperModal isOpen={isOpen} onClose={close} />
         </div>
         <div className={styles.funnel__content}>
           <FunnelCard title={'Leads'} isLoading={isLoading} users={roles[CamperRole.LEAD]} />

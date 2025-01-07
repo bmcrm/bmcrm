@@ -47,13 +47,7 @@
     pointer-events: none;
     color: var(--color-neutral);
   }
-  &--camp {
-    &:hover {
-      &:after {
-        width: 0%;
-      }
-    }
-  }
+
   &--header {
     @media (width < breakpoints.$md) {
       padding-bottom: 15px;
@@ -76,6 +70,13 @@
           right: 0;
           bottom: unset;
         }
+      }
+    }
+  }
+  &--camp {
+    &:hover {
+      &:after {
+        width: 0;
       }
     }
   }
@@ -111,5 +112,8 @@
         }
       }
     }
+  }
+  &--inventory {
+    text-transform: uppercase;
   }
 }

@@ -1,0 +1,1 @@
+export { default as InventoryCard } from './ui/InventoryCard';

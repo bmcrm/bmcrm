@@ -13,4 +13,5 @@ export enum CustomNavLinkTheme {
   CAMP = 'link--camp',
   SETTINGS = 'link--settings',
   ICON = 'link--icon',
+  INVENTORY = 'link--inventory',
 }

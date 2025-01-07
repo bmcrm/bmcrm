@@ -1,0 +1,22 @@
+.category {
+
+	&__title {
+		font: var(--font-m);
+		font-weight: 500;
+		text-transform: uppercase;
+
+		.counter {
+			font: var(--font-s);
+			color: var(--color-neutral);
+		}
+
+		+ .category__list {
+			margin-top: 20px;
+		}
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(245px, 250px));
+	}
+}

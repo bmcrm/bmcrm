@@ -1,52 +1,50 @@
 import { memo } from 'react';
-import styles from './InventoryPage.module.scss';
-import { Button } from '@shared/ui/Button';
 import { useToggle } from '@shared/hooks/useToggle';
-import { InventoryCategories } from '@entities/Inventory/ui/InventoryCategories/InventoryCategories';
 import { Container } from '@shared/ui/Container';
+import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
-import { ToTopButton } from '@widgets/ToTopButton';
-import { useGetInventory } from '@entities/Inventory';
 import { InventoryEmpty } from '../InventoryEmpty/InventoryEmpty';
 import { AddInventoryModal } from '@features/AddInventoryModal';
+import { InventoryNav } from '../InventoryNav/InventoryNav';
+import { InventoryCategory } from '../InventoryCategory/InventoryCategory';
+import { useGetCategories, useGetInventory } from '@entities/Inventory';
+import styles from './InventoryPage.module.scss';
 
 const InventoryPage = memo(() => {
-	const { data: inventory, isLoading } = useGetInventory();
+	const { data: categories, isLoading: categoriesIsLoading } = useGetCategories();
+	const { data: inventory, isLoading: inventoryIsLoading } = useGetInventory();
 	const { isOpen, open, close } = useToggle();
+	const isLoading = inventoryIsLoading || categoriesIsLoading;
 
-	const categoriesFromInventory = [...new Set(inventory?.map(item => item.category))];
+	console.log('categories:', categories);
+	console.log('inventory:', inventory);
 
-	if (isLoading && !inventory?.length) return <FormLoader />;
+	if (isLoading && !categories?.length) return <FormLoader />;
 
 	return (
-		<section className={styles.inventory}>
-			{/*<ToTopButton/>*/}
-			<Container className={styles.inventory__container} fluid>
-
-				{categoriesFromInventory.length > 0 && (
-					<div className={styles.top_options_btns}>
-						<Button onClick={open}>Add inventory</Button>
-					</div>
-				)}
-
-				{categoriesFromInventory.length > 0 ? (
-					<div className={styles.categories}>
-						{categoriesFromInventory.map(category => (
-							<InventoryCategories
-								key={category}
-								title={category}
-								items={inventory?.filter(item => item?.category === category)}
-							/>
-						))}
-					</div>
-				) : (
-					<InventoryEmpty handleAddInventory={open} />
-				)}
-
-				{isOpen && <AddInventoryModal isOpen={isOpen} onClose={close} />}
-
-			</Container>
-		</section>
+		<>
+			<section className={styles.inventory}>
+				<Container className={styles.inventory__container} fluid>
+					{categories && categories.length > 0 && inventory && inventory.length > 0 && (
+						<>
+							<InventoryNav categories={categories} />
+							<Button onClick={open} className={'ml-a mt-30'}>Add inventory</Button>
+							<div className={styles.inventory__categories}>
+								{categories.map(category => (
+									<InventoryCategory
+										key={category}
+										category={category}
+										items={inventory.filter(item => item?.category === category)}
+									/>
+								))}
+							</div>
+						</>
+					)}
+					{!categories?.length && !inventory?.length && <InventoryEmpty handleAddInventory={open} />}
+				</Container>
+			</section>
+			<AddInventoryModal isOpen={isOpen} onClose={close} />
+		</>
 	);
 });
 

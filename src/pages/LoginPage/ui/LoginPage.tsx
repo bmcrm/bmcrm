@@ -50,7 +50,7 @@ const LoginPage = memo(() => {
       <AuthFormTemplate badge={'Sign in to your account'} background decor>
         <UserLoginForm onSubmit={handleSubmit} initialValues={initialValues} />
         {isPending && <FormLoader />}
-        {isOpen && <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />}
+        <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />
       </AuthFormTemplate>
     </AuthPageTemplate>
   );

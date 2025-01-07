@@ -61,7 +61,7 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
       <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} onClick={open}>
         <Icon icon={<BlurIcon />} size={IconSize.SIZE_24} />
       </Button>
-      {isOpen && <CampersCountModal isOpen={isOpen} onClose={closeModalHandler} />}
+      <CampersCountModal isOpen={isOpen} onClose={closeModalHandler} />
     </>
   );
 

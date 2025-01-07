@@ -67,7 +67,7 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
     authOnly: true,
   },
   [AppRoutes.INVENTORY]: {
-    path: RoutePath.inventory,
+    path: `${RoutePath.inventory}/:category?`,
     element: <InventoryPage />,
     authOnly: true,
   },

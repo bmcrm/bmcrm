@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
+import { appState } from '@entities/App';
 
 interface UseModalProps {
 	isOpen?: boolean;
@@ -7,31 +8,24 @@ interface UseModalProps {
 	animationDelay: number;
 }
 
-let openModalCount = 0;
-
 export const useModal = ({ isOpen, onClose, animationDelay }: UseModalProps) => {
 	const [isClosing, setIsClosing] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const modalRef = useRef<HTMLDivElement>(null);
+	const { incrementModalCount, decrementModalCount } = appState();
 
 	const close = useCallback(() => {
 		if (!onClose || !modalRef.current) return;
-
-		enableBodyScroll(modalRef.current);
 		setIsClosing(true);
 
 		timerRef.current = setTimeout(() => {
 			setIsMounted(false);
 			setIsClosing(false);
 			onClose();
-			openModalCount -= 1;
-
-			if (openModalCount === 0) {
-				clearAllBodyScrollLocks();
-			}
+			decrementModalCount();
 		}, animationDelay);
-	}, [animationDelay, onClose]);
+	}, [animationDelay, decrementModalCount, onClose]);
 
 	const onKeyDown = useCallback(
 		(e: KeyboardEvent) => {
@@ -45,15 +39,15 @@ export const useModal = ({ isOpen, onClose, animationDelay }: UseModalProps) => 
 	useEffect(() => {
 		if (isOpen) {
 			setIsMounted(true);
+			incrementModalCount();
 		} else {
 			close();
 		}
-	}, [isOpen, close]);
+	}, [isOpen, close, incrementModalCount]);
 
 	useEffect(() => {
 		if (isMounted && modalRef.current) {
 			window.addEventListener('keydown', onKeyDown);
-			openModalCount += 1;
 			disableBodyScroll(modalRef.current);
 		}
 
@@ -63,13 +57,12 @@ export const useModal = ({ isOpen, onClose, animationDelay }: UseModalProps) => 
 			}
 
 			window.removeEventListener('keydown', onKeyDown);
-			openModalCount -= 1;
 
-			if (openModalCount === 0) {
+			if (appState.getState().modalCount === 0) {
 				clearAllBodyScrollLocks();
 			}
 		};
-	}, [isMounted, onKeyDown]);
+	}, [isMounted, isOpen, onClose, onKeyDown]);
 
 	return {
 		isMounted,

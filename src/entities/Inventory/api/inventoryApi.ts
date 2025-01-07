@@ -4,6 +4,14 @@ import { INVENTORY_ENDPOINT } from '@shared/const/endpoints';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
 export const inventoryApi = {
+	getCategories: async (): Promise<string[]> => {
+		const endpoint = `${INVENTORY_ENDPOINT}/categories`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
 	getInventory: async (itemID?: string): Promise<IInventoryItem[]> => {
 		const endpoint = `${INVENTORY_ENDPOINT}${itemID ? `/${itemID}` : ''}`;
 		const headers = createAuthHeaders();
@@ -27,11 +35,14 @@ export const inventoryApi = {
 
     return response.data;
 	},
-	deleteInventoryItem: async (itemID: string) => {
+	deleteInventoryItem: async (itemID: string, options?: { lastItem?: boolean; category?: string }) => {
 		const endpoint = `${INVENTORY_ENDPOINT}/${itemID}`;
     const headers = createAuthHeaders();
+		const params = options ? { params: options } : undefined;
 
-    await axios.delete(endpoint, { headers });
+		console.log('params', params);
+
+    await axios.delete(endpoint, { headers, ...params });
 	},
 	getPresignedUrl: async (fileName: string) => {
 		const endpoint = `${INVENTORY_ENDPOINT}/upload`;
@@ -43,9 +54,9 @@ export const inventoryApi = {
 	},
 	uploadFileToS3: async ({ file, uploadURL }: { file: File, uploadURL: string }) => {
 		const headers = {
-			'Content-Type': 'image/png',
+			'Content-Type': file.type,
 		};
 
-		return await axios.post(uploadURL, { file }, { headers });
+		return await axios.put(uploadURL, file, { headers });
 	},
 };

@@ -11,20 +11,10 @@
     flex-direction: column;
     flex-grow: 1;
   }
-}
 
-.categories {
-  display: flex;
-  flex-direction: column;
-  gap: 45px;
-}
-
-.top_options_btns {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 30px;
-  @media (width < breakpoints.$sm) {
-    justify-content: center;
+  &__categories {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
   }
 }

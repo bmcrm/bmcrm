@@ -25,6 +25,5 @@ export const generateNavList = (campID: string): NavLinkType[] => ([
   {
     path: RoutePath.inventory,
     text: 'Inventory',
-    disabled: true,
   },
 ]);

@@ -12,17 +12,3 @@ const useGetPresignedUrl = () => {
 };
 
 export { useGetPresignedUrl };
-
-// const getPresignedUrl = async (fileName: string) => {
-// 	const response = await fetch(`https://api.${mode}.bmcrm.camp/inventory/upload`, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization: token,
-// 		},
-// 		body: JSON.stringify({ fileName }),
-// 	});
-//
-// 	const data = await response.json();
-// 	return data.uploadURL;
-// };
