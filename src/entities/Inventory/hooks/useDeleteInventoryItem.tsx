@@ -7,13 +7,19 @@ import { inventoryApi } from '../api/inventoryApi';
 import { inventoryKeys } from '../model/const/inventoryKeys';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
+interface MutationFnProps {
+	itemID: string;
+	lastItem?: boolean;
+	category?: string;
+}
+
 const useDeleteInventoryItem = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { success } = useToast();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
-		mutationFn: ({ itemID, lastItem, category }: { itemID: string; lastItem?: boolean; category?: string }) => {
+		mutationFn: ({ itemID, lastItem, category }: MutationFnProps) => {
 			return inventoryApi.deleteInventoryItem(itemID, { lastItem, category });
 		},
 		onMutate: async ({ itemID, lastItem, category }) => {

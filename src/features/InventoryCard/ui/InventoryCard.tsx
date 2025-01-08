@@ -7,6 +7,7 @@ import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { InventoryDetailsModal } from '@widgets/InventoryDetailsModal';
 import { useDeleteInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
+import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './InventoryCard.module.scss';
 import DefaultImg from '@shared/assets/images/inventory/no-img.webp';
 import DeleteIcon from '@shared/assets/icons/delete.svg';
@@ -23,12 +24,25 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 	const { mutate: deleteItem } = useDeleteInventoryItem();
 	const { isOpen, open, close } = useToggle();
 
-	const handleDelete = useCallback(() => {
+	const handleDelete = useCallback(async () => {
 		const itemsInCategory = inventory?.filter(item => item.category === category);
 		const isLastItem = itemsInCategory?.length === 1;
 
-		deleteItem({ itemID: id, lastItem: isLastItem, category: isLastItem ? category : undefined });
-  }, [category, deleteItem, id, inventory]);
+		try {
+			await new Promise<void>((resolve) => {
+				close();
+				setTimeout(resolve, MODAL_ANIMATION_DELAY + 100);
+			});
+
+			deleteItem({
+				itemID: id,
+				lastItem: isLastItem,
+				category: isLastItem ? category : undefined,
+			});
+		} catch {
+			return;
+		}
+  }, [category, close, deleteItem, id, inventory]);
 
 	return (
 		<>
@@ -53,7 +67,7 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 							className={styles.card__btn}
 							onClick={(e) => {
 								e.stopPropagation();
-								handleDelete();
+								void handleDelete();
 							}}
 						>
 							<Icon icon={<DeleteIcon/>} size={IconSize.SIZE_14}/>
