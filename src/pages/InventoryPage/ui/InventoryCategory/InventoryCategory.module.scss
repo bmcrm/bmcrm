@@ -17,6 +17,7 @@
 
 	&__list {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(245px, 250px));
+		grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+		gap: 25px;
 	}
 }

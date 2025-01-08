@@ -40,8 +40,6 @@ export const inventoryApi = {
     const headers = createAuthHeaders();
 		const params = options ? { params: options } : undefined;
 
-		console.log('params', params);
-
     await axios.delete(endpoint, { headers, ...params });
 	},
 	getPresignedUrl: async (fileName: string) => {

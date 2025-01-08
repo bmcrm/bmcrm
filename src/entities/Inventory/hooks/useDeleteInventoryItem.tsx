@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@shared/hooks/useToast';
 import { errorHandler } from '@shared/lib/errorHandler';
+import { RoutePath } from '@app/providers/AppRouter';
 import { inventoryApi } from '../api/inventoryApi';
 import { inventoryKeys } from '../model/const/inventoryKeys';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
 const useDeleteInventoryItem = () => {
 	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 	const { success } = useToast();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
@@ -32,6 +35,8 @@ const useDeleteInventoryItem = () => {
 					if (!oldCategories) return oldCategories;
 					return oldCategories.filter((cat) => cat !== category);
 				});
+
+				navigate(RoutePath.inventory);
 			}
 
 			return { previousItems, previousCategories };

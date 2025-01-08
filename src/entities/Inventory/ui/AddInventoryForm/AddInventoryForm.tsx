@@ -31,6 +31,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 			const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
 				...values,
 				files,
+				category: values.category?.toLowerCase(),
 				price: parseFloat(String(values.price)),
 				quantity: parseInt(String(values.quantity), 10),
 				createdAt: new Date().toISOString(),
@@ -112,7 +113,12 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				<ul className={styles.form__preview}>
 					{imagePreviews.map((preview, index) => (
 						<li key={index} className={styles.form__previewItem}>
-							<Image src={preview.previewUrl} alt={`Preview ${index}`} maxWidth={90} />
+							<Image
+								src={preview.previewUrl}
+								alt={`Preview ${index}`}
+								maxWidth={90}
+								customStyles={{ height: '65px' }}
+							/>
 							<Button
 								className={styles.btnRemove}
 								theme={ButtonTheme.CLEAR}

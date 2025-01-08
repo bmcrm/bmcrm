@@ -3,6 +3,12 @@
 	max-width: 100%;
 	overflow: hidden;
 
+	&.contain {
+		img {
+			object-fit: contain;
+		}
+	}
+
 	picture {
 		display: block;
 		width: 100%;

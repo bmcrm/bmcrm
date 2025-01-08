@@ -2,6 +2,12 @@
 	border-radius: 10px;
 	background-color: var(--color-white);
 
+	@media (hover: hover) {
+		&:hover {
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+		}
+	}
+
 	&__head {
 		padding: 10px 10px 15px;
 		border-bottom: 1px solid rgba(139, 16, 62, .3);
@@ -17,6 +23,12 @@
 	&__img {
 		border-radius: 10px;
 		height: 150px;
+
+		&.contain {
+			img {
+				object-fit: contain;
+			}
+		}
 	}
 
 	&__title {

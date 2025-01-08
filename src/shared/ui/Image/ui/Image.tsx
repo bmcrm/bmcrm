@@ -7,9 +7,9 @@ type ImageProps = {
   className?: string;
   src?: string | null;
   alt?: string;
-  width?: string | number;
-  maxWidth?: string | number;
-  borderRadius?: string | number;
+  width?: CSSProperties['width'];
+  maxWidth?: CSSProperties['maxWidth'];
+  borderRadius?: CSSProperties['borderRadius'];
   customStyles?: CSSProperties;
 };
 
@@ -24,7 +24,7 @@ const Image = memo((props: ImageProps) => {
   };
 
   return (
-    <div className={classNames(styles.image, {}, [className])} style={customStyle}>
+    <div className={classNames(styles.image, { [styles.contain]: !src }, [className])} style={customStyle}>
       <picture>
         <img src={src || DefaultCampImg} alt={alt} />
       </picture>

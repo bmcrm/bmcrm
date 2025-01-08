@@ -45,29 +45,3 @@
     }
   }
 }
-
-
-
-.form__image input {
-  height: 60px;
-  cursor: pointer;
-  &::placeholder {
-    text-align: center;
-  }
-}
-.file__input {
-  visibility: hidden;
-}
-.imagePreviewContainer {
-  display: flex;
-  gap: 10px;
-}
-.imagePreview {
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  width: 94px;
-  height: 87px;
-
-}
-
