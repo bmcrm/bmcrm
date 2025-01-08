@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { fetchInventory } from '@shared/api/fetchInventory/fetchInventory';
 import { AxiosError } from 'axios';
-import { IInventoryItem } from '../../types/types';
+import { IInventoryItem } from '../../types/Inventory.types.ts';
 
 interface InventoryState {
   isLoading: boolean;

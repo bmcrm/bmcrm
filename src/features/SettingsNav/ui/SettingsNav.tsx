@@ -12,9 +12,8 @@ const SettingsNav = memo(({ className }: SettingsNavProps) => (
 	<nav className={classNames(styles.nav, {}, [className])}>
 		<ul className={styles.nav__list}>
 			{
-				settingNavItemsList.map(
-					item => <li key={item.path}><CustomNavLink link={item} theme={CustomNavLinkTheme.SETTINGS}/></li>
-				)
+				settingNavItemsList.map(item =>
+					<li key={item.path}><CustomNavLink link={item} theme={CustomNavLinkTheme.SETTINGS}/></li>)
 			}
 		</ul>
 	</nav>

@@ -39,7 +39,7 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
           style={{ color: user.email_confirmed ? '#4ECB71' : '#C1C1C1' }}
         />
       </li>
-      {isOpen && camperEmail && (
+      {camperEmail && (
         <CamperDetailsModal camperEmail={camperEmail} isDetailsOpen={isOpen} onDetailsClose={close} />
       )}
     </>

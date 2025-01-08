@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Button } from '@shared/ui/Button';
@@ -58,7 +57,7 @@ const FunnelPage = () => {
   }, [campers]);
 
   return (
-    <section className={classNames(styles.funnel, {}, [])}>
+    <section className={styles.funnel}>
       <Container fluid>
         <div className={styles.funnel__head}>
           <Funnel
@@ -70,7 +69,7 @@ const FunnelPage = () => {
             }}
           />
           <Button onClick={open} className={styles.funnel__btn}>Invite</Button>
-          {isOpen && <InviteCamperModal isOpen={isOpen} onClose={close} />}
+          <InviteCamperModal isOpen={isOpen} onClose={close} />
         </div>
         <div className={styles.funnel__content}>
           <FunnelCard title={'Leads'} isLoading={isLoading} users={roles[CamperRole.LEAD]} />

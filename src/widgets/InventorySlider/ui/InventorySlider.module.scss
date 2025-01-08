@@ -1,0 +1,23 @@
+@use '@app/styles/breakpoints';
+
+.gallery {
+
+	&__main {
+		+ .gallery__thumbs {
+			margin-top: 10px;
+
+			@media (width < breakpoints.$md) {
+				margin-top: 5px;
+			}
+		}
+	}
+
+	&__item {
+		height: 100%;
+		border-radius: 10px;
+
+		&.thumb {
+			border-radius: 5px;
+		}
+	}
+}

@@ -1,0 +1,1 @@
+export { default as InventorySlider } from './ui/InventorySlider';

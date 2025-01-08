@@ -1,0 +1,71 @@
+.card {
+	border-radius: 10px;
+	background-color: var(--color-white);
+
+	@media (hover: hover) {
+		&:hover {
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+		}
+	}
+
+	&__head {
+		padding: 10px 10px 15px;
+		border-bottom: 1px solid rgba(139, 16, 62, .3);
+	}
+
+	&__body {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 10px;
+	}
+
+	&__img {
+		border-radius: 10px;
+		height: 150px;
+
+		&.contain {
+			img {
+				object-fit: contain;
+			}
+		}
+	}
+
+	&__title {
+		font: var(--font-m);
+		font-weight: 400;
+	}
+
+	&__desc {
+		font: var(--font-xs);
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
+	}
+
+	&__badges {
+		display: flex;
+		flex-wrap: wrap;
+    gap: 10px 15px;
+	}
+
+	&__control {
+		display: flex;
+    align-items: flex-end;
+		justify-content: flex-end;
+    gap: 15px;
+	}
+
+	&__btn {
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+			&:hover {
+        color: var(--color-black);
+      }
+		}
+	}
+}

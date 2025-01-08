@@ -69,11 +69,11 @@ const CamperDetailsHeader = memo((props: ICamperDetailsHeaderProps) => {
 			<div className={styles.head__heading}>
 				<div className={styles.head__title}>
 					<h2>{capitalizedName}</h2>
-					<div className={styles.details__icons}>
+					<div className={styles.head__icons}>
 						<Icon
 							icon={camper?.email_confirmed ? <CheckIcon /> : <ClockIcon />}
 							size={IconSize.SIZE_24}
-							style={{ color: camper?.email_confirmed ? '#4ECB71' : '#C1C1C1' }}
+							style={{ color: camper?.email_confirmed ? '#4ECB71' : 'var(--color-neutral)' }}
 						/>
 						{isReadonly && (
 							<Button
@@ -82,7 +82,7 @@ const CamperDetailsHeader = memo((props: ICamperDetailsHeaderProps) => {
 								className={styles.btn}
 								onClick={toggleReadonly}
 							>
-								<Icon icon={<EditIcon/>} size={IconSize.SIZE_24} style={{ color: '#C1C1C1' }}/>
+								<Icon icon={<EditIcon />} size={IconSize.SIZE_24} style={{ color: 'var(--color-neutral)' }}/>
 							</Button>
 						)}
 					</div>
@@ -109,9 +109,7 @@ const CamperDetailsHeader = memo((props: ICamperDetailsHeaderProps) => {
 						</li>
 					)}
 				</ul>
-				{isOpen && !isReadonly && (
-					<AddSocialModal isOpen={isOpen} onClose={close} onSubmit={handleAddSocial}/>
-				)}
+				{!isReadonly && <AddSocialModal isOpen={isOpen} onClose={close} onSubmit={handleAddSocial} />}
 			</div>
 			<div className={styles.head__info}>
 				{!isTablet && (

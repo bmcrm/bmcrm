@@ -32,29 +32,29 @@ const FunnelCard = memo((props: FunnelCardProps) => {
   };
 
   return (
-    <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
-      {isLoading && <FormLoader />}
-      {title && (
-        <div className={classNames(styles.card__head, { [styles.pointer]: isAllCardIcon }, [])} onClick={handleClick}>
-          <h3>{title}</h3>
-          {isAllCardIcon && <Icon icon={<FullSizeIcon />} size={IconSize.SIZE_20} className={styles.card__icon} />}
-        </div>
-      )}
-      {isOpen && (
-        <Modal isOpen={isOpen} onClose={close}>
-          <FunnelCardAll users={users} title={title} />
-        </Modal>
-      )}
-      <ul className={styles.card__content}>
-        {slicedUsers.length > 0 ? (
-          slicedUsers.map(user => (
-            <FunnelCardItem key={user.email} user={user} />
-          ))
-        ) : (
-          <li className={styles.card__empty}>Nobody's rocking this status.</li>
+    <>
+      <div className={classNames(styles.card, { [styles.fluid]: fluid }, [className])}>
+        {isLoading && <FormLoader/>}
+        {title && (
+          <div className={classNames(styles.card__head, { [styles.pointer]: isAllCardIcon }, [])} onClick={handleClick}>
+            <h3>{title}</h3>
+            {isAllCardIcon && <Icon icon={<FullSizeIcon/>} size={IconSize.SIZE_20} className={styles.card__icon}/>}
+          </div>
         )}
-      </ul>
-    </div>
+        <ul className={styles.card__content}>
+          {slicedUsers.length > 0 ? (
+            slicedUsers.map(user => (
+              <FunnelCardItem key={user.email} user={user}/>
+            ))
+          ) : (
+            <li className={styles.card__empty}>Nobody's rocking this status.</li>
+          )}
+        </ul>
+      </div>
+      <Modal isOpen={isOpen} onClose={close}>
+        <FunnelCardAll users={users} title={title}/>
+      </Modal>
+    </>
   );
 });
 

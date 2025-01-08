@@ -4,8 +4,8 @@ import { CustomInput } from '@shared/ui/CustomInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import styles from './EditInventoryForm.module.scss';
 import useInventory from '@entities/Inventory/model/services/useInventory/useInventory';
-import { createItemSchema } from '@shared/const/validationSchemas';
-import { IInventoryItem } from '@entities/Inventory/model/types/types';
+import { createInventoryItemSchema } from '@shared/const/validationSchemas';
+import { IInventoryItem } from '@entities/Inventory/model/types/Inventory.types.ts';
 import { Icon } from '@shared/ui/Icon';
 import DeleteItemPreview from '@shared/assets/icons/deleteImage.svg';
 import { FormLoader } from '@features/FormLoader';
@@ -83,7 +83,7 @@ const EditInventoryForm = memo(({ onClose, itemId }: EditInventoryFormProps) => 
 
   return (
     <Formik
-      validationSchema={createItemSchema}
+      validationSchema={createInventoryItemSchema}
       initialValues={{
         title: item?.title || '',
         description: item?.description || '',

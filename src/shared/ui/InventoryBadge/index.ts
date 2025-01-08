@@ -1,0 +1,1 @@
+export { default as InventoryBadge } from './ui/InventoryBadge';

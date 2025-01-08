@@ -1,0 +1,52 @@
+@use '@app/styles/breakpoints';
+
+.details {
+	display: flex;
+	gap: 20px;
+	width: 700px;
+	max-width: 100%;
+
+	@media (width < breakpoints.$md) {
+		flex-direction: column;
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		flex-grow: 1;
+	}
+
+	&__heading {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		h2 {
+			font: var(--font-xxl);
+		}
+	}
+
+	&__desc {
+		font: var(--font-xs);
+	}
+
+	&__badges {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+
+	&__btn {
+		color: var(--color-neutral);
+		margin-top: auto;
+		margin-left: auto;
+
+		@media (hover: hover) {
+			&:hover {
+				color: var(--color-black);
+			}
+		}
+	}
+}
