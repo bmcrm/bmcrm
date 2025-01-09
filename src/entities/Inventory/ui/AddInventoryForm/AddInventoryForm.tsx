@@ -1,9 +1,9 @@
 import { memo, useCallback, useState } from 'react';
 import { Form, Formik } from 'formik';
-import imageCompression from 'browser-image-compression';
+import { compressImages } from '@shared/lib/compressImages';
 import { useToast } from '@shared/hooks/useToast';
 import { CustomInput } from '@shared/ui/CustomInput';
-import { FilesInput } from '@shared/ui/FilesInput';
+import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Image } from '@shared/ui/Image';
@@ -47,39 +47,15 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 
 	const handleFilesAdded = useCallback(
 		async (files: File[]) => {
-			if (imagePreviews.length >= 5) {
+
+			if (imagePreviews.length + files.length > 5) {
 				error('You can only upload up to 5 images.');
 				return;
 			}
 
-			const compressedFiles = await Promise.all(
-				files.map(async (file) => {
-					if (file.size > 5 * 1024 * 1024) {
-						error(`File "${file.name}" exceeds the size limit of 5MB.`);
-						return null;
-					}
-
-					try {
-						const options = {
-							maxSizeMB: 0.5,
-							maxWidthOrHeight: 1920,
-							useWebWorker: true,
-							initialQuality: 0.75,
-						};
-						const compressedFile = await imageCompression(file, options);
-						return {
-							file: compressedFile,
-							previewUrl: URL.createObjectURL(compressedFile),
-						};
-					} catch (err) {
-						error(`Error compressing image "${file.name}".`);
-						console.error('Compression error:', err);
-						return null;
-					}
-				})
-			);
-
+			const compressedFiles = await compressImages({ files });
 			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
+
 			setImagePreviews((prev) => [...prev, ...validFiles]);
 		},
 		[error, imagePreviews.length]
@@ -101,14 +77,20 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				{isPending && <FormLoader/>}
 				<div className={styles.form__inner}>
 					{inputs.default.map(({ name, placeholder, label }) => (
-						<CustomInput key={name} name={name} label={label} placeholder={placeholder}/>
+						<CustomInput key={name} name={name} label={label} placeholder={placeholder} />
 					))}
 					<div className={styles.form__row}>
-						{inputs.row.map(({ name, placeholder, label }) => (
-							<CustomInput key={name} name={name} label={label} placeholder={placeholder}/>
+						{inputs.row.map(({ name, placeholder, label, type }) => (
+							<CustomInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
 						))}
 					</div>
-					<FilesInput label={'Photo'} onFilesAdded={handleFilesAdded} previewsLength={imagePreviews.length}/>
+					<FilesInput
+						theme={FilesInputTheme.ADD_INVENTORY}
+						name={'image'}
+						label={'Photo'}
+						onFilesAdded={handleFilesAdded}
+						previewsLength={imagePreviews.length}
+					/>
 				</div>
 				<ul className={styles.form__preview}>
 					{imagePreviews.map((preview, index) => (

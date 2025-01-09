@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { Form, Formik } from 'formik';
-import { classNames } from '@shared/lib/classNames';
 import { FormLoader } from '@features/FormLoader';
 import { Modal } from '@shared/ui/Modal';
 import { CamperDetailsHeader } from '../CamperDetailsHeader/CamperDetailsHeader';
@@ -35,7 +34,7 @@ const CamperDetailsModal = memo((props: CamperDetailsModalProps) => {
   return (
     <Modal isOpen={isDetailsOpen} onClose={onDetailsClose}>
       <Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
-        <Form className={classNames(styles.details, {}, [])}>
+        <Form className={styles.details}>
           {isLoading && <FormLoader style={{ backgroundColor: 'var(--color-white)' }} />}
           <CamperDetailsHeader
             camper={camper}
