@@ -1,6 +1,16 @@
-import { memo, useState, useCallback, useMemo, useRef, useEffect, type CSSProperties } from 'react';
+import {
+	memo,
+	useState,
+	useCallback,
+	useMemo,
+	useRef,
+	useEffect,
+	type CSSProperties,
+	type Dispatch,
+	type SetStateAction
+} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as ISwiper } from 'swiper/types';
+import type { Swiper as ISwiper } from 'swiper/types';
 import { Navigation, Thumbs } from 'swiper/modules';
 import { classNames } from '@shared/lib/classNames';
 import { compressImages } from '@shared/lib/compressImages';
@@ -19,12 +29,20 @@ type InventorySliderProps = {
 	theme?: InventorySliderTheme;
 	images?: string[];
 	customStyles?: CSSProperties;
+	newImages?: { file: File; previewUrl: string }[];
+	setNewImages?: Dispatch<SetStateAction<{ file: File, previewUrl: string }[]>>
 };
 
 const InventorySlider = memo((props: InventorySliderProps) => {
-	const { className, images, customStyles, theme = InventorySliderTheme.DEFAULT } = props;
+	const {
+		className,
+		images,
+		customStyles,
+		theme = InventorySliderTheme.DEFAULT,
+		newImages,
+		setNewImages,
+	} = props;
 	const [thumbs, setThumbs] = useState<ISwiper | null>(null);
-	const [newImages, setNewImages] = useState<{ file: File; previewUrl: string }[]>([]);
 	const mainSwiperRef = useRef<ISwiper | null>(null);
 	const thumbsSwiperRef = useRef<ISwiper | null>(null);
 	const { isMobile } = useMedia();
@@ -42,14 +60,14 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 			const compressedFiles = await compressImages({ files });
 			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
 
-			setNewImages(prev => [...prev, ...validFiles]);
+			setNewImages?.(prev => [...prev, ...validFiles]);
 		},
-		[error]
+		[error, setNewImages]
 	);
 
 	const previewImages = useMemo(() => {
-		const addedImg = newImages.map(img => img.previewUrl);
-		return [...(images ? images : []), ...addedImg];
+		const addedImg = newImages?.map(img => img.previewUrl);
+		return [...(images ? images : []), ...(addedImg ? addedImg : [])];
 	}, [images, newImages]);
 
 	useEffect(() => {
@@ -61,7 +79,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 
 	useEffect(() => {
 		return () => {
-			newImages.forEach(file => URL.revokeObjectURL(URL.createObjectURL(file.file)));
+			newImages?.forEach(file => URL.revokeObjectURL(URL.createObjectURL(file.file)));
 		};
 	}, [newImages]);
 
@@ -104,7 +122,8 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 						setThumbs(swiper);
 					}}
 					spaceBetween={isMobile ? 5 : 10}
-					slidesPerView={4}
+					slidesPerView={isEditing ? 5 : 4}
+					noSwipingClass={styles.gallery__disabled}
 				>
 					{previewImages.length > 1 && (
 						previewImages.map((image, i) => (
@@ -118,7 +137,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 						))
 					)}
 					{isEditing && previewImages.length < 5 && (
-						<SwiperSlide style={{ height: 'auto' }}>
+						<SwiperSlide className={styles.gallery__disabled}>
 							<FilesInput
 								theme={FilesInputTheme.EDIT_INVENTORY}
 								name={'image'}
