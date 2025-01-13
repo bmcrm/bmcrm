@@ -1,0 +1,5 @@
+.swiper-slide-thumb-active {
+	> *:nth-child(1) {
+		border: 2px solid var(--color-orange-dark);
+	}
+}

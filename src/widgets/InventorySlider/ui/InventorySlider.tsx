@@ -25,6 +25,7 @@ import { InventorySliderTheme } from '../model/types/InventorySlider.types';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/thumbs';
+import './swiper.scss';
 import styles from './InventorySlider.module.scss';
 import DeleteImgIcon from '@shared/assets/icons/cross.svg';
 
@@ -157,7 +158,11 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 						setThumbs(swiper);
 					}}
 					spaceBetween={isMobile ? 5 : 10}
-					slidesPerView={isEditing ? 5 : 4}
+					slidesPerView={isEditing
+						? previewImages.length === 5
+							? 5 : previewImages.length === 1
+								? 1 : previewImages.length + 1
+						: previewImages.length}
 					noSwipingClass={styles.gallery__disabled}
 				>
 					{previewImages.length > 1 && (

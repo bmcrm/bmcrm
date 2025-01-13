@@ -10,7 +10,7 @@ import { inventoryKeys } from '../model/const/inventoryKeys';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
 const useUpdateInventoryItem = () => {
-	const { success } = useToast();
+	const { success, error } = useToast();
 	const { tokens: { decodedIDToken } } = userState();
 	const queryClient = useQueryClient();
 	const { mutateAsync: getPresignedUrl } = useGetPresignedUrl();
@@ -22,11 +22,22 @@ const useUpdateInventoryItem = () => {
 			const uploadedImageUrls: string[] = [];
 
 			if (files && files.length > 0) {
-				for (const file of files) {
-					const uploadURL = await getPresignedUrl(file.name);
-					await uploadFileToS3({ file, uploadURL });
-					uploadedImageUrls.push(uploadURL.split('?')[0]);
-				}
+				const results = await Promise.allSettled(
+					files.map(async (file) => {
+						const uploadURL = await getPresignedUrl(file.name);
+						await uploadFileToS3({ file, uploadURL });
+						return uploadURL.split('?')[0];
+					}),
+				);
+
+				results.forEach((result, index) => {
+					if (result.status === 'fulfilled') {
+						uploadedImageUrls.push(result.value);
+					} else {
+						error(`Failed to upload file: ${files[index].name}`)
+						console.error(`Failed to upload file: ${files[index].name}`, result.reason);
+					}
+				});
 			}
 
 			const inventoryItem = {

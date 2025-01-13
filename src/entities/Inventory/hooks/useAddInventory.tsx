@@ -11,7 +11,7 @@ import type { IInventoryItem } from '../model/types/Inventory.types';
 
 const useAddInventory = () => {
 	const queryClient = useQueryClient();
-	const { success } = useToast();
+	const { success, error } = useToast();
 	const { tokens: { decodedIDToken } } = userState();
 	const { mutateAsync: getPresignedUrl } = useGetPresignedUrl();
 	const { mutateAsync: uploadFileToS3 } = useUploadFileToS3();
@@ -22,11 +22,22 @@ const useAddInventory = () => {
 			const uploadedImageUrls: string[] = [];
 
 			if (files && files.length > 0) {
-				for (const file of files) {
-					const uploadURL = await getPresignedUrl(file.name);
-					await uploadFileToS3({ file, uploadURL });
-					uploadedImageUrls.push(uploadURL.split('?')[0]);
-				}
+				const results = await Promise.allSettled(
+					files.map(async (file) => {
+						const uploadURL = await getPresignedUrl(file.name);
+						await uploadFileToS3({ file, uploadURL });
+						return uploadURL.split('?')[0];
+					}),
+				);
+
+				results.forEach((result, index) => {
+					if (result.status === 'fulfilled') {
+						uploadedImageUrls.push(result.value);
+					} else {
+						error(`Failed to upload file: ${files[index].name}`)
+						console.error(`Failed to upload file: ${files[index].name}`, result.reason);
+					}
+				});
 			}
 
 			const inventoryItem = {
