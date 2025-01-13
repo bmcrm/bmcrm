@@ -1,4 +1,4 @@
-import { memo, type ReactElement } from 'react';
+import { memo, useState, useEffect, type ReactElement, useCallback } from 'react';
 import { Modal } from '@shared/ui/Modal';
 import { DetailsDefault } from '../DetailsDefault/DetailsDefault';
 import { DetailsEditing } from '../DetailsEditing/DetailsEditing';
@@ -15,15 +15,33 @@ type InventoryDetailsModalProps = {
 
 const InventoryDetailsModal = memo((props: InventoryDetailsModalProps) => {
 	const { isOpen, onClose, item, handleDelete, theme = InventoryDetailsModalTheme.DEFAULT } = props;
+	const [currentTheme, setCurrentTheme] = useState<InventoryDetailsModalTheme>(theme);
+
+	useEffect(() => {
+		setCurrentTheme(theme);
+	}, [theme]);
+
+	const closeHandler = useCallback(() => {
+		setCurrentTheme(InventoryDetailsModalTheme.DEFAULT);
+		onClose();
+	}, [onClose]);
 
 	const content: Record<InventoryDetailsModalTheme, ReactElement> = {
-		[InventoryDetailsModalTheme.DEFAULT]: <DetailsDefault item={item} handleDelete={handleDelete} />,
-		[InventoryDetailsModalTheme.EDIT]: <DetailsEditing />,
+		[InventoryDetailsModalTheme.DEFAULT]: <DetailsDefault
+			item={item}
+			handleDelete={handleDelete}
+			onEdit={() => setCurrentTheme(InventoryDetailsModalTheme.EDIT)}
+		/>,
+		[InventoryDetailsModalTheme.EDIT]: <DetailsEditing
+			item={item}
+			cancelEdit={() => setCurrentTheme(InventoryDetailsModalTheme.DEFAULT)}
+			onClose={onClose}
+		/>,
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
-			{content[theme]}
+		<Modal isOpen={isOpen} onClose={closeHandler}>
+			{content[currentTheme]}
 		</Modal>
 	);
 });

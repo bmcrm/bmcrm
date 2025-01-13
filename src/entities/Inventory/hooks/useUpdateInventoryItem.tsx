@@ -1,24 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '@shared/hooks/useToast';
 import { errorHandler } from '@shared/lib/errorHandler';
+import { useToast } from '@shared/hooks/useToast';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 import { useGetPresignedUrl } from './useGetPresignedUrl';
 import { useUploadFileToS3 } from './useUploadFileToS3';
 import { userState } from '@entities/User';
-import { inventoryKeys } from '../model/const/inventoryKeys';
 import { inventoryApi } from '../api/inventoryApi';
+import { inventoryKeys } from '../model/const/inventoryKeys';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
-const useAddInventory = () => {
-	const queryClient = useQueryClient();
+const useUpdateInventoryItem = () => {
 	const { success, error } = useToast();
 	const { tokens: { decodedIDToken } } = userState();
+	const queryClient = useQueryClient();
 	const { mutateAsync: getPresignedUrl } = useGetPresignedUrl();
 	const { mutateAsync: uploadFileToS3 } = useUploadFileToS3();
 
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
 		mutationFn: async (item: Partial<IInventoryItem & { files: File[] }>) => {
-			const { files, ...rest } = item;
+			const { files, images, ...rest } = item;
 			const uploadedImageUrls: string[] = [];
 
 			if (files && files.length > 0) {
@@ -42,16 +42,16 @@ const useAddInventory = () => {
 
 			const inventoryItem = {
 				...rest,
-				images: uploadedImageUrls,
+				images: [...(images ? images : []), ...uploadedImageUrls],
 			};
 
-			return inventoryApi.addInventoryItem(inventoryItem);
+			return inventoryApi.updateInventoryItem(inventoryItem);
 		},
 		onSuccess: (_, variables) => {
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
-			success('Item created successfully!');
-			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
+			success('Item updated successfully!');
+			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item updated successfully', {
 				camp_id: decodedIDToken?.camp_id,
 				user: decodedIDToken?.email,
 				imageCount: variables.images?.length,
@@ -63,4 +63,4 @@ const useAddInventory = () => {
 	return { mutate, mutateAsync, isPending, isSuccess, isError };
 };
 
-export { useAddInventory };
+export { useUpdateInventoryItem };

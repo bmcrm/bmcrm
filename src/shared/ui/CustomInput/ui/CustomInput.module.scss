@@ -22,8 +22,13 @@
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(4px);
-    font: var(--font-size-s);
+    font: var(--font-s);
     outline: none;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-ruby-dark);
+    }
   }
 
   &__btn {

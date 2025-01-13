@@ -1,16 +1,17 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Image } from '@shared/ui/Image';
 import { InventoryBadge } from '@shared/ui/InventoryBadge';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { InventoryDetailsModal } from '@widgets/InventoryDetailsModal';
-import { useDeleteInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
+import { InventoryDetailsModal, InventoryDetailsModalTheme } from '@widgets/InventoryDetailsModal';
+import { type IInventoryItem, useDeleteInventoryItem, useGetInventory } from '@entities/Inventory';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './InventoryCard.module.scss';
 import DefaultImg from '@shared/assets/images/inventory/no-img.webp';
 import DeleteIcon from '@shared/assets/icons/delete.svg';
+import EditIcon from '@shared/assets/icons/edit_icon.svg';
 
 type InventoryCardProps = {
 	className?: string;
@@ -20,6 +21,7 @@ type InventoryCardProps = {
 const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 	const { id, title, description, quantity, price, category, images } = item;
 	const imgURL = images?.[0] || DefaultImg;
+	const [modalTheme, setModalTheme] = useState<InventoryDetailsModalTheme>(InventoryDetailsModalTheme.DEFAULT);
 	const { data: inventory } = useGetInventory();
 	const { mutate: deleteItem } = useDeleteInventoryItem();
 	const { isOpen, open, close } = useToggle();
@@ -44,12 +46,26 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 		}
   }, [category, close, deleteItem, id, inventory]);
 
+	const handleOpenModal = useCallback(
+		(theme: InventoryDetailsModalTheme) => {
+			setModalTheme(theme);
+			open();
+		},
+		[open]
+	);
+
 	return (
 		<>
-			<li className={classNames(styles.card, {}, [className])} onClick={open}>
+			<li
+				className={classNames(styles.card, {}, [className])}
+				onClick={() => handleOpenModal(InventoryDetailsModalTheme.DEFAULT)}
+			>
 				<div className={styles.card__head}>
-					<Image src={imgURL} alt={title}
-					       className={classNames(styles.card__img, { [styles.contain]: !images?.[0] }, [])}/>
+					<Image
+						src={imgURL}
+						alt={title}
+						className={classNames(styles.card__img, { [styles.contain]: !images?.[0] }, [])}
+					/>
 				</div>
 				<div className={styles.card__body}>
 					<h3 className={styles.card__title}>{title}</h3>
@@ -67,15 +83,32 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 							className={styles.card__btn}
 							onClick={(e) => {
 								e.stopPropagation();
+								handleOpenModal(InventoryDetailsModalTheme.EDIT);
+							}}
+						>
+							<Icon icon={<EditIcon />} size={IconSize.SIZE_14} />
+						</Button>
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							className={styles.card__btn}
+							onClick={(e) => {
+								e.stopPropagation();
 								void handleDelete();
 							}}
 						>
-							<Icon icon={<DeleteIcon/>} size={IconSize.SIZE_14}/>
+							<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14}/>
 						</Button>
 					</div>
 				</div>
 			</li>
-			<InventoryDetailsModal isOpen={isOpen} onClose={close} item={item} handleDelete={handleDelete} />
+			<InventoryDetailsModal
+				isOpen={isOpen}
+				onClose={close}
+				item={item}
+				handleDelete={handleDelete}
+				theme={modalTheme}
+			/>
 		</>
 	);
 });

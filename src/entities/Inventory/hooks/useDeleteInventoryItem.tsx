@@ -5,6 +5,7 @@ import { errorHandler } from '@shared/lib/errorHandler';
 import { RoutePath } from '@app/providers/AppRouter';
 import { inventoryApi } from '../api/inventoryApi';
 import { inventoryKeys } from '../model/const/inventoryKeys';
+import { inventoryState } from '../model/state/inventoryState';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
 interface MutationFnProps {
@@ -17,12 +18,15 @@ const useDeleteInventoryItem = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { success } = useToast();
+	const { deletionCount, incrementDeletionCount, decrementDeletionCount } = inventoryState();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
 		mutationFn: ({ itemID, lastItem, category }: MutationFnProps) => {
 			return inventoryApi.deleteInventoryItem(itemID, { lastItem, category });
 		},
 		onMutate: async ({ itemID, lastItem, category }) => {
+			incrementDeletionCount();
+
 			await queryClient.cancelQueries({ queryKey: inventoryKeys.allInventory });
 			await queryClient.cancelQueries({ queryKey: inventoryKeys.allCategories });
 
@@ -57,8 +61,12 @@ const useDeleteInventoryItem = () => {
 			errorHandler(error);
 		},
 		onSettled: () => {
-			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
-			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
+			decrementDeletionCount();
+
+			if (deletionCount === 0) {
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
+			}
 		},
 	});
 

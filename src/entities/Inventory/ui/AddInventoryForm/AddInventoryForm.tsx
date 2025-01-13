@@ -1,19 +1,20 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import imageCompression from 'browser-image-compression';
+import { compressImages } from '@shared/lib/compressImages';
+import { isDuplicateFile } from '../../lib/checkDuplicateFiles';
 import { useToast } from '@shared/hooks/useToast';
 import { CustomInput } from '@shared/ui/CustomInput';
-import { FilesInput } from '@shared/ui/FilesInput';
+import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Image } from '@shared/ui/Image';
 import { FormLoader } from '@features/FormLoader';
-import { useAddInventory } from '@entities/Inventory';
+import { useAddInventory } from '../../hooks/useAddInventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { initialValues, inputs } from '../../model/data/AddInventoryForm.data';
 import type { IInventoryItem } from '../../model/types/Inventory.types';
 import styles from './AddInventoryForm.module.scss';
-import DeletePreviewIcon from '@shared/assets/icons/deleteImage.svg';
+import DeletePreviewIcon from '@shared/assets/icons/cross.svg';
 
 type AddInventoryFormProps = {
 	onClose: () => void;
@@ -23,6 +24,12 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 	const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
 	const { mutateAsync: createItem, isPending } = useAddInventory();
 	const { error } = useToast();
+
+	useEffect(() => {
+		return () => {
+			imagePreviews?.forEach(file => URL.revokeObjectURL(file.previewUrl));
+		};
+	}, [imagePreviews]);
 
 	const handleSubmit = useCallback(
 		async (values: Partial<IInventoryItem>, options: { resetForm: () => void }) => {
@@ -47,47 +54,38 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 
 	const handleFilesAdded = useCallback(
 		async (files: File[]) => {
-			if (imagePreviews.length >= 5) {
+
+			if (imagePreviews.length + files.length > 5) {
 				error('You can only upload up to 5 images.');
 				return;
 			}
 
-			const compressedFiles = await Promise.all(
-				files.map(async (file) => {
-					if (file.size > 5 * 1024 * 1024) {
-						error(`File "${file.name}" exceeds the size limit of 5MB.`);
-						return null;
-					}
+			const uniqueFiles = files.filter(file => !isDuplicateFile({ currentFiles: imagePreviews, file }));
 
-					try {
-						const options = {
-							maxSizeMB: 0.5,
-							maxWidthOrHeight: 1920,
-							useWebWorker: true,
-							initialQuality: 0.75,
-						};
-						const compressedFile = await imageCompression(file, options);
-						return {
-							file: compressedFile,
-							previewUrl: URL.createObjectURL(compressedFile),
-						};
-					} catch (err) {
-						error(`Error compressing image "${file.name}".`);
-						console.error('Compression error:', err);
-						return null;
-					}
-				})
-			);
+			if (uniqueFiles.length === 0) {
+				error('Duplicate files are not allowed.');
+				return;
+			}
 
+			const compressedFiles = await compressImages({ files });
 			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
+
 			setImagePreviews((prev) => [...prev, ...validFiles]);
 		},
-		[error, imagePreviews.length]
+		[error, imagePreviews]
 	);
 
 	const handleRemoveImage = useCallback(
-		(index: number) => setImagePreviews(prev => prev.filter((_, i) => i !== index)),
-		[]
+		(index: number) => {
+			const previewToRemove = imagePreviews[index];
+
+			if (previewToRemove) {
+				URL.revokeObjectURL(previewToRemove.previewUrl);
+			}
+
+			setImagePreviews(prev => prev.filter((_, i) => i !== index));
+		},
+		[imagePreviews]
 	);
 
 	return (
@@ -101,14 +99,20 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				{isPending && <FormLoader/>}
 				<div className={styles.form__inner}>
 					{inputs.default.map(({ name, placeholder, label }) => (
-						<CustomInput key={name} name={name} label={label} placeholder={placeholder}/>
+						<CustomInput key={name} name={name} label={label} placeholder={placeholder} />
 					))}
 					<div className={styles.form__row}>
-						{inputs.row.map(({ name, placeholder, label }) => (
-							<CustomInput key={name} name={name} label={label} placeholder={placeholder}/>
+						{inputs.row.map(({ name, placeholder, label, type }) => (
+							<CustomInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
 						))}
 					</div>
-					<FilesInput label={'Photo'} onFilesAdded={handleFilesAdded} previewsLength={imagePreviews.length}/>
+					<FilesInput
+						theme={FilesInputTheme.ADD_INVENTORY}
+						name={'image'}
+						label={'Photo'}
+						onFilesAdded={handleFilesAdded}
+						previewsLength={imagePreviews.length}
+					/>
 				</div>
 				<ul className={styles.form__preview}>
 					{imagePreviews.map((preview, index) => (
@@ -125,7 +129,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 								size={ButtonSize.TEXT}
 								onClick={() => handleRemoveImage(index)}
 							>
-								<Icon icon={<DeletePreviewIcon/>} size={IconSize.SIZE_16} />
+								<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
 							</Button>
 						</li>
 					))}

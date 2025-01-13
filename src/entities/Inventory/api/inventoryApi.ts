@@ -27,8 +27,8 @@ export const inventoryApi = {
 
     return response.data;
 	},
-	updateInventoryItem: async (item: Partial<IInventoryItem>, itemID: string) => {
-		const endpoint = `${INVENTORY_ENDPOINT}/${itemID}`;
+	updateInventoryItem: async (item: Partial<IInventoryItem>) => {
+		const endpoint = `${INVENTORY_ENDPOINT}/${item.id}`;
 		const headers = createAuthHeaders();
 
     const response = await axios.patch(endpoint, item, { headers });

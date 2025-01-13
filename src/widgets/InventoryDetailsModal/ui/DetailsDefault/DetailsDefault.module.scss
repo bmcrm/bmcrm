@@ -3,7 +3,7 @@
 .details {
 	display: flex;
 	gap: 20px;
-	width: 700px;
+	width: 800px;
 	max-width: 100%;
 
 	@media (width < breakpoints.$md) {
@@ -17,14 +17,8 @@
 		flex-grow: 1;
 	}
 
-	&__heading {
-		display: flex;
-		align-items: center;
-		gap: 20px;
-
-		h2 {
-			font: var(--font-xxl);
-		}
+	&__title {
+		font: var(--font-xxl);
 	}
 
 	&__desc {
@@ -38,10 +32,16 @@
 		gap: 10px;
 	}
 
+	&__control {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 15px;
+		margin-top: auto;
+	}
+
 	&__btn {
 		color: var(--color-neutral);
-		margin-top: auto;
-		margin-left: auto;
 
 		@media (hover: hover) {
 			&:hover {
