@@ -31,8 +31,6 @@ export const inventoryApi = {
 		const endpoint = `${INVENTORY_ENDPOINT}/${item.id}`;
 		const headers = createAuthHeaders();
 
-		console.log('item in api:', item);
-
     const response = await axios.patch(endpoint, item, { headers });
 
     return response.data;

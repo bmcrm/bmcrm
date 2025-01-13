@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react';
-import { Form, Formik, type FormikValues } from 'formik';
+import { Form, Formik } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { generateInitialValues } from '../../lib/generateInitialValues';
@@ -8,22 +8,28 @@ import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
 import { CustomInput } from '@shared/ui/CustomInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
-import { useGetCategories, useUpdateInventoryItem, type IInventoryItem } from '@entities/Inventory';
+import { useGetCategories, useUpdateInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
+import { createInventoryItemSchema } from '@shared/const/validationSchemas';
+import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './DetailsEditing.module.scss';
 
 type DetailsEditingProps = {
 	className?: string;
 	item: IInventoryItem;
 	cancelEdit: () => void;
+	onClose: () => void;
 };
 
 const DetailsEditing = memo((props: DetailsEditingProps) => {
-	const { className, item, cancelEdit } = props;
-	const { images, id } = item;
+	const { className, item, cancelEdit, onClose } = props;
+	const { images, id, category } = item;
+	const [currentImages, setCurrentImages] = useState<string[]>(images ? images : []);
 	const [newImages, setNewImages] = useState<{ file: File; previewUrl: string }[]>([]);
+	const [deletedImages, setDeletedImages] = useState<string[]>([]);
 	const { isMobile } = useMedia();
 	const { initialValues, initialData } = generateInitialValues(item);
 	const { data: categories } = useGetCategories();
+	const { data: inventory } = useGetInventory();
 	const { mutateAsync: updateInventory, isPending } = useUpdateInventoryItem();
 
 	const selectOptions = categories?.map(category => ({
@@ -31,32 +37,56 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 		content: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
 	}));
 
-	const submitHandler = useCallback(async (values: FormikValues) => {
+	const handleCancelEdit = useCallback(() => {
+		newImages.forEach(file => URL.revokeObjectURL(file.previewUrl));
+		cancelEdit();
+	}, [cancelEdit, newImages]);
+
+	const submitHandler = useCallback(async (values: Partial<IInventoryItem>) => {
 		const files = newImages.map(img => img.file);
+		const isChangedCategory = category !== values.category;
+		const itemsInCategory = inventory?.filter(item => item.category === category);
+		const isLastItem = itemsInCategory?.length === 1;
 
 		const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
 			...values,
 			files,
 			id,
+			...(currentImages.length > 0 ? { images: currentImages } : {}),
+			...(deletedImages.length > 0 ? { deletedImages } : {}),
+			...(isChangedCategory && isLastItem ? { lastItem: isLastItem, oldCategory: category } : {}),
 		};
 
-		console.log('inventoryItem:', inventoryItem);
-
 		await updateInventory(inventoryItem);
-		cancelEdit();
-	}, [cancelEdit, id, newImages, updateInventory]);
+
+		if (isChangedCategory) {
+			await new Promise<void>((resolve) => {
+				onClose();
+				setTimeout(resolve, MODAL_ANIMATION_DELAY + 100);
+			});
+		}
+
+		handleCancelEdit();
+	}, [category, currentImages, deletedImages, handleCancelEdit, id, inventory, newImages, onClose, updateInventory]);
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={submitHandler} enableReinitialize>
+		<Formik
+			initialValues={initialValues}
+			onSubmit={submitHandler}
+			validationSchema={createInventoryItemSchema}
+			enableReinitialize
+		>
 			{({ values, handleChange }) => (
 				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__inner}>
 						<InventorySlider
-							images={images}
+							currentImages={currentImages}
 							customStyles={{ maxWidth: isMobile ? '100%' : '45%' }}
 							theme={InventorySliderTheme.EDIT}
 							newImages={newImages}
+							setCurrentImages={setCurrentImages}
 							setNewImages={setNewImages}
+							setDeletedImages={setDeletedImages}
 						/>
 						<div className={styles.form__content}>
 							{initialData.default.map(({ name, label, placeholder }) => (
@@ -65,7 +95,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 									name={name}
 									label={label}
 									placeholder={placeholder}
-									value={values[name as keyof IInventoryItem]}
+									value={values[name as keyof Omit<IInventoryItem, 'lastItem'>]}
 									onChange={handleChange}
 								/>
 							))}
@@ -77,7 +107,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 										name={name}
 										label={label}
 										placeholder={placeholder}
-										value={values[name as keyof IInventoryItem]}
+										value={values[name as keyof Omit<IInventoryItem, 'lastItem'>]}
 										onChange={handleChange}
 									/>
 								))}
@@ -93,7 +123,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 							className={styles.form__btn}
 							theme={ButtonTheme.CLEAR}
 							size={ButtonSize.TEXT}
-							onClick={cancelEdit}
+							onClick={handleCancelEdit}
 						>
 							Cancel
 						</Button>

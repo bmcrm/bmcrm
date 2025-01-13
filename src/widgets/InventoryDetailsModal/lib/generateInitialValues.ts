@@ -3,7 +3,7 @@ import type { IInventoryItem } from '@entities/Inventory';
 export const generateInitialValues = (item: IInventoryItem) => {
 	const { title, description, price, quantity, category, images } = item;
 
-	const initialValues: Partial<IInventoryItem> = {
+	const initialValues: Partial<Omit<IInventoryItem, 'lastItem'>> = {
 		title,
 		description,
 		price,

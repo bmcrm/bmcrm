@@ -11,12 +11,14 @@
 
 	&__main {
 		max-width: 100%;
+		max-height: 300px;
 		flex-grow: 1;
 	}
 
 	&__thumbs {
 		width: 100%;
 		max-width: 100%;
+		max-height: 60px;
 	}
 
 	&__item {
@@ -28,11 +30,33 @@
 		}
 	}
 
+	&__img {
+		border-radius: inherit;
+		height: 100%;
+	}
+
 	&__btn-add {
 		height: 100%;
 	}
 
+	&__btn-remove {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background-color: var(--color-orange-pastel);
+		border-radius: 0 0 0 5px;
+		color: var(--color-ruby-dark);
+
+		@media (hover: hover) {
+			&:hover {
+				scale: 1.1;
+			}
+		}
+	}
+
 	&__disabled {
-		height: auto;
+		&.slide  {
+			height: auto;
+		}
 	}
 }

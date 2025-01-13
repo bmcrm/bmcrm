@@ -24,6 +24,10 @@ const FilesInput = memo((props: FilesInputProps) => {
 	const handleFileChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
 			onFilesAdded(Array.from(event.target.files));
+
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
 		}
 	}, [onFilesAdded]);
 

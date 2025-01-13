@@ -34,8 +34,17 @@
 
   .btn--remove {
     position: absolute;
-    top: -1px;
-    right: -1px;
+    top: 0;
+    right: 0;
+    background-color: var(--color-orange-pastel);
+    border-radius: 0 0 0 5px;
+    color: var(--color-ruby-dark);
+
+    @media (hover: hover) {
+      &:hover {
+        scale: 1.1;
+      }
+    }
   }
   .btn--cancel {
     @media (hover: hover) {

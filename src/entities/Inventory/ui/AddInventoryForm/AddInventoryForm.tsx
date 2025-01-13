@@ -1,6 +1,7 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import { compressImages } from '@shared/lib/compressImages';
+import { isDuplicateFile } from '../../lib/checkDuplicateFiles';
 import { useToast } from '@shared/hooks/useToast';
 import { CustomInput } from '@shared/ui/CustomInput';
 import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
@@ -8,12 +9,12 @@ import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button'
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Image } from '@shared/ui/Image';
 import { FormLoader } from '@features/FormLoader';
-import { useAddInventory } from '@entities/Inventory';
+import { useAddInventory } from '../../hooks/useAddInventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { initialValues, inputs } from '../../model/data/AddInventoryForm.data';
 import type { IInventoryItem } from '../../model/types/Inventory.types';
 import styles from './AddInventoryForm.module.scss';
-import DeletePreviewIcon from '@shared/assets/icons/deleteImage.svg';
+import DeletePreviewIcon from '@shared/assets/icons/cross.svg';
 
 type AddInventoryFormProps = {
 	onClose: () => void;
@@ -23,6 +24,12 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 	const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
 	const { mutateAsync: createItem, isPending } = useAddInventory();
 	const { error } = useToast();
+
+	useEffect(() => {
+		return () => {
+			imagePreviews?.forEach(file => URL.revokeObjectURL(file.previewUrl));
+		};
+	}, [imagePreviews]);
 
 	const handleSubmit = useCallback(
 		async (values: Partial<IInventoryItem>, options: { resetForm: () => void }) => {
@@ -53,17 +60,32 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				return;
 			}
 
+			const uniqueFiles = files.filter(file => !isDuplicateFile({ currentFiles: imagePreviews, file }));
+
+			if (uniqueFiles.length === 0) {
+				error('Duplicate files are not allowed.');
+				return;
+			}
+
 			const compressedFiles = await compressImages({ files });
 			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
 
 			setImagePreviews((prev) => [...prev, ...validFiles]);
 		},
-		[error, imagePreviews.length]
+		[error, imagePreviews]
 	);
 
 	const handleRemoveImage = useCallback(
-		(index: number) => setImagePreviews(prev => prev.filter((_, i) => i !== index)),
-		[]
+		(index: number) => {
+			const previewToRemove = imagePreviews[index];
+
+			if (previewToRemove) {
+				URL.revokeObjectURL(previewToRemove.previewUrl);
+			}
+
+			setImagePreviews(prev => prev.filter((_, i) => i !== index));
+		},
+		[imagePreviews]
 	);
 
 	return (
@@ -107,7 +129,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 								size={ButtonSize.TEXT}
 								onClick={() => handleRemoveImage(index)}
 							>
-								<Icon icon={<DeletePreviewIcon/>} size={IconSize.SIZE_16} />
+								<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
 							</Button>
 						</li>
 					))}

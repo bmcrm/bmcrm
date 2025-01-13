@@ -35,6 +35,7 @@ const InventoryDetailsModal = memo((props: InventoryDetailsModalProps) => {
 		[InventoryDetailsModalTheme.EDIT]: <DetailsEditing
 			item={item}
 			cancelEdit={() => setCurrentTheme(InventoryDetailsModalTheme.DEFAULT)}
+			onClose={onClose}
 		/>,
 	};
 

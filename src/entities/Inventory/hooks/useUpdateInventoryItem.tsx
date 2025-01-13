@@ -39,7 +39,7 @@ const useUpdateInventoryItem = () => {
 		onSuccess: (_, variables) => {
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
-			success('Item created successfully!');
+			success('Item updated successfully!');
 			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item updated successfully', {
 				camp_id: decodedIDToken?.camp_id,
 				user: decodedIDToken?.email,
