@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, type InputHTMLAttributes } from 'react';
+import { memo, useState, useEffect, type InputHTMLAttributes, type ReactNode } from 'react';
 import { Field, useFormikContext, ErrorMessage, type FormikValues } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { createSlug } from '@shared/lib/createSlug';
@@ -18,7 +18,7 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   theme?: CustomInputTheme;
   type?: string;
-  label?: string;
+  label?: string | ReactNode;
   controlledInputName?: string;
 }
 

@@ -1,3 +1,5 @@
+@use '@app/styles/breakpoints';
+
 .empty {
 	display: flex;
 	flex-direction: column;
@@ -7,4 +9,34 @@
 	width: 100%;
 	max-width: 500px;
 	margin: auto;
+
+	h2 {
+		font: var(--font-xl);
+		font-weight: 500;
+		text-align: center;
+
+		@media (width < breakpoints.$md) {
+			font: var(--font-l);
+			font-weight: 500;
+		}
+	}
+
+	&__desc {
+		p {
+			font: var(--font-l);
+			text-align: center;
+
+			@media (width < breakpoints.$md) {
+				font: var(--font-m);
+			}
+
+			&:first-child {
+				padding-bottom: 10px;
+			}
+			&:last-child {
+				padding-top: 10px;
+				border-top: 1px solid var(--color-neutral);
+			}
+		}
+	}
 }

@@ -15,7 +15,7 @@ type HeaderProps = {
 };
 
 const Header = memo(({ className, theme = HeaderTheme.DEFAULT }: HeaderProps) => {
-  const { isMobile } = useMedia();
+  const { isTablet } = useMedia();
   const { isOpen, toggle, close } = useToggle();
 
   return (
@@ -24,9 +24,9 @@ const Header = memo(({ className, theme = HeaderTheme.DEFAULT }: HeaderProps) =>
         <Logo />
         {theme === HeaderTheme.DEFAULT && (
           <>
-            <Nav isOpen={isMobile ? isOpen : true} handleCLose={close} />
-            {!isMobile && <UserAvatar />}
-            {isMobile && <Hamburger isOpen={isOpen} onClick={toggle} />}
+            <Nav isOpen={isTablet ? isOpen : true} handleCLose={close} />
+            {!isTablet && <UserAvatar />}
+            {isTablet && <Hamburger isOpen={isOpen} onClick={toggle} />}
           </>
         )}
       </div>

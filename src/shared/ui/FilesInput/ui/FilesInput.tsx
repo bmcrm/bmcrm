@@ -1,4 +1,13 @@
-import { memo, useState, useRef, useCallback, type ChangeEvent, type DragEvent, type InputHTMLAttributes } from 'react';
+import {
+	memo,
+	useState,
+	useRef,
+	useCallback,
+	type ChangeEvent,
+	type DragEvent,
+	type InputHTMLAttributes,
+	type ReactNode
+} from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { FilesInputTheme } from '../model/types/FilesInput.types';
@@ -10,7 +19,7 @@ interface FilesInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	className?: string;
 	theme: FilesInputTheme;
 	name: string;
-	label?: string;
+	label?: string | ReactNode;
 	previewsLength?: number;
 	onFilesAdded: (files: File[]) => void;
 }

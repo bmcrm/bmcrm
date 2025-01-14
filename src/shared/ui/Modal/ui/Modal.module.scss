@@ -44,13 +44,10 @@
     max-height: 85%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
     background-color: var(--color-secondary-bg);
 
-    @media (width < breakpoints.$md) {
-      padding: 20px;
-    }
     @media (width < breakpoints.$xs) {
       padding: 10px;
     }
