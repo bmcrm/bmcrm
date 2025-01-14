@@ -20,7 +20,7 @@ export const inputs = {
 		{
 			name: 'price',
 			placeholder: '$120',
-			label: 'Price (1 pc)',
+			label: <>Price <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(1 pc)</span></>,
 			type: 'number',
 		},
 		{

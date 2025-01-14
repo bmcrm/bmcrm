@@ -24,7 +24,7 @@ const DetailsDefault = memo((props: DetailsDefaultProps) => {
 	return (
 		<div className={classNames(styles.details, {}, [className])}>
 			{images && images.length > 0 && (
-				<InventorySlider currentImages={images} customStyles={{ maxWidth: isMobile ? '100%' : '45%' }} />
+				<InventorySlider currentImages={images} customStyles={{ maxWidth: isMobile ? '100%' : '55%' }} />
 			)}
 			<div className={styles.details__content}>
 				<h2 className={styles.details__title}>{title}</h2>

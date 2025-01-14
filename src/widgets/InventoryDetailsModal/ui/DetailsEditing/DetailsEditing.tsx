@@ -47,9 +47,11 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 		const isChangedCategory = category !== values.category;
 		const itemsInCategory = inventory?.filter(item => item.category === category);
 		const isLastItem = itemsInCategory?.length === 1;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { images: _, ...filteredValues } = values;
 
 		const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
-			...values,
+			...filteredValues,
 			files,
 			id,
 			...(currentImages.length > 0 ? { images: currentImages } : {}),
@@ -81,7 +83,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 					<div className={styles.form__inner}>
 						<InventorySlider
 							currentImages={currentImages}
-							customStyles={{ maxWidth: isMobile ? '100%' : '45%' }}
+							customStyles={{ maxWidth: isMobile ? '100%' : '55%' }}
 							theme={InventorySliderTheme.EDIT}
 							newImages={newImages}
 							setCurrentImages={setCurrentImages}

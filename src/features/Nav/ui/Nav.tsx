@@ -22,7 +22,7 @@ type NavProps = {
 const Nav = memo((props: NavProps) => {
 	const { className, isOpen, handleCLose } = props;
 	const navRef = useRef<HTMLElement>(null);
-	const { isMobile } = useMedia();
+	const { isTablet } = useMedia();
 	const { mutate: logout } = useLogout();
 	const { tokens: { decodedIDToken } } = userState();
 	const mods: Mods = {
@@ -30,12 +30,12 @@ const Nav = memo((props: NavProps) => {
 	};
 
 	useEffect(() => {
-		if (isMobile && isOpen && navRef.current) {
+		if (isTablet && isOpen && navRef.current) {
 			disableBodyScroll(navRef.current);
 		}
 
 		return () => clearAllBodyScrollLocks();
-	}, [isMobile, isOpen]);
+	}, [isTablet, isOpen]);
 
 	const handleLogout = useCallback(() => {
 		handleCLose?.();
@@ -45,14 +45,14 @@ const Nav = memo((props: NavProps) => {
 	return (
 		<nav ref={navRef} className={classNames(styles.nav, mods, [className])}>
 			<div className={styles.nav__inner}>
-				{isMobile && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose} />}
+				{isTablet && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose} />}
 				<ul className={styles.nav__list}>
 					{decodedIDToken && (generateNavList(decodedIDToken.camp_id).map(item => (
 						<li key={item.path}>
 							<CustomNavLink link={item} onClick={handleCLose} />
 						</li>
 					)))}
-					{isMobile && (
+					{isTablet && (
 						<>
 							<li>
 								<CustomNavLink

@@ -1,7 +1,7 @@
 @use '@app/styles/breakpoints';
 
 .nav {
-  @media (width < breakpoints.$md) {
+  @media (width < breakpoints.$lg) {
     position: fixed;
     z-index: 110;
     top: 60px;
@@ -34,13 +34,13 @@
   }
 
   &.open {
-    @media (width < breakpoints.$md) {
+    @media (width < breakpoints.$lg) {
       transform: translateX(0);
     }
   }
 
   &__inner {
-    @media (width < breakpoints.$md) {
+    @media (width < breakpoints.$lg) {
       display: grid;
       align-content: flex-start;
       gap: 25px;
@@ -60,10 +60,10 @@
     gap: 30px;
 
     @media (width < breakpoints.$lg) {
+      flex-direction: column;
       gap: 20px;
     }
     @media (width < breakpoints.$md) {
-      flex-direction: column;
       gap: 15px;
     }
   }

@@ -11,14 +11,18 @@
 
 	&__main {
 		max-width: 100%;
-		max-height: 300px;
+		max-height: 400px;
 		flex-grow: 1;
 	}
 
 	&__thumbs {
 		width: 100%;
 		max-width: 100%;
-		max-height: 60px;
+		height: 60px;
+
+		@media (width < breakpoints.$md) {
+			height: 40px;
+		}
 	}
 
 	&__item {

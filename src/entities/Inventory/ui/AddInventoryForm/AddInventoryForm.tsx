@@ -109,7 +109,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 					<FilesInput
 						theme={FilesInputTheme.ADD_INVENTORY}
 						name={'image'}
-						label={'Photo'}
+						label={<>Photo <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(max. 5 photos)</span></>}
 						onFilesAdded={handleFilesAdded}
 						previewsLength={imagePreviews.length}
 					/>
