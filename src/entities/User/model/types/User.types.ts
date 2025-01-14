@@ -44,14 +44,6 @@ export interface IIDToken {
   auth_time: number;
   'cognito:username': string;
   camp_id: string;
-  camp_name?: string;
-  camp_website?: string;
-  city?: string;
-  created_at: string;
-  first_name?: string;
-  last_name?: string;
-  playa_name?: string;
-  role: CamperRole;
   email: string;
   email_verified: boolean;
   event_id: string;
@@ -60,6 +52,7 @@ export interface IIDToken {
   iss: string;
   jti: string;
   origin_jti: string;
+  role: CamperRole;
   sub: string;
   token_use: string;
   updated_at: number;

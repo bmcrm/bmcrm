@@ -5,6 +5,7 @@ import { classNames } from '@shared/lib/classNames';
 import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { Avatar } from '@shared/ui/Avatar';
 import UserAvatarTooltip from '../UserAvatarTooltip/UserAvatarTooltip';
+import { useGetCampers } from '@entities/Camper';
 import { userState } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
 import { UserAvatarTheme } from '../../model/types/UserAvatar.types';
@@ -21,19 +22,20 @@ const UserAvatar = memo((props: UserAvatarProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const { isTablet } = useMedia();
   const { tokens: { decodedIDToken } } = userState();
+  const { data: [currentCamper] = [] } = useGetCampers({ camperEmail: decodedIDToken?.email });
 
   const capitalizedName = useMemo(() => {
-    if (!decodedIDToken) return null;
+    if (!currentCamper) return null;
 
-    const { first_name, last_name, playa_name, email } = decodedIDToken;
+    const { first_name, last_name, playa_name, email } = currentCamper;
 
     return capitalizedCamperName({ first_name, last_name, playa_name, email });
-  }, [decodedIDToken]);
+  }, [currentCamper]);
 
   const commonContent = (
     <div className={styles.avatar__info}>
-      <h2 className={styles.avatar__name}>{capitalizedName ?? 'Anonymous'}</h2>
-      <h3 className={styles.avatar__camp}>{decodedIDToken?.camp_name}</h3>
+      <h2 className={styles.avatar__name}>{capitalizedName ?? 'Loading...'}</h2>
+      <h3 className={styles.avatar__camp}>{currentCamper?.camp_name}</h3>
     </div>
   );
 

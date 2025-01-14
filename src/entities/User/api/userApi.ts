@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
 	AuthFlowType,
 	CognitoIdentityProviderClient,
@@ -13,7 +14,6 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { EnvConfigs } from '@shared/config/env';
-import axiosInstance from '@shared/config/axios';
 import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
 import {
 	ICamperRegistrationData,
@@ -33,7 +33,7 @@ export const userApi = {
 		const endpoint = `${CAMPER_ENDPOINT}/create`;
 		const headers = createAuthHeaders();
 
-		const response = await axiosInstance.post(endpoint, credentials, { headers });
+		const response = await axios.post(endpoint, credentials, { headers });
 
 		return response.data;
 	},

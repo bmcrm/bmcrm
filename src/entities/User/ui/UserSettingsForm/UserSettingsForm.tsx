@@ -16,7 +16,7 @@ type UserSettingsFormProps = {
 
 const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
   const { tokens: { decodedIDToken } } = userState();
-  const { data: [currentCamper] = [], isLoading } = useGetCampers({camperEmail: decodedIDToken?.email});
+  const { data: [currentCamper] = [], isLoading } = useGetCampers({ camperEmail: decodedIDToken?.email });
 
   const initialValues = useMemo(() => ({
     email: currentCamper?.email ?? '',

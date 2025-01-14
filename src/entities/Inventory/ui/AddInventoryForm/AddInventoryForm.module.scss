@@ -1,3 +1,5 @@
+@use '@app/styles/breakpoints';
+
 .form {
   display: flex;
   flex-direction: column;
@@ -14,10 +16,15 @@
   &__row {
     display: flex;
     gap: 20px;
+
+    @media (width < breakpoints.$xs) {
+      flex-direction: column;
+    }
   }
 
   &__preview {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 90px);
     gap: 10px;
   }
 

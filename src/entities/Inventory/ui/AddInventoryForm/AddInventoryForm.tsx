@@ -120,7 +120,6 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 							<Image
 								src={preview.previewUrl}
 								alt={`Preview ${index}`}
-								maxWidth={90}
 								customStyles={{ height: '65px' }}
 							/>
 							<Button

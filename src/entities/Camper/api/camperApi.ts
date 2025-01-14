@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
-import axiosInstance from '@shared/config/axios';
 import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
 import type { ICamper, IInviteCamperData } from '../model/types/Camper.types';
 
@@ -17,14 +16,14 @@ export const camperApi = {
 		const endpoint = `${CAMPER_ENDPOINT}/${payload.email}`;
 		const headers = createAuthHeaders();
 
-		const response = await axiosInstance.patch(endpoint, payload, { headers });
+		const response = await axios.patch(endpoint, payload, { headers });
 
 		return response.data;
 	},
 	inviteCamper: async (payload: IInviteCamperData) => {
 		const headers = createAuthHeaders();
 
-		const response = await axiosInstance.post(CAMPER_ENDPOINT, payload, { headers });
+		const response = await axios.post(CAMPER_ENDPOINT, payload, { headers });
 
 		return response.data;
 	},

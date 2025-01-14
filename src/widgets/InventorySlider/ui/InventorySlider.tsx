@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as ISwiper } from 'swiper/types';
-import { Navigation, Thumbs } from 'swiper/modules';
+import { Thumbs } from 'swiper/modules';
 import { classNames } from '@shared/lib/classNames';
 import { compressImages } from '@shared/lib/compressImages';
 import { useMedia } from '@shared/hooks/useMedia';
@@ -100,10 +100,12 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 		}
 	}, [currentImages, newImages, setCurrentImages, setDeletedImages, setNewImages]);
 
+	const showThumbs = previewImages && previewImages.length > 1 || (isEditing && previewImages && previewImages.length === 1);
+
 	useEffect(() => {
 		if (mainSwiperRef.current && thumbsSwiperRef.current) {
-			mainSwiperRef.current.update?.();
-			thumbsSwiperRef.current.update?.();
+			mainSwiperRef.current.update();
+			thumbsSwiperRef.current.update();
 		}
 	}, [previewImages]);
 
@@ -111,7 +113,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 		<div style={customStyles} className={classNames(styles.gallery, {}, [className])}>
 			<Swiper
 				className={styles.gallery__main}
-				modules={[Navigation, Thumbs]}
+				modules={[Thumbs]}
 				thumbs={{ swiper: thumbs }}
 				spaceBetween={10}
 				onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
@@ -149,53 +151,47 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 					)}
 				</>
 			</Swiper>
-			{(previewImages && previewImages.length > 1 || (isEditing && previewImages && previewImages.length === 1)) && (
-				<Swiper
-					className={styles.gallery__thumbs}
-					modules={[Thumbs]}
-					onSwiper={(swiper) => {
-						thumbsSwiperRef.current = swiper;
-						setThumbs(swiper);
-					}}
-					spaceBetween={isMobile ? 5 : 10}
-					slidesPerView={isEditing
-						? previewImages.length === 5
-							? 5 : previewImages.length === 1
-								? 1 : previewImages.length + 1
-						: previewImages.length}
-					noSwipingClass={styles.gallery__disabled}
-				>
-					{previewImages.length > 1 && (
-						previewImages.map((image, i) => (
-							<SwiperSlide key={`thumb-${i}-${image}`} style={{ height: 'auto' }}>
-								<div className={classNames(styles.gallery__item, {}, [styles.thumb])}>
-									<Image src={image} alt={`thumb-${i + 1}`} className={styles.gallery__img} />
-									{isEditing && (
-										<Button
-											theme={ButtonTheme.CLEAR}
-											size={ButtonSize.TEXT}
-											className={classNames(styles.gallery__btnRemove, {}, [styles.gallery__disabled])}
-											onClick={() => handleRemoveImg(image)}
-										>
-											<Icon icon={<DeleteImgIcon />} size={IconSize.SIZE_14} />
-										</Button>
-									)}
-								</div>
-							</SwiperSlide>
-						))
-					)}
-					{isEditing && previewImages.length < 5 && (
-						<SwiperSlide className={classNames(styles.gallery__disabled, {}, [styles.slide])}>
-							<FilesInput
-								theme={FilesInputTheme.EDIT_INVENTORY}
-								name={'image'}
-								onFilesAdded={handleAddImages}
-								className={styles.gallery__btnAdd}
-							/>
+			<Swiper
+				className={classNames(styles.gallery__thumbs, { [styles.show]: showThumbs }, [])}
+				modules={[Thumbs]}
+				onSwiper={(swiper) => {
+					thumbsSwiperRef.current = swiper;
+					setThumbs(swiper);
+				}}
+				spaceBetween={isMobile ? 5 : 10}
+				slidesPerView={5}
+				noSwipingClass={styles.gallery__disabled}
+			>
+				{previewImages.length > 1 && (
+					previewImages.map((image, i) => (
+						<SwiperSlide key={`thumb-${i}-${image}`} style={{ height: 'auto' }}>
+							<div className={classNames(styles.gallery__item, {}, [styles.thumb])}>
+								<Image src={image} alt={`thumb-${i + 1}`} className={styles.gallery__img} />
+								{isEditing && (
+									<Button
+										theme={ButtonTheme.CLEAR}
+										size={ButtonSize.TEXT}
+										className={classNames(styles.gallery__btnRemove, {}, [styles.gallery__disabled])}
+										onClick={() => handleRemoveImg(image)}
+									>
+										<Icon icon={<DeleteImgIcon />} size={IconSize.SIZE_14} />
+									</Button>
+								)}
+							</div>
 						</SwiperSlide>
-					)}
-				</Swiper>
-			)}
+					))
+				)}
+				{isEditing && previewImages.length < 5 && (
+					<SwiperSlide className={classNames(styles.gallery__disabled, {}, [styles.slide])}>
+						<FilesInput
+							theme={FilesInputTheme.EDIT_INVENTORY}
+							name={'image'}
+							onFilesAdded={handleAddImages}
+							className={styles.gallery__btnAdd}
+						/>
+					</SwiperSlide>
+				)}
+			</Swiper>
 		</div>
 	);
 });
