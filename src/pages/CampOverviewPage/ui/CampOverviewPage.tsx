@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { classNames } from '@shared/lib/classNames';
 import { Container } from '@shared/ui/Container';
 import { Header, HeaderTheme } from '@widgets/Header';
-import { CampOverview } from '@features/CampOverview';
+import { CampOverview } from '@widgets/CampOverview';
 import { FormLoader } from '@features/FormLoader';
 import { AuthFormTemplate } from '@features/AuthFormTemplate';
 import { AlreadyRegisteredBlock } from '@features/AlreadyRegisteredBlock';
@@ -49,7 +49,7 @@ const CampOverviewPage = memo(() => {
 				{!isError && (
 					<section className={classNames(styles.overview, {}, [])}>
 						<Container>
-							<CampOverview camp={camp || null} isLoading={isLoading} scrollTarget={scrollTarget}/>
+							<CampOverview camp={camp || null} isLoading={isLoading} scrollTarget={scrollTarget} />
 						</Container>
 					</section>
 				)}
