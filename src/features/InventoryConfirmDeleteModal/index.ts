@@ -1,0 +1,1 @@
+export { default as InventoryConfirmDeleteModal } from './ui/InventoryConfirmDeleteModal';

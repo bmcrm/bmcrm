@@ -8,7 +8,7 @@ import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
 import { CustomInput } from '@shared/ui/CustomInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
-import { useGetCategories, useUpdateInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
+import { useGetCategories, useUpdateInventoryItem, type IInventoryItem } from '@entities/Inventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './DetailsEditing.module.scss';
@@ -29,7 +29,6 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 	const { isMobile } = useMedia();
 	const { initialValues, initialData } = generateInitialValues(item);
 	const { data: categories } = useGetCategories();
-	const { data: inventory } = useGetInventory();
 	const { mutateAsync: updateInventory, isPending } = useUpdateInventoryItem();
 
 	const selectOptions = categories?.map(category => ({
@@ -45,8 +44,6 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 	const submitHandler = useCallback(async (values: Partial<IInventoryItem>) => {
 		const files = newImages.map(img => img.file);
 		const isChangedCategory = category !== values.category;
-		const itemsInCategory = inventory?.filter(item => item.category === category);
-		const isLastItem = itemsInCategory?.length === 1;
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { images: _, ...filteredValues } = values;
 
@@ -56,7 +53,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 			id,
 			...(currentImages.length > 0 ? { images: currentImages } : {}),
 			...(deletedImages.length > 0 ? { deletedImages } : {}),
-			...(isChangedCategory && isLastItem ? { lastItem: isLastItem, oldCategory: category } : {}),
+			...(isChangedCategory ? { oldCategory: category } : {}),
 		};
 
 		await updateInventory(inventoryItem);
@@ -69,7 +66,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 		}
 
 		handleCancelEdit();
-	}, [category, currentImages, deletedImages, handleCancelEdit, id, inventory, newImages, onClose, updateInventory]);
+	}, [category, currentImages, deletedImages, handleCancelEdit, id, newImages, onClose, updateInventory]);
 
 	return (
 		<Formik

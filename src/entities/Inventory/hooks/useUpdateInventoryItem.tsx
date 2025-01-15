@@ -48,8 +48,17 @@ const useUpdateInventoryItem = () => {
 			return inventoryApi.updateInventoryItem(inventoryItem);
 		},
 		onSuccess: (_, variables) => {
-			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
+			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
+
+			if (variables.category) {
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.currentCategory(variables.category) });
+			}
+
+			if (variables.oldCategory) {
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.currentCategory(variables.oldCategory) });
+			}
+
 			success('Item updated successfully!');
 			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item updated successfully', {
 				camp_id: decodedIDToken?.camp_id,
