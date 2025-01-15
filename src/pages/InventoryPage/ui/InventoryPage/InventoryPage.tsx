@@ -1,58 +1,70 @@
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Container } from '@shared/ui/Container';
 import { Button } from '@shared/ui/Button';
-import { FormLoader } from '@features/FormLoader';
+import { Loader } from '@shared/ui/Loader';
 import { AddInventoryModal } from '@features/AddInventoryModal';
 import { InventoryNav } from '../InventoryNav/InventoryNav';
 import { InventoryCategory } from '../InventoryCategory/InventoryCategory';
 import { InventoryPlaceholder } from '../InventoryPlaceholder/InventoryPlaceholder';
 import { useGetCategories, useGetInventory } from '@entities/Inventory';
+import { FixedCategories } from '../../model/types/InventroyPage.types';
 import { InventoryPlaceholderTheme } from '../../model/types/InventoryPlaceholder.types';
 import styles from './InventoryPage.module.scss';
 
+const FIXED_CATEGORIES = [FixedCategories.ALL];
+const NEWEST_LIMIT = 5;
+
 const InventoryPage = () => {
-	const { category } = useParams<{ category: string }>();
-	const { data: categories, isLoading: categoriesIsLoading } = useGetCategories();
-	const { data: inventory, isLoading: inventoryIsLoading } = useGetInventory();
 	const { isOpen, open, close } = useToggle();
+	const { category } = useParams<{ category: string }>();
+	const { data: categoriesFromApi, isLoading: categoriesIsLoading } = useGetCategories();
+
+	const categories = useMemo(() => categoriesFromApi
+			? [...FIXED_CATEGORIES, ...categoriesFromApi]
+			: null,
+		[categoriesFromApi]
+	);
+
+	const isValidCategory = useMemo(
+		() => !category || categories?.includes(category),
+		[category, categories]
+	);
+
+	const queryParams = useMemo(() => {
+		if (!isValidCategory) return undefined;
+
+		return category === FixedCategories.NEWEST
+			? { category: FixedCategories.NEWEST, limit: String(NEWEST_LIMIT) }
+			: category ? { category } : {};
+	}, [category, isValidCategory]);
+
+	const { data: inventory, isLoading: inventoryIsLoading } = useGetInventory({ queryParams, enabled: isValidCategory });
 	const isLoading = inventoryIsLoading || categoriesIsLoading;
-
-	const isValidCategory = !category || (categories && categories.includes(category));
-	const filteredInventory = category
-		? inventory?.filter(item => item?.category === category)
-		: inventory;
-
-	if (isLoading && !categories?.length) return <FormLoader />;
 
 	return (
 		<>
 			<section className={styles.inventory}>
 				<Container className={styles.inventory__container} fluid>
-					{categories && categories.length > 0 && (
+					{categoriesFromApi && categoriesFromApi.length > 0 && categories ? (
 						<>
 							<InventoryNav categories={categories} />
 							<Button onClick={open} className={'ml-a mt-30'}>Add inventory</Button>
 							{isValidCategory ? (
 								<div className={styles.inventory__categories}>
-									{filteredInventory && filteredInventory.length > 0 && (
+									{category ? (
+										<InventoryCategory category={category} items={inventory} isLoading={inventoryIsLoading} />
+									) : (
 										<>
-											{category ? (
+											{isLoading && <Loader className={'m-centred-hv'} />}
+											{inventory && categories.filter(c => c !== FixedCategories.ALL).map(c => (
 												<InventoryCategory
-													category={category}
-													items={filteredInventory}
+													key={c}
+													category={c}
+													items={inventory?.filter(item => item?.category === c)}
 												/>
-											) : (
-												<>
-													{categories.map(category => (
-														<InventoryCategory
-															key={category}
-															category={category}
-															items={filteredInventory.filter(item => item?.category === category)}
-														/>
-													))}
-												</>
-											)}
+											))}
 										</>
 									)}
 								</div>
@@ -60,9 +72,8 @@ const InventoryPage = () => {
 								<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_CATEGORY} />
 							)}
 						</>
-					)}
-					{!categories?.length && !inventory?.length && (
-						<InventoryPlaceholder handleAddInventory={open} theme={InventoryPlaceholderTheme.EMPTY_INVENTORY} />
+					) : (
+						!isLoading && <InventoryPlaceholder handleAddInventory={open} theme={InventoryPlaceholderTheme.EMPTY_INVENTORY} />
 					)}
 				</Container>
 			</section>

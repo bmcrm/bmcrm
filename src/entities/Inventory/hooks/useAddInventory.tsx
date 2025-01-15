@@ -50,6 +50,11 @@ const useAddInventory = () => {
 		onSuccess: (_, variables) => {
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
 			void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
+
+			if (variables.category) {
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.currentCategory(variables.category) });
+			}
+
 			success('Item created successfully!');
 			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
 				camp_id: decodedIDToken?.camp_id,

@@ -5,16 +5,18 @@ import { inventoryKeys } from '../model/const/inventoryKeys';
 import { inventoryApi } from '../api/inventoryApi';
 
 type UseGetInventoryProps = {
-	itemID?: string;
 	enabled?: boolean;
+	queryParams?: { category?: string, limit?: string };
 }
 
-const useGetInventory = ({ itemID, enabled = true }: UseGetInventoryProps = {}) => {
+const useGetInventory = ({ queryParams, enabled = true }: UseGetInventoryProps = {}) => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery({
-		queryKey: inventoryKeys.allInventory,
-		queryFn: () => inventoryApi.getInventory(itemID ?? ''),
+		queryKey: queryParams && queryParams.category
+			? inventoryKeys.currentCategory(queryParams.category)
+			: inventoryKeys.allInventory,
+		queryFn: () => inventoryApi.getInventory(queryParams),
 		staleTime: 5 * 60 * 1000,
-		enabled,
+		enabled: enabled && Boolean(queryParams),
 	});
 
 	useEffect(() => {

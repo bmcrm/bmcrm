@@ -3,6 +3,11 @@ import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { INVENTORY_ENDPOINT } from '@shared/const/endpoints';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
+type IGetInventory = {
+	category?: string;
+	limit?: string;
+};
+
 export const inventoryApi = {
 	getCategories: async (): Promise<string[]> => {
 		const endpoint = `${INVENTORY_ENDPOINT}/categories`;
@@ -12,11 +17,15 @@ export const inventoryApi = {
 
 		return response.data;
 	},
-	getInventory: async (itemID?: string): Promise<IInventoryItem[]> => {
-		const endpoint = `${INVENTORY_ENDPOINT}${itemID ? `/${itemID}` : ''}`;
+	getInventory: async (queryParams: IGetInventory = {}): Promise<IInventoryItem[]> => {
 		const headers = createAuthHeaders();
+		const endpoint = new URL(INVENTORY_ENDPOINT);
 
-		const response = await axios.get(endpoint, { headers });
+		Object.entries(queryParams)
+			.filter(([, value]) => value !== undefined)
+			.forEach(([key, value]) => endpoint.searchParams.append(key, String(value)));
+
+		const response = await axios.get(String(endpoint), { headers });
 
 		return response.data;
 	},
@@ -35,12 +44,11 @@ export const inventoryApi = {
 
     return response.data;
 	},
-	deleteInventoryItem: async (itemID: string, options?: { lastItem?: boolean; category?: string }) => {
+	deleteInventoryItem: async (itemID: string) => {
 		const endpoint = `${INVENTORY_ENDPOINT}/${itemID}`;
-    const headers = createAuthHeaders();
-		const params = options ? { params: options } : undefined;
+		const headers = createAuthHeaders();
 
-    await axios.delete(endpoint, { headers, ...params });
+		await axios.delete(endpoint, { headers });
 	},
 	getPresignedUrl: async (fileName: string) => {
 		const endpoint = `${INVENTORY_ENDPOINT}/upload`;

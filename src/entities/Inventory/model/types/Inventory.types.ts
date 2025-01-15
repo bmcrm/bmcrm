@@ -5,7 +5,6 @@ export interface IInventoryItem {
   price: number | string;
   category: string;
   oldCategory?: string;
-  lastItem?: boolean;
   images?: string[];
   deletedImages?: string[];
   id: string;

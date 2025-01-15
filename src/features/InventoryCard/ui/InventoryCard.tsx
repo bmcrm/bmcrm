@@ -5,8 +5,9 @@ import { Image } from '@shared/ui/Image';
 import { InventoryBadge } from '@shared/ui/InventoryBadge';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
+import { InventoryConfirmDeleteModal } from '@features/InventoryConfirmDeleteModal';
 import { InventoryDetailsModal, InventoryDetailsModalTheme } from '@widgets/InventoryDetailsModal';
-import { type IInventoryItem, useDeleteInventoryItem, useGetInventory } from '@entities/Inventory';
+import { useDeleteInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import styles from './InventoryCard.module.scss';
 import DefaultImg from '@shared/assets/images/inventory/no-img.webp';
@@ -21,10 +22,11 @@ type InventoryCardProps = {
 const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 	const { id, title, description, quantity, price, category, images } = item;
 	const imgURL = images?.[0] || DefaultImg;
+	const { isOpen, open, close } = useToggle();
+	const { isOpen: isConfirmOpen, open: confirmOpen, close: confirmClose } = useToggle();
 	const [modalTheme, setModalTheme] = useState<InventoryDetailsModalTheme>(InventoryDetailsModalTheme.DEFAULT);
 	const { data: inventory } = useGetInventory();
 	const { mutate: deleteItem } = useDeleteInventoryItem();
-	const { isOpen, open, close } = useToggle();
 
 	const handleDelete = useCallback(async () => {
 		const itemsInCategory = inventory?.filter(item => item.category === category);
@@ -32,19 +34,20 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 
 		try {
 			await new Promise<void>((resolve) => {
+				confirmClose();
 				close();
 				setTimeout(resolve, MODAL_ANIMATION_DELAY + 100);
 			});
 
 			deleteItem({
 				itemID: id,
-				lastItem: isLastItem,
-				category: isLastItem ? category : undefined,
+				category,
+				...(isLastItem ? { lastItem: isLastItem } : {}),
 			});
 		} catch {
 			return;
 		}
-  }, [category, close, deleteItem, id, inventory]);
+  }, [category, close, confirmClose, deleteItem, id, inventory]);
 
 	const handleOpenModal = useCallback(
 		(theme: InventoryDetailsModalTheme) => {
@@ -94,7 +97,7 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 							className={styles.card__btn}
 							onClick={(e) => {
 								e.stopPropagation();
-								void handleDelete();
+								confirmOpen();
 							}}
 						>
 							<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14}/>
@@ -106,8 +109,14 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 				isOpen={isOpen}
 				onClose={close}
 				item={item}
-				handleDelete={handleDelete}
+				handleDelete={confirmOpen}
 				theme={modalTheme}
+			/>
+			<InventoryConfirmDeleteModal
+				isOpen={isConfirmOpen}
+				onClose={confirmClose}
+				itemTitle={title}
+				handleDelete={handleDelete}
 			/>
 		</>
 	);

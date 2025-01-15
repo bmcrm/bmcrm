@@ -10,8 +10,8 @@ import type { IInventoryItem } from '../model/types/Inventory.types';
 
 interface MutationFnProps {
 	itemID: string;
+	category: string;
 	lastItem?: boolean;
-	category?: string;
 }
 
 const useDeleteInventoryItem = () => {
@@ -21,26 +21,29 @@ const useDeleteInventoryItem = () => {
 	const { deletionCount, incrementDeletionCount, decrementDeletionCount } = inventoryState();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
-		mutationFn: ({ itemID, lastItem, category }: MutationFnProps) => {
-			return inventoryApi.deleteInventoryItem(itemID, { lastItem, category });
-		},
+		mutationFn: ({ itemID }: MutationFnProps) => inventoryApi.deleteInventoryItem(itemID),
 		onMutate: async ({ itemID, lastItem, category }) => {
 			incrementDeletionCount();
 
 			await queryClient.cancelQueries({ queryKey: inventoryKeys.allInventory });
+			await queryClient.cancelQueries({ queryKey: inventoryKeys.currentCategory(category) });
 			await queryClient.cancelQueries({ queryKey: inventoryKeys.allCategories });
 
 			const previousItems = queryClient.getQueryData<IInventoryItem[]>(inventoryKeys.allInventory);
+			const previousCurrentItems = queryClient.getQueryData<IInventoryItem[]>(inventoryKeys.currentCategory(category));
 			const previousCategories = queryClient.getQueryData<string[]>(inventoryKeys.allCategories);
 
 			queryClient.setQueryData<IInventoryItem[]>(inventoryKeys.allInventory, (oldItems) => {
 				if (!oldItems) return oldItems;
-				success('Item successfully removed');
-
 				return oldItems.filter((item) => item.id !== itemID);
 			});
 
-			if (lastItem && category && previousCategories) {
+			queryClient.setQueryData<IInventoryItem[]>(inventoryKeys.currentCategory(category), (oldItems) => {
+				if (!oldItems) return oldItems;
+				return oldItems.filter((item) => item.id !== itemID);
+			});
+
+			if (lastItem && previousCategories) {
 				queryClient.setQueryData<string[]>(inventoryKeys.allCategories, (oldCategories) => {
 					if (!oldCategories) return oldCategories;
 					return oldCategories.filter((cat) => cat !== category);
@@ -49,23 +52,29 @@ const useDeleteInventoryItem = () => {
 				navigate(RoutePath.inventory);
 			}
 
-			return { previousItems, previousCategories };
+			success('Item successfully removed');
+
+			return { previousItems, previousCurrentItems, previousCategories };
 		},
-		onError: (error, _, context) => {
+		onError: (error, variables, context) => {
 			if (context?.previousItems) {
 				queryClient.setQueryData(inventoryKeys.allInventory, context.previousItems);
+			}
+			if (context?.previousCurrentItems) {
+				queryClient.setQueryData(inventoryKeys.currentCategory(variables.category), context.previousCurrentItems);
 			}
 			if (context?.previousCategories) {
 				queryClient.setQueryData(inventoryKeys.allCategories, context.previousCategories);
 			}
 			errorHandler(error);
 		},
-		onSettled: () => {
+		onSettled: (_, __, variables) => {
 			decrementDeletionCount();
 
-			if (deletionCount === 0) {
+			if (deletionCount === 1) {
 				void queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory });
 				void queryClient.invalidateQueries({ queryKey: inventoryKeys.allCategories });
+				void queryClient.invalidateQueries({ queryKey: inventoryKeys.currentCategory(variables.category) });
 			}
 		},
 	});
