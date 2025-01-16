@@ -22,14 +22,7 @@
 	}
 
 	&__desc {
-		p {
-			font: var(--font-l);
-			text-align: center;
-
-			@media (width < breakpoints.$md) {
-				font: var(--font-m);
-			}
-
+		.empty__text {
 			&:first-child {
 				padding-bottom: 10px;
 			}
@@ -37,6 +30,15 @@
 				padding-top: 10px;
 				border-top: 1px solid var(--color-neutral);
 			}
+		}
+	}
+
+	&__text {
+		font: var(--font-l);
+		text-align: center;
+
+		@media (width < breakpoints.$md) {
+			font: var(--font-m);
 		}
 	}
 }

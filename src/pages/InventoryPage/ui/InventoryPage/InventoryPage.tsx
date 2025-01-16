@@ -1,12 +1,12 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToggle } from '@shared/hooks/useToggle';
+import { useDebounce } from '@shared/hooks/useDebounce';
 import { Container } from '@shared/ui/Container';
-import { Button } from '@shared/ui/Button';
-import { Loader } from '@shared/ui/Loader';
 import { AddInventoryModal } from '@features/AddInventoryModal';
 import { InventoryNav } from '../InventoryNav/InventoryNav';
-import { InventoryCategory } from '../InventoryCategory/InventoryCategory';
+import { InventoryCategories } from '../InventoryCategories/InventoryCategories';
+import { InventoryControl } from '../InventoryControl/InventoryControl';
 import { InventoryPlaceholder } from '../InventoryPlaceholder/InventoryPlaceholder';
 import { useGetCategories, useGetInventory } from '@entities/Inventory';
 import { FixedCategories } from '../../model/types/InventroyPage.types';
@@ -17,6 +17,8 @@ const FIXED_CATEGORIES = [FixedCategories.ALL];
 const NEWEST_LIMIT = 5;
 
 const InventoryPage = () => {
+	const [searchQuery, setSearchQuery] = useState('');
+	const debouncedSearchQuery = useDebounce(searchQuery, 400);
 	const { isOpen, open, close } = useToggle();
 	const { category } = useParams<{ category: string }>();
 	const { data: categoriesFromApi, isLoading: categoriesIsLoading } = useGetCategories();
@@ -33,15 +35,27 @@ const InventoryPage = () => {
 	);
 
 	const queryParams = useMemo(() => {
-		if (!isValidCategory) return undefined;
+		if (!isValidCategory) return null;
 
-		return category === FixedCategories.NEWEST
-			? { category: FixedCategories.NEWEST, limit: String(NEWEST_LIMIT) }
-			: category ? { category } : {};
-	}, [category, isValidCategory]);
+		const params: { category?: string; limit?: string; title?: string } = {
+			...(category === FixedCategories.NEWEST
+				? { category: FixedCategories.NEWEST, limit: String(NEWEST_LIMIT) }
+				: category ? { category } : {}),
+		};
+
+		if (debouncedSearchQuery.trim()) {
+			params.title = `${debouncedSearchQuery.trim()}`;
+		}
+
+		return params;
+	}, [category, debouncedSearchQuery, isValidCategory]);
 
 	const { data: inventory, isLoading: inventoryIsLoading } = useGetInventory({ queryParams, enabled: isValidCategory });
 	const isLoading = inventoryIsLoading || categoriesIsLoading;
+
+	useEffect(() => {
+		setSearchQuery('');
+	}, [category]);
 
 	return (
 		<>
@@ -50,24 +64,19 @@ const InventoryPage = () => {
 					{categoriesFromApi && categoriesFromApi.length > 0 && categories ? (
 						<>
 							<InventoryNav categories={categories} />
-							<Button onClick={open} className={'ml-a mt-30'}>Add inventory</Button>
+							<InventoryControl
+								handleOpen={open}
+								value={searchQuery}
+								onChange={setSearchQuery}
+							/>
 							{isValidCategory ? (
-								<div className={styles.inventory__categories}>
-									{category ? (
-										<InventoryCategory category={category} items={inventory} isLoading={inventoryIsLoading} />
-									) : (
-										<>
-											{isLoading && <Loader className={'m-centred-hv'} />}
-											{inventory && categories.filter(c => c !== FixedCategories.ALL).map(c => (
-												<InventoryCategory
-													key={c}
-													category={c}
-													items={inventory?.filter(item => item?.category === c)}
-												/>
-											))}
-										</>
-									)}
-								</div>
+								<InventoryCategories
+									category={category}
+									categories={categories}
+									inventory={inventory}
+									isLoading={isLoading}
+									inventoryIsLoading={inventoryIsLoading}
+								/>
 							) : (
 								<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_CATEGORY} />
 							)}

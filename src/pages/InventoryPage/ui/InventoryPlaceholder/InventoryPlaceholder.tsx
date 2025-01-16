@@ -30,14 +30,21 @@ const InventoryPlaceholder = memo((props: InventoryPlaceholderProps) => {
 			title: 'There is no such category',
 			desc: (
 				<div className={styles.empty__desc}>
-					<p>
+					<p className={styles.empty__text}>
 						Start by adding inventory items to keep everything organized and easily accessible.
 					</p>
-					<p>
+					<p className={styles.empty__text}>
 						Try using a different search query. The category you’re looking for might appear.
 					</p>
 				</div>
 			),
+			button: null,
+		},
+		[InventoryPlaceholderTheme.INVALID_SEARCH]: {
+			image: InvalidCategoryImg,
+			alt: 'Invalid search',
+			title: 'There is no such item',
+			desc: <p className={styles.empty__text}>Try using a different search query.</p>,
 			button: null,
 		},
 	};
