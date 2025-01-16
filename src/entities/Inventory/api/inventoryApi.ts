@@ -6,6 +6,7 @@ import type { IInventoryItem } from '../model/types/Inventory.types';
 type IGetInventory = {
 	category?: string;
 	limit?: string;
+	title?: string;
 };
 
 export const inventoryApi = {
@@ -17,13 +18,15 @@ export const inventoryApi = {
 
 		return response.data;
 	},
-	getInventory: async (queryParams: IGetInventory = {}): Promise<IInventoryItem[]> => {
+	getInventory: async (queryParams: IGetInventory | null = {}): Promise<IInventoryItem[]> => {
 		const headers = createAuthHeaders();
 		const endpoint = new URL(INVENTORY_ENDPOINT);
 
-		Object.entries(queryParams)
-			.filter(([, value]) => value !== undefined)
-			.forEach(([key, value]) => endpoint.searchParams.append(key, String(value)));
+		if (queryParams) {
+			Object.entries(queryParams)
+				.filter(([, value]) => value !== undefined)
+				.forEach(([key, value]) => endpoint.searchParams.append(key, String(value)));
+		}
 
 		const response = await axios.get(String(endpoint), { headers });
 
