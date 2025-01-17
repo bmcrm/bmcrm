@@ -13,8 +13,13 @@ const RegisterTCOPage = memo(() => {
   const handleSubmit = useCallback(
     async (values: ITCORegistrationData, resetForm: () => void) => {
       await registration({ stage: IRegistrationStage.REGISTRATION_TCO, data: values });
+      const redirectState = {
+        email: values.email,
+        password: values.password,
+        isConfirmation: true,
+      };
       resetForm();
-      navigate(RoutePath.login, { replace: true, state: { email: values.email, password: values.password } });
+      navigate(RoutePath.login, { replace: true, state: redirectState });
     },
     [navigate, registration]
   );

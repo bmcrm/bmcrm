@@ -12,7 +12,7 @@ export const inputsData = [
     placeholder: '∗∗∗∗∗∗∗∗',
     label: 'New Password',
     type: 'password',
-    theme: CustomInputTheme.PASSWORD,
+    theme: CustomInputTheme.PASSWORD_TOOLTIP,
   },
   {
     name: 'password_confirm',
