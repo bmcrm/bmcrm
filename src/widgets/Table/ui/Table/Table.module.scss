@@ -1,0 +1,21 @@
+.table {
+	width: 100%;
+	border: 1px solid var(--color-neutral);
+
+	&__wrapper {
+		width: 100%;
+	}
+
+	thead {
+		th {
+			border: 1px solid var(--color-neutral);
+			text-align: left;
+		}
+	}
+
+	tbody {
+		td {
+			border: 1px solid var(--color-neutral);
+		}
+	}
+}
