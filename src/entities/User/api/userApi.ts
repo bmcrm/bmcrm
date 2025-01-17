@@ -38,13 +38,17 @@ export const userApi = {
 		return response.data;
 	},
 	confirmRegistration: async ({ email, code }: IConfirmRegistration) => {
-		const params: ConfirmSignUpCommandInput = {
-			ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
-			Username: email,
-			ConfirmationCode: code,
-		};
+		try {
+			const params: ConfirmSignUpCommandInput = {
+				ClientId: EnvConfigs.COGNITO_APP_CLIENT_ID,
+				Username: email,
+				ConfirmationCode: code,
+			};
 
-		return await cognitoClient.send(new ConfirmSignUpCommand(params));
+			return await cognitoClient.send(new ConfirmSignUpCommand(params));
+		} catch (e) {
+			console.error('error in confirmation api:', e);
+		}
 	},
 	login: async ({ email, password }: ILoginData) => {
 		const params: InitiateAuthCommandInput = {

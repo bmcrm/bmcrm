@@ -25,7 +25,7 @@ export const inputs = {
 			placeholder: 'Min. 8 characters',
 			label: 'Password',
 			type: 'password',
-			theme: CustomInputTheme.PASSWORD,
+			theme: CustomInputTheme.PASSWORD_TOOLTIP,
 		},
 	],
 };

@@ -34,9 +34,10 @@ const CustomInput = memo((props: CustomInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { values, setFieldValue } = useFormikContext<FormikValues>();
-  const isPassword = theme === CustomInputTheme.PASSWORD;
+  const isPasswordTooltip = theme === CustomInputTheme.PASSWORD_TOOLTIP;
+  const isPasswordNoTooltip = theme === CustomInputTheme.PASSWORD_NO_TOOLTIP;
   const isControlled = theme === CustomInputTheme.CONTROLLED;
-  const errors = isPassword ? validatePassword(values.password) : null;
+  const errors = isPasswordTooltip ? validatePassword(values.password) : null;
   const isValid = errors?.filter(error => !error.valid).length;
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const CustomInput = memo((props: CustomInputProps) => {
   return (
     <label className={classNames(styles.input, {}, [className])}>
       {label && <p className={styles.input__caption}>{label}</p>}
-      {isPassword && isFocused && !!isValid && (
+      {isPasswordTooltip && isFocused && !!isValid && (
         <Tooltip
           className={styles.tooltip}
           properties={{
@@ -75,7 +76,7 @@ const CustomInput = memo((props: CustomInputProps) => {
         type={isOpen ? 'text' : type}
         {...rest}
       />
-      {isPassword && (
+      {(isPasswordTooltip || isPasswordNoTooltip) && (
         <Button
           className={styles.input__btn}
           theme={ButtonTheme.CLEAR}

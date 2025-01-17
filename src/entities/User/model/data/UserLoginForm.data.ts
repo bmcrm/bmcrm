@@ -1,3 +1,5 @@
+import { CustomInputTheme } from '@shared/ui/CustomInput';
+
 export const inputsData = [
 	{
 		name: 'email',
@@ -10,6 +12,7 @@ export const inputsData = [
 		placeholder: '∗∗∗∗∗∗∗∗',
 		label: 'Password',
 		type: 'password',
+		theme: CustomInputTheme.PASSWORD_NO_TOOLTIP,
 	},
 ];
 

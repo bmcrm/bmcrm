@@ -7,8 +7,13 @@ import { CustomInput } from '@shared/ui/CustomInput';
 import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { FormLoader } from '@features/FormLoader';
-import { logger, LogLevel, LogSource } from '@shared/lib/logger';
-import { useRegistration, useLogin, type IConfirmRegistration, type ILoginData, IRegistrationStage } from '@entities/User';
+import {
+  useRegistration,
+  useLogin,
+  type IConfirmRegistration,
+  type ILoginData,
+  IRegistrationStage,
+} from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
 import { confirmUserSchema } from '@shared/const/validationSchemas';
 import styles from './UserConfirmModal.module.scss';
@@ -23,9 +28,9 @@ type UserConfirmModalProps = {
 const UserConfirmModal = memo((props: UserConfirmModalProps) => {
   const { isOpen, onClose, credentials } = props;
   const navigate = useNavigate();
-  const { mutateAsync: confirmEmail, isPending: isRegistrationPending } = useRegistration();
+  const { mutateAsync: confirmEmail, isPending: isConfirmationPending } = useRegistration();
   const { mutateAsync: login, isPending: isLoginPending } = useLogin();
-  const isLoading = isRegistrationPending || isLoginPending;
+  const isLoading = isConfirmationPending || isLoginPending;
 
   const onSubmit = useCallback(
     async (values: { code: string }) => {
@@ -34,7 +39,6 @@ const UserConfirmModal = memo((props: UserConfirmModalProps) => {
           email: credentials.email,
           code: values.code.trim(),
         };
-
         await confirmEmail({
           stage: IRegistrationStage.CONFIRMATION,
           data,
@@ -42,9 +46,6 @@ const UserConfirmModal = memo((props: UserConfirmModalProps) => {
         onClose();
         await login(credentials);
         navigate(RoutePath.funnel, { replace: true });
-        logger(LogLevel.INFO, LogSource.WEBAPP, 'User confirmed', {
-          user: credentials.email,
-        });
       }
     },
     [confirmEmail, credentials, login, navigate, onClose]
