@@ -12,9 +12,9 @@
     "test:pw": "playwright test -c ./config/playwright/playwright.config.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.716.0",
-    "@aws-sdk/client-dynamodb": "^3.716.0",
-    "@aws-sdk/client-ssm": "^3.716.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.730.0",
+    "@aws-sdk/client-dynamodb": "^3.730.0",
+    "@aws-sdk/client-ssm": "^3.730.0",
     "@sentry/react": "^8.47.0",
     "@tanstack/react-query": "^5.62.8",
     "@tanstack/react-query-devtools": "^5.62.8",

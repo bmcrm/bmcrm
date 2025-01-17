@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import { useToggle } from '@shared/hooks/useToggle';
@@ -15,11 +15,14 @@ const LoginPage = memo(() => {
   const [credentials, setCredentials] = useState<ILoginData | null>(null);
   const { isOpen, open, close } = useToggle();
   const { mutateAsync: login, isPending } = useLogin();
-  const signInCredentials = location?.state as ILoginData;
-  const initialValues = {
-    email: signInCredentials?.email || '',
-    password: signInCredentials?.password || '',
-  };
+  const { email, password, isConfirmation } = location.state as ILoginData & { isConfirmation: boolean } ?? {};
+
+  useEffect(() => {
+    if (isConfirmation && email && password) {
+      setCredentials({ email, password });
+      open();
+    }
+  }, [email, isConfirmation, open, password]);
 
   const handleSubmit = useCallback(
     async (values: ILoginData, { resetForm }: { resetForm: () => void }) => {
@@ -48,7 +51,7 @@ const LoginPage = memo(() => {
   return (
     <AuthPageTemplate>
       <AuthFormTemplate badge={'Sign in to your account'} background decor>
-        <UserLoginForm onSubmit={handleSubmit} initialValues={initialValues} />
+        <UserLoginForm onSubmit={handleSubmit} />
         {isPending && <FormLoader />}
         <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />
       </AuthFormTemplate>

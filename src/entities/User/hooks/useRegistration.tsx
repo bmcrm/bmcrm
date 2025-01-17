@@ -41,17 +41,23 @@ const useRegistration = () => {
 		onSuccess: (_, variables) => {
 			const { toast } = stages[variables.stage];
 			const isTCO = variables.stage === IRegistrationStage.REGISTRATION_TCO;
+			const isConfirmation = variables.stage === IRegistrationStage.CONFIRMATION;
 
 			toast();
-			logger(LogLevel.INFO, LogSource.WEBAPP, `New user registered as ${isTCO ? 'TCO' : 'Camper'}`, {
-				user: variables.data.email,
-				...(isTCO ? { camp_id: (variables.data as ITCORegistrationData).camp_id } : {}),
-			});
+
+			if (isConfirmation) {
+				logger(LogLevel.INFO, LogSource.WEBAPP, 'User confirmed', {
+					user: variables.data.email,
+				});
+			} else {
+				logger(LogLevel.INFO, LogSource.WEBAPP, `New user registered as ${isTCO ? 'TCO' : 'Camper'}`, {
+					user: variables.data.email,
+					...(isTCO ? { camp_id: (variables.data as ITCORegistrationData).camp_id } : {}),
+				});
+			}
 		},
 		onError: (error, variables) => {
-			if (error.name !== 'UserNotConfirmedException') {
-				errorHandler(error);
-			}
+			errorHandler(error);
 
 			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
 				user: variables.data.email,
