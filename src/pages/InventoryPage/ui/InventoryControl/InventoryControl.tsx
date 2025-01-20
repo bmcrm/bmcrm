@@ -22,7 +22,7 @@ const InventoryControl = memo((props: InventoryControlProps) => {
 				value={value}
 				onChange={onChange}
 			/>
-			<Button onClick={handleOpen} className={'ml-a'}>Add inventory</Button>
+			<Button onClick={handleOpen}>Add inventory</Button>
 		</div>
 	);
 });

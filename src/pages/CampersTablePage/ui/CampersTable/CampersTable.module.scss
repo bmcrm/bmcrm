@@ -1,0 +1,10 @@
+.table {
+
+	&__link {
+		@media (hover: hover) {
+			&:hover {
+        text-decoration: underline;
+      }
+		}
+	}
+}

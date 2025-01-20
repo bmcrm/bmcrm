@@ -26,21 +26,14 @@ const errorsNames: { [key in ErrorNames]: string } = {
 export const errorHandler = (error: unknown) => {
   let errorMessage = 'Oops, something went wrong! Try again later!';
 
-  if (error instanceof Error) {
-    if (error.name in ErrorNames) {
-      errorMessage = errorsNames[error.name as ErrorNames];
-    } else if (isAxiosError(error) && error.response?.data?.name in ErrorNames) {
-      errorMessage = errorsNames[error.response?.data.name as ErrorNames];
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
-
-    Sentry.captureMessage(`${error.name || 'UnknownError'}: ${error.message}`);
-    logger(LogLevel.ERROR, LogSource.WEBAPP, error.message, { message: error.message });
-  } else {
-    console.error('Unknown error object:', error);
+  if (error instanceof Error && error.name in ErrorNames) {
+    errorMessage = errorsNames[error.name as ErrorNames];
+  } else if (isAxiosError(error) && Object.values(ErrorNames).includes(error?.response?.data.name)) {
+    errorMessage = errorsNames[error.response?.data.name as ErrorNames];
   }
 
+  Sentry.captureMessage(`${(error as Error).name || 'UnknownError'}: ${(error as Error).message}`);
+  logger(LogLevel.ERROR, LogSource.WEBAPP, (error as Error).message, { message: (error as Error).message });
   toast.error(errorMessage, {
     duration: 4000,
     position: 'top-right',

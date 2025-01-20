@@ -1,4 +1,4 @@
-import { memo, type ReactNode, useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
 import { Table } from '@widgets/Table';
@@ -223,8 +223,10 @@ const MOCK_DATA: ICamper[] = [
 	},
 ];
 
-const CampersTable = memo((props: CampersTableProps) => {
+const CampersTable = (props: CampersTableProps) => {
 	const { className, campers } = props;
+
+	console.log('campers: ', campers);
 
 	const columns = useMemo<ColumnDef<ICamper>[]>(
 		() => [
@@ -254,7 +256,9 @@ const CampersTable = memo((props: CampersTableProps) => {
 				accessorKey: 'email',
 				// header: () => <span>Email</span>,
 				header: 'Email',
-				cell: (info) => <a href={`mailto:${info.getValue()}`}>{info.getValue() as ReactNode}</a>,
+				cell: (info) => (
+					<a href={`mailto:${info.getValue()}`} className={styles.table__link}>{info.getValue() as ReactNode}</a>
+				),
 				// sortingFn: sortStatusFn,
 			},
 			{
@@ -272,9 +276,9 @@ const CampersTable = memo((props: CampersTableProps) => {
 
 	return (
 		<div className={classNames(styles.table, {}, [className])}>
-			<Table columns={columns} data={MOCK_DATA} />
+			<Table<ICamper> columns={columns} data={MOCK_DATA} />
 		</div>
 	);
-});
+};
 
 export { CampersTable };
