@@ -1,0 +1,46 @@
+.control {
+	position: relative;
+
+	&__btn {
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--color-neutral);
+			}
+		}
+	}
+}
+
+.tooltip {
+	width: 100vw;
+	max-width: 150px;
+	padding: 0;
+	border-radius: 10px;
+	background-color: var(--color-neutral);
+	color: var(--color-black);
+
+	&__row {
+		padding: 10px;
+
+		&.fluid {
+			padding-left: 0;
+			padding-right: 0;
+		}
+
+		+ .tooltip__row {
+			border-top: 1px solid var(--color-black);
+		}
+	}
+
+	&__btn {
+		justify-content: flex-start;
+		gap: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
+
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--color-black);
+			}
+		}
+	}
+}

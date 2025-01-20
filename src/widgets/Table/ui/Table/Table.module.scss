@@ -1,0 +1,44 @@
+.table {
+	width: 100%;
+	font: var(--font-s);
+
+	thead {
+		font-weight: 700;
+		text-align: left;
+
+		.table__cell {
+			padding-bottom: 10px;
+		}
+	}
+
+	tbody {
+		.table__cell {
+			padding-top: 15px;
+			padding-bottom: 15px;
+		}
+	}
+
+	tr {
+		border-bottom: 1px solid var(--color-neutral);
+	}
+
+	&__wrapper {
+		width: 100%;
+	}
+
+	&__cell {
+		padding-left: 10px;
+		padding-right: 10px;
+
+		+ .table__cell {
+			border-left: 1px solid var(--color-neutral);
+		}
+	}
+
+	&__row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 5px;
+	}
+}

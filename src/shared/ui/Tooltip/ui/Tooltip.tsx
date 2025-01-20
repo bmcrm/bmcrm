@@ -1,39 +1,40 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { forwardRef, type CSSProperties, type ReactNode } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import styles from './Tooltip.module.scss';
 
 type TooltipProps = {
-  className?: string;
-  children?: ReactNode;
-  properties?: {
-    top?: string | number;
-    left?: string | number;
-    right?: string | number;
-    bottom?: string | number;
-    width?: string | number;
-    height?: string | number;
-    transform?: string;
-  };
+	className?: string;
+	children?: ReactNode;
+	properties?: {
+		top?: CSSProperties['top'];
+		left?: CSSProperties['left'];
+		right?: CSSProperties['right'];
+		bottom?: CSSProperties['bottom'];
+		width?: CSSProperties['width'];
+		height?: CSSProperties['height'];
+		transform?: CSSProperties['transform'];
+	};
 };
 
-const Tooltip = (props: TooltipProps) => {
-  const { className, children, properties } = props;
+const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
+	(props, ref) => {
+		const { className, children, properties } = props;
 
-  const tooltipStyles: CSSProperties = {
-    top: properties?.top,
-    left: properties?.left,
-    right: properties?.right,
-    bottom: properties?.bottom,
-    width: properties?.width,
-    height: properties?.height,
-    transform: properties?.transform,
-  };
+		const tooltipStyles: CSSProperties = {
+			top: properties?.top,
+			left: properties?.left,
+			right: properties?.right,
+			bottom: properties?.bottom,
+			width: properties?.width,
+			height: properties?.height,
+			transform: properties?.transform,
+		};
 
-  return (
-    <div className={classNames(styles.tooltip, {}, [className])} style={tooltipStyles}>
-      {children}
-    </div>
-  );
-};
+		return (
+			<div ref={ref} className={classNames(styles.tooltip, {}, [className])} style={tooltipStyles}>
+				{children}
+			</div>
+		);
+	});
 
 export default Tooltip;
