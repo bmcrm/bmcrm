@@ -15,7 +15,7 @@ import { TableControl } from '../TableControl/TableControl';
 import styles from './Table.module.scss';
 import AscIcon from '@shared/assets/icons/arrow-top.svg';
 import DescIcon from '@shared/assets/icons/arrow-top.svg';
-import FilterIcon from '@shared/assets/icons/eye_open.svg';
+import FilterIcon from '@shared/assets/icons/search_icon.svg';
 
 type TableProps<TData extends object> = {
 	className?: string;
