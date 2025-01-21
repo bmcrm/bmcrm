@@ -1,6 +1,7 @@
 import { flexRender, type Table } from '@tanstack/react-table';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TableControl } from '../TableControl/TableControl';
+import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from '../Table/Table.module.scss';
 import AscIcon from '@shared/assets/icons/ascending_icon.svg';
 import DescIcon from '@shared/assets/icons/descending_icon.svg';
@@ -35,7 +36,7 @@ const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
 										<Icon icon={<FilterIcon />} size={IconSize.SIZE_12} />
 									)}
 								</div>
-								<TableControl header={header} />
+								<TableControl theme={TableControlTheme.COLUMN} header={header} />
 							</div>
 						)
 					}

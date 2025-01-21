@@ -233,15 +233,18 @@ const CampersTable = (props: CampersTableProps) => {
 		() => [
 			{
 				accessorKey: 'first_name',
-				header: 'Name (PlayaName)',
+				header: 'Name',
 				cell: (info) => {
 					const row = info.row.original;
 					const firstName = row.first_name || '';
 					const lastName = row.last_name || '';
-					const playaName = row.playa_name || '';
 
-					return (<>{`${firstName} ${lastName} (${playaName})`.trim()}</>);
+					return `${firstName} ${lastName}`;
 				},
+			},
+			{
+				accessorKey: 'playa_name',
+				header: 'Playa Name',
 			},
 			{
 				accessorKey: 'role',
@@ -275,7 +278,7 @@ const CampersTable = (props: CampersTableProps) => {
 
 	return (
 		<div className={classNames(styles.table, {}, [className])}>
-			<Table<ICamper> columns={columns} data={MOCK_DATA} />
+			<Table<ICamper> title={'All Campers'} columns={columns} data={MOCK_DATA} />
 		</div>
 	);
 };

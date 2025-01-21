@@ -1,4 +1,5 @@
 .tooltip {
+	z-index: 10;
 	width: 100vw;
 	max-width: 150px;
 	padding: 0;
@@ -19,6 +20,12 @@
 		}
 	}
 
+	&__column {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
 	&__btn {
 		justify-content: flex-start;
 		gap: 10px;
@@ -35,7 +42,7 @@
 	&__caption {
 		font: var(--font-s);
 
-		+ .tooltip__flex {
+		+ .tooltip__flex, + .tooltip__column {
 			margin-top: 5px;
 		}
 	}

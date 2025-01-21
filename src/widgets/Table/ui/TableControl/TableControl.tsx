@@ -1,47 +1,58 @@
-import { useEffect, useRef } from 'react';
-import type { Header } from '@tanstack/react-table';
+import { useCallback, type MouseEvent, type ReactNode, useRef } from 'react';
+import type { Header, Table } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TableTooltip } from '../TableTooltip/TableTooltip';
+import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from './TableControl.module.scss';
 import DotsIcon from '@shared/assets/icons/three-dots-vertical_icon.svg';
+import SettingsIcon from '@shared/assets/icons/settings_icon.svg';
 
 type TableControlProps<TData extends object> = {
 	className?: string;
-	header: Header<TData, unknown>;
+	theme: TableControlTheme;
+	table?: Table<TData>;
+	header?: Header<TData, unknown>;
 };
 
-const TableControl = <TData extends object>({ className, header }: TableControlProps<TData>) => {
+const TableControl = <TData extends object>(props: TableControlProps<TData>) => {
+	const { className, theme, table, header } = props;
 	const { isOpen, open, close } = useToggle();
-	const tooltipRef = useRef<HTMLDivElement>(null);
+	const btnRef = useRef<HTMLButtonElement>(null);
 
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
-				close();
-			}
-		};
+	const handleOpenTooltip = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		
+		if (isOpen) {
+			close();
+		} else {
+			open();
+		}
+	}, [close, isOpen, open]);
 
-		document.addEventListener('mousedown', handleClickOutside);
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, [close]);
+	const controlContent: Record<TableControlTheme, { icon: ReactNode }> = {
+		[TableControlTheme.TABLE]: {
+			icon: <SettingsIcon />,
+		},
+		[TableControlTheme.COLUMN]: {
+			icon: <DotsIcon />,
+		},
+	};
 
 	return (
-		<div className={classNames(styles.control, {}, [className])}>
+		<div className={classNames(styles.control, {}, [className, styles[theme]])}>
 			<Button
+				ref={btnRef}
 				theme={ButtonTheme.CLEAR}
 				size={ButtonSize.TEXT}
 				className={styles.control__btn}
-				onClick={open}
+				onClick={handleOpenTooltip}
 			>
-				<Icon icon={<DotsIcon />} size={IconSize.SIZE_20} style={{ color: 'var(--color-black)' }} />
+				<Icon icon={controlContent[theme].icon} size={IconSize.SIZE_20} className={styles.control__icon} />
 			</Button>
-			{isOpen && <TableTooltip tooltipRef={tooltipRef} header={header} handleClose={close} />}
+			{isOpen && <TableTooltip theme={theme} table={table} header={header} handleClose={close} btnRef={btnRef} />}
 		</div>
 	);
 };

@@ -1,11 +1,28 @@
 .control {
 	position: relative;
 
-	&__btn {
-		@media (hover: hover) {
-			&:hover {
-				background-color: var(--color-neutral);
+	&--table {
+		margin-left: auto;
+
+		.control__icon {
+			@media (hover: hover) {
+				&:hover {
+					color: var(--color-ruby-dark);
+				}
 			}
 		}
+	}
+	&--column {
+		.control__btn {
+			@media (hover: hover) {
+				&:hover {
+					background-color: var(--color-neutral);
+				}
+			}
+		}
+	}
+
+	&__icon {
+		color: var(--color-black);
 	}
 }
