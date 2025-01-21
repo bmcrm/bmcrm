@@ -2,9 +2,9 @@ import { memo } from 'react';
 import { ErrorMessage, Field } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
-import styles from './CustomTextarea.module.scss';
+import styles from './FormikTextarea.module.scss';
 
-type CustomTextareaProps = {
+type FormikTextareaProps = {
   className?: string;
   name: string;
   placeholder?: string;
@@ -13,7 +13,7 @@ type CustomTextareaProps = {
   readonly?: boolean;
 };
 
-const CustomTextarea = memo((props: CustomTextareaProps) => {
+const FormikTextarea = memo((props: FormikTextareaProps) => {
   const { className, name, placeholder, label, disabled, readonly } = props;
 
   return (
@@ -33,4 +33,4 @@ const CustomTextarea = memo((props: CustomTextareaProps) => {
   );
 });
 
-export default CustomTextarea;
+export default FormikTextarea;

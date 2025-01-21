@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { AuthBadge } from '@shared/ui/AuthBadge';
 import { Modal } from '@shared/ui/Modal';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { FormLoader } from '@features/FormLoader';
@@ -57,7 +57,7 @@ const UserConfirmModal = memo((props: UserConfirmModalProps) => {
         <Form className={styles.confirmForm}>
           <AuthBadge label={'Account Verification'} />
           <p>Please check your email to verify your account.</p>
-          <CustomInput name={'code'} placeholder={'--- ---'} label={'Code'} />
+          <FormikInput name={'code'} placeholder={'--- ---'} label={'Code'} />
           <Button type={'submit'} fluid className={'mt-15'}>
             <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
             VERIFY

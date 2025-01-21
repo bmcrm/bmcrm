@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react';
 import { Form, Formik, type FormikHelpers } from 'formik';
 import { Link } from 'react-router-dom';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
-import { CustomCheckbox } from '@shared/ui/CustomCheckbox';
+import { FormikCheckbox } from '@shared/ui/FormikCheckbox';
 import { initialData, leftInputs, rightInputs } from '../../model/data/TCORegisterForm.data';
 import { registrationSchema } from '@shared/const/validationSchemas';
 import { RoutePath } from '@app/providers/AppRouter';
@@ -43,19 +43,19 @@ const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 			<Form className={styles.form}>
 				<div className={styles.form__inner}>
 					{leftInputs.map((input) => (
-						<CustomInput key={input.name} {...input} />
+						<FormikInput key={input.name} {...input} />
 					))}
 				</div>
 				<div className={styles.form__inner}>
 					<div className={styles.form__row}>
 						{rightInputs.name.map((input) => (
-							<CustomInput key={input.name} {...input} />
+							<FormikInput key={input.name} {...input} />
 						))}
 					</div>
 					{rightInputs.rest.map((input) => (
-						<CustomInput key={input.name} {...input} />
+						<FormikInput key={input.name} {...input} />
 					))}
-					<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
+					<FormikCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
 					<Button type={'submit'} fluid>
 						<CampIcon />
 						SIGN UP

@@ -4,7 +4,7 @@ import { useToast } from '@shared/hooks/useToast';
 import { Modal } from '@shared/ui/Modal';
 import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { FormLoader } from '@features/FormLoader';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 import { useInviteCamper } from '@entities/Camper';
@@ -62,7 +62,7 @@ const InviteCamperModal = memo(({ isOpen, onClose }: InviteCamperModalProps) => 
         <p className={styles.subtitle}>Please enter the email address of the user you want to invite</p>
         <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '' }}>
           <Form className={styles.inviteModal__form}>
-            <CustomInput name={'email'} placeholder={'Email'} />
+            <FormikInput name={'email'} placeholder={'Email'} />
             <div className={styles.divider} />
             <div className={styles.copy__wrapper}>
               <h4>Invite user by link</h4>

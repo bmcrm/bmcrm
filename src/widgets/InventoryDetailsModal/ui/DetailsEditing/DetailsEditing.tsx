@@ -6,7 +6,7 @@ import { generateInitialValues } from '../../lib/generateInitialValues';
 import { InventorySlider, InventorySliderTheme } from '@widgets/InventorySlider';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { useGetCategories, useUpdateInventoryItem, type IInventoryItem } from '@entities/Inventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
@@ -89,7 +89,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 						/>
 						<div className={styles.form__content}>
 							{initialData.default.map(({ name, label, placeholder }) => (
-								<CustomInput
+								<FormikInput
 									key={name}
 									name={name}
 									label={label}
@@ -100,7 +100,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 							))}
 							<div className={styles.form__row}>
 								{initialData.nested.map(({ name, label, placeholder, type }) => (
-									<CustomInput
+									<FormikInput
 										key={name}
 										type={type}
 										name={name}

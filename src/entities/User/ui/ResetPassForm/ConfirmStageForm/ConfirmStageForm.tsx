@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Form, Formik } from 'formik';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { confirmResetPassSchema } from '@shared/const/validationSchemas';
@@ -17,7 +17,7 @@ const ConfirmStageForm = memo(({ onSubmit }: ConfirmStageFormProps) => (
   <Formik validationSchema={confirmResetPassSchema} onSubmit={onSubmit} initialValues={initialValues}>
     <Form className={styles.form}>
       {inputsData.map(input => (
-        <CustomInput key={input.name} {...input} />
+        <FormikInput key={input.name} {...input} />
       ))}
       <Button type={'submit'} className={styles.btn} fluid>
         <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />

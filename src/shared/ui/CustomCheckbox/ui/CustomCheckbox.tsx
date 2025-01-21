@@ -1,41 +1,25 @@
-import { memo } from 'react';
-import { ErrorMessage, Field } from 'formik';
+import { memo, type InputHTMLAttributes } from 'react';
 import { classNames } from '@shared/lib/classNames';
-import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import styles from './CustomCheckbox.module.scss';
 
-type CustomCheckboxProps = {
-  className?: string;
-  name: string;
-  label?: string;
-  disabled?: boolean;
-  value?: string;
-  errorMessage?: boolean;
-};
+interface CustomCheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+	className?: string;
+	label: string;
+}
 
 const CustomCheckbox = memo((props: CustomCheckboxProps) => {
-  const {
-    className,
-    name,
-    label,
-    disabled,
-    value,
-    errorMessage = false,
-  } = props;
+	const { className, label, ...rest } = props;
 
-  return (
-    <label className={classNames(styles.checkbox, {}, [className])}>
-      <Field
-        type={'checkbox'}
-        disabled={disabled}
-        className={styles.input}
-        name={name}
-        value={value}
-      />
-      <p className={styles.label}>{label}</p>
-      {errorMessage && <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />}
-    </label>
-  );
+	return (
+		<label className={classNames(styles.checkbox, {}, [className])}>
+			<input
+				type={'checkbox'}
+				className={styles.input}
+				{...rest}
+			/>
+			 <p className={styles.label}>{label}</p>
+		</label>
+	);
 });
 
 export default CustomCheckbox;

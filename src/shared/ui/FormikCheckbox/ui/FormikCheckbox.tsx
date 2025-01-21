@@ -2,18 +2,18 @@ import { memo } from 'react';
 import { ErrorMessage, Field } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
-import styles from './CustomRadio.module.scss';
+import styles from './FormikCheckbox.module.scss';
 
-type CustomRadioProps = {
+type FormikCheckboxProps = {
   className?: string;
   name: string;
-  label: string;
+  label?: string;
   disabled?: boolean;
-  value: string;
+  value?: string;
   errorMessage?: boolean;
 };
 
-const CustomRadio = memo((props: CustomRadioProps) => {
+const FormikCheckbox = memo((props: FormikCheckboxProps) => {
   const {
     className,
     name,
@@ -24,9 +24,9 @@ const CustomRadio = memo((props: CustomRadioProps) => {
   } = props;
 
   return (
-    <label className={classNames(styles.radio, {}, [className])}>
+    <label className={classNames(styles.checkbox, {}, [className])}>
       <Field
-        type={'radio'}
+        type={'checkbox'}
         disabled={disabled}
         className={styles.input}
         name={name}
@@ -38,4 +38,4 @@ const CustomRadio = memo((props: CustomRadioProps) => {
   );
 });
 
-export default CustomRadio;
+export default FormikCheckbox;
