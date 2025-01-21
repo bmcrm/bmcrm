@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Field, FieldArray } from 'formik';
-import { CustomTextarea } from '@shared/ui/CustomTextarea';
+import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import type { ICamper } from '@entities/Camper';
 import styles from './CamperDetailsHistory.module.scss';
 
@@ -23,7 +23,7 @@ const CamperDetailsHistory = memo(({ initialValues, isReadonly }: CamperDetailsH
 							{isReadonly ? (
 								<p className={styles.text}>{item.value}</p>
 							) : index === 0 ? (
-								<CustomTextarea
+								<FormikTextarea
 									placeholder='Write....'
 									name={`history.${index}.value`}
 									readonly={isReadonly}

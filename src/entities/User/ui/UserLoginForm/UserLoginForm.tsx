@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Formik, type FormikHelpers } from 'formik';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { inputsData } from '../../model/data/UserLoginForm.data';
@@ -19,7 +19,7 @@ const UserLoginForm = memo(({ onSubmit }: UserLoginFormProps) => (
   <Formik validationSchema={loginSchema} onSubmit={onSubmit} initialValues={{ email: '', password: '' }}>
     <Form className={styles.form}>
       {inputsData.map(input => (
-        <CustomInput key={input.name} {...input} />
+        <FormikInput key={input.name} {...input} />
       ))}
       <Link to={RoutePath.reset_pass} className={styles.link}>
         Forgot Password?

@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { compressImages } from '@shared/lib/compressImages';
 import { isDuplicateFile } from '../../lib/checkDuplicateFiles';
 import { useToast } from '@shared/hooks/useToast';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
@@ -99,11 +99,11 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				{isPending && <FormLoader/>}
 				<div className={styles.form__inner}>
 					{inputs.default.map(({ name, placeholder, label }) => (
-						<CustomInput key={name} name={name} label={label} placeholder={placeholder} />
+						<FormikInput key={name} name={name} label={label} placeholder={placeholder} />
 					))}
 					<div className={styles.form__row}>
 						{inputs.row.map(({ name, placeholder, label, type }) => (
-							<CustomInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
+							<FormikInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
 						))}
 					</div>
 					<FilesInput

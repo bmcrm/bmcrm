@@ -1,8 +1,9 @@
 import { useMemo, type ReactNode } from 'react';
-import { type ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
-import { Table } from '@widgets/Table';
-import { CamperRole, ICamper } from '@entities/Camper';
+import { dateNormalize } from '@shared/lib/dateNormalize';
+import { Table, multiValueFilter } from '@widgets/Table';
+import { type ICamper, CamperRole } from '@entities/Camper';
 import styles from './CampersTable.module.scss';
 
 type CampersTableProps = {
@@ -232,34 +233,27 @@ const CampersTable = (props: CampersTableProps) => {
 		() => [
 			{
 				accessorKey: 'first_name',
-				header: 'First Name',
-				// cell: info => info.getValue(),
-			},
-			{
-				accessorFn: row => row.last_name,
-				id: 'last_name',
-				// cell: info => info.getValue(),
-				header: 'Last Name',
-				sortUndefined: 'last',
-				sortDescFirst: false,
-			},
-			{
-				accessorKey: 'playa_name',
-				header: 'Playa Name',
+				header: 'Name (PlayaName)',
+				cell: (info) => {
+					const row = info.row.original;
+					const firstName = row.first_name || '';
+					const lastName = row.last_name || '';
+					const playaName = row.playa_name || '';
+
+					return (<>{`${firstName} ${lastName} (${playaName})`.trim()}</>);
+				},
 			},
 			{
 				accessorKey: 'role',
 				header: 'Role',
-				// sortUndefined: 'last',
+				filterFn: multiValueFilter,
 			},
 			{
 				accessorKey: 'email',
-				// header: () => <span>Email</span>,
 				header: 'Email',
 				cell: (info) => (
 					<a href={`mailto:${info.getValue()}`} className={styles.table__link}>{info.getValue() as ReactNode}</a>
 				),
-				// sortingFn: sortStatusFn,
 			},
 			{
 				accessorKey: 'city',
@@ -268,7 +262,12 @@ const CampersTable = (props: CampersTableProps) => {
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
-				// invertSorting: true,
+				cell: (info) => dateNormalize(info.getValue() as string),
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated At',
+				cell: (info) => dateNormalize(info.getValue() as string),
 			},
 		],
 		[]

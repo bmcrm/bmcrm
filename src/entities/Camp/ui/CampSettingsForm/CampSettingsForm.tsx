@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react';
 import { Form, Formik } from 'formik';
 import { useMedia } from '@shared/hooks/useMedia';
-import { CustomInput } from '@shared/ui/CustomInput';
-import { CustomTextarea } from '@shared/ui/CustomTextarea';
+import { FormikInput } from '@shared/ui/FormikInput';
+import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { Image } from '@shared/ui/Image';
 import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
@@ -41,8 +41,8 @@ const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
         <Form className={styles.form}>
           <div className={styles.form__inner}>
             <div className={styles.form__inputs}>
-              {inputsData.map(input => <CustomInput key={input.name} {...input} />)}
-              <CustomTextarea name={'camp_description'} label={'Description'} placeholder={'Lorem ipsum dolor sit amet...'} />
+              {inputsData.map(input => <FormikInput key={input.name} {...input} />)}
+              <FormikTextarea name={'camp_description'} label={'Description'} placeholder={'Lorem ipsum dolor sit amet...'} />
             </div>
             <Image maxWidth={360} borderRadius={isMobile ? 15 : 30}/>
           </div>

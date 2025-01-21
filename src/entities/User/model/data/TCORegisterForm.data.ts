@@ -1,11 +1,11 @@
-import { CustomInputTheme } from '@shared/ui/CustomInput';
+import { FormikInputTheme } from '@shared/ui/FormikInput';
 
 export const leftInputs = [
 	{
 		name: 'camp_name',
 		placeholder: 'Sparkle Unicorns',
 		label: 'Name your camp',
-		theme: CustomInputTheme.CONTROLLED,
+		theme: FormikInputTheme.CONTROLLED,
 		controlledInputName: 'camp_id',
 	},
 	{
@@ -56,7 +56,7 @@ export const rightInputs = {
 			placeholder: 'Min. 8 characters',
 			label: 'Password',
 			type: 'password',
-			theme: CustomInputTheme.PASSWORD_TOOLTIP,
+			theme: FormikInputTheme.PASSWORD_TOOLTIP,
 		},
 	],
 };

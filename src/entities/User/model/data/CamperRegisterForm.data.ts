@@ -1,4 +1,4 @@
-import { CustomInputTheme } from '@shared/ui/CustomInput';
+import { FormikInputTheme } from '@shared/ui/FormikInput';
 
 export const inputs = {
 	name: [
@@ -25,7 +25,7 @@ export const inputs = {
 			placeholder: 'Min. 8 characters',
 			label: 'Password',
 			type: 'password',
-			theme: CustomInputTheme.PASSWORD_TOOLTIP,
+			theme: FormikInputTheme.PASSWORD_TOOLTIP,
 		},
 	],
 };

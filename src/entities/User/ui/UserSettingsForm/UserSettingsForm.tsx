@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { Form, Formik } from 'formik';
 import { useGetCampers, type ICamper } from '@entities/Camper';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Avatar } from '@shared/ui/Avatar';
 import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
@@ -36,7 +36,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
         <Form className={styles.form}>
           <div className={styles.form__inner}>
             <div className={styles.form__inputs}>
-              {inputsData.map(input => <CustomInput key={input.name} {...input} />)}
+              {inputsData.map(input => <FormikInput key={input.name} {...input} />)}
             </div>
             <Avatar size={240} src={null} />
           </div>

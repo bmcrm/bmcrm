@@ -1,4 +1,4 @@
-import { CustomInputTheme } from '@shared/ui/CustomInput';
+import { FormikInputTheme } from '@shared/ui/FormikInput';
 
 export const inputsData = [
 	{
@@ -12,7 +12,7 @@ export const inputsData = [
 		placeholder: '∗∗∗∗∗∗∗∗',
 		label: 'Password',
 		type: 'password',
-		theme: CustomInputTheme.PASSWORD_NO_TOOLTIP,
+		theme: FormikInputTheme.PASSWORD_NO_TOOLTIP,
 	},
 ];
 

@@ -7,25 +7,25 @@ import { Tooltip } from '@shared/ui/Tooltip';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { validatePassword } from '../lib/validatePassword';
-import { CustomInputTheme } from '../model/types/CustomInput.types';
-import styles from './CustomInput.module.scss';
+import { FormikInputTheme } from '../model/types/FormikInput.types';
+import styles from './FormikInput.module.scss';
 import Accept from '@shared/assets/icons/accept.svg';
 import Cross from '@shared/assets/icons/cross.svg';
 import EyeOpen from '@shared/assets/icons/eye_open.svg';
 import EyeClose from '@shared/assets/icons/eye_closed.svg';
 
-interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FormikInputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
-  theme?: CustomInputTheme;
+  theme?: FormikInputTheme;
   type?: string;
   label?: string | ReactNode;
   controlledInputName?: string;
 }
 
-const CustomInput = memo((props: CustomInputProps) => {
+const FormikInput = memo((props: FormikInputProps) => {
   const {
     className,
-    theme = CustomInputTheme.DEFAULT,
+    theme = FormikInputTheme.DEFAULT,
     type = 'text',
     label,
     controlledInputName,
@@ -34,9 +34,9 @@ const CustomInput = memo((props: CustomInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { values, setFieldValue } = useFormikContext<FormikValues>();
-  const isPasswordTooltip = theme === CustomInputTheme.PASSWORD_TOOLTIP;
-  const isPasswordNoTooltip = theme === CustomInputTheme.PASSWORD_NO_TOOLTIP;
-  const isControlled = theme === CustomInputTheme.CONTROLLED;
+  const isPasswordTooltip = theme === FormikInputTheme.PASSWORD_TOOLTIP;
+  const isPasswordNoTooltip = theme === FormikInputTheme.PASSWORD_NO_TOOLTIP;
+  const isControlled = theme === FormikInputTheme.CONTROLLED;
   const errors = isPasswordTooltip ? validatePassword(values.password) : null;
   const isValid = errors?.filter(error => !error.valid).length;
 
@@ -91,4 +91,4 @@ const CustomInput = memo((props: CustomInputProps) => {
   );
 });
 
-export default CustomInput;
+export default FormikInput;

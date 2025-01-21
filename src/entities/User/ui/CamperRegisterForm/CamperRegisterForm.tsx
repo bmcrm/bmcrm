@@ -2,9 +2,9 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { FieldArray, Form, Formik } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { socialLinksParser } from '@shared/lib/socialLinkParser';
-import { CustomInput } from '@shared/ui/CustomInput';
-import { CustomTextarea } from '@shared/ui/CustomTextarea';
-import { CustomCheckbox } from '@shared/ui/CustomCheckbox';
+import { FormikInput } from '@shared/ui/FormikInput';
+import { FormikTextarea } from '@shared/ui/FormikTextarea';
+import { FormikCheckbox } from '@shared/ui/FormikCheckbox';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Tooltip } from '@shared/ui/Tooltip';
@@ -88,7 +88,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 			{({ values }) => (
 				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__item}>
-						<CustomInput name={'playa_name'} placeholder={'Playa Name'} label={'Playa Name'}/>
+						<FormikInput name={'playa_name'} placeholder={'Playa Name'} label={'Playa Name'}/>
 						<FieldArray name={'social_links'}>
 							{({ remove, push }) => (
 								<>
@@ -145,7 +145,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 											>
 												<Icon icon={<ThreeDotIcon/>} size={IconSize.SIZE_20}/>
 											</Button>
-											<CustomInput
+											<FormikInput
 												name={`social_links.${index}`}
 												placeholder={'https://www.facebook.com/'}
 												label={'Social media link'}
@@ -155,7 +155,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 								</>
 							)}
 						</FieldArray>
-						<CustomTextarea
+						<FormikTextarea
 							name={'about_me'}
 							placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
 							label={'About you'}
@@ -164,13 +164,13 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 					<div className={styles.form__item}>
 						<div className={styles.form__row}>
 							{inputs.name.map((input) => (
-								<CustomInput key={input.name} {...input} />
+								<FormikInput key={input.name} {...input} />
 							))}
 						</div>
 						{inputs.rest.map((input) => (
-							<CustomInput key={input.name} {...input} />
+							<FormikInput key={input.name} {...input} />
 						))}
-						<CustomCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
+						<FormikCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
 						<Button type={'submit'} fluid>
 							<CampIcon />
 							SIGN UP

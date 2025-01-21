@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { Form, Formik } from 'formik';
 import { socialLinksParser } from '@shared/lib/socialLinkParser';
 import { Modal } from '@shared/ui/Modal';
-import { CustomInput } from '@shared/ui/CustomInput';
+import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
 import { addSocialSchema } from '@shared/const/validationSchemas';
 import type { CamperSocial } from '@entities/Camper';
@@ -28,7 +28,7 @@ const AddSocialModal = memo((props: AddSocialModalProps) => {
       <h2 className={styles.title}>Add Social Media Link</h2>
       <Formik validationSchema={addSocialSchema} onSubmit={onSubmitHandler} initialValues={{ url: '' }}>
         <Form className={styles.form}>
-          <CustomInput name={'url'} placeholder={'facebook.com/'} label={'URL'}/>
+          <FormikInput name={'url'} placeholder={'facebook.com/'} label={'URL'}/>
           <Button type={'submit'} className={'m-centred'}>Add</Button>
         </Form>
       </Formik>

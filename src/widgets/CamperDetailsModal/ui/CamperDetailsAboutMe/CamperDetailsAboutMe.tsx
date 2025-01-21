@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CustomTextarea } from '@shared/ui/CustomTextarea';
+import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import type { ICamper } from '@entities/Camper';
 import styles from './CamperDetailsAboutMe.module.scss';
 
@@ -14,7 +14,7 @@ const CamperDetailsAboutMe = memo(({ camper, isReadonly }: CamperDetailsAboutMeP
 		{isReadonly ? (
 			<p className={styles.text}>{camper?.about_me}</p>
 		) : (
-			<CustomTextarea
+			<FormikTextarea
 				placeholder={'Write....'}
 				name={'about_me'}
 				readonly={isReadonly}
