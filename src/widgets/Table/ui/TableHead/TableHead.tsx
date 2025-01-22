@@ -21,7 +21,7 @@ const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
 						? null
 						: (
 							<div className={styles.table__row}>
-								<div className={styles.table__row}>
+								<p className={styles.table__row}>
 									{flexRender(
 										header.column.columnDef.header,
 										header.getContext()
@@ -35,7 +35,7 @@ const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
 									{header.column.getIsFiltered() && (
 										<Icon icon={<FilterIcon />} size={IconSize.SIZE_12} />
 									)}
-								</div>
+								</p>
 								<TableControl theme={TableControlTheme.COLUMN} header={header} />
 							</div>
 						)

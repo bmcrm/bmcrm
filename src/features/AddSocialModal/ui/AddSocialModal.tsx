@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react';
 import { Form, Formik } from 'formik';
-import { socialLinksParser } from '@shared/lib/socialLinkParser';
 import { Modal } from '@shared/ui/Modal';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { Button } from '@shared/ui/Button';
+import { socialLinksParser } from '@features/SocialIcon';
 import { addSocialSchema } from '@shared/const/validationSchemas';
 import type { CamperSocial } from '@entities/Camper';
 import styles from './AddSocialModal.module.scss';

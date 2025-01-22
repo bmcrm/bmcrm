@@ -1,18 +1,16 @@
 @use '@app/styles/breakpoints';
-.error {
-  color: var(--color-ruby-dark);
 
-  font-size: var(--font-size-xs);
-}
-.wrapper {
+.message {
+  position: absolute;
+  left: 10px;
+  bottom: -25px;
   display: flex;
   align-items: center;
   gap: 10px;
-  position: absolute;
-  bottom: -25px;
-  left: 10px;
+  font: var(--font-xs);
+  color: var(--color-ruby-dark);
+
   @media (width < breakpoints.$md) {
-    bottom: -25px;
-    left: 0px;
+    left: 0;
   }
 }

@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 import { jwtDecode } from 'jwt-decode';
 import { errorHandler } from '@shared/lib/errorHandler';
 import { tokenNormalize } from '@shared/lib/tokenNormalize';
@@ -32,10 +31,7 @@ const useLogin = () => {
 		},
 		onError: (error, variables) => {
 			errorHandler(error);
-
-			if (error instanceof CognitoIdentityProviderServiceException && error.name !== 'UserNotConfirmedException') {
-				logger(LogLevel.ERROR, LogSource.WEBAPP, 'Login error', { user: variables.email });
-			}
+			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Login error', { user: variables.email });
 		},
 	});
 

@@ -6,5 +6,6 @@ export {
 	type ICamper,
 	type CamperSocial,
 	type IInviteCamperData,
+	type CamperHistory,
 	CamperRole,
 } from './model/types/Camper.types';

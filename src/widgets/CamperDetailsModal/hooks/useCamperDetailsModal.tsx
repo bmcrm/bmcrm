@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { FormikHelpers } from 'formik';
 import { trimFields } from '../lib/trimFields';
 import { useGetCampers, useUpdateCamper, type CamperSocial, type ICamper, CamperRole } from '@entities/Camper';
@@ -7,9 +7,10 @@ import { userState } from '@entities/User';
 interface IUseCamperDetailsModalProps {
 	camperEmail: string;
 	onDetailsClose: () => void;
+	isDetailsOpen: boolean;
 }
 
-const useCamperDetailsModal = ({ camperEmail, onDetailsClose }: IUseCamperDetailsModalProps) => {
+const useCamperDetailsModal = ({ camperEmail, onDetailsClose, isDetailsOpen }: IUseCamperDetailsModalProps) => {
 	const { data: [camper] = [], isLoading: isGetLoading } = useGetCampers({ camperEmail });
 	const { mutate: updateCamper, isPending: isUpdatePending } = useUpdateCamper();
 	const { tokens: { decodedIDToken } } = userState();
@@ -17,6 +18,12 @@ const useCamperDetailsModal = ({ camperEmail, onDetailsClose }: IUseCamperDetail
 	const [isReadonly, setIsReadonly] = useState(false);
 	const currentYear = new Date().getFullYear();
 	const isLoading = isGetLoading || isUpdatePending;
+
+	useEffect(() => {
+		if (isDetailsOpen) {
+			setIsReadonly(false);
+		}
+	}, [isDetailsOpen]);
 
 	const toggleReadonly = useCallback(() => setIsReadonly(prev => !prev), []);
 

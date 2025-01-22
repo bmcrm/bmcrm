@@ -1,0 +1,17 @@
+.title {
+	position: relative;
+	padding-bottom: 10px;
+	font: var(--font-l);
+	font-weight: 500;
+	text-transform: uppercase;
+
+	&:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 200px;
+		height: 1px;
+		background-color: var(--color-ruby-dark);
+	}
+}

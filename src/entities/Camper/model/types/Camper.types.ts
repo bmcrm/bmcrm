@@ -32,8 +32,8 @@ export interface ICamper {
   about_me?: string;
   social_links?: CamperSocial[];
   history?: CamperHistory[];
-  updated_at: string | number;
-  created_at: string | number;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface IInviteCamperData {

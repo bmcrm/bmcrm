@@ -35,9 +35,9 @@ const Modal = (props: ModalProps) => {
 
   return (
     <Portal>
-      <div ref={modalRef} className={classNames(styles.modal, mods, [className])}>
+      <div ref={modalRef} className={classNames(styles.modal, mods, [])}>
         <div className={styles.modal__overlay} onClick={close}>
-          <div className={styles.modal__content} onClick={onContentClick}>
+          <div className={classNames(styles.modal__content, {}, [className])} onClick={onContentClick}>
             {children}
           </div>
         </div>

@@ -1,0 +1,9 @@
+.summary {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	&__text {
+		font-weight: 500;
+	}
+}

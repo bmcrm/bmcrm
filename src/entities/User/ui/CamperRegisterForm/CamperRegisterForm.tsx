@@ -1,13 +1,13 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { FieldArray, Form, Formik } from 'formik';
 import { classNames } from '@shared/lib/classNames';
-import { socialLinksParser } from '@shared/lib/socialLinkParser';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { FormikCheckbox } from '@shared/ui/FormikCheckbox';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Tooltip } from '@shared/ui/Tooltip';
+import { socialLinksParser } from '@features/SocialIcon';
 import { camperRegistrationSchema } from '@shared/const/validationSchemas';
 import { initialData, inputs } from '../../model/data/CamperRegisterForm.data';
 import { type ICamperRegistrationData } from '../../model/types/User.types';

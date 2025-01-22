@@ -8,7 +8,7 @@ import { Avatar } from '@shared/ui/Avatar';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { AddSocialModal } from '@features/AddSocialModal';
-import { SocialIconItem } from '@features/SocialIconItem';
+import { SocialIcon } from '@features/SocialIcon';
 import type { CamperSocial, ICamper } from '@entities/Camper';
 import styles from './CamperDetailsHeader.module.scss';
 import CheckIcon from '@shared/assets/icons/check.svg';
@@ -89,11 +89,9 @@ const CamperDetailsHeader = memo((props: ICamperDetailsHeaderProps) => {
 				</div>
 				<ul className={styles.head__socials}>
 					{socialIcons.map((icon, i) => (
-						<SocialIconItem
+						<SocialIcon
 							key={i}
 							social={icon}
-							readonly={isReadonly}
-							onRemove={() => handleRemoveSocial(i)}
 						/>
 					))}
 					{!isReadonly && socialIcons.length < 5 && (

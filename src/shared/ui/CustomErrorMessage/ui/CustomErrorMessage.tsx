@@ -8,9 +8,9 @@ interface CustomErrorMessageProps {
 }
 
 const CustomErrorMessage = memo(({ message }: CustomErrorMessageProps) => (
-  <div className={styles.wrapper}>
-    <Icon icon={<ErrorIcon/>}/>
-    <div className={styles.error}>{message}</div>
+  <div className={styles.message}>
+    <Icon icon={<ErrorIcon />} />
+    <p>{message}</p>
   </div>
 ));
 
