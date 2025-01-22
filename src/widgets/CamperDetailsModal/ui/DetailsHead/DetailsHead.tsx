@@ -30,7 +30,7 @@ const DetailsHead = memo((props: DetailsHeadProps) => {
 			<HeadContent camper={camper} setTheme={setTheme} />
 			{social_links && social_links.length > 0 && (
 				<ul className={styles.head__socials}>
-					{social_links.map(social => <SocialIcon social={social} />)}
+					{social_links.map((social, i) => <SocialIcon key={i} social={social} />)}
 				</ul>
 			)}
 		</div>

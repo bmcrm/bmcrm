@@ -1,20 +1,17 @@
-import { memo } from 'react';
-import { ErrorMessage, Field } from 'formik';
+import { memo, type InputHTMLAttributes } from 'react';
+import { Field, ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import styles from './FormikTextarea.module.scss';
 
-type FormikTextareaProps = {
+interface FormikTextareaProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
-  name: string;
-  placeholder?: string;
   label?: string;
-  disabled?: boolean;
-  readonly?: boolean;
-};
+  name: string;
+}
 
 const FormikTextarea = memo((props: FormikTextareaProps) => {
-  const { className, name, placeholder, label, disabled, readonly } = props;
+  const { className, label, name, ...rest } = props;
 
   return (
     <label className={classNames(styles.label, {}, [className])}>
@@ -24,9 +21,7 @@ const FormikTextarea = memo((props: FormikTextareaProps) => {
         rows={3}
         className={styles.textarea}
         name={name}
-        readOnly={readonly}
-        placeholder={placeholder}
-        disabled={disabled}
+        {...rest}
       />
       <ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />} />
     </label>

@@ -26,4 +26,9 @@
   &::placeholder {
     color: var(--color-neutral);
   }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-ruby-dark);
+  }
 }

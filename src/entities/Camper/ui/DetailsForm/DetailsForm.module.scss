@@ -1,0 +1,32 @@
+@use '@app/styles/breakpoints';
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	&__row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px 10px;
+
+		@media (width < breakpoints.$md) {
+      grid-template-columns: 1fr;
+    }
+	}
+
+	&__buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+	}
+
+	.btn-cancel {
+		@media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+      }
+    }
+	}
+}
