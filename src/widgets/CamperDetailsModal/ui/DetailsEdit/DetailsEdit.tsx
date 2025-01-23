@@ -20,7 +20,7 @@ const DetailsEdit = memo((props: DetailsEditProps) => {
 
 	return (
 		<div className={classNames(styles.details, {}, [className])}>
-			<DetailsForm initialValues={initialValues} handleCancel={handleCancel} />
+			<DetailsForm initialValues={initialValues} handleCancel={handleCancel} camperEmail={camper.email} />
 		</div>
 	);
 });

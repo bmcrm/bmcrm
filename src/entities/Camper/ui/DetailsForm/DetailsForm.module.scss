@@ -22,7 +22,71 @@
 		gap: 10px;
 	}
 
+	&__group {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	&__caption {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+
+		p {
+			font: var(--font-s);
+			font-weight: 500;
+		}
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+
+		@media (width < breakpoints.$md) {
+			gap: 10px;
+		}
+
+		&-itemHistory {
+			display: grid;
+			grid-template-columns: 100px 1fr;
+			align-items: flex-start;
+			gap: 5px 10px;
+
+			@media (width < breakpoints.$md) {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		&-itemHistoryInner {
+			@media (width < breakpoints.$md) {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+		}
+
+		&-itemSocial {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+		}
+	}
+
 	.btn-cancel {
+		@media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+      }
+    }
+	}
+	.btn-add {
+		padding: 2px;
+		color: var(--color-neutral);
+		border: 1px solid currentColor;
+		border-radius: 50%;
+
 		@media (hover: hover) {
       &:hover {
         color: var(--color-black);

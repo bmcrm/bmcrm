@@ -40,7 +40,7 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
         />
       </li>
       {camperEmail && (
-        <CamperDetailsModal camperEmail={camperEmail} isDetailsOpen={isOpen} onDetailsClose={close} />
+        <CamperDetailsModal camperEmail={camperEmail} isOpen={isOpen} onClose={close} />
       )}
     </>
   );

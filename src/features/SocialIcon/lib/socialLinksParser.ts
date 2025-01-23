@@ -14,3 +14,11 @@ export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
 		};
 	});
 };
+
+export const generateSocialName = (url: string) => {
+	const foundSocial = Object
+		.values(SocialIcons)
+		.find(social => url.toLowerCase().includes(social));
+
+	return foundSocial? foundSocial : 'default';
+};

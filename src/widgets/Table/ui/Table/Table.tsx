@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
 	useReactTable,
 	getCoreRowModel,
@@ -13,6 +13,7 @@ import { classNames } from '@shared/lib/classNames';
 import { TableHead } from '../TableHead/TableHead';
 import { TableBody } from '../TableBody/TableBody';
 import { TableControl } from '../TableControl/TableControl';
+import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from './Table.module.scss';
 
@@ -45,16 +46,33 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 		},
 	});
 
+	const handleResetFilters = useCallback(() => {
+		table.resetColumnFilters();
+		table.resetSorting();
+	}, [table]);
+
 	return (
-		<div className={classNames(styles.table__wrapper, {}, [className])}>
+		<div className={classNames(styles.table, {}, [className])}>
 			<div className={styles.table__header}>
 				{title && <h2 className={styles.table__title}>{title}</h2>}
-				<TableControl table={table} theme={TableControlTheme.TABLE} />
+				<div className={styles.table__row} style={{ gap: 10 }}>
+					<Button
+						className={styles.btnReset}
+						theme={ButtonTheme.CLEAR}
+            size={ButtonSize.TEXT}
+            onClick={handleResetFilters}
+					>
+						Reset All Filters
+					</Button>
+					<TableControl table={table} theme={TableControlTheme.TABLE} />
+				</div>
 			</div>
-			<table className={styles.table}>
-				<TableHead table={table} />
-				<TableBody table={table} />
-			</table>
+			<div className={styles.table__scroll}>
+				<table className={styles.table__inner}>
+					<TableHead table={table} />
+					<TableBody table={table} />
+				</table>
+			</div>
 		</div>
 	);
 };

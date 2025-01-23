@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useToggle } from '@shared/hooks/useToggle';
 import { dateNormalize } from '@shared/lib/dateNormalize';
@@ -6,7 +6,7 @@ import { multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonSize } from '@shared/ui/Button';
 import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
 import { userState } from '@entities/User';
-import { type ICamper, CamperRole } from '@entities/Camper';
+import { CamperRole, type ICamper } from '@entities/Camper';
 import styles from './CampersTable.module.scss';
 
 type CampersTableProps = {
@@ -46,6 +46,7 @@ const CampersTable = (props: CampersTableProps) => {
 								<Button
 									size={ButtonSize.S}
 									onClick={() => handleOpenDetails(email)}
+									style={{ marginLeft: 'auto' }}
 								>
 									Edit
 								</Button>
@@ -91,7 +92,11 @@ const CampersTable = (props: CampersTableProps) => {
 	return (
 		<>
 			<Table<ICamper> title={'All Campers'} columns={columns} data={campers} />
-			<CamperDetailsModal camperEmail={camperEmail} isOpen={isOpen} onClose={close} />
+			<CamperDetailsModal
+				camperEmail={camperEmail}
+				isOpen={isOpen}
+				onClose={close}
+			/>
 		</>
 	);
 };

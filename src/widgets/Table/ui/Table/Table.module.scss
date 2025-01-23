@@ -1,6 +1,10 @@
+@use '@app/styles/breakpoints';
+
 .table {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 	width: 100%;
-	font: var(--font-s);
 
 	thead {
 		font-weight: 700;
@@ -20,13 +24,43 @@
 
 	tr {
 		border-bottom: 1px solid var(--color-neutral);
+
+		th:first-child, td:first-child {
+			@media (width < breakpoints.$lg) {
+				position: sticky;
+				left: 0;
+				max-width: 250px;
+				background-color: var(--color-primary-bg);
+
+				&:after {
+					content:'';
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: 1px;
+					height: 100%;
+					background-color: var(--color-neutral);
+				}
+			}
+			@media (width < breakpoints.$md) {
+				max-width: 90px;
+			}
+		}
+		th:first-child {
+			@media (width < breakpoints.$lg) {
+				z-index: 1;
+			}
+		}
 	}
 
-	&__wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
+	&__scroll {
+		overflow-x: auto;
+	}
+
+	&__inner {
 		width: 100%;
+		min-width: 1000px;
+		font: var(--font-s);
 	}
 
 	&__header {
@@ -47,6 +81,12 @@
 
 		+ .table__cell {
 			border-left: 1px solid var(--color-neutral);
+
+			@media (width < breakpoints.$lg) {
+				&:nth-child(2) {
+					border-left: none;
+				}
+			}
 		}
 	}
 
@@ -54,6 +94,16 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 5px;
+		column-gap: 5px;
+	}
+
+	.btn-reset {
+		color: var(--color-black);
+
+		@media (hover: hover) {
+			&:hover {
+				text-decoration: underline;
+      }
+		}
 	}
 }

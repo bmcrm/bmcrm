@@ -21,7 +21,7 @@ const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
 						? null
 						: (
 							<div className={styles.table__row}>
-								<p className={styles.table__row}>
+								<p className={styles.table__row} style={{ flexWrap: 'wrap' }}>
 									{flexRender(
 										header.column.columnDef.header,
 										header.getContext()

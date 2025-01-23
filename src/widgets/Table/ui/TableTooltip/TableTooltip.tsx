@@ -42,7 +42,7 @@ const TableTooltip = <TData extends object>(props: TableTooltipProps<TData>) => 
 	}, [btnRef, handleClose]);
 
 	const tooltipContent: Record<TableControlTheme, ReactNode> = {
-		[TableControlTheme.TABLE]: table && <TableContent table={table} handleClose={handleClose} />,
+		[TableControlTheme.TABLE]: table && <TableContent table={table} />,
 		[TableControlTheme.COLUMN]: header && <ColumnContent header={header} handleClose={handleClose} />,
 	};
 

@@ -1,5 +1,5 @@
 export interface CamperHistory {
-  year: number;
+  year: string;
   value: string;
 }
 
