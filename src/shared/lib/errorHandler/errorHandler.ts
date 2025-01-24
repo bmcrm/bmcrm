@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import * as Sentry from '@sentry/react';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
+import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito-identity-provider';
 
 enum ErrorNames {
   USER_NOT_FOUND = 'UserNotFoundException',
@@ -30,6 +31,11 @@ export const errorHandler = (error: unknown) => {
     errorMessage = errorsNames[error.name as ErrorNames];
   } else if (isAxiosError(error) && Object.values(ErrorNames).includes(error?.response?.data.name)) {
     errorMessage = errorsNames[error.response?.data.name as ErrorNames];
+  } else if (
+    error instanceof CognitoIdentityProviderServiceException
+    && Object.values(ErrorNames).includes(error.name as ErrorNames)
+  ) {
+    errorMessage = errorsNames[error.name as ErrorNames];
   }
 
   Sentry.captureMessage(`${(error as Error).name || 'UnknownError'}: ${(error as Error).message}`);

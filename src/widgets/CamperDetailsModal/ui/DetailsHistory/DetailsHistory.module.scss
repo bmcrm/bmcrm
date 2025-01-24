@@ -1,0 +1,17 @@
+.history {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	&__item {
+		display: flex;
+		gap: 10px;
+		font-weight: 500;
+	}
+}

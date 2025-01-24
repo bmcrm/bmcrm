@@ -4,7 +4,7 @@ import styles from './CustomCheckbox.module.scss';
 
 interface CustomCheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 	className?: string;
-	label: string;
+	label?: string;
 }
 
 const CustomCheckbox = memo((props: CustomCheckboxProps) => {

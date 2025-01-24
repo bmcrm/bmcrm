@@ -1,0 +1,82 @@
+@use '@app/styles/breakpoints';
+
+.head {
+	display: flex;
+	align-items: flex-start;
+	gap: 5px 20px;
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		gap: 5px;
+	}
+
+	&__title {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		flex-grow: 1;
+
+		h2 {
+			font: var(--font-xxl);
+			font-weight: 500;
+
+			@media (width < breakpoints.$lg) {
+				font: var(--font-l);
+			}
+		}
+	}
+
+	&__status {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+	}
+
+	&__email {
+		font: var(--font-s);
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+			&:hover {
+				text-decoration: underline;
+				color: var(--color-black);
+			}
+		}
+	}
+
+	&__details {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: 10px;
+		font: var(--font-s);
+
+		@media (width < breakpoints.$lg) {
+			font: var(--font-xs);
+		}
+	}
+
+	&__socials {
+		display: flex;
+		align-items: center;
+		align-self: flex-start;
+		flex-shrink: 0;
+		gap: 15px;
+		margin-left: auto;
+
+		@media (width < breakpoints.$lg) {
+			gap: 10px;
+		}
+	}
+
+	&__edit-btn {
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+			&:hover {
+        color: var(--color-black);
+      }
+		}
+	}
+}

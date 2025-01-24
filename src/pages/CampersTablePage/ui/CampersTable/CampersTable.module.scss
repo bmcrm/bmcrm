@@ -1,5 +1,13 @@
 .table {
 
+	&__cell {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: 5px;
+	}
+
 	&__link {
 		@media (hover: hover) {
 			&:hover {

@@ -1,124 +1,112 @@
-import { useCallback, type Ref } from 'react';
-import type { Header } from '@tanstack/react-table';
+import { useEffect, useRef, useState, useCallback, type ReactNode, type RefObject, type CSSProperties } from 'react';
+import type { Table, Header } from '@tanstack/react-table';
+import { useMedia } from '@shared/hooks/useMedia';
 import { classNames } from '@shared/lib/classNames';
-import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
-import { Icon, IconSize } from '@shared/ui/Icon';
-import { CustomCheckbox } from '@shared/ui/CustomCheckbox';
-import { Search, SearchTheme } from '@features/Search';
 import { Tooltip } from '@shared/ui/Tooltip';
-import { CamperRole } from '@entities/Camper';
+import { Portal } from '@shared/ui/Portal';
+import { TableContent } from './TableContent';
+import { ColumnContent } from './ColumnContent';
+import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from './TableTooltip.module.scss';
-import AscIcon from '@shared/assets/icons/ascending_icon.svg';
-import DescIcon from '@shared/assets/icons/descending_icon.svg';
-import ClearSortIcon from '@shared/assets/icons/clear-sort_icon.svg';
 
 type TableTooltipProps<TData extends object> = {
 	className?: string;
-	header: Header<TData, unknown>;
+	theme: TableControlTheme;
 	handleClose: () => void;
-	tooltipRef?: Ref<HTMLDivElement>;
+	table?: Table<TData>;
+	header?: Header<TData, unknown>;
+	btnRef: RefObject<HTMLButtonElement>;
+	portalTargetRef?: RefObject<HTMLDivElement>;
+	tableScrollRef?: RefObject<HTMLDivElement>;
 };
 
 const TableTooltip = <TData extends object>(props: TableTooltipProps<TData>) => {
-	const { className, header, handleClose, tooltipRef } = props;
-	const columnFilterValue = header.column.getFilterValue();
-	const isSorted = header.column.getIsSorted();
+	const { className, theme, table, header, btnRef, portalTargetRef, tableScrollRef, handleClose } = props;
+	const tooltipRef = useRef<HTMLDivElement>(null);
+	const [tooltipProperties, setTooltipProperties] = useState<CSSProperties>();
+	const [isPositionReady, setIsPositionReady] = useState(false);
+	const { isMobile } = useMedia();
 
-	const handleSort = useCallback((action: () => void) => {
-		action();
-		handleClose();
-	}, [handleClose]);
+	const calculatePosition = useCallback(() => {
+		if (btnRef.current && portalTargetRef?.current) {
+			const btnRect = btnRef.current.getBoundingClientRect();
+			const portalRect = portalTargetRef.current.getBoundingClientRect();
+			const isFirstColumn = header?.index === 0;
 
-	return (
-		<Tooltip
-			ref={tooltipRef}
-			properties={{
+			setTooltipProperties({
+				top: btnRect.bottom - portalRect.top + window.scrollY,
+				left: isMobile && isFirstColumn
+					? btnRect.left - portalRect.left + window.scrollX
+					: undefined,
+				right: isMobile && isFirstColumn
+					? undefined
+					: portalRect.right - btnRect.right + window.scrollX,
+			});
+			setIsPositionReady(true);
+		} else {
+			setTooltipProperties({
 				top: '100%',
 				right: 0,
-			}}
+			});
+			setIsPositionReady(true);
+		}
+	}, [btnRef, header?.index, isMobile, portalTargetRef]);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as Node;
+
+			if (
+				tooltipRef.current &&
+				!tooltipRef.current.contains(target) &&
+				btnRef.current &&
+				!btnRef.current.contains(target)
+			) {
+				handleClose();
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [btnRef, handleClose]);
+
+	useEffect(() => {
+		calculatePosition();
+		const tableScroll = tableScrollRef?.current;
+
+		if (tableScroll) {
+			tableScroll.addEventListener('scroll', calculatePosition);
+		}
+
+		return () => {
+			if (tableScroll) {
+				tableScroll.removeEventListener('scroll', calculatePosition);
+			}
+		};
+	}, [calculatePosition, tableScrollRef]);
+
+	const tooltipContent: Record<TableControlTheme, ReactNode> = {
+		[TableControlTheme.TABLE]: table && <TableContent table={table} />,
+		[TableControlTheme.COLUMN]: header && <ColumnContent header={header} handleClose={handleClose} />,
+	};
+
+	const tooltip = isPositionReady ? (
+		<Tooltip
+			ref={tooltipRef}
+			properties={tooltipProperties || {}}
 			className={classNames(styles.tooltip, {}, [className])}
 		>
-			<div className={classNames(styles.tooltip__row, {}, [styles.fluid])}>
-				{isSorted !== 'asc' && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header.column.toggleSorting(false))}
-						fluid
-					>
-						<Icon icon={<AscIcon />} size={IconSize.SIZE_16} />
-						Sort Ascending
-					</Button>
-				)}
-				{isSorted !== 'desc' && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header.column.toggleSorting(true))}
-						fluid
-					>
-						<Icon icon={<DescIcon />} size={IconSize.SIZE_16} />
-						Sort Descending
-					</Button>
-				)}
-				{isSorted && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header.column.clearSorting())}
-						fluid
-					>
-						<Icon icon={<ClearSortIcon />} size={IconSize.SIZE_16} />
-						Clear Sort
-					</Button>
-				)}
-			</div>
-			{header.id === 'role' ? (
-				<div className={styles.tooltip__row}>
-					<h4 className={styles.tooltip__caption}>Filter by role:</h4>
-					<div className={styles.tooltip__flex}>
-						{Object.values(CamperRole).map((role) => {
-							const currentFilterValue = (header.column.getFilterValue() ?? []) as string[];
-							const isChecked = currentFilterValue.includes(role);
-
-							return (
-								<CustomCheckbox
-									key={role}
-									label={role}
-									name={role}
-									value={role}
-									checked={isChecked}
-									onChange={(e) => {
-										const isAdding = e.target.checked;
-										const newFilterValue = isAdding
-											? [...currentFilterValue, role]
-											: currentFilterValue.filter((r) => r !== role);
-
-										header.column.setFilterValue(newFilterValue.length > 0 ? newFilterValue : undefined);
-									}}
-								/>
-							);
-						})}
-					</div>
-				</div>
-			) : (
-				<div className={styles.tooltip__row}>
-					<Search
-						theme={SearchTheme.TABLE}
-						maxWidth={245}
-						placeholder={'Search...'}
-						value={(columnFilterValue ?? '') as string}
-						onChange={value => header.column.setFilterValue(value)}
-					/>
-				</div>
-			)}
+			{tooltipContent[theme]}
 		</Tooltip>
+	) : null;
+
+	return portalTargetRef?.current ? (
+		<Portal element={portalTargetRef.current}>{tooltip}</Portal>
+	) : (
+		tooltip
 	);
 };
 
