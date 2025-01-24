@@ -1,0 +1,1 @@
+export { default as CamperTag } from './ui/CamperTag';

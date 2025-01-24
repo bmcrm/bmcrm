@@ -6,8 +6,10 @@ export { useInviteCamper } from './hooks/useInviteCamper';
 
 export {
 	type ICamper,
+	type IFormikCamper,
 	type CamperSocial,
 	type IInviteCamperData,
 	type CamperHistory,
+	type CamperTags,
 	CamperRole,
 } from './model/types/Camper.types';

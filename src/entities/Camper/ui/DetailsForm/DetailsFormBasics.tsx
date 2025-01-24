@@ -1,0 +1,44 @@
+import { memo } from 'react';
+import { FormikInput } from '@shared/ui/FormikInput';
+import { CustomSelect } from '@shared/ui/CustomSelect';
+import { roleOptions } from '../../lib/generateSelectOptions';
+import { inputs } from '../../model/data/DetailsForm.data';
+import { CamperRole } from '@entities/Camper';
+import styles from './DetailsForm.module.scss';
+
+type DetailsFormBasicsProps = {
+	role: CamperRole;
+};
+
+const DetailsFormBasics = memo(({ role }: DetailsFormBasicsProps) => (
+	<>
+		<div className={styles.form__row}>
+			{inputs.name.map(({ name, placeholder, label }) => (
+				<FormikInput
+					key={name}
+					name={name}
+					placeholder={placeholder}
+					label={label}
+				/>
+			))}
+		</div>
+		<div className={styles.form__row}>
+			{inputs.rest.map(({ name, placeholder, label }) => (
+				<FormikInput
+					key={name}
+					name={name}
+					placeholder={placeholder}
+					label={label}
+				/>
+			))}
+		</div>
+		<CustomSelect
+			name={'role'}
+			options={roleOptions}
+			label={'Role'}
+			disabled={role === CamperRole.TCO}
+		/>
+	</>
+));
+
+export { DetailsFormBasics };

@@ -1,0 +1,38 @@
+.tag {
+	position: relative;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 20px;
+	background-color: var(--color-ruby-dark);
+
+	&__name {
+		font: var(--font-m);
+		font-weight: 500;
+		color: var(--color-white);
+		text-align: center;
+	}
+
+	&__detail {
+		position: relative;
+		padding-left: 10px;
+		font: var(--font-s);
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: 8px;
+			left: 0;
+			width: 6px;
+			height: 6px;
+			border-radius: 100%;
+			background-color: var(--color-ruby-dark);
+		}
+	}
+
+	&__tooltip {
+		z-index: 1;
+		padding: 10px;
+		background-color: var(--color-neutral);
+		border-radius: 10px;
+	}
+}

@@ -5,11 +5,26 @@
 	align-items: flex-start;
 	gap: 5px 20px;
 
+	@media (width < breakpoints.$md) {
+		flex-direction: column;
+	}
+
+	&__avatar {
+		@media (width < breakpoints.$md) {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+
 	&__content {
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
 		gap: 5px;
+
+		@media (width < breakpoints.$md) {
+			width: 100%;
+		}
 	}
 
 	&__title {
@@ -17,6 +32,10 @@
 		align-items: center;
 		gap: 15px;
 		flex-grow: 1;
+
+		@media (width < breakpoints.$md) {
+			justify-content: center;
+		}
 
 		h2 {
 			font: var(--font-xxl);
@@ -35,6 +54,8 @@
 	}
 
 	&__email {
+		width: max-content;
+		max-width: 100%;
 		font: var(--font-s);
 		color: var(--color-neutral);
 
@@ -54,19 +75,6 @@
 
 		@media (width < breakpoints.$lg) {
 			font: var(--font-xs);
-		}
-	}
-
-	&__socials {
-		display: flex;
-		align-items: center;
-		align-self: flex-start;
-		flex-shrink: 0;
-		gap: 15px;
-		margin-left: auto;
-
-		@media (width < breakpoints.$lg) {
-			gap: 10px;
 		}
 	}
 

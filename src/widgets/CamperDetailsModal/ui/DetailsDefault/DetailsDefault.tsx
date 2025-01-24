@@ -1,7 +1,10 @@
 import { memo } from 'react';
+import { useMedia } from '@shared/hooks/useMedia';
 import { classNames } from '@shared/lib/classNames';
 import { DetailsHead } from '../DetailsHead/DetailsHead';
 import { DetailsRole } from '../DetailsRole/DetailsRole';
+import { DetailsSocial } from '../DetailsSocial/DetailsSocial';
+import { DetailsTags } from '../DetailsTags/DetailsTags';
 import { DetailsSummary } from '../DetailsSummary/DetailsSummary';
 import { DetailsHistory } from '../DetailsHistory/DetailsHistory';
 import type { ICamper } from '@entities/Camper';
@@ -16,13 +19,20 @@ type DetailsDefaultProps = {
 
 const DetailsDefault = memo((props: DetailsDefaultProps) => {
 	const { className, camper, setTheme } = props;
-	const { role, about_me, history } = camper;
+	const { role, about_me, history, tags, social_links } = camper;
 	const isHistory = history?.some(h => h.value.length > 0);
+	const { isMobile } = useMedia();
 
 	return (
 		<div className={classNames(styles.details, {}, [className])}>
 			<DetailsHead camper={camper} setTheme={setTheme} />
-			<DetailsRole role={role} />
+			<div className={styles.details__row}>
+				<DetailsRole role={role} />
+				{isMobile && social_links && social_links.length > 0 && (
+					<DetailsSocial socials={social_links} />
+				)}
+			</div>
+			{tags && <DetailsTags tags={tags} />}
 			{about_me && <DetailsSummary summary={about_me} />}
 			{history && isHistory && <DetailsHistory history={history} />}
 		</div>

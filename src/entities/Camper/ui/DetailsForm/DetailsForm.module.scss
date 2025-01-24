@@ -48,7 +48,7 @@
 			gap: 10px;
 		}
 
-		&-itemHistory {
+		&-item-history {
 			display: grid;
 			grid-template-columns: 100px 1fr;
 			align-items: flex-start;
@@ -59,7 +59,7 @@
 			}
 		}
 
-		&-itemHistoryInner {
+		&-item-history-inner {
 			@media (width < breakpoints.$md) {
 				display: flex;
 				align-items: center;
@@ -67,7 +67,20 @@
 			}
 		}
 
-		&-itemSocial {
+		&-item-social {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+		}
+
+		&-item-tag {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: flex-start;
+			gap: 10px;
+		}
+
+		&-item-tag-inner {
 			display: flex;
 			align-items: center;
 			gap: 5px;

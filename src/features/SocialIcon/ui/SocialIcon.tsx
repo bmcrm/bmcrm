@@ -14,13 +14,13 @@ type SocialIconProps = {
 
 const SocialIcon = memo((props: SocialIconProps) => {
   const { className, social: { name, url } } = props;
-  const { isTablet } = useMedia();
+  const { isMobile } = useMedia();
 
   return (
     <a href={url} target={'_blank'} className={classNames(styles.link, {}, [className])}>
       <Icon
         icon={socialIconsList[name as SocialIcons]}
-        size={isTablet ? IconSize.SIZE_14 : IconSize.SIZE_24}
+        size={isMobile ? IconSize.SIZE_20 : IconSize.SIZE_24}
       />
     </a>
   );
