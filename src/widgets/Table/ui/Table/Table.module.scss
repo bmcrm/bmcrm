@@ -53,6 +53,10 @@
 		}
 	}
 
+	&__wrapper {
+		position: relative;
+	}
+
 	&__scroll {
 		overflow-x: auto;
 	}

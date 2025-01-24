@@ -1,4 +1,4 @@
-import { useCallback, type MouseEvent, type ReactNode, useRef } from 'react';
+import { useCallback, useRef, type MouseEvent, type ReactNode, type RefObject } from 'react';
 import type { Header, Table } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
@@ -15,10 +15,12 @@ type TableControlProps<TData extends object> = {
 	theme: TableControlTheme;
 	table?: Table<TData>;
 	header?: Header<TData, unknown>;
+	portalTargetRef?: RefObject<HTMLDivElement>;
+	tableScrollRef?: RefObject<HTMLDivElement>;
 };
 
 const TableControl = <TData extends object>(props: TableControlProps<TData>) => {
-	const { className, theme, table, header } = props;
+	const { className, theme, table, header, portalTargetRef, tableScrollRef } = props;
 	const { isOpen, open, close } = useToggle();
 	const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -52,7 +54,17 @@ const TableControl = <TData extends object>(props: TableControlProps<TData>) => 
 			>
 				<Icon icon={controlContent[theme].icon} size={IconSize.SIZE_20} className={styles.control__icon} />
 			</Button>
-			{isOpen && <TableTooltip theme={theme} table={table} header={header} handleClose={close} btnRef={btnRef} />}
+			{isOpen && (
+				<TableTooltip
+					theme={theme}
+					table={table}
+					header={header}
+					handleClose={close}
+					btnRef={btnRef}
+					portalTargetRef={portalTargetRef}
+					tableScrollRef={tableScrollRef}
+				/>
+			)}
 		</div>
 	);
 };

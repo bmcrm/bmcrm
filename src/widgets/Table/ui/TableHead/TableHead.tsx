@@ -1,3 +1,4 @@
+import type { RefObject } from 'react';
 import { flexRender, type Table } from '@tanstack/react-table';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TableControl } from '../TableControl/TableControl';
@@ -9,9 +10,11 @@ import FilterIcon from '@shared/assets/icons/search_icon.svg';
 
 type TableHeadProps<TData extends object> = {
 	table: Table<TData>;
+	portalTargetRef?: RefObject<HTMLDivElement>;
+	tableScrollRef?: RefObject<HTMLDivElement>;
 };
 
-const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
+const TableHead = <TData extends object>({ table, portalTargetRef, tableScrollRef }: TableHeadProps<TData>) => (
 	<thead>
 	{table.getHeaderGroups().map((headerGroup) => (
 		<tr key={headerGroup.id}>
@@ -33,10 +36,15 @@ const TableHead = <TData extends object>({ table }: TableHeadProps<TData>) => (
 										/>
 									)}
 									{header.column.getIsFiltered() && (
-										<Icon icon={<FilterIcon />} size={IconSize.SIZE_12} />
+										<Icon icon={<FilterIcon/>} size={IconSize.SIZE_12} />
 									)}
 								</p>
-								<TableControl theme={TableControlTheme.COLUMN} header={header} />
+								<TableControl
+									portalTargetRef={portalTargetRef}
+									tableScrollRef={tableScrollRef}
+									theme={TableControlTheme.COLUMN}
+									header={header}
+								/>
 							</div>
 						)
 					}

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
 	useReactTable,
 	getCoreRowModel,
@@ -26,6 +26,8 @@ type TableProps<TData extends object> = {
 
 const Table = <TData extends object>(props: TableProps<TData>) => {
 	const { className, title, data, columns } = props;
+	const portalTargetRef = useRef<HTMLDivElement>(null);
+	const tableScrollRef = useRef<HTMLDivElement>(null);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -67,11 +69,13 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 					<TableControl table={table} theme={TableControlTheme.TABLE} />
 				</div>
 			</div>
-			<div className={styles.table__scroll}>
-				<table className={styles.table__inner}>
-					<TableHead table={table} />
-					<TableBody table={table} />
-				</table>
+			<div ref={portalTargetRef} className={styles.table__wrapper}>
+				<div ref={tableScrollRef} className={styles.table__scroll}>
+					<table className={styles.table__inner}>
+						<TableHead table={table} portalTargetRef={portalTargetRef} tableScrollRef={tableScrollRef} />
+						<TableBody table={table} />
+					</table>
+				</div>
 			</div>
 		</div>
 	);
