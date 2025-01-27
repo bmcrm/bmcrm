@@ -1,0 +1,13 @@
+.select {
+	position: relative;
+	width: 100%;
+	color: var(--color-black);
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	&__caption {
+		font: var(--font-s);
+		font-weight: 500;
+	}
+}

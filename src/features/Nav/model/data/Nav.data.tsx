@@ -13,6 +13,10 @@ export const generateNavList = (campID: string): NavLinkType[] => ([
     text: 'Funnel',
   },
   {
+    path: RoutePath.campers,
+    text: 'Campers',
+  },
+  {
     path: RoutePath.finances,
     text: 'Finances',
     disabled: true,

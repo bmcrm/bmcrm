@@ -19,6 +19,7 @@ type ColumnContentProps<TData extends object> = {
 const ColumnContent = <TData extends object>({ header, handleClose }: ColumnContentProps<TData>) => {
 	const columnFilterValue = header.column.getFilterValue();
 	const isSorted = header.column.getIsSorted();
+	const canSort = header.column.getCanSort();
 
 	const handleSort = useCallback((action: () => void) => {
 		action();
@@ -27,47 +28,49 @@ const ColumnContent = <TData extends object>({ header, handleClose }: ColumnCont
 
 	return (
 		<>
-			<div className={classNames(styles.tooltip__row, {}, [styles.fluid])}>
-				{isSorted !== 'asc' && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header?.column.toggleSorting(false))}
-						fluid
-					>
-						<Icon icon={<AscIcon />} size={IconSize.SIZE_16} />
-						Sort Ascending
-					</Button>
-				)}
-				{isSorted !== 'desc' && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header?.column.toggleSorting(true))}
-						fluid
-					>
-						<Icon icon={<DescIcon />} size={IconSize.SIZE_16} />
-						Sort Descending
-					</Button>
-				)}
-				{isSorted && (
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.BLACK}
-						className={styles.tooltip__btn}
-						onClick={() => handleSort(() => header?.column.clearSorting())}
-						fluid
-					>
-						<Icon icon={<ClearSortIcon />} size={IconSize.SIZE_16} />
-						Clear Sort
-					</Button>
-				)}
-			</div>
+			{canSort && (
+				<div className={classNames(styles.tooltip__row, {}, [styles.fluid])}>
+					{isSorted !== 'asc' && (
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							color={ButtonColor.BLACK}
+							className={styles.tooltip__btn}
+							onClick={() => handleSort(() => header?.column.toggleSorting(false))}
+							fluid
+						>
+							<Icon icon={<AscIcon />} size={IconSize.SIZE_16} />
+							Sort Ascending
+						</Button>
+					)}
+					{isSorted !== 'desc' && (
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							color={ButtonColor.BLACK}
+							className={styles.tooltip__btn}
+							onClick={() => handleSort(() => header?.column.toggleSorting(true))}
+							fluid
+						>
+							<Icon icon={<DescIcon />} size={IconSize.SIZE_16} />
+							Sort Descending
+						</Button>
+					)}
+					{isSorted && (
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							color={ButtonColor.BLACK}
+							className={styles.tooltip__btn}
+							onClick={() => handleSort(() => header?.column.clearSorting())}
+							fluid
+						>
+							<Icon icon={<ClearSortIcon />} size={IconSize.SIZE_16} />
+							Clear Sort
+						</Button>
+					)}
+				</div>
+			)}
 			{header.id === 'role' ? (
 				<div className={styles.tooltip__row}>
 					<h4 className={styles.tooltip__caption}>Filter by role:</h4>

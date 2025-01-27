@@ -33,7 +33,7 @@ const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
 						)}
 					</div>
 					<ul className={styles.form__list}>
-						{values.social_links?.map((_, i) => (
+						{values.social_links?.map((_, i, array) => (
 							<li key={i} className={styles.form__listItemSocial}>
 								<FormikInput
 									name={`social_links.${i}.url`}
@@ -44,7 +44,7 @@ const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
 									size={ButtonSize.TEXT}
 									className={styles.btnAdd}
 									onClick={() => {
-										if (i === 0) {
+										if (array.length === 1) {
 											void setFieldValue(`social_links.${i}.url`, '');
 										} else {
 											remove(i);

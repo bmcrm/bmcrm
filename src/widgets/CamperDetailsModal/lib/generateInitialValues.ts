@@ -12,10 +12,12 @@ export const generateInitialValues = (camper: ICamper): Partial<IFormikCamper> =
     city: city || '',
     about_me: about_me || '',
 		history: history || [{ year: String(currentYear), value: '' }],
-		tags: Object.entries(tags || {}).map(([key, values]) => ({
-			tagName: key,
-			tagDetails: values,
-		})),
+		tags: tags && Object.values(tags).length > 0
+			? Object.entries(tags).map(([key, values]) => ({
+				tagName: key,
+				tagDetails: values,
+			}))
+			: [{ tagName: '', tagDetails: [] }],
 		...(social_links && social_links.length > 0 ? { social_links } : { social_links: [{ name: '', url: '' }] }),
 	});
 };

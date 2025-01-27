@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { CamperRole } from '@entities/Camper';
 
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
 
@@ -121,15 +122,15 @@ export const camperRegistrationSchema = yup.object().shape({
 export const userSettingsSchema = yup.object().shape({
   first_name: yup
     .string()
+    .trim()
     .required('Field is required')
-    .max(32, 'First name must be less than 32 characters')
-    .transform((_, originalValue) => originalValue.trim()),
+    .max(32, 'First name must be less than 32 characters'),
   last_name: yup
     .string()
+    .trim()
     .required('Field is required')
-    .max(32, 'Last name must be less than 32 characters')
-    .transform((_, originalValue) => originalValue.trim()),
-  playa_name: yup.string().transform((_, originalValue) => originalValue.trim()),
+    .max(32, 'Last name must be less than 32 characters'),
+  playa_name: yup.string().trim(),
 });
 
 export const campSettingsSchema = yup.object().shape({
@@ -151,4 +152,44 @@ export const createInventoryItemSchema = yup.object().shape({
   price: yup.number().required('Price is required').min(1, 'Price must be at least 1$'),
   quantity: yup.number().required('Quantity is required').min(1, 'Quantity must be at least 1'),
   category: yup.string().required('Category is required'),
+});
+
+export const editCamperSchema = yup.object().shape({
+  first_name: yup
+    .string()
+    .trim()
+    .required('Field is required')
+    .max(32, 'First name must be less than 32 characters'),
+  last_name: yup
+    .string()
+    .trim()
+    .required('Field is required')
+    .max(32, 'Last name must be less than 32 characters'),
+  playa_name: yup.string().trim().max(24, 'Less than 24 characters'),
+  city: yup.string().trim().max(32, 'Less than 32 characters'),
+  role: yup
+    .mixed<CamperRole>()
+    .oneOf(Object.values(CamperRole) as CamperRole[], 'Invalid role selected'),
+  tags: yup
+    .array()
+    .of(
+      yup.object().shape({
+        tagName: yup
+          .string()
+          .trim()
+          .test(
+            'tagName-required-if-tagDetails',
+            'Tag name is required',
+            function (value, context) {
+              const { tagDetails } = context.parent;
+              if (tagDetails && tagDetails.length > 0) {
+                return Boolean(value && value.trim());
+              }
+              return true;
+            }
+          ),
+        tagDetails: yup.array().of(yup.string().trim()).notRequired(),
+      })
+    )
+    .notRequired(),
 });

@@ -32,7 +32,7 @@ const DetailsDefault = memo((props: DetailsDefaultProps) => {
 					<DetailsSocial socials={social_links} />
 				)}
 			</div>
-			{tags && <DetailsTags tags={tags} />}
+			{tags && Object.values(tags).length > 0 && <DetailsTags tags={tags} />}
 			{about_me && <DetailsSummary summary={about_me} />}
 			{history && isHistory && <DetailsHistory history={history} />}
 		</div>

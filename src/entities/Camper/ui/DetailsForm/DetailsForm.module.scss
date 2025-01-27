@@ -42,7 +42,7 @@
 	&__list {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 15px;
 
 		@media (width < breakpoints.$md) {
 			gap: 10px;
@@ -75,15 +75,13 @@
 
 		&-item-tag {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 300px 1fr;
 			align-items: flex-start;
-			gap: 10px;
-		}
+			gap: 5px 10px;
 
-		&-item-tag-inner {
-			display: flex;
-			align-items: center;
-			gap: 5px;
+			@media (width < breakpoints.$md) {
+				grid-template-columns: 1fr;
+			}
 		}
 	}
 

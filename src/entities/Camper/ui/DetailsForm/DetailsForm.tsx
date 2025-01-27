@@ -11,6 +11,7 @@ import { DetailsFormButtons } from './DetailsFormButtons';
 import { useUpdateCamper } from '../../hooks/useUpdateCamper';
 import { generateSocialName } from '@features/SocialIcon';
 import { CamperRole, type ICamper, type IFormikCamper } from '../../model/types/Camper.types';
+import { editCamperSchema } from '@shared/const/validationSchemas';
 import styles from './DetailsForm.module.scss';
 
 type DetailsFormProps = {
@@ -41,18 +42,26 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 			...(normalizedTags ? { tags: normalizedTags } : {}),
 		};
 
-		console.log('payload:', payload);
-
-		// updateCamper(payload);
+		updateCamper(payload);
 		handleCancel();
-	}, [camperEmail, handleCancel, initialValues.role]);
-
-	console.log('initialValues:', initialValues);
+	}, [camperEmail, handleCancel, initialValues.role, updateCamper]);
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
+		<Formik
+			initialValues={initialValues}
+			validationSchema={editCamperSchema}
+			onSubmit={handleSubmit}
+			enableReinitialize
+		>
 			{({ values }) => (
-				<Form className={classNames(styles.form, {}, [className])}>
+				<Form
+					className={classNames(styles.form, {}, [className])}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+						}
+					}}
+				>
 					<DetailsFormBasics role={initialValues.role || CamperRole.CAMPER} />
 					<DetailsFormTags values={values} />
 					<FormikTextarea

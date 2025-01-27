@@ -2,20 +2,22 @@ import { memo } from 'react';
 import { useToggle } from '@shared/hooks/useToggle';
 import { classNames } from '@shared/lib/classNames';
 import { Tooltip } from '@shared/ui/Tooltip';
+import { CamperTagTheme } from '../model/types/CamperTag.types';
 import styles from './CamperTag.module.scss';
 
 type CamperTagProps = {
 	className?: string;
+	theme?: CamperTagTheme;
 	tag: { name: string; details: string[] };
 };
 
 const CamperTag = memo((props: CamperTagProps) => {
-	const { className, tag: { name, details } } = props;
+	const { className, theme = CamperTagTheme.DEFAULT, tag: { name, details } } = props;
 	const { isOpen, open, close } = useToggle();
 
 	return (
 		<div
-			className={classNames(styles.tag, {}, [className])}
+			className={classNames(styles.tag, {}, [className, styles[theme]])}
 			onMouseEnter={open}
 			onMouseLeave={close}
 		>
