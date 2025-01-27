@@ -2,8 +2,9 @@ import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useToggle } from '@shared/hooks/useToggle';
 import { dateNormalize } from '@shared/lib/dateNormalize';
-import { multiValueFilter, Table } from '@widgets/Table';
+import { filterTagsByKey, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonSize } from '@shared/ui/Button';
+import { CamperTag, CamperTagTheme } from '@features/CamperTag';
 import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
 import { userState } from '@entities/User';
 import { CamperRole, type ICamper } from '@entities/Camper';
@@ -76,6 +77,24 @@ const CampersTable = (props: CampersTableProps) => {
 				header: 'City',
 			},
 			{
+				accessorKey: 'tags',
+				header: 'Tags',
+				filterFn: filterTagsByKey,
+				enableSorting: false,
+				cell: (info) => {
+					const row = info.row.original;
+					const tags = row.tags || {};
+
+					return (
+						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
+							{Object.entries(tags).map(([name, details]) => (
+								<CamperTag theme={CamperTagTheme.TABLE} tag={{ name, details }} />
+							))}
+						</div>
+					);
+				},
+			},
+			{
 				accessorKey: 'created_at',
 				header: 'Created At',
 				cell: (info) => dateNormalize(info.getValue() as string),
@@ -86,7 +105,7 @@ const CampersTable = (props: CampersTableProps) => {
 				cell: (info) => dateNormalize(info.getValue() as string),
 			},
 		],
-		[handleOpenDetails, isTCO, userEmail]
+		[handleOpenDetails, userEmail]
 	);
 
 	return (

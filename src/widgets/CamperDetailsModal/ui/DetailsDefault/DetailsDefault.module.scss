@@ -1,5 +1,18 @@
+@use '@app/styles/breakpoints';
+
 .details {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+
+	@media (width < breakpoints.$md) {
+		gap: 10px;
+  }
+
+	&__row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+	}
 }

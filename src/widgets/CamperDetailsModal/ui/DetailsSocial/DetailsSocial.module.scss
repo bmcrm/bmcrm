@@ -1,0 +1,17 @@
+@use '@app/styles/breakpoints';
+
+.socials {
+	display: flex;
+	align-items: center;
+	align-self: flex-start;
+	flex-shrink: 0;
+	gap: 15px;
+	margin-left: auto;
+
+	@media (width < breakpoints.$lg) {
+		gap: 10px;
+	}
+	@media (width < breakpoints.$md) {
+		align-self: unset;
+	}
+}

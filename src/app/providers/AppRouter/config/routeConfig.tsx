@@ -12,7 +12,7 @@ import { ResetPassPage } from '@pages/ResetPassPage';
 import { CampOverviewPage } from '@pages/CampOverviewPage';
 import { NotFound } from '@widgets/CampNotFound';
 import { SettingsPage, SettingsAccount, SettingsCamp } from '@pages/SettingsPage';
-import { CampersTablePage } from '@pages/CampersTablePage';
+import { CampersPage } from '@pages/CampersPage';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -32,7 +32,7 @@ export enum AppRoutes {
   LOGIN = 'login',
   RESET_PASS = 'reset_pass',
   CAMP_OVERVIEW = 'camp_overview',
-  CAMPERS_TABLE = 'campers_table',
+  CAMPERS = 'campers',
   NOT_FOUND = 'not_found',
 }
 
@@ -49,7 +49,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.LOGIN]: '/login',
   [AppRoutes.RESET_PASS]: '/reset-password',
   [AppRoutes.CAMP_OVERVIEW]: '/id/',
-  [AppRoutes.CAMPERS_TABLE]: '/campers-table',
+  [AppRoutes.CAMPERS]: '/campers',
   [AppRoutes.NOT_FOUND]: '*',
 };
 
@@ -95,9 +95,9 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
     path: `${RoutePath.camp_overview}:id`,
     element: <CampOverviewPage />,
   },
-  [AppRoutes.CAMPERS_TABLE]: {
-    path: RoutePath.campers_table,
-    element: <CampersTablePage />,
+  [AppRoutes.CAMPERS]: {
+    path: RoutePath.campers,
+    element: <CampersPage />,
     authOnly: true,
   },
   [AppRoutes.SETTINGS]: {

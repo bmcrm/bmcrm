@@ -1,3 +1,3 @@
 export { default as Table } from './ui/Table/Table';
 
-export { multiValueFilter } from './lib/multiValueFilter';
+export { multiValueFilter, filterTagsByKey } from './lib/tableFilter';

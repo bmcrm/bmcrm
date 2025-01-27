@@ -50,7 +50,7 @@ const TableTooltip = <TData extends object>(props: TableTooltipProps<TData>) => 
 			});
 			setIsPositionReady(true);
 		}
-	}, [btnRef, header?.index, isMobile, portalTargetRef]);
+	}, [header?.index, isMobile, btnRef.current, portalTargetRef?.current]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {

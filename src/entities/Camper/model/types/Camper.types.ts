@@ -8,6 +8,15 @@ export interface CamperSocial {
   url: string;
 }
 
+export type CamperTags = {
+  [key: string]: string[];
+};
+
+export interface FormikTag {
+  tagName: string;
+  tagDetails: string[];
+}
+
 export enum CamperRole {
   TCO = 'tco',
   COORG = 'co-organizer',
@@ -34,7 +43,12 @@ export interface ICamper {
   history?: CamperHistory[];
   updated_at: string;
   created_at: string;
+  tags?: CamperTags;
 }
+
+export type IFormikCamper = Omit<ICamper, 'tags'> & {
+  tags: FormikTag[];
+};
 
 export interface IInviteCamperData {
   email: string;
