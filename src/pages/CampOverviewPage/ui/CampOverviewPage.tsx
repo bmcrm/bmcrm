@@ -28,17 +28,26 @@ const CampOverviewPage = memo(() => {
 	const { mutateAsync: registration, isPending } = useRegistration();
 
 	const submitHandler = useCallback(
-		async (values: ICamperRegistrationData, resetForm: () => void) => {
-			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data: { ...values, camp_id: id } });
+		async (values: Omit<ICamperRegistrationData, 'camp_name'>, resetForm: () => void) => {
+			if (!camp?.camp_name || !id) return;
+
+			const payload: ICamperRegistrationData = {
+				...values,
+				camp_name: camp.camp_name,
+			};
+
+			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data: { ...payload, camp_id: id } });
+
 			const redirectState = {
 				email: values.email,
 				password: values.password,
 				isConfirmation: true,
 			};
+
 			resetForm();
 			navigate(RoutePath.login, { replace: true, state: redirectState });
 		},
-		[id, navigate, registration]
+		[id, navigate, registration, camp?.camp_name]
 	);
 
 	return (
