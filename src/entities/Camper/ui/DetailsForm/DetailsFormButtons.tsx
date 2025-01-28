@@ -10,7 +10,7 @@ const DetailsFormButtons = memo(({ handleCancel }: DetailsFormButtonsProps) => (
 	<div className={styles.form__buttons}>
 		<Button type={'submit'}>Save</Button>
 		<Button
-			className={styles.btnCancel}
+			className={styles.form__btnCancel}
 			theme={ButtonTheme.CLEAR}
 			size={ButtonSize.TEXT}
 			color={ButtonColor.NEUTRAL}

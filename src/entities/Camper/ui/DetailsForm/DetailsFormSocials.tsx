@@ -3,16 +3,16 @@ import { useFormikContext, FieldArray } from 'formik';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import type { IFormikCamper } from '../../model/types/Camper.types';
+import type { CamperSocial } from '../../model/types/Camper.types';
 import styles from './DetailsForm.module.scss';
 import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type DetailsFormSocialsProps = {
-	values: Partial<IFormikCamper>;
+	socials?: CamperSocial[];
 };
 
-const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
+const DetailsFormSocials = memo(({ socials }: DetailsFormSocialsProps) => {
 	const { setFieldValue } = useFormikContext();
 
 	return (
@@ -21,11 +21,11 @@ const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
 				<div className={styles.form__group}>
 					<div className={styles.form__caption}>
 						<p>Social</p>
-						{values.social_links && values.social_links.length < 5 && (
+						{socials && socials.length < 5 && (
 							<Button
 								theme={ButtonTheme.CLEAR}
 								size={ButtonSize.TEXT}
-								className={styles.btnAdd}
+								className={styles.form__btnControl}
 								onClick={() => push({ name: '', url: '' })}
 							>
 								<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
@@ -33,7 +33,7 @@ const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
 						)}
 					</div>
 					<ul className={styles.form__list}>
-						{values.social_links?.map((_, i, array) => (
+						{socials?.map((_, i, array) => (
 							<li key={i} className={styles.form__listItemSocial}>
 								<FormikInput
 									name={`social_links.${i}.url`}
@@ -42,7 +42,7 @@ const DetailsFormSocials = memo(({ values }: DetailsFormSocialsProps) => {
 								<Button
 									theme={ButtonTheme.CLEAR}
 									size={ButtonSize.TEXT}
-									className={styles.btnAdd}
+									className={styles.form__btnControl}
 									onClick={() => {
 										if (array.length === 1) {
 											void setFieldValue(`social_links.${i}.url`, '');

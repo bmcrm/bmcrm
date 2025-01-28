@@ -30,7 +30,7 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 						<Button
 							theme={ButtonTheme.CLEAR}
 							size={ButtonSize.TEXT}
-							className={styles.btnAdd}
+							className={styles.form__btnControl}
 							onClick={() => pushTag({ tagName: '', tagDetails: [] })}
 						>
 							<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
@@ -45,7 +45,7 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 										<Button
 											theme={ButtonTheme.CLEAR}
 											size={ButtonSize.TEXT}
-											className={styles.btnAdd}
+											className={styles.form__btnControl}
 											onClick={() => {
 												if (array.length === 1) {
 													void setFieldValue(`tags.${tagIndex}.tagName`, '');

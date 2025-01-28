@@ -85,19 +85,20 @@
 		}
 	}
 
-	.btn-cancel {
-		@media (hover: hover) {
-      &:hover {
-        color: var(--color-black);
-      }
-    }
-	}
-	.btn-add {
+	&__btn-control {
 		padding: 2px;
 		color: var(--color-neutral);
 		border: 1px solid currentColor;
 		border-radius: 50%;
 
+		@media (hover: hover) {
+			&:hover {
+				color: var(--color-black);
+			}
+		}
+	}
+
+	&__btn-cancel {
 		@media (hover: hover) {
       &:hover {
         color: var(--color-black);

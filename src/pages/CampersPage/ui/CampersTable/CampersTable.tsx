@@ -89,8 +89,9 @@ const CampersTable = (props: CampersTableProps) => {
 
 					return (
 						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
-							{Object.entries(tags).map(([name, details]) => (
+							{Object.entries(tags).map(([name, details], i) => (
 								<CamperTag
+									key={`${name}-${i}`}
 									theme={CamperTagTheme.TABLE}
 									tag={{ name, details }}
 									portalTargetRef={portalTargetRef}

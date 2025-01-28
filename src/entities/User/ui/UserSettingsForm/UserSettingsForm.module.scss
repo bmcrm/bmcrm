@@ -3,14 +3,41 @@
 .form {
 
 	&__inner {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 240px;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 20px;
+		gap: 15px 40px;
 
 		@media (width < breakpoints.$lg) {
-			flex-direction: column-reverse;
-			align-items: center;
+			grid-template-columns: 1fr;
+			justify-items: center;
+		}
+
+		> *:nth-child(1) {
+			grid-column: span 1;
+
+			@media (width < breakpoints.$lg) {
+				width: 100%;
+				order: 2;
+			}
+		}
+		> *:nth-child(2) {
+			grid-column: span 1;
+
+			@media (width < breakpoints.$lg) {
+				order: 1;
+			}
+		}
+		> *:nth-child(3) {
+			grid-template-columns: 1fr;
+			grid-column: span 2;
+
+			@media (width < breakpoints.$lg) {
+				width: 100%;
+				order: 3;
+				grid-column: span 1;
+			}
 		}
 
 		+ button {
@@ -25,11 +52,19 @@
 	&__inputs {
 		display: grid;
 		gap: 25px;
-		width: 100%;
-		max-width: 475px;
 
 		@media (width < breakpoints.$md) {
 			gap: 15px;
+		}
+	}
+
+	&__row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+
+		@media (width < breakpoints.$lg) {
+			grid-template-columns: 1fr;
 		}
 	}
 }

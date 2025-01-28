@@ -69,8 +69,8 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 						placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
 						label={'Summary'}
 					/>
-					<DetailsFormHistory values={values} />
-					<DetailsFormSocials values={values} />
+					<DetailsFormHistory history={values.history} />
+					<DetailsFormSocials socials={values.social_links} />
 					<DetailsFormButtons handleCancel={handleCancel} />
 				</Form>
 			)}
