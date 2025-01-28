@@ -10,12 +10,12 @@ export interface ICamperRegistrationData {
   social_links?: CamperSocial[];
   accept: boolean;
   role?: CamperRole;
+  camp_name: string;
+  camp_id: string;
 }
 
 export interface ITCORegistrationData extends ICamperRegistrationData {
-  camp_id: string;
   city: string;
-  camp_name: string;
   camp_website: string;
 }
 
