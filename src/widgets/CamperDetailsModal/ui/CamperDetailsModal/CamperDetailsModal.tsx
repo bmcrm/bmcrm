@@ -1,4 +1,4 @@
-import { memo, useState, type ReactNode, useEffect } from 'react';
+import { memo, useState, useEffect, type ReactNode } from 'react';
 import { Modal } from '@shared/ui/Modal';
 import { DetailsDefault } from '../DetailsDefault/DetailsDefault';
 import { DetailsEdit } from '../DetailsEdit/DetailsEdit';

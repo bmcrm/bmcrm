@@ -6,16 +6,16 @@ import { CustomSelect } from '@shared/ui/CustomSelect';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import type { IFormikCamper } from '../../model/types/Camper.types';
+import type { CamperHistory } from '../../model/types/Camper.types';
 import styles from './DetailsForm.module.scss';
 import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type DetailsFormHistoryProps = {
-	values: Partial<IFormikCamper>;
+	history?: CamperHistory[];
 };
 
-const DetailsFormHistory = memo(({ values }: DetailsFormHistoryProps) => {
+const DetailsFormHistory = memo(({ history }: DetailsFormHistoryProps) => {
 	const currentYear = new Date().getFullYear();
 
 	return (
@@ -27,14 +27,14 @@ const DetailsFormHistory = memo(({ values }: DetailsFormHistoryProps) => {
 						<Button
 							theme={ButtonTheme.CLEAR}
 							size={ButtonSize.TEXT}
-							className={styles.btnAdd}
-							onClick={() => push({ year: String(currentYear - (values.history?.length ?? 0)), value: '' })}
+							className={styles.form__btnControl}
+							onClick={() => push({ year: String(currentYear - (history?.length ?? 0)), value: '' })}
 						>
 							<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
 						</Button>
 					</div>
 					<ul className={styles.form__list}>
-						{values.history?.map((h, i) => (
+						{history?.map((h, i) => (
 							<li key={i} className={styles.form__listItemHistory}>
 								<div className={styles.form__listItemHistoryInner}>
 									<CustomSelect name={`history.${i}.year`} options={BMYearsOptions(currentYear)} value={h.year} />
@@ -42,7 +42,7 @@ const DetailsFormHistory = memo(({ values }: DetailsFormHistoryProps) => {
 										<Button
 											theme={ButtonTheme.CLEAR}
 											size={ButtonSize.TEXT}
-											className={classNames(styles.btnAdd, {}, ['ml-a', 'mt-5'])}
+											className={classNames(styles.form__btnControl, {}, ['ml-a', 'mt-5'])}
 											onClick={() => remove(i)}
 										>
 											<Icon icon={<MinusIcon />} size={IconSize.SIZE_16} />

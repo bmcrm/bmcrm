@@ -1,4 +1,6 @@
 export { default as DetailsForm } from './ui/DetailsForm/DetailsForm';
+export { DetailsFormHistory } from './ui/DetailsForm/DetailsFormHistory';
+export { DetailsFormSocials } from './ui/DetailsForm/DetailsFormSocials';
 
 export { useGetCampers } from './hooks/useGetCampers';
 export { useUpdateCamper } from './hooks/useUpdateCamper';
