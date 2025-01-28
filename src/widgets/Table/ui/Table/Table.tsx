@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { type RefObject, useCallback, useRef, useState } from 'react';
 import {
 	useReactTable,
 	getCoreRowModel,
@@ -22,15 +22,19 @@ type TableProps<TData extends object> = {
 	title?: string;
 	data: TData[];
 	columns: ColumnDef<TData>[];
+	portalTargetRef?: RefObject<HTMLDivElement>;
+	tableScrollRef?: RefObject<HTMLDivElement>;
 };
 
 const Table = <TData extends object>(props: TableProps<TData>) => {
-	const { className, title, data, columns } = props;
-	const portalTargetRef = useRef<HTMLDivElement>(null);
-	const tableScrollRef = useRef<HTMLDivElement>(null);
+	const { className, title, data, columns, portalTargetRef, tableScrollRef } = props;
+	const internalPortalTargetRef = useRef<HTMLDivElement>(null);
+	const innerTableScrollRef = useRef<HTMLDivElement>(null);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const finalPortalRef = portalTargetRef || internalPortalTargetRef;
+	const finalScrollRef = tableScrollRef || innerTableScrollRef;
 
 	const table = useReactTable({
 		columns,
@@ -69,10 +73,10 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 					<TableControl table={table} theme={TableControlTheme.TABLE} />
 				</div>
 			</div>
-			<div ref={portalTargetRef} className={styles.table__wrapper}>
-				<div ref={tableScrollRef} className={styles.table__scroll}>
+			<div ref={finalPortalRef} className={styles.table__wrapper}>
+				<div ref={finalScrollRef} className={styles.table__scroll}>
 					<table className={styles.table__inner}>
-						<TableHead table={table} portalTargetRef={portalTargetRef} tableScrollRef={tableScrollRef} />
+						<TableHead table={table} portalTargetRef={finalPortalRef} tableScrollRef={finalScrollRef} />
 						<TableBody table={table} />
 					</table>
 				</div>
