@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useToggle } from '@shared/hooks/useToggle';
 import { dateNormalize } from '@shared/lib/dateNormalize';
@@ -20,6 +20,8 @@ const CampersTable = (props: CampersTableProps) => {
 	const [camperEmail, setCamperEmail] = useState('');
 	const { isOpen, open, close } = useToggle();
 	const { tokens: { decodedIDToken } } = userState();
+	const portalTargetRef = useRef<HTMLDivElement>(null);
+	const tableScrollRef = useRef<HTMLDivElement>(null);
 	const isTCO = decodedIDToken?.role === CamperRole.TCO;
 	const userEmail = decodedIDToken?.email;
 
@@ -88,7 +90,12 @@ const CampersTable = (props: CampersTableProps) => {
 					return (
 						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
 							{Object.entries(tags).map(([name, details]) => (
-								<CamperTag theme={CamperTagTheme.TABLE} tag={{ name, details }} />
+								<CamperTag
+									theme={CamperTagTheme.TABLE}
+									tag={{ name, details }}
+									portalTargetRef={portalTargetRef}
+									tableScrollRef={tableScrollRef}
+								/>
 							))}
 						</div>
 					);
@@ -110,7 +117,13 @@ const CampersTable = (props: CampersTableProps) => {
 
 	return (
 		<>
-			<Table<ICamper> title={'All Campers'} columns={columns} data={campers} />
+			<Table<ICamper>
+				title={'All Campers'}
+				columns={columns}
+				data={campers}
+				portalTargetRef={portalTargetRef}
+				tableScrollRef={tableScrollRef}
+			/>
 			<CamperDetailsModal
 				camperEmail={camperEmail}
 				isOpen={isOpen}

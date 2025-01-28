@@ -9,18 +9,10 @@
 		.tag__name {
 			font: var(--font-m);
 		}
-
-		.tag__tooltip {
-			padding: 10px;
-		}
 	}
 	&--table {
 		.tag__name {
 			font: var(--font-s);
-		}
-
-		.tag__tooltip {
-			padding: 5px 10px;
 		}
 	}
 
@@ -48,7 +40,8 @@
 	}
 
 	&__tooltip {
-		z-index: 1;
+		z-index: 100;
+		padding: 5px 10px;
 		background-color: var(--color-neutral);
 		border-radius: 10px;
 	}
