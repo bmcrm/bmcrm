@@ -20,7 +20,7 @@ import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
 type CamperRegisterFormProps = {
 	className: string;
-	onSubmit: (values: Omit<ICamperRegistrationData, 'camp_name'>, resetForm: () => void) => void;
+	onSubmit: (values: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'>, resetForm: () => void) => void;
 };
 
 const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
@@ -66,7 +66,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 				? socialLinksParser(values.social_links)
 				: [];
 
-			const data: Omit<ICamperRegistrationData, 'camp_name'> = {
+			const data: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'> = {
 				first_name: values.first_name.trim(),
 				last_name: values.last_name.trim(),
 				playa_name: values.playa_name.trim(),

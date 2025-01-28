@@ -28,15 +28,16 @@ const CampOverviewPage = memo(() => {
 	const { mutateAsync: registration, isPending } = useRegistration();
 
 	const submitHandler = useCallback(
-		async (values: Omit<ICamperRegistrationData, 'camp_name'>, resetForm: () => void) => {
+		async (values: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'>, resetForm: () => void) => {
 			if (!camp?.camp_name || !id) return;
 
-			const payload: ICamperRegistrationData = {
+			const data: ICamperRegistrationData = {
 				...values,
 				camp_name: camp.camp_name,
+				camp_id: id,
 			};
 
-			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data: { ...payload, camp_id: id } });
+			await registration({ stage: IRegistrationStage.REGISTRATION_CAMPER, data });
 
 			const redirectState = {
 				email: values.email,
