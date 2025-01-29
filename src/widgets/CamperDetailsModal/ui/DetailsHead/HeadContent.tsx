@@ -3,7 +3,8 @@ import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
-import type { ICamper } from '@entities/Camper';
+import { userState } from '@entities/User';
+import { CamperRole, type ICamper } from '@entities/Camper';
 import { CamperDetailsModalTheme } from '../../model/types/CamperDetailsModal.types';
 import styles from './DetailsHead.module.scss';
 import CheckIcon from '@shared/assets/icons/check.svg';
@@ -26,6 +27,8 @@ const HeadContent = memo((props: HeadContentProps) => {
 		created_at,
 		updated_at,
 	}} = props;
+	const { tokens: { decodedIDToken } } = userState();
+	const canEdit = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.email === email;
 
 	const capitalizedName = useMemo(
 		() => capitalizedCamperName({ first_name, last_name, playa_name, email }),
@@ -42,14 +45,16 @@ const HeadContent = memo((props: HeadContentProps) => {
 						size={IconSize.SIZE_24}
 						style={{ color: `var(${email_confirmed ? '--color-green-light' : '--color-neutral'})` }}
 					/>
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						className={styles.head__editBtn}
-						onClick={() => setTheme(CamperDetailsModalTheme.EDIT)}
-					>
-						<Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
-					</Button>
+					{canEdit && (
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							className={styles.head__editBtn}
+							onClick={() => setTheme(CamperDetailsModalTheme.EDIT)}
+						>
+							<Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
+						</Button>
+					)}
 				</div>
 			</div>
 			<a href={`mailto: ${email}`} className={styles.head__email}>{email}</a>

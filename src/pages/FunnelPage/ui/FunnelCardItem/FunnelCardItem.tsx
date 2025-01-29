@@ -3,7 +3,7 @@ import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Avatar } from '@shared/ui/Avatar';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
+import { CamperDetailsModal, CamperDetailsModalTheme } from '@widgets/CamperDetailsModal';
 import type { ICamper } from '@entities/Camper';
 import styles from './FunnerCardItem.module.scss';
 import ClockIcon from '@shared/assets/icons/clock.svg';
@@ -40,7 +40,12 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
         />
       </li>
       {camperEmail && (
-        <CamperDetailsModal camperEmail={camperEmail} isOpen={isOpen} onClose={close} />
+        <CamperDetailsModal
+          theme={CamperDetailsModalTheme.DEFAULT}
+          camperEmail={camperEmail}
+          isOpen={isOpen}
+          onClose={close}
+        />
       )}
     </>
   );
