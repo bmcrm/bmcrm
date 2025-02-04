@@ -59,10 +59,27 @@ const useRegistration = () => {
 		onError: (error, variables) => {
 			errorHandler(error);
 
-			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
-				user: variables.data.email,
-				...variables.data,
-			});
+			if (
+				variables.stage === IRegistrationStage.REGISTRATION_CAMPER
+				|| variables.stage === IRegistrationStage.REGISTRATION_TCO
+			) {
+				const { email, camp_id, camp_name, playa_name } = variables.data as ICamperRegistrationData;
+
+				logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during registration', {
+					user: email,
+					playa_name,
+					camp_id,
+					camp_name,
+				});
+			}
+
+			if (variables.stage === IRegistrationStage.CONFIRMATION) {
+				const { email } = variables.data as IConfirmRegistration;
+
+				logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during confirmation', {
+					user: email,
+				});
+			}
 		},
 	});
 
