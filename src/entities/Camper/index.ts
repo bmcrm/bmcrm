@@ -13,5 +13,6 @@ export {
 	type IInviteCamperData,
 	type CamperHistory,
 	type CamperTags,
+	type ICampersByRole,
 	CamperRole,
 } from './model/types/Camper.types';

@@ -10,6 +10,7 @@ import { DetailsFormSocials } from './DetailsFormSocials';
 import { DetailsFormButtons } from './DetailsFormButtons';
 import { useUpdateCamper } from '../../hooks/useUpdateCamper';
 import { generateSocialName } from '@features/SocialIcon';
+import { appState } from '@entities/App';
 import { CamperRole, type ICamper, type IFormikCamper } from '../../model/types/Camper.types';
 import { editCamperSchema } from '@shared/const/validationSchemas';
 import styles from './DetailsForm.module.scss';
@@ -18,12 +19,14 @@ type DetailsFormProps = {
 	className?: string;
 	initialValues: Partial<IFormikCamper>;
 	handleCancel: () => void;
+	onClose?: () => void;
 	camperEmail: string;
 };
 
 const DetailsForm = memo((props: DetailsFormProps) => {
-	const { className, initialValues, handleCancel, camperEmail } = props;
+	const { className, initialValues, handleCancel, onClose, camperEmail } = props;
 	const { mutate: updateCamper } = useUpdateCamper();
+	const { decrementModalCount } = appState();
 
 	const handleSubmit = useCallback((values: Partial<IFormikCamper>) => {
 		const { social_links, role, tags, ...rest } = values;
@@ -42,9 +45,14 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 			...(normalizedTags ? { tags: normalizedTags } : {}),
 		};
 
+		if (initialValues.role !== values.role) {
+			decrementModalCount()
+			onClose?.();
+		}
+
 		updateCamper(payload);
 		handleCancel();
-	}, [camperEmail, handleCancel, initialValues.role, updateCamper]);
+	}, [camperEmail, handleCancel, initialValues.role, updateCamper, onClose, decrementModalCount]);
 
 	return (
 		<Formik

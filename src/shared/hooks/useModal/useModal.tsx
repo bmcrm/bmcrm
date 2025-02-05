@@ -13,7 +13,7 @@ export const useModal = ({ isOpen, onClose, animationDelay }: UseModalProps) => 
 	const [isMounted, setIsMounted] = useState(false);
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const modalRef = useRef<HTMLDivElement>(null);
-	const { incrementModalCount, decrementModalCount } = appState();
+	const { incrementModalCount, decrementModalCount, resetModalCount } = appState();
 
 	const close = useCallback(() => {
 		if (!onClose || !modalRef.current) return;
@@ -31,9 +31,10 @@ export const useModal = ({ isOpen, onClose, animationDelay }: UseModalProps) => 
 		(e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
 				close();
+				resetModalCount();
 			}
 		},
-		[close]
+		[close, resetModalCount]
 	);
 
 	useEffect(() => {
