@@ -1,20 +1,13 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Progress, ProgressColors } from '@shared/ui/Progress';
 import { CamperRole } from '@entities/Camper';
 import styles from './Funnel.module.scss';
 
-type FunnelCampers = {
-	[CamperRole.LEAD]: number;
-	[CamperRole.QUALIFIED]: number;
-	[CamperRole.INTENT]: number;
-	[CamperRole.CAMPER]: number;
-};
-
 type FunnelProps = {
 	className?: string;
-	campers: FunnelCampers;
+	campers: Record<Exclude<CamperRole, CamperRole.TCO | CamperRole.COORG>, number>;
 };
 
 const Funnel = memo(({ className, campers }: FunnelProps) => {
@@ -32,6 +25,7 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
 		(event: MouseEvent) => {
 			if (openIndex !== null) {
 				const tooltip = tooltipRefs.current[openIndex];
+
 				if (tooltip && !tooltip.contains(event.target as Node)) {
 					setOpenIndex(null);
 				}
@@ -46,7 +40,7 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
 		return () => document.removeEventListener('click', handleClickOutside);
 	}, [handleClickOutside]);
 
-	const stages = [
+	const stages = useMemo(() => [
 		{
 			count: campers[CamperRole.LEAD],
 			color: ProgressColors.ORANGE_LIGHT,
@@ -70,7 +64,7 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
 			description:
 				'Participants confirmed their intention to participate in the camp and showed a high level of interest',
 		},
-	];
+	], [campers]);
 
 	return (
 		<ul className={classNames(styles.funnel, {}, [className])}>
@@ -103,4 +97,4 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
 	);
 });
 
-export default Funnel;
+export { Funnel };

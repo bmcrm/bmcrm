@@ -5,6 +5,7 @@ interface IAppState {
 	modalCount: number;
 	incrementModalCount: () => void;
 	decrementModalCount: () => void;
+	resetModalCount: () => void;
 }
 
 const appState = create<IAppState>()(
@@ -12,6 +13,7 @@ const appState = create<IAppState>()(
 		modalCount: 0,
 		incrementModalCount: () => set((state) => ({ modalCount: state.modalCount + 1 })),
 		decrementModalCount: () => set((state) => ({ modalCount: Math.max(0, state.modalCount - 1) })),
+		resetModalCount: () => set(() => ({ modalCount: 0 })),
 	})),
 );
 

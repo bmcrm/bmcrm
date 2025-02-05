@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Avatar } from '@shared/ui/Avatar';
@@ -19,17 +19,14 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
   const userName = user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.email;
   const { isOpen, open, close } = useToggle();
 
-  const clickHandler = () => {
+  const handleOpenModal = useCallback(() => {
     setCamperEmail(user.email);
     open();
-  };
+  }, [user.email, open]);
 
   return (
     <>
-      <li
-        onClick={clickHandler}
-        className={classNames(styles.cardItem, {}, [className])}
-      >
+      <li onClick={handleOpenModal} className={classNames(styles.cardItem, {}, [className])}>
         <Avatar alt={user.avatar} size={30} />
         <p className={styles.cardItem__name}>{userName}</p>
         <Icon
@@ -51,4 +48,4 @@ const FunnelCardItem = memo(({ className, user }: FunnerCardItemProps) => {
   );
 });
 
-export default FunnelCardItem;
+export { FunnelCardItem };

@@ -55,3 +55,5 @@ export interface IInviteCamperData {
   camp_id: string;
   idToken: string;
 }
+
+export type ICampersByRole = Record<CamperRole, ICamper[]>;

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { userState } from '@entities/User';
@@ -13,6 +13,13 @@ type DetailsFormBasicsProps = {
 
 const DetailsFormBasics = memo(({ role }: DetailsFormBasicsProps) => {
 	const { tokens: { decodedIDToken } } = userState();
+
+	const options = useMemo(
+		() => role === CamperRole.TCO
+			? roleOptions
+			: roleOptions.filter(option => option.value !== CamperRole.TCO),
+		[role]
+	);
 
 	return (
 		<>
@@ -39,7 +46,7 @@ const DetailsFormBasics = memo(({ role }: DetailsFormBasicsProps) => {
 			{decodedIDToken?.role === CamperRole.TCO && (
 				<CustomSelect
 					name={'role'}
-					options={roleOptions}
+					options={options}
 					label={'Role'}
 					disabled={role === CamperRole.TCO}
 				/>

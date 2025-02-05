@@ -9,10 +9,11 @@ type DetailsEditProps = {
 	className?: string;
 	camper: ICamper;
 	setTheme: (theme: CamperDetailsModalTheme) => void;
+	onClose?: () => void;
 };
 
 const DetailsEdit = memo((props: DetailsEditProps) => {
-	const { className, camper, setTheme } = props;
+	const { className, camper, setTheme, onClose } = props;
 
 	const initialValues = useMemo(() => generateInitialValues(camper), [camper]);
 
@@ -20,7 +21,12 @@ const DetailsEdit = memo((props: DetailsEditProps) => {
 
 	return (
 		<div className={classNames(styles.details, {}, [className])}>
-			<DetailsForm initialValues={initialValues} handleCancel={handleCancel} camperEmail={camper.email} />
+			<DetailsForm
+				initialValues={initialValues}
+				handleCancel={handleCancel}
+				onClose={onClose}
+				camperEmail={camper.email}
+			/>
 		</div>
 	);
 });
