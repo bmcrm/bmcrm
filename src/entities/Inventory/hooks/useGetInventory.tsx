@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { errorHandler } from '@shared/lib/errorHandler';
 import { inventoryKeys } from '../model/const/inventoryKeys';
 import { inventoryApi } from '../api/inventoryApi';
@@ -18,15 +18,19 @@ const useGetInventory = ({ queryParams, enabled = true }: UseGetInventoryProps =
 			return inventoryKeys.currentCategory(queryParams.category);
 		}
 		return inventoryKeys.allInventory;
-	}, [queryParams]);
+	}, [queryParams?.title, queryParams?.category]);
 
-	const { data, isLoading, isSuccess, isError, error } = useQuery({
+	const { data, isLoading, isSuccess, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
 		queryKey,
-		queryFn: () => inventoryApi.getInventory(queryParams),
+		queryFn: ({ pageParam }) =>
+			inventoryApi.getInventory({ ...queryParams, ...(pageParam ? { nextToken: pageParam } : {}) }),
+		getNextPageParam: (lastPage) => lastPage?.nextToken ?? undefined,
+		initialPageParam: '',
+		enabled: enabled && Boolean(queryParams),
 		staleTime: queryParams?.title ? 0 : 5 * 60 * 1000,
 		gcTime: queryParams?.title ? 0 : 5 * 60 * 1000,
-		enabled: enabled && Boolean(queryParams),
-	});
+		select: (data) => data.pages.flatMap((page) => page.items),
+	})
 
 	useEffect(() => {
 		if (isError) {
@@ -34,7 +38,7 @@ const useGetInventory = ({ queryParams, enabled = true }: UseGetInventoryProps =
 		}
 	}, [isError, error]);
 
-	return { data, isLoading, isSuccess, isError };
+	return { data, isLoading, isSuccess, isError, fetchNextPage, hasNextPage, isFetchingNextPage };
 };
 
 export { useGetInventory };

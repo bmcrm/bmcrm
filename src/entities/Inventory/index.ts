@@ -10,4 +10,4 @@ export { inventoryState } from './model/state/inventoryState';
 
 export { isDuplicateFile } from './lib/checkDuplicateFiles';
 
-export type { IInventoryItem } from './model/types/Inventory.types';
+export type { IInventory, IInventoryItem } from './model/types/Inventory.types';

@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { INVENTORY_ENDPOINT } from '@shared/const/endpoints';
-import type { IInventoryItem } from '../model/types/Inventory.types';
+import type { IInventory, IInventoryItem } from '../model/types/Inventory.types';
 
-type IGetInventory = {
+type IGetInventoryParams = {
 	category?: string;
 	limit?: string;
 	title?: string;
+	nextToken?: string;
 };
 
 export const inventoryApi = {
@@ -18,7 +19,7 @@ export const inventoryApi = {
 
 		return response.data;
 	},
-	getInventory: async (queryParams: IGetInventory | null = {}): Promise<IInventoryItem[]> => {
+	getInventory: async (queryParams: IGetInventoryParams | null = {}): Promise<IInventory> => {
 		const headers = createAuthHeaders();
 		const endpoint = new URL(INVENTORY_ENDPOINT);
 
