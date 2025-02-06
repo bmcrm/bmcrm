@@ -37,17 +37,27 @@ const CamperTag = memo((props: CamperTagProps) => {
 	useEffect(() => {
 		calculatePosition();
 		const tableScroll = tableScrollRef?.current;
+		const tagElement = tagRef.current;
 
 		if (tableScroll) {
 			tableScroll.addEventListener('scroll', calculatePosition);
+		}
+
+		const resizeObserver = new ResizeObserver(calculatePosition);
+		if (portalTargetRef?.current) {
+			resizeObserver.observe(portalTargetRef.current);
+		}
+		if (tagElement) {
+			resizeObserver.observe(tagElement);
 		}
 
 		return () => {
 			if (tableScroll) {
 				tableScroll.removeEventListener('scroll', calculatePosition);
 			}
+			resizeObserver.disconnect();
 		};
-	}, [calculatePosition]);
+	}, [calculatePosition, portalTargetRef, tableScrollRef]);
 
 	const tooltip = (
 		<Tooltip className={styles.tag__tooltip} properties={tooltipProperties}>
