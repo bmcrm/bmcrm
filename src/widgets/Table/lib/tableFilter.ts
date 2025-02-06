@@ -15,14 +15,20 @@ export const multiValueFilter = <TData>(
 	return filterValue === cellValue;
 };
 
-export const filterTagsByKey: FilterFn<ICamper> = (row, columnId, filterValue) => {
+export const filterTags: FilterFn<ICamper> = (row, columnId, filterValue) => {
 	const tags = row.getValue(columnId) as CamperTags;
 
 	if (!tags || typeof tags !== 'object') {
 		return false;
 	}
 
-	return Object.keys(tags).some((key) =>
-		key.toLowerCase().includes(filterValue.toLowerCase())
-	);
+	return Object.entries(tags).some(([key, values]) => {
+		const matchesKey = key.toLowerCase().includes(filterValue.toLowerCase());
+
+		const matchesValues = Array.isArray(values)
+			? values.some(value => value.toLowerCase().includes(filterValue.toLowerCase()))
+			: false;
+
+		return matchesKey || matchesValues;
+	});
 };

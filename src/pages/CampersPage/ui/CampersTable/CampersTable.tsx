@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useToggle } from '@shared/hooks/useToggle';
 import { dateNormalize } from '@shared/lib/dateNormalize';
-import { filterTagsByKey, multiValueFilter, Table } from '@widgets/Table';
+import { filterTags, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonSize } from '@shared/ui/Button';
 import { CamperTag, CamperTagTheme } from '@features/CamperTag';
 import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
@@ -81,7 +81,7 @@ const CampersTable = (props: CampersTableProps) => {
 			{
 				accessorKey: 'tags',
 				header: 'Tags',
-				filterFn: filterTagsByKey,
+				filterFn: filterTags,
 				enableSorting: false,
 				cell: (info) => {
 					const row = info.row.original;

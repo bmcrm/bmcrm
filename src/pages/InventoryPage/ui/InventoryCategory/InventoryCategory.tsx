@@ -16,7 +16,7 @@ type InventoryCategoryProps = {
 
 const InventoryCategory = memo((props: InventoryCategoryProps) => {
 	const { className, category, items, handleLoadMore, hasNextPage, isLoadingNextPage } = props;
-	const triggerRef = useRef<HTMLDivElement | null>(null);
+	const triggerRef = useRef<HTMLDivElement>(null);
 
 	const observerCallback = useCallback(
 		(entries: IntersectionObserverEntry[]) => {

@@ -34,14 +34,15 @@ const TableTooltip = <TData extends object>(props: TableTooltipProps<TData>) => 
 			const isFirstColumn = header?.index === 0;
 
 			setTooltipProperties({
-				top: btnRect.bottom - portalRect.top + window.scrollY,
+				top: btnRect.bottom - portalRect.top,
 				left: isMobile && isFirstColumn
-					? btnRect.left - portalRect.left + window.scrollX
+					? btnRect.left - portalRect.left
 					: undefined,
 				right: isMobile && isFirstColumn
 					? undefined
-					: portalRect.right - btnRect.right + window.scrollX,
+					: portalRect.right - btnRect.right,
 			});
+
 			setIsPositionReady(true);
 		} else {
 			setTooltipProperties({
@@ -96,7 +97,7 @@ const TableTooltip = <TData extends object>(props: TableTooltipProps<TData>) => 
 	const tooltip = isPositionReady ? (
 		<Tooltip
 			ref={tooltipRef}
-			properties={tooltipProperties || {}}
+			properties={tooltipProperties}
 			className={classNames(styles.tooltip, {}, [className])}
 		>
 			{tooltipContent[theme]}

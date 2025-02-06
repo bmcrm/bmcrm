@@ -20,18 +20,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 	(props, ref) => {
 		const { className, children, properties } = props;
 
-		const tooltipStyles: CSSProperties = {
-			top: properties?.top,
-			left: properties?.left,
-			right: properties?.right,
-			bottom: properties?.bottom,
-			width: properties?.width,
-			height: properties?.height,
-			transform: properties?.transform,
-		};
-
 		return (
-			<div ref={ref} className={classNames(styles.tooltip, {}, [className])} style={tooltipStyles}>
+			<div ref={ref} className={classNames(styles.tooltip, {}, [className])} style={properties}>
 				{children}
 			</div>
 		);
