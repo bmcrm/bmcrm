@@ -11,48 +11,69 @@ import styles from './InventoryCategories.module.scss';
 type InventoryCategoriesProps = {
 	className?: string;
 	category?: string;
-	inventory?: IInventoryItem[];
+	categories: string[] | null;
+	inventoryItems?: IInventoryItem[];
+	handleLoadMore?: () => void;
 	inventoryIsLoading: boolean;
 	isLoading: boolean;
-	categories: string[] | null;
+	isLoadingNextPage?: boolean;
+	hasNextPage?: boolean;
 };
 
 const InventoryCategories = memo((props: InventoryCategoriesProps) => {
-	const { className, category, inventory, inventoryIsLoading, isLoading, categories } = props;
+	const {
+		className,
+		category,
+		inventoryItems,
+		inventoryIsLoading,
+		isLoading,
+		isLoadingNextPage,
+		categories,
+		handleLoadMore,
+		hasNextPage,
+	} = props;
 
 	const filteredCategories = useMemo(() => {
-		if (!categories || !inventory) return null;
+		if (!categories || !inventoryItems) return null;
 
 		return categories.filter(c =>
-			c !== FixedCategories.ALL && inventory.some(item => item.category === c)
+			c !== FixedCategories.ALL && inventoryItems.some(item => item.category === c)
 		);
-	}, [categories, inventory]);
+	}, [categories, inventoryItems]);
 
-	const hasResults = useMemo(() => inventory && inventory.length > 0, [inventory]);
+	const hasResults = useMemo(
+		() => inventoryItems && inventoryItems.length > 0, [inventoryItems]
+	);
 
 	return (
 		<div className={classNames(styles.categories, {}, [className])}>
 			{category ? (
 				<>
-					{inventoryIsLoading && <Loader className={'m-centred-hv'} />}
-					{inventory && inventory.length > 0 && (
-						<InventoryCategory category={category} items={inventory} />
+					{inventoryIsLoading && <Loader className={'m-centred-hv'}/>}
+					{inventoryItems && inventoryItems.length > 0 && (
+						<InventoryCategory
+							category={category}
+							items={inventoryItems}
+							handleLoadMore={handleLoadMore}
+							hasNextPage={hasNextPage}
+							isLoadingNextPage={isLoadingNextPage}
+						/>
 					)}
-					{!inventoryIsLoading && (!inventory || inventory.length === 0) && (
-						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH} />
+					{!inventoryIsLoading && (!inventoryItems || inventoryItems.length === 0) && (
+						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH}/>
 					)}
 				</>
 			) : (
 				<>
-					{isLoading && <Loader className={'m-centred-hv'} />}
+					{isLoading && <Loader className={'m-centred-hv'}/>}
 					{!isLoading && !hasResults && (
-						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH} />
+						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH}/>
 					)}
-					{inventory && filteredCategories?.map(c => (
+					{inventoryItems && filteredCategories?.map(fc => (
 						<InventoryCategory
-							key={c}
-							category={c}
-							items={inventory.filter(item => item?.category === c)}
+							key={fc}
+							category={fc}
+							items={inventoryItems.filter(item => item?.category === fc)}
 						/>
 					))}
 				</>

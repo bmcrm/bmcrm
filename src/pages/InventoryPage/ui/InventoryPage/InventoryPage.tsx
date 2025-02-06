@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useToggle } from '@shared/hooks/useToggle';
 import { useDebounce } from '@shared/hooks/useDebounce';
@@ -15,6 +15,7 @@ import styles from './InventoryPage.module.scss';
 
 const FIXED_CATEGORIES = [FixedCategories.ALL];
 const NEWEST_LIMIT = 5;
+const CATEGORY_LIMIT = 10;
 
 const InventoryPage = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -37,25 +38,35 @@ const InventoryPage = () => {
 	const queryParams = useMemo(() => {
 		if (!isValidCategory) return null;
 
-		const params: { category?: string; limit?: string; title?: string } = {
-			...(category === FixedCategories.NEWEST
-				? { category: FixedCategories.NEWEST, limit: String(NEWEST_LIMIT) }
-				: category ? { category } : {}),
-		};
+		const categoryParams = category === FixedCategories.NEWEST
+			? { category: FixedCategories.NEWEST, limit: String(NEWEST_LIMIT) }
+			: category
+				? { category, limit: String(CATEGORY_LIMIT) }
+				: {};
 
-		if (debouncedSearchQuery.trim()) {
-			params.title = `${debouncedSearchQuery.trim()}`;
-		}
+		const searchParams = debouncedSearchQuery.trim()
+			? { title: debouncedSearchQuery.trim() }
+			: {};
 
-		return params;
+		return { ...categoryParams, ...searchParams };
 	}, [category, debouncedSearchQuery, isValidCategory]);
 
-	const { data: inventory, isLoading: inventoryIsLoading } = useGetInventory({ queryParams, enabled: isValidCategory });
+	const {
+		data: inventoryItems,
+		isLoading: inventoryIsLoading,
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+	} = useGetInventory({ queryParams, enabled: isValidCategory });
 	const isLoading = inventoryIsLoading || categoriesIsLoading;
 
 	useEffect(() => {
 		setSearchQuery('');
 	}, [category]);
+
+	const handleLoadMore = useCallback(() => {
+		void fetchNextPage();
+	}, [fetchNextPage]);
 
 	return (
 		<>
@@ -73,8 +84,11 @@ const InventoryPage = () => {
 								<InventoryCategories
 									category={category}
 									categories={categories}
-									inventory={inventory}
+									inventoryItems={inventoryItems}
+									handleLoadMore={handleLoadMore}
+									hasNextPage={hasNextPage}
 									isLoading={isLoading}
+									isLoadingNextPage={isFetchingNextPage}
 									inventoryIsLoading={inventoryIsLoading}
 								/>
 							) : (

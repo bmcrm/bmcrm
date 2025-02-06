@@ -1,3 +1,8 @@
+export interface IInventory {
+  items: IInventoryItem[];
+  nextToken?: string;
+}
+
 export interface IInventoryItem {
   title: string;
   description: string;
