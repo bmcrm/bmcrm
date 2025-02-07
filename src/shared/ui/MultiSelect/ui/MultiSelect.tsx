@@ -1,45 +1,48 @@
 import { memo, useCallback, useMemo } from 'react';
+import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import type { MultiValue, Props as SelectProps } from 'react-select';
 import { classNames } from '@shared/lib/classNames';
-import styles from './TagsSelect.module.scss';
+import styles from './MultiSelect.module.scss';
 
 interface Option {
 	value: string;
 	label: string;
 }
 
-interface TagsSelectProps extends Omit<SelectProps<Option, true>, 'onChange' | 'value'> {
+interface MultiSelectProps extends Omit<SelectProps<Option, true>, 'onChange' | 'value'> {
 	className?: string;
+	isCreatable?: boolean;
 	label?: string;
 	value?: string[];
 	onChange?: (values: string[]) => void;
 	options: Option[];
 }
 
-const TagsSelect = memo((props: TagsSelectProps) => {
-	const { className, label, value = [], onChange, options, ...rest } = props;
+const MultiSelect = memo((props: MultiSelectProps) => {
+	const { className, label, value = [], onChange, options, isCreatable, ...rest } = props;
+	const CurrentSelect = isCreatable ? CreatableSelect : Select;
 
 	const formattedValue = useMemo(
 		() => value.map((val) => ({
-		value: val,
-		label: options.find((opt) => opt.value === val)?.label || val,
-	})),
+			value: val,
+			label: options.find((opt) => opt.value === val)?.label || val,
+		})),
 		[value, options]
 	);
 
 	const handleChange = useCallback(
 		(selectedOptions: MultiValue<Option>) => {
-		const newValues = selectedOptions.map((option) => option.value);
-		onChange?.(newValues);
-	},
+			const newValues = selectedOptions.map((option) => option.value);
+			onChange?.(newValues);
+		},
 		[onChange]
 	);
 
 	return (
 		<label className={classNames(styles.select, {}, [className])}>
 			{label && <p className={styles.select__caption}>{label}</p>}
-			<CreatableSelect
+			<CurrentSelect
 				isMulti
 				value={formattedValue}
 				options={options}
@@ -76,4 +79,4 @@ const TagsSelect = memo((props: TagsSelectProps) => {
 	);
 });
 
-export default TagsSelect;
+export default MultiSelect;

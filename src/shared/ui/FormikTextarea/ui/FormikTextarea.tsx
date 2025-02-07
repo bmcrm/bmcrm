@@ -14,12 +14,12 @@ const FormikTextarea = memo((props: FormikTextareaProps) => {
   const { className, label, name, ...rest } = props;
 
   return (
-    <label className={classNames(styles.label, {}, [className])}>
-      {label && <p>{label}</p>}
+    <label className={classNames(styles.textarea, {}, [className])}>
+      {label && <p className={styles.textarea__caption}>{label}</p>}
       <Field
         as={'textarea'}
         rows={3}
-        className={styles.textarea}
+        className={styles.textarea__field}
         name={name}
         {...rest}
       />

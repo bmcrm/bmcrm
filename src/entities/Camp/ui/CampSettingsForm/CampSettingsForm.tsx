@@ -28,7 +28,7 @@ const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
     city: currentCamp?.city ?? '',
     camp_website: currentCamp?.camp_website ?? '',
     camp_description: currentCamp?.camp_description ?? '',
-  }), [currentCamp]);
+  }), [currentCamp?.camp_id, currentCamp?.camp_name, currentCamp?.city, currentCamp?.camp_website, currentCamp?.camp_description]);
 
   return (
     <>

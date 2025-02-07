@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 import { useFormikContext, FieldArray } from 'formik';
 import { tagsOptions } from '../../lib/generateSelectOptions';
 import { FormikInput } from '@shared/ui/FormikInput';
-import { TagsSelect } from '@shared/ui/TagsSelect';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { useGetCampers } from '../../hooks/useGetCampers';
@@ -59,7 +59,8 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 									</div>
 									<FormikInput name={`tags.${tagIndex}.tagName`} placeholder={'Skills'} />
 								</div>
-								<TagsSelect
+								<MultiSelect
+									isCreatable
 									label={'Tag Details'}
 									placeholder={'Select or Write...'}
 									value={tag.tagDetails || []}

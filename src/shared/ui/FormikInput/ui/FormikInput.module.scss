@@ -6,10 +6,6 @@
   flex-direction: column;
   gap: 5px;
 
-  &::placeholder {
-    color: var(--color-neutral);
-  }
-
   &__caption {
     font: var(--font-s);
     font-weight: 500;
@@ -20,10 +16,14 @@
     padding: 10px 20px;
     border: 2px solid var(--color-input-orange);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, .02);
     backdrop-filter: blur(4px);
     font: var(--font-s);
     outline: none;
+
+    &::placeholder {
+      color: var(--color-neutral);
+    }
 
     &:focus {
       outline: none;
