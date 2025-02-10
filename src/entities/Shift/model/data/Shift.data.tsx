@@ -5,13 +5,13 @@ import { InputsType } from '../types/Shift.types';
 export const inputs = {
 	caption: [
 		{
-			name: 'shift_name',
+			name: 'title',
 			placeholder: 'Daily Campsite MOOP',
 			label: 'Shift Name',
 			type: InputsType.INPUT,
 		},
 		{
-			name: 'shift_description',
+			name: 'description',
 			placeholder: 'Write',
 			label: 'Description',
 			type: InputsType.TEXTAREA,
@@ -25,7 +25,18 @@ export const inputComponents = {
 };
 
 export const initialValues = {
-  shift_name: '',
-  shift_description: '',
+  title: '',
+  description: '',
 	members: [],
+	start_date: null,
+	end_date: null,
+	time: [
+		{
+			start_time: (() => {
+				const now = new Date();
+				now.setHours(0, 0, 0, 0);
+				return now;
+			})(),
+		}
+	],
 };

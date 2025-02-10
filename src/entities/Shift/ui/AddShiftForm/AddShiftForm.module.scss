@@ -1,5 +1,55 @@
+@use '@app/styles/breakpoints';
+
 .form {
 	display: flex;
 	flex-direction: column;
 	gap: 25px;
+
+	&__group {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	&__caption {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+
+		p {
+			font: var(--font-s);
+			font-weight: 500;
+		}
+	}
+
+	&__row {
+		display: flex;
+		gap: 20px;
+
+		@media (width < breakpoints.$md) {
+			flex-direction: column;
+		}
+	}
+
+	&__fields {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	&__btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2px;
+		border: 1px solid currentColor;
+		border-radius: 50%;
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+      }
+    }
+	}
 }

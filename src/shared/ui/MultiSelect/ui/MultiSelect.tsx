@@ -71,6 +71,7 @@ const MultiSelect = memo((props: MultiSelectProps) => {
 					placeholder: (baseStyles) => ({
 						...baseStyles,
 						font: 'var(--font-s)',
+						color: 'var(--color-neutral)',
 					}),
 				}}
 				{...rest}

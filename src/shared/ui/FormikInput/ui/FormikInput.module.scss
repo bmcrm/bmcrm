@@ -1,10 +1,10 @@
 .input {
   position: relative;
-  width: 100%;
-  color: var(--color-black);
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
+  color: var(--color-black);
 
   &__caption {
     font: var(--font-s);
