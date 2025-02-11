@@ -38,16 +38,6 @@
 		align-items: center;
 	}
 
-	&__datepicker {
-		position: relative;
-		width: 100%;
-		max-width: 250px;
-
-		@media (width < breakpoints.$md) {
-			max-width: 100%;
-		}
-	}
-
 	&__btn {
 		display: flex;
 		align-items: center;
