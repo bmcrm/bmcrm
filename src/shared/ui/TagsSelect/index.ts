@@ -1,1 +1,0 @@
-export { default as TagsSelect } from './ui/TagsSelect';

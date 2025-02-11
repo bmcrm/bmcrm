@@ -24,7 +24,6 @@ export const generateNavList = (campID: string): NavLinkType[] => ([
   {
     path: RoutePath.shifts,
     text: 'Shifts',
-    disabled: true,
   },
   {
     path: RoutePath.inventory,

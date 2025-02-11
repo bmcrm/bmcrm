@@ -193,3 +193,46 @@ export const editCamperSchema = yup.object().shape({
     )
     .notRequired(),
 });
+
+export const shiftSchema = yup.object().shape({
+  title: yup
+    .string()
+    .trim()
+    .required('Title is required')
+    .max(64, 'Title must be less than 64 characters'),
+  description: yup
+    .string()
+    .trim()
+    .max(255, 'Description must be less than 255 characters'),
+  members: yup
+    .array()
+    .of(
+      yup
+        .string()
+        .trim()
+        .required('Member name is required')
+    )
+    .min(1, 'At least one member is required'),
+  start_date: yup
+    .date()
+    .required('Date is required'),
+  time: yup
+    .array()
+    .of(
+      yup.object().shape({
+        start_time: yup
+          .date()
+          .nullable()
+          .required('Start time is required'),
+        end_time: yup
+          .date()
+          .nullable()
+          .when('start_time', (start_time, schema) =>
+            start_time[0]
+              ? schema.min(start_time, 'End time cannot be before start time')
+              : schema
+          ),
+      })
+    )
+    .min(1, 'At least one time entry is required'),
+});

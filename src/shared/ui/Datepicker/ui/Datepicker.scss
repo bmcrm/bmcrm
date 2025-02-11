@@ -1,0 +1,43 @@
+.react-datepicker {
+
+	&__day {
+
+		&--in-range {
+			background-color: var(--color-ruby-dark);
+
+			&:not([aria-disabled=true]):hover {
+				background-color: var(--color-ruby-light);
+			}
+		}
+
+		&--in-selecting-range {
+			&:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range) {
+				background-color: rgba(139, 16, 32, .5);
+			}
+
+			&:not([aria-disabled=true]):hover {
+				background-color: var(--color-ruby-light);
+			}
+		}
+
+		&--keyboard-selected {
+			background-color: rgba(139, 16, 32, .5);
+
+			&:not([aria-disabled=true]):hover {
+				background-color: var(--color-ruby-light);
+			}
+		}
+	}
+
+	&__close-icon::after {
+		background-color: var(--color-ruby-dark);
+	}
+}
+
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+	background-color: var(--color-ruby-dark);
+
+	&:hover {
+		background-color: var(--color-ruby-light);
+	}
+}
