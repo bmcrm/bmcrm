@@ -2,7 +2,9 @@ import { memo, useCallback, useMemo } from 'react';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import type { MultiValue, Props as SelectProps } from 'react-select';
+import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
+import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import styles from './MultiSelect.module.scss';
 
 interface Option {
@@ -55,6 +57,7 @@ const MultiSelect = memo((props: MultiSelectProps) => {
 						borderRadius: 10,
 						borderColor: state.isFocused ? 'var(--color-ruby-dark)' : 'var(--color-input-orange)',
 						boxShadow: 'none',
+						backgroundColor: 'transparent',
 						'&:hover': {
 							borderColor: state.isFocused ? 'var(--color-ruby-dark)' : 'var(--color-input-orange)',
 							boxShadow: 'none',
@@ -75,6 +78,10 @@ const MultiSelect = memo((props: MultiSelectProps) => {
 					}),
 				}}
 				{...rest}
+			/>
+			<ErrorMessage
+				name={rest.name ?? ''}
+				render={(msg) => <CustomErrorMessage message={msg} />}
 			/>
 		</label>
 	);

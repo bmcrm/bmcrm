@@ -1,3 +1,11 @@
 .shifts {
+	position: relative;
+	flex-grow: 1;
+}
 
+.loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
 }

@@ -4,7 +4,7 @@ import { errorHandler } from '@shared/lib/errorHandler';
 import { shiftApi } from '../api/shiftApi';
 import { shiftKeys } from '../model/const/shiftKeys';
 import { shiftState } from '../model/state/shiftState';
-import type { IShift } from '../model/types/Shift.types';
+import type { IShiftResponse } from '../model/types/Shift.types';
 
 const useDeleteShift = () => {
 	const queryClient = useQueryClient();
@@ -18,11 +18,15 @@ const useDeleteShift = () => {
 
 			await queryClient.cancelQueries({ queryKey: shiftKeys.allShifts });
 
-			const previousShifts = queryClient.getQueryData<IShift[]>(shiftKeys.allShifts);
+			const previousShifts = queryClient.getQueryData<IShiftResponse>(shiftKeys.allShifts);
 
-			queryClient.setQueryData<IShift[]>(shiftKeys.allShifts, (oldShifts) => {
+			queryClient.setQueryData<IShiftResponse>(shiftKeys.allShifts, (oldShifts) => {
 				if (!oldShifts) return oldShifts;
-				return oldShifts.filter((shift) => shift.shift_id !== shiftID);
+				const shifts = oldShifts.items;
+
+				const filteredShifts = shifts.filter((shift) => shift.shift_id !== shiftID);
+
+				return { items: filteredShifts };
 			});
 
 			success('Shift successfully removed');
@@ -33,6 +37,7 @@ const useDeleteShift = () => {
 			if (context?.previousShifts) {
 				queryClient.setQueryData(shiftKeys.allShifts, context.previousShifts);
 			}
+
 			errorHandler(error);
 		},
 		onSettled: () => {

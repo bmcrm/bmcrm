@@ -9,8 +9,6 @@ export const shiftApi = {
 
 		const response = await axios.get(SHIFT_ENDPOINT, { headers });
 
-		console.log('response: ', response)
-
 		return response.data;
 	},
 	createShift: async (shift: Partial<IShift>) => {
@@ -20,7 +18,7 @@ export const shiftApi = {
 
 		return response.data;
 	},
-	updateShift: async (shift: Partial<IShift>) => {
+	editShift: async (shift: Partial<IShift>) => {
 		const endpoint = `${SHIFT_ENDPOINT}/${shift.shift_id}`;
 		const headers = createAuthHeaders();
 

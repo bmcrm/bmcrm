@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 import { format } from 'date-fns';
 import { classNames } from '@shared/lib/classNames';
-import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { useDeleteShift, type IShift } from '@entities/Shift';
 import styles from './ShiftsItem.module.scss';
@@ -10,10 +10,12 @@ import DeleteIcon from '@shared/assets/icons/delete.svg';
 type ShiftsItemProps = {
 	className?: string;
 	shift: IShift;
+	onEditShift?: (shift: IShift) => void;
 };
 
 const ShiftsItem = memo((props: ShiftsItemProps) => {
-	const { className, shift: { start_date, end_date, time, title, description, members, shift_id } } = props;
+	const { className, shift, onEditShift } = props;
+	const { start_date, end_date, time, title, description, members, shift_id } = shift;
 	const { mutate: deleteShift } = useDeleteShift();
 
 	const handleDelete = useCallback(() => {
@@ -46,7 +48,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 				</div>
 				<div className={styles.item__column}>
 					<strong className={styles.item__caption}>MEMBERS</strong>
-					<div className={styles.item__columnInner}>
+					<div className={classNames(styles.item__columnInner, {}, [styles.flex])}>
 						{members.map((member, i) => (
 							<p key={`${member}-${i}`} className={styles.item__text}>{member}</p>
 						))}
@@ -54,10 +56,20 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 				</div>
 			</div>
 			<div className={styles.item__control}>
-				<Button>
+				<Button
+					theme={ButtonTheme.OUTLINE}
+					size={ButtonSize.S}
+					color={ButtonColor.BLACK}
+					onClick={() => onEditShift?.(shift)}
+				>
 					Edit
 				</Button>
-				<Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} onClick={handleDelete}>
+				<Button
+					theme={ButtonTheme.CLEAR}
+					size={ButtonSize.TEXT}
+					className={styles.item__delete}
+					onClick={handleDelete}
+				>
 					<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14} />
 				</Button>
 			</div>

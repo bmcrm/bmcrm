@@ -1,16 +1,18 @@
 import { memo } from 'react';
+import { classNames } from '@shared/lib/classNames';
 import { Icon } from '@shared/ui/Icon';
 import styles from './CustomErrorMessage.module.scss';
 import ErrorIcon from '@shared/assets/icons/error.svg';
 
 interface CustomErrorMessageProps {
-  message: string;
+  className?: string;
+  message?: string;
 }
 
-const CustomErrorMessage = memo(({ message }: CustomErrorMessageProps) => (
-  <div className={styles.message}>
+const CustomErrorMessage = memo(({ message, className }: CustomErrorMessageProps) => (
+  <div className={classNames(styles.message, {}, [className])}>
     <Icon icon={<ErrorIcon />} />
-    <p>{message}</p>
+    {message &&  <p>{message}</p>}
   </div>
 ));
 

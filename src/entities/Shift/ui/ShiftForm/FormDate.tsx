@@ -1,12 +1,13 @@
 import { memo, useCallback } from 'react';
-import { FieldArray, useFormikContext } from 'formik';
+import { ErrorMessage, FieldArray, useFormikContext } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
+import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import { Datepicker, DatepickerTime } from '@shared/ui/Datepicker';
 import type { IShift } from '../../model/types/Shift.types';
-import styles from './AddShiftForm.module.scss';
+import styles from './ShiftForm.module.scss';
 import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 import MinusIcon from '@shared/assets/icons/minus_icon.svg';
 
@@ -31,12 +32,17 @@ const FormDate = memo((props: FormDateProps) => {
 
 	return (
 		<div className={classNames(styles.form__row, {}, [className])}>
-			<Datepicker
-				style={{ maxWidth: isMobile ? '100%' : 250 }}
-				label={'Date'}
-				dateRange={[start_date, end_date]}
-				onChange={handleDatepickerChange}
-			/>
+			<div className={styles.form__datepicker}>
+				<Datepicker
+					label={'Date'}
+					dateRange={[start_date, end_date]}
+					onChange={handleDatepickerChange}
+				/>
+				<ErrorMessage
+					name={'start_date'}
+					render={(msg) => <CustomErrorMessage message={msg} />}
+				/>
+			</div>
 			<FieldArray name={'time'}>
 				{({ push, remove }) => (
 					<div className={styles.form__group}>
@@ -56,12 +62,14 @@ const FormDate = memo((props: FormDateProps) => {
 								<DatepickerTime
 									style={{ maxWidth: isMobile ? '100%' : 100 }}
 									time={t.start_time}
+									name={`time.${i}.start_time`}
 									onChange={(date) => setFieldValue(`time.${i}.start_time`, date)}
 								/>
 								{'-'}
 								<DatepickerTime
 									style={{ maxWidth: isMobile ? '100%' : 100 }}
 									time={t.end_time}
+									name={`time.${i}.end_time`}
 									onChange={(date) => setFieldValue(`time.${i}.end_time`, date)}
 								/>
 								{i !== 0 && (

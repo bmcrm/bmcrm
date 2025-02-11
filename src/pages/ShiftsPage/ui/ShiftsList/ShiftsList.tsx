@@ -7,15 +7,16 @@ import styles from './ShiftsList.module.scss';
 type ShiftsListProps = {
 	className?: string;
 	shifts: IShift[];
+	onEditShift?: (shift: IShift) => void;
 };
 
 const ShiftsList = memo((props: ShiftsListProps) => {
-	const { className, shifts } = props;
+	const { className, shifts, onEditShift } = props;
 
 	return (
 		<ul className={classNames(styles.list, {}, [className])}>
 			{shifts.map((shift) => (
-				<ShiftsItem key={shift.shift_id} shift={shift} />
+				<ShiftsItem key={shift.shift_id} shift={shift} onEditShift={onEditShift} />
 			))}
 		</ul>
 	);

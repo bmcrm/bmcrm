@@ -1,3 +1,5 @@
+@use '@app/styles/breakpoints';
+
 .item {
 	position: relative;
 	width: 100%;
@@ -6,7 +8,16 @@
 	background-color: var(--color-secondary-bg);
 
 	&__inner {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 200px 1.5fr;
+
+		@media (width < breakpoints.$lg) {
+			grid-template-columns: 2fr 1fr;
+			gap: 10px;
+		}
+		@media (width < breakpoints.$md) {
+			grid-template-columns: 1fr;
+		}
 
 		+ .item__control {
 			margin-top: 10px;
@@ -14,25 +25,75 @@
 	}
 
 	&__column {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+
+		+ .item__column {
+
+			.item__caption {
+				padding-left: 15px;
+
+				@media (width < breakpoints.$md) {
+					padding-left: 0;
+				}
+			}
+
+			.item__column-inner {
+				padding-left: 15px;
+				border-left: 1px solid var(--color-neutral);
+
+				@media (width < breakpoints.$md) {
+					padding-left: 0;
+					border-left: none;
+				}
+			}
+		}
 
 		&:not(:last-child) {
-			padding-right: 15px;
+
+			.item__caption {
+				padding-right: 15px;
+			}
+
+			.item__column-inner {
+				padding-right: 15px;
+			}
+		}
+		&:last-child {
+			@media (width < breakpoints.$lg) {
+				grid-column-start: 1;
+				grid-column-end: 3;
+
+				.item__caption {
+					padding-left: 0;
+				}
+
+				.item__column-inner {
+					padding-left: 0;
+					border-left: none;
+				}
+			}
+			@media (width < breakpoints.$md) {
+				grid-column-start: unset;
+				grid-column-end: unset;
+			}
 		}
 
 		&-inner {
+			flex-grow: 1;
 
-		}
-
-		+ .item__column {
-			padding-left: 15px;
-
-			&-inner {
-				border-left: 1px solid var(--color-neutral);
+			&.flex {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+				align-content: flex-start;
+        gap: 5px 30px;
 			}
 		}
 	}
 
 	&__caption {
+		display: block;
 		font: var(--font-s);
 		font-weight: 500;
 
@@ -50,5 +111,20 @@
 		align-items: center;
 		justify-content: flex-end;
 		gap: 5px;
+	}
+
+	&__delete {
+		align-items: center;
+		justify-content: center;
+		padding: 3px;
+		border: 1px solid currentColor;
+		border-radius: 50%;
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+      }
+    }
 	}
 }

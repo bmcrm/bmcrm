@@ -1,6 +1,8 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
+import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
+import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import styles from './Datepicker.module.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Datepicker.scss';
@@ -35,6 +37,10 @@ const DatepickerTime = memo((props: DatepickerTimeProps) => {
 				timeFormat={'HH:mm'}
 				showTimeSelect
 				showTimeSelectOnly
+			/>
+			<ErrorMessage
+				name={name ?? ''}
+				render={() => <CustomErrorMessage className={styles.datepicker__error} />}
 			/>
 		</label>
 	);
