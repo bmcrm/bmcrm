@@ -1,10 +1,9 @@
 import { memo, useCallback } from 'react';
-import { ErrorMessage, FieldArray, useFormikContext } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import { Datepicker, DatepickerTime } from '@shared/ui/Datepicker';
 import type { IShift } from '../../model/types/Shift.types';
 import styles from './ShiftForm.module.scss';
@@ -32,17 +31,13 @@ const FormDate = memo((props: FormDateProps) => {
 
 	return (
 		<div className={classNames(styles.form__row, {}, [className])}>
-			<div className={styles.form__datepicker}>
-				<Datepicker
-					label={'Date'}
-					dateRange={[start_date, end_date]}
-					onChange={handleDatepickerChange}
-				/>
-				<ErrorMessage
-					name={'start_date'}
-					render={(msg) => <CustomErrorMessage message={msg} />}
-				/>
-			</div>
+			<Datepicker
+				style={{ maxWidth: isMobile ? '100%' : 250 }}
+				errorName={'start_date'}
+				label={'Date'}
+				dateRange={[start_date, end_date]}
+				onChange={handleDatepickerChange}
+			/>
 			<FieldArray name={'time'}>
 				{({ push, remove }) => (
 					<div className={styles.form__group}>

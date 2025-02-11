@@ -1,12 +1,15 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
+import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
+import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import styles from './Datepicker.module.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Datepicker.scss';
 
 type DatepickerProps = {
 	className?: string;
+	errorName?: string;
 	label?: string;
 	placeholder?: string;
 	style?: CSSProperties;
@@ -16,7 +19,7 @@ type DatepickerProps = {
 };
 
 const Datepicker = memo((props: DatepickerProps) => {
-	const { className, label, placeholder = 'Select or write...', style, name, dateRange, onChange } = props;
+	const { className, errorName, label, placeholder = 'Select or write...', style, name, dateRange, onChange } = props;
 	const [startDate, endDate] = dateRange ?? [null, null];
 
 	return (
@@ -34,6 +37,12 @@ const Datepicker = memo((props: DatepickerProps) => {
 				placeholderText={placeholder}
 				dateFormat={'dd.MM.yyyy'}
 			/>
+			{errorName && (
+				<ErrorMessage
+					name={errorName}
+					render={(msg) => <CustomErrorMessage message={msg} />}
+				/>
+			)}
 		</label>
 	);
 });
