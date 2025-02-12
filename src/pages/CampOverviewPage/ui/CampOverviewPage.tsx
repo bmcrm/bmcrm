@@ -1,7 +1,9 @@
 import { memo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { classNames } from '@shared/lib/classNames';
+import { useMedia } from '@shared/hooks/useMedia';
 import { Container } from '@shared/ui/Container';
+import { Image } from '@shared/ui/Image';
 import { Header, HeaderTheme } from '@widgets/Header';
 import { CampOverview } from '@widgets/CampOverview';
 import { FormLoader } from '@features/FormLoader';
@@ -18,6 +20,8 @@ import {
 } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
 import styles from './CampOverviewPage.module.scss';
+import FakeFormImg from '@shared/assets/images/camp-overview/fake-form.png';
+import FakeFormMobileImg from '@shared/assets/images/camp-overview/fake-form_mobile.png';
 
 const CampOverviewPage = memo(() => {
 	const scrollTarget = useRef<HTMLDivElement>(null);
@@ -26,6 +30,7 @@ const CampOverviewPage = memo(() => {
 	const { isLoggedIn } = userState();
 	const { data: camp, isLoading, isError } = useGetCamp({ campID: id ?? '', enabled: !!id });
 	const { mutateAsync: registration, isPending } = useRegistration();
+	const { isMobile } = useMedia();
 
 	const submitHandler = useCallback(
 		async (values: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'>, resetForm: () => void) => {
@@ -53,7 +58,7 @@ const CampOverviewPage = memo(() => {
 
 	return (
 		<>
-			<Header theme={HeaderTheme.OVERVIEW}/>
+			<Header theme={HeaderTheme.OVERVIEW} />
 			<main className={classNames(styles.page, { [styles.error]: isError }, [])}>
 				{isError && (
 					<NotFound textRedirect={'CREATE A CAMP AND ACCOUNT'} redirectTo={RoutePath.registration}>
@@ -72,12 +77,18 @@ const CampOverviewPage = memo(() => {
 					<section className={styles.register} ref={scrollTarget}>
 						<Container>
 							<AuthFormTemplate badge={'Register to Join the Camp'}>
-								<CamperRegisterForm
-									className={classNames(styles.form, { [styles.blur]: isLoggedIn }, [])}
-									onSubmit={submitHandler}
-								/>
 								{isPending && <FormLoader />}
-								{isLoggedIn && <AlreadyRegisteredBlock camp={camp || null} />}
+								{!isLoggedIn && <CamperRegisterForm className={styles.form} onSubmit={submitHandler} />}
+								{isLoggedIn && (
+									<>
+										<Image
+											src={isMobile ? FakeFormMobileImg : FakeFormImg}
+											maxWidth={isMobile ? 300 : '100%'}
+											className={'m-centred'}
+										/>
+										<AlreadyRegisteredBlock camp={camp || null} />
+									</>
+								)}
 							</AuthFormTemplate>
 						</Container>
 					</section>

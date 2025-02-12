@@ -1,13 +1,20 @@
 @use '@app/styles/breakpoints';
+
 .wrapper {
   position: absolute;
-  inset: -3px;
-  backdrop-filter: blur(3px);
   z-index: 111;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  backdrop-filter: blur(3px);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .item {
   display: grid;
   grid-template-columns: minmax(300px, 1fr) minmax(150px, 250px);
@@ -21,7 +28,7 @@
   border-radius: 20px;
   border: 1px solid #d2d2d2;
   background-color: var(--color-secondary-bg);
-  box-shadow: 0 2px 60px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 60px 0 rgba(0, 0, 0, .1);
 
   @media (width < breakpoints.$md) {
     grid-template-columns: 1fr;

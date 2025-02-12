@@ -6,13 +6,13 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 1;
-	background-image: url('images/camp-overview/bg_404.png');
+	background-image: url('@shared/assets/images/camp-overview/bg_404.png');
 	background-size: 100% 100%;
 	background-position: top center;
 	background-repeat: no-repeat;
 
 	@media (width < breakpoints.$md) {
-		background-image: url('images/camp-overview/bg_404_mobile.png');
+		background-image: url('@shared/assets/images/camp-overview/bg_404_mobile.png');
 		background-size: cover;
 	}
 
@@ -24,7 +24,7 @@
 		bottom: 0;
 		width: 332px;
 		height: 155px;
-		background-image: url('images/camp-overview/bg_404_small.png');
+		background-image: url('@shared/assets/images/camp-overview/bg_404_small.png');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -42,7 +42,7 @@
 		display: block;
 		width: 146px;
 		height: 137px;
-		background-image: url('images/camp-overview/tumbleweed.png');
+		background-image: url('@shared/assets/images/camp-overview/tumbleweed.png');
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
