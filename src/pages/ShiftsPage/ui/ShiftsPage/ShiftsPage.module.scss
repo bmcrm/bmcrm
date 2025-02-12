@@ -1,6 +1,28 @@
 .shifts {
 	position: relative;
+	display: flex;
+	flex-direction: column;
 	flex-grow: 1;
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+	}
+
+	&__empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		flex-grow: 1;
+
+		h2 {
+			font: var(--font-xl);
+			font-weight: 600;
+      text-align: center;
+		}
+	}
 }
 
 .loader {
