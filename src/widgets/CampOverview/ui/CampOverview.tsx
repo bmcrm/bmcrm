@@ -1,4 +1,4 @@
-import { memo, type RefObject } from 'react';
+import { memo, useCallback, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
@@ -46,13 +46,13 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
     </>
   );
 
-  const closeModalHandler = () => {
+  const closeModalHandler = useCallback(() => {
     close();
 
     setTimeout(() => {
       scrollTarget.current?.scrollIntoView({ behavior: 'smooth' });
     }, MODAL_ANIMATION_DELAY);
-  };
+  }, [close, scrollTarget.current]);
 
   const campersCounter = isLoggedIn ? (
     campers?.length || '0'
@@ -85,7 +85,7 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
           )}
         </div>
         <div className={styles.camp__row}>
-          <Image borderRadius={isMobile ? 20 : 30} />
+          <Image className={'m-centred'} borderRadius={isMobile ? 20 : 30} maxWidth={isMobile ? 400 : '100%'} />
           <div className={styles.camp__desc}>
             <p className={styles.camp__text}>
               {camp?.camp_description || 'Someday, there will be a camp description here!'}

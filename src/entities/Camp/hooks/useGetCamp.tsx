@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { errorHandler } from '@shared/lib/errorHandler';
 import { campKeys } from '../model/const/campKeys';
 import { campApi } from '../api/campApi';
+import { AxiosError } from 'axios';
 
 type UseGetCampProps = {
 	campID: string;
@@ -14,11 +15,16 @@ const useGetCamp = ({ campID, enabled = true }: UseGetCampProps) => {
 		queryKey: campKeys.currentCamp(campID),
 		queryFn: () => campApi.getCamp(campID ?? ''),
 		staleTime: 5 * 60 * 1000,
+		retry: 1,
 		enabled,
 	});
 
 	useEffect(() => {
 		if (isError) {
+			if (error instanceof AxiosError && error.response?.data?.message === `Camp with id ${campID} not found`) {
+				return;
+			}
+
 			errorHandler(error);
 		}
 	}, [isError, error]);

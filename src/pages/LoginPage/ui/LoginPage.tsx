@@ -4,7 +4,7 @@ import { CognitoIdentityProviderServiceException } from '@aws-sdk/client-cognito
 import { useToggle } from '@shared/hooks/useToggle';
 import { AuthFormTemplate } from '@features/AuthFormTemplate';
 import { AuthPageTemplate } from '@features/AuthPageTemplate';
-import { UserLoginForm, useLogin, type ILoginData } from '@entities/User';
+import { UserLoginForm, useLogin, userState, type ILoginData } from '@entities/User';
 import { UserConfirmModal } from '@features/UserConfirmModal';
 import { FormLoader } from '@features/FormLoader';
 import { RoutePath } from '@app/providers/AppRouter';
@@ -16,6 +16,7 @@ const LoginPage = memo(() => {
   const { isOpen, open, close } = useToggle();
   const { mutateAsync: login, isPending } = useLogin();
   const { email, password, isConfirmation } = location.state as ILoginData & { isConfirmation: boolean } ?? {};
+  const { isLoggedIn } = userState();
 
   useEffect(() => {
     if (isConfirmation && email && password) {
@@ -23,6 +24,12 @@ const LoginPage = memo(() => {
       open();
     }
   }, [email, isConfirmation, open, password]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(RoutePath.funnel, { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = useCallback(
     async (values: ILoginData, { resetForm }: { resetForm: () => void }) => {
@@ -49,13 +56,15 @@ const LoginPage = memo(() => {
   );
 
   return (
-    <AuthPageTemplate>
-      <AuthFormTemplate badge={'Sign in to your account'} background decor>
-        <UserLoginForm onSubmit={handleSubmit} />
-        {isPending && <FormLoader />}
-        <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />
-      </AuthFormTemplate>
-    </AuthPageTemplate>
+    <>
+      <AuthPageTemplate>
+        <AuthFormTemplate badge={'Sign in to your account'} background decor>
+          <UserLoginForm onSubmit={handleSubmit} />
+          {isPending && <FormLoader />}
+        </AuthFormTemplate>
+      </AuthPageTemplate>
+      <UserConfirmModal isOpen={isOpen} onClose={close} credentials={credentials} />
+    </>
   );
 });
 

@@ -1,6 +1,7 @@
 @use '@app/styles/breakpoints';
 
 .camp {
+
   &__title {
     font: var(--font-xxl);
     font-weight: 500;
@@ -78,7 +79,7 @@
       bottom: 25px;
       width: 245px;
       height: 283px;
-      background-image: url('images/camp-overview/bg.png');
+      background-image: url('@shared/assets/images/camp-overview/bg.png');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
