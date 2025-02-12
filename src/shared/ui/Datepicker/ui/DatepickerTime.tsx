@@ -38,10 +38,12 @@ const DatepickerTime = memo((props: DatepickerTimeProps) => {
 				showTimeSelect
 				showTimeSelectOnly
 			/>
-			<ErrorMessage
-				name={name ?? ''}
-				render={() => <CustomErrorMessage className={styles.datepicker__error} />}
-			/>
+			{name && (
+				<ErrorMessage
+					name={name}
+					render={() => <CustomErrorMessage className={styles.datepicker__error} />}
+				/>
+			)}
 		</label>
 	);
 });
