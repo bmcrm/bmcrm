@@ -36,11 +36,12 @@ const ShiftsPage = () => {
           {isLoading && <Loader className={styles.loader} />}
           {shifts && shifts.length > 0 ? (
             <ShiftsList className={'mt-40'} shifts={shifts} onEditShift={handleEditShift} />
-          ) : (
+          ) : (!isLoading && (
             <div className={styles.shifts__empty}>
               <Image src={EmptyImg} maxWidth={400} />
               <h2>No shifts found</h2>
             </div>
+            )
           )}
         </Container>
       </section>
