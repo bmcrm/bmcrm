@@ -79,10 +79,12 @@ const MultiSelect = memo((props: MultiSelectProps) => {
 				}}
 				{...rest}
 			/>
-			<ErrorMessage
-				name={rest.name ?? ''}
-				render={(msg) => <CustomErrorMessage message={msg} />}
-			/>
+			{rest.name && (
+				<ErrorMessage
+					name={rest.name}
+					render={(msg) => <CustomErrorMessage message={msg} />}
+				/>
+			)}
 		</label>
 	);
 });

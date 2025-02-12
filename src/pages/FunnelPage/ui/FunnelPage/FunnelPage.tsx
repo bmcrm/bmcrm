@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useToggle } from '@shared/hooks/useToggle';
 import { useMedia } from '@shared/hooks/useMedia';
-import { Button } from '@shared/ui/Button';
 import { Container } from '@shared/ui/Container';
-import { InviteCamperModal } from '@features/InviteCamperModal';
+import { InviteButton } from '@features/InviteButton';
 import { Funnel } from '../Funnel/Funnel';
 import { FunnelCards } from '../FunnelCards/FunnelCards';
 import { useGetCampers, type ICampersByRole, CamperRole } from '@entities/Camper';
 import styles from './FunnelPage.module.scss';
 
 const FunnelPage = () => {
-	const { isOpen, open, close } = useToggle();
 	const { isMobile } = useMedia();
 	const { data: campers } = useGetCampers();
 	const [campersByRole, setCampersByRole] = useState<ICampersByRole>({
@@ -58,12 +55,11 @@ const FunnelPage = () => {
 								[CamperRole.CAMPER]: campersByRole[CamperRole.CAMPER].length + campersByRole[CamperRole.TCO].length + campersByRole[CamperRole.COORG].length,
 							}}
 						/>
-						<Button onClick={open} className={styles.funnel__btn}>Invite</Button>
+						<InviteButton className={styles.funnel__btn} />
 					</div>
 					<FunnelCards campersByRole={campersByRole} customStyles={{ marginTop: isMobile ? 30 : 40 }} />
 				</Container>
 			</section>
-			<InviteCamperModal isOpen={isOpen} onClose={close} />
 		</>
 	);
 };
