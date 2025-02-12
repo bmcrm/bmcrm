@@ -1,1 +1,1 @@
-export { default as ShiftModal } from './ui/ShiftModal/ShiftModal';
+export { default as ShiftModal } from './ui/ShiftModal';
