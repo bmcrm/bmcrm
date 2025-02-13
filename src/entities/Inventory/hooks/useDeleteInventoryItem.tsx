@@ -33,15 +33,34 @@ const useDeleteInventoryItem = () => {
 			const previousCurrentItems = queryClient.getQueryData<IInventoryItem[]>(inventoryKeys.currentCategory(category));
 			const previousCategories = queryClient.getQueryData<string[]>(inventoryKeys.allCategories);
 
-			queryClient.setQueryData<IInventoryItem[]>(inventoryKeys.allInventory, (oldItems) => {
-				if (!oldItems) return oldItems;
-				return oldItems.filter((item) => item.id !== itemID);
-			});
+			queryClient.setQueryData<{ pages: { items: IInventoryItem[] }[], pageParams: string[] }>(
+				inventoryKeys.allInventory,
+				(oldData) => {
+					if (!oldData) return oldData;
 
-			queryClient.setQueryData<IInventoryItem[]>(inventoryKeys.currentCategory(category), (oldItems) => {
-				if (!oldItems) return oldItems;
-				return oldItems.filter((item) => item.id !== itemID);
-			});
+					return {
+						...oldData,
+						pages: oldData.pages.map((page) => ({
+							...page,
+							items: page.items.filter((item) => item.id !== itemID),
+						})),
+					};
+				}
+			);
+
+			queryClient.setQueryData<{ pages: { items: IInventoryItem[] }[], pageParams: string[] }>(
+				inventoryKeys.currentCategory(category),
+				(oldData) => {
+					if (!oldData) return oldData;
+
+					return {
+						...oldData,
+						pages: oldData.pages.map((page) => ({
+							...page,
+							items: page.items.filter((item) => item.id !== itemID),
+						})),
+					};
+				});
 
 			if (lastItem && previousCategories) {
 				queryClient.setQueryData<string[]>(inventoryKeys.allCategories, (oldCategories) => {

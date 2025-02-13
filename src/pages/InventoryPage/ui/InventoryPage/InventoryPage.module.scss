@@ -13,3 +13,10 @@
     gap: 20px;
   }
 }
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
