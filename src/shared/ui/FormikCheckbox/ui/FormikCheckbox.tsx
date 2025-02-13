@@ -11,6 +11,7 @@ type FormikCheckboxProps = {
   disabled?: boolean;
   value?: string;
   errorMessage?: boolean;
+  ariaLabel?: string;
 };
 
 const FormikCheckbox = memo((props: FormikCheckboxProps) => {
@@ -21,10 +22,11 @@ const FormikCheckbox = memo((props: FormikCheckboxProps) => {
     disabled,
     value,
     errorMessage = false,
+    ariaLabel,
   } = props;
 
   return (
-    <label className={classNames(styles.checkbox, {}, [className])}>
+    <label className={classNames(styles.checkbox, {}, [className])} aria-label={ariaLabel}>
       <Field
         type={'checkbox'}
         disabled={disabled}
