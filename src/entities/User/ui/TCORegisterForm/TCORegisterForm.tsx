@@ -58,7 +58,7 @@ const TCORegisterForm = memo(({ handleSubmit }: TCORegisterFormProps) => {
 					<FormikCheckbox
 						name={'accept'}
 						label={'I agree to the privacy policy'}
-						aria-label={'Accept terms'}
+						ariaLabel={'Accept terms'}
 						errorMessage
 					/>
 					<Button type={'submit'} fluid>
