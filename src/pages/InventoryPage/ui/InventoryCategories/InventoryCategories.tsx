@@ -1,6 +1,5 @@
 import { memo, useMemo } from 'react';
 import { classNames } from '@shared/lib/classNames';
-import { Loader } from '@shared/ui/Loader';
 import { InventoryCategory } from '../InventoryCategory/InventoryCategory';
 import { InventoryPlaceholder } from '../InventoryPlaceholder/InventoryPlaceholder';
 import type { IInventoryItem } from '@entities/Inventory';
@@ -49,7 +48,6 @@ const InventoryCategories = memo((props: InventoryCategoriesProps) => {
 		<div className={classNames(styles.categories, {}, [className])}>
 			{category ? (
 				<>
-					{inventoryIsLoading && <Loader className={'m-centred-hv'}/>}
 					{inventoryItems && inventoryItems.length > 0 && (
 						<InventoryCategory
 							category={category}
@@ -60,14 +58,13 @@ const InventoryCategories = memo((props: InventoryCategoriesProps) => {
 						/>
 					)}
 					{!inventoryIsLoading && (!inventoryItems || inventoryItems.length === 0) && (
-						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH}/>
+						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH} />
 					)}
 				</>
 			) : (
 				<>
-					{isLoading && <Loader className={'m-centred-hv'}/>}
 					{!isLoading && !hasResults && (
-						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH}/>
+						<InventoryPlaceholder theme={InventoryPlaceholderTheme.INVALID_SEARCH} />
 					)}
 					{inventoryItems && filteredCategories?.map(fc => (
 						<InventoryCategory

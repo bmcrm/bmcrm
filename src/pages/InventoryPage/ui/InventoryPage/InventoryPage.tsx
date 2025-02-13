@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useToggle } from '@shared/hooks/useToggle';
 import { useDebounce } from '@shared/hooks/useDebounce';
 import { Container } from '@shared/ui/Container';
+import { Loader } from '@shared/ui/Loader';
 import { AddInventoryModal } from '@features/AddInventoryModal';
 import { InventoryNav } from '../InventoryNav/InventoryNav';
 import { InventoryCategories } from '../InventoryCategories/InventoryCategories';
@@ -72,6 +73,7 @@ const InventoryPage = () => {
 		<>
 			<section className={styles.inventory}>
 				<Container className={styles.inventory__container} fluid>
+					{isLoading && <Loader className={styles.loader} />}
 					{categoriesFromApi && categoriesFromApi.length > 0 && categories ? (
 						<>
 							<InventoryNav categories={categories} />
