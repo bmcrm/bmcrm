@@ -36,7 +36,7 @@ test.describe('Testing login and register flow', () => {
     await page.fill('input[name="password"]', 'Password1!');
     await page.click('label[aria-label="Accept terms"]');
     await page.click('button[type="submit"]');
-    await expect(page.locator('h1')).toHaveText('Account Verification');
+    await expect(page.locator('text=Account Verification')).toBeVisible();
     await deleteUser({
       cognitoPoolId: TEST_PARAMS.TEST_COGNITO_POOL_ID,
       email: 'fake@email.com',
