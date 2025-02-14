@@ -54,6 +54,7 @@ export const getTestParameters = async (): Promise<{
 	TEST_EMAIL: string;
 	TEMP_PASSWORD: string;
 	NEW_PASSWORD: string;
+	CAMP_ID: string;
 }> => {
 	const [
 		TEST_COGNITO_POOL_ID,
@@ -61,12 +62,14 @@ export const getTestParameters = async (): Promise<{
 		TEST_EMAIL,
 		TEMP_PASSWORD,
 		NEW_PASSWORD,
+		CAMP_ID,
 	] = await Promise.all([
 		getParameter('/campers/cognito_user_pool_id'),
 		getParameter('/campers/cognito_client_pool_id'),
 		getParameter('/webapp/test/email'),
 		getParameter('/webapp/test/password_temp'),
 		getParameter('/webapp/test/password_new'),
+		getParameter('/webapp/test/account_camp_id'),
 	]);
 
 	return {
@@ -75,16 +78,18 @@ export const getTestParameters = async (): Promise<{
 		TEST_EMAIL,
 		TEMP_PASSWORD,
 		NEW_PASSWORD,
+		CAMP_ID,
 	};
 }
 
-export const getURLs = async (): Promise<Record<string, string>> => {
+export const getURLs = async (campID?: string): Promise<Record<string, string>> => {
 	const APP_URL = await getParameter('/webapp/url');
 
 	return {
 		REGISTER_URL: `${APP_URL}/registration`,
 		LOGIN_URL: `${APP_URL}/login`,
 		FUNNEL_URL: `${APP_URL}/funnel`,
+		CAMP_OVERVIEW_URL: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
 	};
 }
 
