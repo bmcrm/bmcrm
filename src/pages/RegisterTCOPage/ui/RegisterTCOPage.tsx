@@ -19,7 +19,7 @@ const RegisterTCOPage = memo(() => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(RoutePath.funnel, { replace: true });
+      navigate(RoutePath.campers, { replace: true });
     }
   }, [isLoggedIn, navigate]);
 

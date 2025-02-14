@@ -27,7 +27,7 @@ const LoginPage = memo(() => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(RoutePath.funnel, { replace: true });
+      navigate(RoutePath.campers, { replace: true });
     }
   }, [isLoggedIn, navigate]);
 
@@ -41,7 +41,7 @@ const LoginPage = memo(() => {
       try {
         await login(data);
         resetForm();
-        navigate(RoutePath.funnel, { replace: true });
+        navigate(RoutePath.campers, { replace: true });
       } catch (e) {
         if (e instanceof CognitoIdentityProviderServiceException && e.name === 'UserNotConfirmedException') {
           setCredentials(() => ({

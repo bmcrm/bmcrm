@@ -1,4 +1,4 @@
-import { type RefObject, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, type RefObject } from 'react';
 import {
 	useReactTable,
 	getCoreRowModel,
@@ -15,12 +15,15 @@ import { TableBody } from '../TableBody/TableBody';
 import { TableControl } from '../TableControl/TableControl';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { InviteButton } from '@features/InviteButton';
+import { userState } from '@entities/User';
+import { CamperRole } from '@entities/Camper';
 import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from './Table.module.scss';
 
 type TableProps<TData extends object> = {
 	className?: string;
 	title?: string;
+	isInviteButton?: boolean;
 	data: TData[];
 	columns: ColumnDef<TData>[];
 	portalTargetRef?: RefObject<HTMLDivElement>;
@@ -28,12 +31,14 @@ type TableProps<TData extends object> = {
 };
 
 const Table = <TData extends object>(props: TableProps<TData>) => {
-	const { className, title, data, columns, portalTargetRef, tableScrollRef } = props;
+	const { className, title, isInviteButton, data, columns, portalTargetRef, tableScrollRef } = props;
 	const internalPortalTargetRef = useRef<HTMLDivElement>(null);
 	const innerTableScrollRef = useRef<HTMLDivElement>(null);
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const { tokens: { decodedIDToken } } = userState();
+	const canInvite = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 	const finalPortalRef = portalTargetRef || internalPortalTargetRef;
 	const finalScrollRef = tableScrollRef || innerTableScrollRef;
 
@@ -63,7 +68,7 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 			<div className={styles.table__header}>
 				<div className={styles.table__row} style={{ gap: 10 }}>
 					{title && <h2 className={styles.table__title}>{title}</h2>}
-					<InviteButton size={ButtonSize.S} />
+					{isInviteButton && canInvite && <InviteButton size={ButtonSize.S} />}
 				</div>
 				<div className={classNames(styles.table__row, {}, ['ml-a'])} style={{ gap: 10 }}>
 					<Button

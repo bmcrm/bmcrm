@@ -9,6 +9,8 @@ import { InventoryConfirmDeleteModal } from '@features/InventoryConfirmDeleteMod
 import { InventoryDetailsModal, InventoryDetailsModalTheme } from '@widgets/InventoryDetailsModal';
 import { useDeleteInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
+import { userState } from '@entities/User';
+import { CamperRole } from '@entities/Camper';
 import styles from './InventoryCard.module.scss';
 import DefaultImg from '@shared/assets/images/inventory/no-img.webp';
 import DeleteIcon from '@shared/assets/icons/delete.svg';
@@ -27,6 +29,8 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 	const [modalTheme, setModalTheme] = useState<InventoryDetailsModalTheme>(InventoryDetailsModalTheme.DEFAULT);
 	const { data: inventory } = useGetInventory();
 	const { mutate: deleteItem } = useDeleteInventoryItem();
+	const { tokens: { decodedIDToken } } = userState();
+	const canControl = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
 	const handleDelete = useCallback(async () => {
 		const itemsInCategory = inventory?.filter(item => item.category === category);
@@ -79,30 +83,32 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 						<InventoryBadge
 							label={<><span style={{ font: 'var(--font-s)' }}>${+quantity * +price}</span> total price</>}/>
 					</div>
-					<div className={styles.card__control}>
-						<Button
-							theme={ButtonTheme.CLEAR}
-							size={ButtonSize.TEXT}
-							className={styles.card__btn}
-							onClick={(e) => {
-								e.stopPropagation();
-								handleOpenModal(InventoryDetailsModalTheme.EDIT);
-							}}
-						>
-							<Icon icon={<EditIcon />} size={IconSize.SIZE_14} />
-						</Button>
-						<Button
-							theme={ButtonTheme.CLEAR}
-							size={ButtonSize.TEXT}
-							className={styles.card__btn}
-							onClick={(e) => {
-								e.stopPropagation();
-								confirmOpen();
-							}}
-						>
-							<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14}/>
-						</Button>
-					</div>
+					{canControl && (
+						<div className={styles.card__control}>
+							<Button
+								theme={ButtonTheme.CLEAR}
+								size={ButtonSize.TEXT}
+								className={styles.card__btn}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleOpenModal(InventoryDetailsModalTheme.EDIT);
+								}}
+							>
+								<Icon icon={<EditIcon />} size={IconSize.SIZE_14} />
+							</Button>
+							<Button
+								theme={ButtonTheme.CLEAR}
+								size={ButtonSize.TEXT}
+								className={styles.card__btn}
+								onClick={(e) => {
+									e.stopPropagation();
+									confirmOpen();
+								}}
+							>
+								<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14}/>
+							</Button>
+						</div>
+					)}
 				</div>
 			</li>
 			<InventoryDetailsModal

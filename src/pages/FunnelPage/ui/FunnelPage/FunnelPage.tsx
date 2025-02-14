@@ -5,11 +5,10 @@ import { InviteButton } from '@features/InviteButton';
 import { Funnel } from '../Funnel/Funnel';
 import { FunnelCards } from '../FunnelCards/FunnelCards';
 import { useGetCampers, type ICampersByRole, CamperRole } from '@entities/Camper';
+import { userState } from '@entities/User';
 import styles from './FunnelPage.module.scss';
 
 const FunnelPage = () => {
-	const { isMobile } = useMedia();
-	const { data: campers } = useGetCampers();
 	const [campersByRole, setCampersByRole] = useState<ICampersByRole>({
 		[CamperRole.TCO]: [],
 		[CamperRole.COORG]: [],
@@ -18,6 +17,10 @@ const FunnelPage = () => {
 		[CamperRole.INTENT]: [],
 		[CamperRole.CAMPER]: [],
 	});
+	const { isMobile } = useMedia();
+	const { data: campers } = useGetCampers();
+	const { tokens: { decodedIDToken } } = userState();
+	const canInvite = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
 	useEffect(() => {
 		if (campers && campers.length > 0) {
@@ -55,7 +58,7 @@ const FunnelPage = () => {
 								[CamperRole.CAMPER]: campersByRole[CamperRole.CAMPER].length + campersByRole[CamperRole.TCO].length + campersByRole[CamperRole.COORG].length,
 							}}
 						/>
-						<InviteButton className={styles.funnel__btn} />
+						{canInvite && <InviteButton className={styles.funnel__btn} />}
 					</div>
 					<FunnelCards campersByRole={campersByRole} customStyles={{ marginTop: isMobile ? 30 : 40 }} />
 				</Container>

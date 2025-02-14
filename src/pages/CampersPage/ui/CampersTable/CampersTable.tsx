@@ -22,8 +22,7 @@ const CampersTable = (props: CampersTableProps) => {
 	const { tokens: { decodedIDToken } } = userState();
 	const portalTargetRef = useRef<HTMLDivElement>(null);
 	const tableScrollRef = useRef<HTMLDivElement>(null);
-	const isTCO = decodedIDToken?.role === CamperRole.TCO;
-	const userEmail = decodedIDToken?.email;
+	const canEdit = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
 	const handleOpenDetails = useCallback((email: string) => {
 		setCamperEmail(email);
@@ -40,12 +39,12 @@ const CampersTable = (props: CampersTableProps) => {
 					const firstName = row.first_name || '';
 					const lastName = row.last_name || '';
 					const email = row.email || '';
-					const canEdit = isTCO || userEmail === email;
+					const currentUser = decodedIDToken?.email === email;
 
 					return (
 						<div className={styles.table__cell}>
 							<p>{firstName} {lastName}</p>
-							{canEdit && (
+							{(canEdit || currentUser) && (
 								<Button
 									size={ButtonSize.S}
 									onClick={() => handleOpenDetails(email)}
@@ -113,7 +112,7 @@ const CampersTable = (props: CampersTableProps) => {
 				cell: (info) => dateNormalize(info.getValue() as string),
 			},
 		],
-		[handleOpenDetails, userEmail]
+		[handleOpenDetails, decodedIDToken?.email]
 	);
 
 	return (
@@ -124,6 +123,7 @@ const CampersTable = (props: CampersTableProps) => {
 				data={campers}
 				portalTargetRef={portalTargetRef}
 				tableScrollRef={tableScrollRef}
+				isInviteButton
 			/>
 			<CamperDetailsModal
 				camperEmail={camperEmail}

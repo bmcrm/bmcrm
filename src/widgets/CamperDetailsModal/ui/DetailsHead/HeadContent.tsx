@@ -28,7 +28,9 @@ const HeadContent = memo((props: HeadContentProps) => {
 		updated_at,
 	}} = props;
 	const { tokens: { decodedIDToken } } = userState();
-	const canEdit = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.email === email;
+	const canEdit = decodedIDToken?.role === CamperRole.TCO
+		|| decodedIDToken?.role === CamperRole.COORG
+		|| decodedIDToken?.email === email;
 
 	const capitalizedName = useMemo(
 		() => capitalizedCamperName({ first_name, last_name, playa_name, email }),

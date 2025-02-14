@@ -7,7 +7,7 @@ export const generateSettingNavItems = (role?: CamperRole): NavLinkType[] => [
     path: RoutePath.settings_account,
     text: 'MY ACCOUNT',
   },
-  ...(role === CamperRole.TCO
+  ...(role === CamperRole.TCO || role === CamperRole.COORG
     ? [
       {
         path: RoutePath.settings_camp,
