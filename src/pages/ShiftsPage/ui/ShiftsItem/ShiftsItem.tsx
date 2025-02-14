@@ -11,10 +11,11 @@ type ShiftsItemProps = {
 	className?: string;
 	shift: IShift;
 	onEditShift?: (shift: IShift) => void;
+	canControl?: boolean;
 };
 
 const ShiftsItem = memo((props: ShiftsItemProps) => {
-	const { className, shift, onEditShift } = props;
+	const { className, shift, onEditShift, canControl } = props;
 	const { start_date, end_date, time, title, description, members, shift_id } = shift;
 	const { mutate: deleteShift } = useDeleteShift();
 
@@ -55,24 +56,26 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 					</div>
 				</div>
 			</div>
-			<div className={styles.item__control}>
-				<Button
-					theme={ButtonTheme.OUTLINE}
-					size={ButtonSize.S}
-					color={ButtonColor.BLACK}
-					onClick={() => onEditShift?.(shift)}
-				>
-					Edit
-				</Button>
-				<Button
-					theme={ButtonTheme.CLEAR}
-					size={ButtonSize.TEXT}
-					className={styles.item__delete}
-					onClick={handleDelete}
-				>
-					<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14} />
-				</Button>
-			</div>
+			{canControl && (
+				<div className={styles.item__control}>
+					<Button
+						theme={ButtonTheme.OUTLINE}
+						size={ButtonSize.S}
+						color={ButtonColor.BLACK}
+						onClick={() => onEditShift?.(shift)}
+					>
+						Edit
+					</Button>
+					<Button
+						theme={ButtonTheme.CLEAR}
+						size={ButtonSize.TEXT}
+						className={styles.item__delete}
+						onClick={handleDelete}
+					>
+						<Icon icon={<DeleteIcon />} size={IconSize.SIZE_14} />
+					</Button>
+				</div>
+			)}
 		</li>
 	);
 });

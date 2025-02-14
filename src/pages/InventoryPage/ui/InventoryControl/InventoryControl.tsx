@@ -2,6 +2,8 @@ import { memo } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { Search } from '@features/Search';
 import { Button } from '@shared/ui/Button';
+import { userState } from '@entities/User';
+import { CamperRole } from '@entities/Camper';
 import styles from './InventoryControl.module.scss';
 
 type InventoryControlProps = {
@@ -13,6 +15,8 @@ type InventoryControlProps = {
 
 const InventoryControl = memo((props: InventoryControlProps) => {
 	const { className, handleOpen, value, onChange } = props;
+	const { tokens: { decodedIDToken } } = userState();
+	const canCreate = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
 	return (
 		<div className={classNames(styles.control, {}, [className])}>
@@ -22,7 +26,7 @@ const InventoryControl = memo((props: InventoryControlProps) => {
 				value={value}
 				onChange={onChange}
 			/>
-			<Button onClick={handleOpen}>Add inventory</Button>
+			{canCreate && <Button onClick={handleOpen}>Add inventory</Button>}
 		</div>
 	);
 });

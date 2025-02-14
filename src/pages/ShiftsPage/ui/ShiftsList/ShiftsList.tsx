@@ -8,15 +8,16 @@ type ShiftsListProps = {
 	className?: string;
 	shifts: IShift[];
 	onEditShift?: (shift: IShift) => void;
+	canControl?: boolean;
 };
 
 const ShiftsList = memo((props: ShiftsListProps) => {
-	const { className, shifts, onEditShift } = props;
+	const { className, shifts, onEditShift, canControl } = props;
 
 	return (
 		<ul className={classNames(styles.list, {}, [className])}>
 			{shifts.map((shift) => (
-				<ShiftsItem key={shift.shift_id} shift={shift} onEditShift={onEditShift} />
+				<ShiftsItem key={shift.shift_id} shift={shift} onEditShift={onEditShift} canControl={canControl} />
 			))}
 		</ul>
 	);

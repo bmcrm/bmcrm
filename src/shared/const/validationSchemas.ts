@@ -138,8 +138,9 @@ export const campSettingsSchema = yup.object().shape({
 	camp_name: yup
 		.string()
 		.trim()
+		.required('Camp name is required')
 		.min(3, 'Camp name must be at least 3 characters'),
-	city: yup.string().trim(),
+	city: yup.string().trim().max(32, 'Less than 32 characters').required('City is required'),
 	camp_website: yup
 		.string()
 		.trim()

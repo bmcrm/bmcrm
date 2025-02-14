@@ -45,7 +45,7 @@ const UserConfirmModal = memo((props: UserConfirmModalProps) => {
         });
         onClose();
         await login(credentials);
-        navigate(RoutePath.funnel, { replace: true });
+        navigate(RoutePath.campers, { replace: true });
       }
     },
     [confirmEmail, credentials, login, navigate, onClose]
