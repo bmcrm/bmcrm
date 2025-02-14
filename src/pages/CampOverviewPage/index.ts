@@ -1,1 +1,1 @@
-export { CampOverviewPage } from './ui/CampOverviewPage.async';
+export { CampOverviewPage } from './ui/CampOverviewPage/CampOverviewPage.async';

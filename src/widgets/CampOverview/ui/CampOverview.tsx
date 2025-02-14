@@ -1,5 +1,4 @@
 import { memo, useCallback, type RefObject } from 'react';
-import { Link } from 'react-router-dom';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Skeleton } from '@shared/ui/Skeleton';
@@ -26,7 +25,7 @@ type CampOverviewProps = {
 const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps) => {
   const { isMobile, isTablet } = useMedia();
   const { isOpen, open, close } = useToggle();
-  const { isLoggedIn } = userState();
+  const { isLoggedIn, tokens: { decodedIDToken } } = userState();
   const { data: campers } = useGetCampers({ enabled: isLoggedIn });
 
   let content = (
@@ -46,22 +45,25 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
     </>
   );
 
-  const closeModalHandler = useCallback(() => {
-    close();
-
+  const scroll = useCallback(() => {
     setTimeout(() => {
       scrollTarget.current?.scrollIntoView({ behavior: 'smooth' });
     }, MODAL_ANIMATION_DELAY);
-  }, [close, scrollTarget.current]);
+  }, [scrollTarget.current]);
 
-  const campersCounter = isLoggedIn ? (
+  const handleCloseWithScroll = useCallback(() => {
+    close();
+    scroll();
+  }, [close, scroll]);
+
+  const campersCounter = isLoggedIn && camp?.camp_id === decodedIDToken?.camp_id ? (
     campers?.length || '0'
   ) : (
     <>
       <Button theme={ButtonTheme.CLEAR} size={ButtonSize.TEXT} onClick={open}>
         <Icon icon={<BlurIcon />} size={IconSize.SIZE_24} />
       </Button>
-      <CampersCountModal isOpen={isOpen} onClose={closeModalHandler} />
+      <CampersCountModal isOpen={isOpen} onClose={close} onScroll={handleCloseWithScroll} />
     </>
   );
 
@@ -69,19 +71,22 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
     content = (
       <>
         <h1 className={styles.camp__title}>{camp?.camp_name || 'Camp Name will be here'}</h1>
-        <div className={styles.camp_info}>
-          <h2 className={styles.camp__subtitle}>Campers {campersCounter}</h2>
+        <div className={styles.camp__info}>
+          <h2 className={styles.camp__subtitle}>Campers: {campersCounter}</h2>
           {camp?.camp_website && (
-            <Link to={camp.camp_website}>
-              <p className={styles.camp_website}>
-                Website
-                <Icon
-                  className={styles.camp__icon}
-                  icon={<RedirectIcon />}
-                  size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28}
-                />
-              </p>
-            </Link>
+            <a
+              href={camp.camp_website.startsWith('http') ? camp.camp_website : `https://${camp.camp_website}`}
+              target={'_blank'}
+              rel={'noopener noreferrer'}
+              className={styles.camp__link}
+            >
+              Website
+              <Icon
+                icon={<RedirectIcon />}
+                size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_28}
+                style={{ color: 'var(--color-neutral)' }}
+              />
+            </a>
           )}
         </div>
         <div className={styles.camp__row}>
@@ -97,7 +102,7 @@ const CampOverview = memo(({ camp, isLoading, scrollTarget }: CampOverviewProps)
               </address>
             )}
             {!isLoggedIn && (
-              <Button onClick={closeModalHandler} className={styles.camp__btn}>
+              <Button onClick={scroll} className={styles.camp__btn}>
                 Join the Camp
                 <Icon icon={<CampIcon />} size={isTablet ? IconSize.SIZE_20 : IconSize.SIZE_20} />
               </Button>
