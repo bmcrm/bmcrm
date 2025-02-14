@@ -90,6 +90,7 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		LOGIN_URL: `${APP_URL}/login`,
 		FUNNEL_URL: `${APP_URL}/funnel`,
 		CAMP_OVERVIEW_URL: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
+		CAMPERS: `${APP_URL}/campers`,
 	};
 }
 
@@ -102,5 +103,5 @@ export const login = async (
 	await page.fill('input[name="email"]', TEST_PARAMS.TEST_EMAIL);
 	await page.fill('input[name="password"]', TEST_PARAMS.NEW_PASSWORD);
 	await page.click('button[type="submit"]');
-	await expect(page).toHaveURL(URLS.FUNNEL_URL);
+	await expect(page).toHaveURL(URLS.CAMPERS);
 };
