@@ -10,15 +10,16 @@ import CampIcon from '@shared/assets/icons/camp.svg';
 type CampersCountModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onScroll?: () => void;
 };
 
-const CampersCountModal = memo(({ isOpen, onClose }: CampersCountModalProps) => (
+const CampersCountModal = memo(({ isOpen, onClose, onScroll }: CampersCountModalProps) => (
   <Modal isOpen={isOpen} onClose={onClose}>
     <div className={styles.content}>
       <span className={styles.content__icon}><EyeIcon /></span>
-      <Text title={'Sign up to see the number of campers'} titleSize={TextSize.L} titleAlign={TextAlign.CENTER}/>
-      <Button onClick={onClose} fluid>
-        <Icon icon={<CampIcon/>} size={IconSize.SIZE_20} />SIGN UP
+      <Text title={'Sign up to see the number of campers'} titleSize={TextSize.L} titleAlign={TextAlign.CENTER} />
+      <Button onClick={onScroll} fluid>
+        <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />SIGN UP
       </Button>
     </div>
   </Modal>

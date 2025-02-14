@@ -13,12 +13,8 @@
       text-align: left;
     }
 
-    + .camp__subtitle {
-      margin-top: 10px;
-
-      @media (width < breakpoints.$md) {
-        margin-top: 0;
-      }
+    + .camp__info {
+      margin-top: 20px;
     }
   }
 
@@ -33,24 +29,40 @@
     @media (width < breakpoints.$lg) {
       font: var(--font-s);
     }
-    @media (width < breakpoints.$md) {
-      justify-content: flex-start;
-      font: var(--font-xs);
-      text-align: left;
-    }
-
-    + .camp__row {
-      margin-top: 30px;
-
-      @media (width < breakpoints.$md) {
-        margin-top: 20px;
-      }
-    }
   }
 
   &__text {
     @media (width < breakpoints.$lg) {
       font: var(--font-xs);
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font: var(--font-l);
+    text-align: center;
+
+    @media (width < breakpoints.$lg) {
+      font: var(--font-s);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+
+    + .camp__row {
+      margin-top: 30px;
     }
   }
 
@@ -134,27 +146,4 @@
       box-shadow: none;
     }
   }
-}
-
-.camp_website {
-  display: flex;
-  gap: 5px;
-}
-.camp_info {
-  margin-top: 20px;
-  margin-bottom: 31px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 25px;
-  font: var(--font-l);
-  text-align: center;
-  @media (width < breakpoints.$md) {
-    font: var(--font-s);
-    font-weight: 500;
-    text-align: left;
-  }
-}
-.camp__icon {
-  color: #c1c1c1;
 }
