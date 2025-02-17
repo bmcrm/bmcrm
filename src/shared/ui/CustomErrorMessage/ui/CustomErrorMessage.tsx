@@ -10,7 +10,7 @@ interface CustomErrorMessageProps {
 }
 
 const CustomErrorMessage = memo(({ message, className }: CustomErrorMessageProps) => (
-  <div className={classNames(styles.message, {}, [className])}>
+  <div className={classNames(styles.message, {}, [className])} aria-label={'Error message'}>
     <Icon icon={<ErrorIcon />} />
     {message &&  <p>{message}</p>}
   </div>
