@@ -53,6 +53,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 							size={ButtonSize.TEXT}
 							className={styles.head__editBtn}
 							onClick={() => setTheme(CamperDetailsModalTheme.EDIT)}
+							aria-label={'Edit details button'}
 						>
 							<Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
 						</Button>

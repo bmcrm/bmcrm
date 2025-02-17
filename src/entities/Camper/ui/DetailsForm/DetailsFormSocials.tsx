@@ -27,6 +27,7 @@ const DetailsFormSocials = memo(({ socials }: DetailsFormSocialsProps) => {
 								size={ButtonSize.TEXT}
 								className={styles.form__btnControl}
 								onClick={() => push({ name: '', url: '' })}
+								aria-label={'Add social button'}
 							>
 								<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
 							</Button>
@@ -50,6 +51,7 @@ const DetailsFormSocials = memo(({ socials }: DetailsFormSocialsProps) => {
 											remove(i);
 										}
 									}}
+									aria-label={'Remove social button'}
 								>
 									<Icon icon={<MinusIcon />} size={IconSize.SIZE_16} />
 								</Button>

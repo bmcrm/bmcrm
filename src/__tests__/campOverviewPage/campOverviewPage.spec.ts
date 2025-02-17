@@ -23,9 +23,9 @@ test.describe('Check camp overview page', () => {
 	test('Login and redirect to camp overview page', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
-		await page.goto(URLS.CAMP_OVERVIEW_URL);
+		await page.goto(URLS.CAMP_OVERVIEW);
 
-		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW_URL);
+		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
 		await expect(page.locator('text=camp for tests')).toBeVisible();
 	});
 
@@ -41,9 +41,9 @@ test.describe('Check camp overview page', () => {
 			faker.string.symbol(1) +
 			faker.string.alpha(1).toUpperCase();
 
-		await page.goto(URLS.CAMP_OVERVIEW_URL);
+		await page.goto(URLS.CAMP_OVERVIEW);
 
-		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW_URL);
+		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
 		await expect(page.locator('text=camp for tests')).toBeVisible();
 
 		await page.fill('input[name="playa_name"]', fakePlayaName);
@@ -54,7 +54,7 @@ test.describe('Check camp overview page', () => {
 		await page.click('label[aria-label="Accept terms"]');
 		await page.click('button[type="submit"]');
 
-		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW_URL);
+		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
 		await expect(page.locator('[aria-label="Error message"]')).not.toBeVisible();
 	});
 });

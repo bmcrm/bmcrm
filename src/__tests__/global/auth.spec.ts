@@ -38,7 +38,7 @@ test.describe('Testing login and register flow', () => {
       faker.string.symbol(1) +
       faker.string.alpha(1).toUpperCase();
 
-    await page.goto(URLS.REGISTER_URL);
+    await page.goto(URLS.REGISTER);
     await page.fill('input[name="camp_name"]', fakeCampName);
     await page.fill('input[name="city"]', fakeCity);
     await page.fill('input[name="first_name"]', fakeFirstName);

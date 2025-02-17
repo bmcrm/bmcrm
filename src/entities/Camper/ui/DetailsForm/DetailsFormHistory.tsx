@@ -29,6 +29,7 @@ const DetailsFormHistory = memo(({ history }: DetailsFormHistoryProps) => {
 							size={ButtonSize.TEXT}
 							className={styles.form__btnControl}
 							onClick={() => push({ year: String(currentYear - (history?.length ?? 0)), value: '' })}
+							aria-label={'Add history button'}
 						>
 							<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
 						</Button>
@@ -44,6 +45,7 @@ const DetailsFormHistory = memo(({ history }: DetailsFormHistoryProps) => {
 											size={ButtonSize.TEXT}
 											className={classNames(styles.form__btnControl, {}, ['ml-a', 'mt-5'])}
 											onClick={() => remove(i)}
+											aria-label={'Remove history button'}
 										>
 											<Icon icon={<MinusIcon />} size={IconSize.SIZE_16} />
 										</Button>

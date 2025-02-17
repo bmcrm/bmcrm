@@ -2,6 +2,7 @@ import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 import { CognitoIdentityProviderClient, AdminDeleteUserCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { expect, type Page } from '@playwright/test';
+import { faker } from '@faker-js/faker';
 
 const cognitoClient = new CognitoIdentityProviderClient({
 	region: 'us-east-1',
@@ -90,10 +91,10 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 	const APP_URL = await getParameter('/webapp/url');
 
 	return {
-		REGISTER_URL: `${APP_URL}/registration`,
-		LOGIN_URL: `${APP_URL}/login`,
-		FUNNEL_URL: `${APP_URL}/funnel`,
-		CAMP_OVERVIEW_URL: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
+		REGISTER: `${APP_URL}/registration`,
+		LOGIN: `${APP_URL}/login`,
+		FUNNEL: `${APP_URL}/funnel`,
+		CAMP_OVERVIEW: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
 		CAMPERS: `${APP_URL}/campers`,
 	};
 }
@@ -103,9 +104,23 @@ export const login = async (
 	URLS: Record<string, string>,
 	TEST_PARAMS: Record<string, string>
 ) => {
-	await page.goto(URLS.LOGIN_URL);
+	await page.goto(URLS.LOGIN);
 	await page.fill('input[name="email"]', TEST_PARAMS.TEST_EMAIL);
 	await page.fill('input[name="password"]', TEST_PARAMS.NEW_PASSWORD);
 	await page.click('button[type="submit"]');
 	await expect(page).toHaveURL(URLS.CAMPERS);
+};
+
+export const fillCamperDetailsForm = async (page: Page) => {
+	const fakeFirstName = faker.person.firstName();
+	const fakeLastName = faker.person.lastName();
+	const fakePlayaName = faker.internet.username();
+	const fakeCity = faker.location.city();
+	const fakeSummary = faker.person.bio();
+
+	await page.fill('input[name="first_name"]', fakeFirstName);
+	await page.fill('input[name="last_name"]', fakeLastName);
+	await page.fill('input[name="playa_name"]', fakePlayaName);
+	await page.fill('input[name="city"]', fakeCity);
+	await page.fill('textarea[name="about_me"]', fakeSummary);
 };
