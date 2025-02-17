@@ -32,6 +32,7 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 							size={ButtonSize.TEXT}
 							className={styles.form__btnControl}
 							onClick={() => pushTag({ tagName: '', tagDetails: [] })}
+							aria-label={'Add tag button'}
 						>
 							<Icon icon={<PlusIcon />} size={IconSize.SIZE_10} />
 						</Button>
@@ -53,6 +54,7 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 													removeTag(tagIndex);
 												}
 											}}
+											aria-label={'Remove tag button'}
 										>
 											<Icon icon={<MinusIcon />} size={IconSize.SIZE_10} />
 										</Button>
