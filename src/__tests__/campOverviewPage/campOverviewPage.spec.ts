@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
-import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -11,6 +10,7 @@ let TEST_PARAMS: {
 	TEMP_PASSWORD: string;
 	NEW_PASSWORD: string;
 	CAMP_ID: string;
+	APP_URL: string;
 };
 
 test.describe('Check camp overview page', () => {
@@ -30,7 +30,7 @@ test.describe('Check camp overview page', () => {
 	});
 
 	test('Fake registration from the camp page', async ({ page }) => {
-		await page.route(`${CAMPER_ENDPOINT}/create`, route => route.abort());
+		await page.route('**/campers/create**', route => route.abort());
 
 		const fakePlayaName = faker.internet.username();
 		const fakeFirstName = faker.person.firstName();
@@ -55,5 +55,6 @@ test.describe('Check camp overview page', () => {
 		await page.click('button[type="submit"]');
 
 		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW_URL);
+		await expect(page.locator('[aria-label="Error message"]')).not.toBeVisible();
 	});
 });
