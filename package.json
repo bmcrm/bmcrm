@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@faker-js/faker": "^9.5.0",
     "@playwright/test": "^1.49.1",
     "@sentry/vite-plugin": "^2.22.7",
     "@tanstack/eslint-plugin-query": "^5.62.1",
