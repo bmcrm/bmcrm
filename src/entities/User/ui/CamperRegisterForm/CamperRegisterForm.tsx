@@ -170,7 +170,12 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 						{inputs.rest.map((input) => (
 							<FormikInput key={input.name} {...input} />
 						))}
-						<FormikCheckbox name={'accept'} label={'I agree to the privacy policy'} errorMessage />
+						<FormikCheckbox
+							name={'accept'}
+							label={'I agree to the privacy policy'}
+							ariaLabel={'Accept terms'}
+							errorMessage
+						/>
 						<Button type={'submit'} fluid>
 							<CampIcon />
 							SIGN UP
