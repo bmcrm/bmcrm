@@ -26,6 +26,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 		city,
 		created_at,
 		updated_at,
+		visitedBM,
 	}} = props;
 	const { tokens: { decodedIDToken } } = userState();
 	const canEdit = decodedIDToken?.role === CamperRole.TCO
@@ -64,7 +65,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 			<ul className={styles.head__details}>
 				{city && <li>{city}</li>}
 				<li>Added: {dateNormalize(created_at)}</li>
-				<li>BM`s: 2022, 2023</li>
+				{visitedBM && visitedBM.length > 0 && <li>BM`s: {visitedBM.join(', ')}</li>}
 				<li>Updated: {dateNormalize(updated_at)}</li>
 			</ul>
 		</div>

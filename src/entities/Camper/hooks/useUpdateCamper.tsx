@@ -19,7 +19,7 @@ const useUpdateCamper = () => {
 
 				return oldCampers.map((camper) =>
 					camper.email === updatedCamper.email
-						? { ...camper, ...updatedCamper }
+						? { ...camper, ...updatedCamper, updated_at: new Date().toISOString() }
 						: camper
 				);
 			});

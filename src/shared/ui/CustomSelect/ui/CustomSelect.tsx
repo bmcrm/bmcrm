@@ -40,8 +40,8 @@ const CustomSelect = memo((props: CustomSelectProps) => {
 				value={selectedValue ?? undefined}
 				{...otherProps}
 			>
-				{options.map(({ value, content }) =>
-					<option key={value} value={value}>{content}</option>
+				{options.map(({ value, label }) =>
+					<option key={value} value={value}>{label}</option>
 				)}
 			</select>
 			<ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />}/>
