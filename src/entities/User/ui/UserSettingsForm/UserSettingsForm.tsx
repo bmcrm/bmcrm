@@ -45,7 +45,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
         >
           {({ values }) => (
             <Form className={styles.form}>
-              <FormInputs history={values.history} socials={values.social_links} />
+              <FormInputs history={values.history} socials={values.social_links} visitedBM={values.visitedBM} />
               <Button type={'submit'} className={'m-centred'}>Save changes</Button>
             </Form>
           )}
