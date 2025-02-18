@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { fillCamperDetailsForm, getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
+import {
+	getTestParameters,
+	getURLs,
+	login,
+	fillCamperDetailsForm,
+	resetCamperDetailsForm,
+} from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -12,21 +18,18 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe.skip('Check funnel page and edit user', () => {
+test.describe('Check funnel page and edit user', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
 		URLS = await getURLs(TEST_PARAMS.CAMP_ID);
 	});
 
-	test.skip('Login and edit user', async ({ page }) => {
+	test('Login and edit user', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.FUNNEL);
 		await expect(page).toHaveURL(URLS.FUNNEL);
-
-		const title = await page.locator('text=Campers');
-		await expect(title).toBeVisible();
 
 		const userItem = page.locator('li', { hasText: 'Test User' });
 		await expect(userItem).toBeVisible();
@@ -43,5 +46,20 @@ test.describe.skip('Check funnel page and edit user', () => {
 		await expect(form).toBeVisible();
 
 		await fillCamperDetailsForm(page);
+
+		await editButton.click();
+		await expect(form).toBeVisible();
+
+		await resetCamperDetailsForm(page);
+
+		await expect(page.locator('text=fakeTown')).toBeVisible();
+
+		await page.keyboard.press('Escape');
+
+		await expect(userItem).toBeVisible();
+
+		await page.waitForResponse((response) =>
+			response.url().includes('/campers') && response.request().method() === 'PATCH' && response.status() === 200
+		);
 	});
 });
