@@ -3,13 +3,13 @@ import { CamperRole, type ICamper } from '../model/types/Camper.types';
 export const BMYearsOptions = (currentYear: number) => (
 	Array.from({ length: currentYear - 1985 }, (_, index) => {
 		const year = currentYear - index;
-		return { value: year.toString(), content: year.toString() };
+		return { value: year.toString(), label: year.toString() };
 	})
 );
 
 export const roleOptions = Object
 	.values(CamperRole)
-	.map(role => ({ value: role, content: role === CamperRole.TCO ? role.toUpperCase() : role}));
+	.map(role => ({ value: role, label: role === CamperRole.TCO ? role.toUpperCase() : role}));
 
 export const tagsOptions = (campers?: ICamper[]): { label: string; value: string }[] => {
 	if (!campers || campers.length === 0) return [];

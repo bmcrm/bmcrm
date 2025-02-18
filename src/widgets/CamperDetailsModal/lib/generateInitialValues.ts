@@ -1,7 +1,7 @@
 import type { ICamper, IFormikCamper } from '@entities/Camper';
 
 export const generateInitialValues = (camper: ICamper): Partial<IFormikCamper> => {
-	const { first_name, last_name, playa_name, city, role, about_me, history, social_links, tags } = camper;
+	const { first_name, last_name, playa_name, city, role, about_me, history, social_links, tags, visitedBM } = camper;
 	const currentYear = new Date().getFullYear();
 
 	return ({
@@ -12,6 +12,7 @@ export const generateInitialValues = (camper: ICamper): Partial<IFormikCamper> =
     city: city || '',
     about_me: about_me || '',
 		history: history || [{ year: String(currentYear), value: '' }],
+		visitedBM: visitedBM || [],
 		tags: tags && Object.values(tags).length > 0
 			? Object.entries(tags).map(([key, values]) => ({
 				tagName: key,

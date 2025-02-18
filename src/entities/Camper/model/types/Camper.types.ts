@@ -44,6 +44,7 @@ export interface ICamper {
   updated_at: string;
   created_at: string;
   tags?: CamperTags;
+  visitedBM?: string[];
 }
 
 export type IFormikCamper = Omit<ICamper, 'tags'> & {

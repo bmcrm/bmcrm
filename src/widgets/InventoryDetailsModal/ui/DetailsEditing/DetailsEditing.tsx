@@ -33,7 +33,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 
 	const selectOptions = categories?.map(category => ({
 		value: category,
-		content: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
+		label: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
 	}));
 
 	const handleCancelEdit = useCallback(() => {

@@ -11,8 +11,8 @@ import { DetailsFormButtons } from './DetailsFormButtons';
 import { useUpdateCamper } from '../../hooks/useUpdateCamper';
 import { generateSocialName } from '@features/SocialIcon';
 import { appState } from '@entities/App';
-import { CamperRole, type ICamper, type IFormikCamper } from '../../model/types/Camper.types';
 import { editCamperSchema } from '@shared/const/validationSchemas';
+import { CamperRole, type ICamper, type IFormikCamper } from '../../model/types/Camper.types';
 import styles from './DetailsForm.module.scss';
 
 type DetailsFormProps = {
@@ -70,7 +70,7 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 						}
 					}}
 				>
-					<DetailsFormBasics role={initialValues.role || CamperRole.CAMPER} />
+					<DetailsFormBasics role={initialValues.role || CamperRole.CAMPER} visitedBM={values.visitedBM} />
 					<DetailsFormTags values={values} />
 					<FormikTextarea
 						name={'about_me'}

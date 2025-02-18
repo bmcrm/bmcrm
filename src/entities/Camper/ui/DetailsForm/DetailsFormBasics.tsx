@@ -1,20 +1,25 @@
 import { memo, useMemo } from 'react';
+import { useFormikContext } from 'formik';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
+import { MultiSelect } from '@shared/ui/MultiSelect';
 import { userState } from '@entities/User';
-import { roleOptions } from '../../lib/generateSelectOptions';
+import { BMYearsOptions, roleOptions } from '../../lib/generateSelectOptions';
 import { inputs } from '../../model/data/DetailsForm.data';
 import { CamperRole } from '@entities/Camper';
 import styles from './DetailsForm.module.scss';
 
 type DetailsFormBasicsProps = {
 	role: CamperRole;
+	visitedBM?: string[];
 };
 
-const DetailsFormBasics = memo(({ role }: DetailsFormBasicsProps) => {
+const DetailsFormBasics = memo(({ role, visitedBM }: DetailsFormBasicsProps) => {
+	const { setFieldValue } = useFormikContext();
 	const { tokens: { decodedIDToken } } = userState();
+	const currentYear = new Date().getFullYear();
 
-	const options = useMemo(
+	const filteredRoleOptions = useMemo(
 		() => role === CamperRole.TCO
 			? roleOptions
 			: roleOptions.filter(option => option.value !== CamperRole.TCO),
@@ -43,10 +48,18 @@ const DetailsFormBasics = memo(({ role }: DetailsFormBasicsProps) => {
 					/>
 				))}
 			</div>
-			{decodedIDToken?.role === CamperRole.TCO && (
+			<MultiSelect
+				isSearchable
+				label={'Visited MB`s'}
+				placeholder={'Select or Write...'}
+				value={visitedBM || []}
+				options={BMYearsOptions(currentYear)}
+				onChange={(newValue) => setFieldValue('visitedBM', newValue)}
+			/>
+			{(decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG) && (
 				<CustomSelect
 					name={'role'}
-					options={options}
+					options={filteredRoleOptions}
 					label={'Role'}
 					disabled={role === CamperRole.TCO}
 				/>
