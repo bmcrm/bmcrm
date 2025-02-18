@@ -51,7 +51,8 @@ const DetailsFormBasics = memo(({ role, visitedBM }: DetailsFormBasicsProps) => 
 			</div>
 			<MultiSelect
 				isSearchable
-				label={'Visited MB`s'}
+				aria-label={'Visited BM`s select'}
+				label={'Visited BM`s'}
 				placeholder={'Select or Write...'}
 				value={visitedBM || []}
 				options={BMYearsOptions(currentYear)}
