@@ -117,6 +117,7 @@ export const fillCamperDetailsForm = async (page: Page) => {
 	const fakePlayaName = faker.internet.username();
 	const fakeCity = faker.location.city();
 	const fakeSummary = faker.person.bio();
+	const fakeHistory = faker.lorem.sentence();
 	const fakeInstagram = `https://instagram.com/${faker.internet.username()}`;
 
 	await page.fill('input[name="first_name"]', fakeFirstName);
@@ -125,31 +126,47 @@ export const fillCamperDetailsForm = async (page: Page) => {
 	await page.fill('input[name="city"]', fakeCity);
 	await page.fill('textarea[name="about_me"]', fakeSummary);
 
-	const visitedSelect = page.locator('[aria-label="Visited BM`s select"]');
-	await visitedSelect.click();
-
-	const firstVisitedSelectOption = page.locator('#react-select-2-option-1');
-	await firstVisitedSelectOption.click();
+	await page.locator('[aria-label="Visited BM`s select"]').click();
+	await page.locator('#react-select-2-option-0').click();
 
 	await page.locator('button[aria-label="Add tag button"]').click();
-
-	const removeButtons = page.locator('button[aria-label="Remove tag button"]');
-	await removeButtons.nth(1).click();
+	const removeTagButtons = page.locator('button[aria-label="Remove tag button"]');
+	await removeTagButtons.nth(1).click();
 
 	await page.fill('input[name="tags.0.tagName"]', 'newTag');
-
-	const tagsSelect = page.locator('[aria-label="Tags select"]');
-	await tagsSelect.click();
-	await page.fill('input[aria-autocomplete="list"]', 'details');
+	await page.locator('[aria-label="Tags select"]').click();
+	await page.fill('input[aria-label="Tags select"]', 'tagDetails');
 	await page.keyboard.press('Enter');
 
 	await page.locator('button[aria-label="Add history button"]').click();
 	await page.locator('button[aria-label="Remove history button"]').click();
-	await page.fill('textarea[name="history.0.value"]', 'history');
+	await page.fill('textarea[name="history.0.value"]', fakeHistory);
 
 	await page.locator('button[aria-label="Add social button"]').click();
 	await page.locator('button[aria-label="Remove social button"]').nth(1).click();
 	await page.fill('input[name="social_links.0.url"]', fakeInstagram);
+
+	await page.click('button[type="submit"]');
+};
+
+export const resetCamperDetailsForm = async (page: Page) => {
+	const currentYear = new Date().getFullYear();
+
+	await page.fill('input[name="first_name"]', 'Test');
+	await page.fill('input[name="last_name"]', 'User');
+	await page.fill('input[name="playa_name"]', 'Fake Playa');
+	await page.fill('input[name="city"]', 'fakeTown');
+	await page.fill('textarea[name="about_me"]', '');
+
+	await page.locator(`[role="button"][aria-label="Remove ${currentYear}"]`).click();
+
+	await page.locator('button[aria-label="Remove tag button"]').click();
+
+	await page.locator(`[role="button"][aria-label="Remove tagDetails"]`).click();
+
+	await page.fill('textarea[name="history.0.value"]', '');
+
+	await page.locator('button[aria-label="Remove social button"]').click();
 
 	await page.click('button[type="submit"]');
 };
