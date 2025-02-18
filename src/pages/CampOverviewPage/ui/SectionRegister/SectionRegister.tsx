@@ -1,6 +1,7 @@
 import { memo, useCallback, type RefObject } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from '@shared/hooks/useMedia';
+import { useToast } from '@shared/hooks/useToast';
 import { classNames } from '@shared/lib/classNames';
 import { Container } from '@shared/ui/Container';
 import { Image } from '@shared/ui/Image';
@@ -33,10 +34,14 @@ const SectionRegister = memo((props: SectionRegisterProps) => {
 	const { isLoggedIn } = userState();
 	const { isMobile } = useMedia();
 	const { mutateAsync: registration, isPending } = useRegistration();
+	const { error } = useToast();
 
 	const submitHandler = useCallback(
 		async (values: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'>, resetForm: () => void) => {
-			if (!camp?.camp_name || !id) return;
+			if (!camp?.camp_name || !id) {
+				error('Camp name not found!');
+				return;
+			}
 
 			const data: ICamperRegistrationData = {
 				...values,
@@ -55,7 +60,7 @@ const SectionRegister = memo((props: SectionRegisterProps) => {
 			resetForm();
 			navigate(RoutePath.login, { replace: true, state: redirectState });
 		},
-		[id, navigate, registration, camp?.camp_name]
+		[id, navigate, registration, camp?.camp_name, error]
 	);
 
 	return (

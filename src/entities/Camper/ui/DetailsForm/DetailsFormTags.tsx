@@ -63,6 +63,7 @@ const DetailsFormTags = memo(({ values }: DetailsFormTagsProps) => {
 								</div>
 								<MultiSelect
 									isCreatable
+									aria-label={'Tags select'}
 									label={'Tag Details'}
 									placeholder={'Select or Write...'}
 									value={tag.tagDetails || []}

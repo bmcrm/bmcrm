@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
+import { fillCamperDetailsForm, getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -25,7 +25,8 @@ test.describe.skip('Check funnel page and edit user', () => {
 		await page.goto(URLS.FUNNEL);
 		await expect(page).toHaveURL(URLS.FUNNEL);
 
-		await expect(page.locator('text=Campers')).toBeVisible();
+		const title = await page.locator('text=Campers');
+		await expect(title).toBeVisible();
 
 		const userItem = page.locator('li', { hasText: 'Test User' });
 		await expect(userItem).toBeVisible();
@@ -40,5 +41,7 @@ test.describe.skip('Check funnel page and edit user', () => {
 
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
+
+		await fillCamperDetailsForm(page);
 	});
 });
