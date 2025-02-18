@@ -1,10 +1,11 @@
 import { memo, useMemo } from 'react';
 import { useFormikContext } from 'formik';
+import { BMYearsOptions } from '@shared/lib/generateBMYearsOptions';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { MultiSelect } from '@shared/ui/MultiSelect';
 import { userState } from '@entities/User';
-import { BMYearsOptions, roleOptions } from '../../lib/generateSelectOptions';
+import { roleOptions } from '../../lib/generateSelectOptions';
 import { inputs } from '../../model/data/DetailsForm.data';
 import { CamperRole } from '@entities/Camper';
 import styles from './DetailsForm.module.scss';

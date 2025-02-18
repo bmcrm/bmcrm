@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { FieldArray } from 'formik';
 import { classNames } from '@shared/lib/classNames';
-import { BMYearsOptions } from '../../lib/generateSelectOptions';
+import { BMYearsOptions } from '@shared/lib/generateBMYearsOptions';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';

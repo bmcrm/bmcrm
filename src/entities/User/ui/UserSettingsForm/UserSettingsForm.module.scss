@@ -7,7 +7,7 @@
 		grid-template-columns: 1fr 240px;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 15px 40px;
+		gap: 25px 40px;
 
 		@media (width < breakpoints.$lg) {
 			grid-template-columns: 1fr;
