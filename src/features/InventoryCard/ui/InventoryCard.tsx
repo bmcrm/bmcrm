@@ -86,6 +86,7 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 					{canControl && (
 						<div className={styles.card__control}>
 							<Button
+								aria-label={'Edit item button'}
 								theme={ButtonTheme.CLEAR}
 								size={ButtonSize.TEXT}
 								className={styles.card__btn}
@@ -97,6 +98,7 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 								<Icon icon={<EditIcon />} size={IconSize.SIZE_14} />
 							</Button>
 							<Button
+								aria-label={'Delete item button'}
 								theme={ButtonTheme.CLEAR}
 								size={ButtonSize.TEXT}
 								className={styles.card__btn}

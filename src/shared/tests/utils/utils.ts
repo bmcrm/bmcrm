@@ -98,6 +98,7 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		CAMP_OVERVIEW: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
 		CAMPERS: `${APP_URL}/campers`,
 		SHIFTS: `${APP_URL}/shifts`,
+		INVENTORY: `${APP_URL}/inventory`,
 	};
 }
 
@@ -216,6 +217,25 @@ export const editShiftsForm = async (page: Page) => {
 	await removeTimeButtons.click();
 
 	await page.fill('input[name="time.0.end_time"]', fakeTimeEnd);
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillInventoryForm = async ({ page, stage }: { page: Page, stage: 'create' | 'edit' }) => {
+	const fakeTitle = faker.word.words(2);
+	const fakeDescription = faker.lorem.sentence();
+	const fakeCategory = faker.commerce.department();
+	const fakePrice = faker.commerce.price({ min: 10, max: 500, dec: 2 });
+	const fakeQuantity = faker.number.int({ min: 1, max: 100 });
+
+	await page.fill('input[name="title"]', fakeTitle);
+	await page.fill('input[name="description"]', fakeDescription);
+	await page.fill('input[name="price"]', fakePrice);
+	await page.fill('input[name="quantity"]', String(fakeQuantity));
+
+	if (stage === 'create') {
+		await page.fill('input[name="category"]', fakeCategory);
+	}
 
 	await page.click('button[type="submit"]');
 };
