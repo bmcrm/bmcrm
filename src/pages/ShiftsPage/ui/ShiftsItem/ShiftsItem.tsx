@@ -67,6 +67,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 						Edit
 					</Button>
 					<Button
+						aria-label={'Delete shift button'}
 						theme={ButtonTheme.CLEAR}
 						size={ButtonSize.TEXT}
 						className={styles.item__delete}

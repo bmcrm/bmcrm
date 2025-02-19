@@ -15,17 +15,19 @@ type DatepickerProps = {
 	style?: CSSProperties;
 	name?: string;
 	dateRange?: [Date | null | undefined, Date | null | undefined];
-	onChange?: (update: [Date | null, Date | null]) => void
+	onChange?: (update: [Date | null, Date | null]) => void;
+	ariaLabel?: string;
 };
 
 const Datepicker = memo((props: DatepickerProps) => {
-	const { className, errorName, label, placeholder = 'Select or write...', style, name, dateRange, onChange } = props;
+	const { className, errorName, label, placeholder = 'Select or write...', style, name, dateRange, onChange, ariaLabel } = props;
 	const [startDate, endDate] = dateRange ?? [null, null];
 
 	return (
 		<label className={classNames(styles.datepicker, {}, [className])} style={style}>
 			{label && <p className={styles.datepicker__caption}>{label}</p>}
 			<DatePicker
+				ariaDescribedBy={ariaLabel}
 				name={name}
 				className={styles.datepicker__field}
 				selectsRange={true}

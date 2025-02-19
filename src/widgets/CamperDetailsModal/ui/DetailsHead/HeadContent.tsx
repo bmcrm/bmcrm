@@ -61,7 +61,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 					)}
 				</div>
 			</div>
-			<a href={`mailto: ${email}`} className={styles.head__email}>{email}</a>
+			<a href={`mailto: ${email}`} aria-label={'Camper email'} className={styles.head__email}>{email}</a>
 			<ul className={styles.head__details}>
 				{city && <li>{city}</li>}
 				<li>Added: {dateNormalize(created_at)}</li>

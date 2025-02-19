@@ -33,6 +33,7 @@ const FormDate = memo((props: FormDateProps) => {
 		<div className={classNames(styles.form__row, {}, [className])}>
 			<Datepicker
 				style={{ maxWidth: isMobile ? '100%' : 250 }}
+				ariaLabel={'Datepicker'}
 				errorName={'start_date'}
 				label={'Date'}
 				dateRange={[start_date, end_date]}
@@ -44,6 +45,7 @@ const FormDate = memo((props: FormDateProps) => {
 						<div className={styles.form__caption}>
 							<p>Time</p>
 							<Button
+								aria-label={'Add time button'}
 								theme={ButtonTheme.CLEAR}
 								size={ButtonSize.TEXT}
 								className={styles.form__btn}
@@ -69,6 +71,7 @@ const FormDate = memo((props: FormDateProps) => {
 								/>
 								{i !== 0 && (
 									<Button
+										aria-label={'Remove time button'}
 										theme={ButtonTheme.CLEAR}
 										size={ButtonSize.TEXT}
 										className={styles.form__btn}

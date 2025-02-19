@@ -96,6 +96,7 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		FUNNEL: `${APP_URL}/funnel`,
 		CAMP_OVERVIEW: `${APP_URL}/id/${campID ?? 'camp-for-tests'}`,
 		CAMPERS: `${APP_URL}/campers`,
+		SHIFTS: `${APP_URL}/shifts`,
 	};
 }
 
@@ -167,6 +168,53 @@ export const resetCamperDetailsForm = async (page: Page) => {
 	await page.fill('textarea[name="history.0.value"]', '');
 
 	await page.locator('button[aria-label="Remove social button"]').click();
+
+	await page.click('button[type="submit"]');
+};
+
+export const createShiftsForm = async (page: Page) => {
+	const fakeShiftName = faker.word.words(3);
+	const fakeDescription = faker.lorem.sentence();
+	const fakeDate = faker.date.future().toISOString().split('T')[0];
+	const fakeTimeEnd = '16:00';
+	const fakeTimeStart_2 = '15:00';
+	const fakeTimeEnd_2 = '19:00';
+
+	await page.fill('input[name="title"]', fakeShiftName);
+	await page.fill('textarea[name="description"]', fakeDescription);
+
+	await page.locator('[aria-label="Members select"]').click();
+	await page.locator('#react-select-2-option-0').click();
+
+	await page.fill('input[aria-describedby="Datepicker"]', fakeDate);
+	await page.keyboard.press('Enter');
+
+	await page.locator('button[aria-label="Add time button"]').click();
+	await page.fill('input[name="time.0.end_time"]', fakeTimeEnd);
+	await page.fill('input[name="time.1.start_time"]', fakeTimeStart_2);
+	await page.fill('input[name="time.1.end_time"]', fakeTimeEnd_2);
+
+	await page.click('button[type="submit"]');
+};
+
+export const editShiftsForm = async (page: Page) => {
+	const fakeShiftName = faker.word.words(3);
+	const fakeDescription = faker.lorem.sentence();
+	const fakeToday = new Date().toISOString().split('T')[0];
+	const fakeTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
+	const fakeDate = `${fakeToday} - ${fakeTomorrow}`;
+	const fakeTimeEnd = '12:00';
+
+	await page.fill('input[name="title"]', fakeShiftName);
+	await page.fill('textarea[name="description"]', fakeDescription);
+
+	await page.fill('input[aria-describedby="Datepicker"]', fakeDate);
+	await page.keyboard.press('Enter');
+
+	const removeTimeButtons = page.locator('button[aria-label="Remove time button"]');
+	await removeTimeButtons.click();
+
+	await page.fill('input[name="time.0.end_time"]', fakeTimeEnd);
 
 	await page.click('button[type="submit"]');
 };
