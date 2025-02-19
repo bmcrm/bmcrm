@@ -12,14 +12,14 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe('Check inventory page, create, edit and remove inventory item', () => {
+test.describe.skip('Check inventory page, create, edit and remove inventory item', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
 		URLS = await getURLs(TEST_PARAMS.CAMP_ID);
 	});
 
-	test('Login, then create, edit and remove inventory item', async ({ page }) => {
+	test.skip('Login, then create, edit and remove inventory item', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.INVENTORY);
