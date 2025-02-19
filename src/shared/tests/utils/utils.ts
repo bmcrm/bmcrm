@@ -3,6 +3,7 @@ import { CognitoIdentityProviderClient, AdminDeleteUserCommand } from '@aws-sdk/
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { expect, type Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { format } from 'date-fns';
 
 const cognitoClient = new CognitoIdentityProviderClient({
 	region: 'us-east-1',
@@ -175,7 +176,7 @@ export const resetCamperDetailsForm = async (page: Page) => {
 export const createShiftsForm = async (page: Page) => {
 	const fakeShiftName = faker.word.words(3);
 	const fakeDescription = faker.lorem.sentence();
-	const fakeDate = faker.date.future().toISOString().split('T')[0];
+	const fakeDate = format(faker.date.future(), 'dd.MM.yyyy');
 	const fakeTimeEnd = '16:00';
 	const fakeTimeStart_2 = '15:00';
 	const fakeTimeEnd_2 = '19:00';
@@ -200,8 +201,8 @@ export const createShiftsForm = async (page: Page) => {
 export const editShiftsForm = async (page: Page) => {
 	const fakeShiftName = faker.word.words(3);
 	const fakeDescription = faker.lorem.sentence();
-	const fakeToday = new Date().toISOString().split('T')[0];
-	const fakeTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
+	const fakeToday = format(new Date(), 'dd.MM.yyyy');
+	const fakeTomorrow = format(new Date(new Date().setDate(new Date().getDate() + 1)), 'dd.MM.yyyy');
 	const fakeDate = `${fakeToday} - ${fakeTomorrow}`;
 	const fakeTimeEnd = '12:00';
 

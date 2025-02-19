@@ -18,14 +18,14 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe.skip('Check shifts page, create, edit and remove shift', () => {
+test.describe('Check shifts page, create, edit and remove shift', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
 		URLS = await getURLs(TEST_PARAMS.CAMP_ID);
 	});
 
-	test.skip('Login, then create, edit and remove shift', async ({ page }) => {
+	test('Login, then create, edit and remove shift', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.SHIFTS);
@@ -39,7 +39,6 @@ test.describe.skip('Check shifts page, create, edit and remove shift', () => {
 		await expect(form).toBeVisible();
 
 		await createShiftsForm(page);
-
 		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
 
 		const editShiftButton = page.locator('button', { hasText: 'Edit' });
@@ -51,10 +50,11 @@ test.describe.skip('Check shifts page, create, edit and remove shift', () => {
 		await editShiftsForm(page);
 
 		await page.locator('button[aria-label="Delete shift button"]').click();
+		await expect(page.locator('text=Shift successfully removed')).toBeVisible();
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/shifts') &&
-			['GET', 'POST', 'DELETE'].includes(response.request().method()) &&
+			['GET', 'PUT', 'DELETE'].includes(response.request().method()) &&
 			(response.status() === 200 || response.status() === 204)
 		);
 	});
