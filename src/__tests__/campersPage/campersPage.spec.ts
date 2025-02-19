@@ -18,14 +18,14 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe.skip('Check campers page and edit user', () => {
+test.describe('Check campers page and edit user', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
 		URLS = await getURLs(TEST_PARAMS.CAMP_ID);
 	});
 
-	test.skip('Login and edit user', async ({ page }) => {
+	test('Login and edit user', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.CAMPERS);
@@ -40,8 +40,6 @@ test.describe.skip('Check campers page and edit user', () => {
 
 		await fillCamperDetailsForm(page);
 
-		await page.waitForTimeout(5000);
-
 		const emailLink = page.locator('a[aria-label="Camper email"]');
 		await expect(emailLink).toBeVisible();
 
@@ -53,7 +51,7 @@ test.describe.skip('Check campers page and edit user', () => {
 
 		await resetCamperDetailsForm(page);
 
-		await expect(page.locator('text=fakeTown')).toBeVisible();
+		await expect(page.locator('li', { hasText: 'fakeTown' })).toBeVisible();
 
 		await page.keyboard.press('Escape');
 
