@@ -22,6 +22,7 @@ const FormBasic = memo(({ members }: FormBasicProps) => {
 				return Component ? <Component key={rest.name} {...rest} /> : null;
 			})}
 			<MultiSelect
+				aria-label={'Members select'}
 				label={'Members'}
 				placeholder={'Select...'}
 				name={'members'}
