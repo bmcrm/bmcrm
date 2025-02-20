@@ -99,6 +99,8 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		CAMPERS: `${APP_URL}/campers`,
 		SHIFTS: `${APP_URL}/shifts`,
 		INVENTORY: `${APP_URL}/inventory`,
+		SETTINGS_ACCOUNT: `${APP_URL}/settings/account`,
+		SETTINGS_CAMP: `${APP_URL}/settings/camp`,
 	};
 }
 
@@ -236,6 +238,83 @@ export const fillInventoryForm = async ({ page, stage }: { page: Page, stage: 'c
 	if (stage === 'create') {
 		await page.fill('input[name="category"]', fakeCategory);
 	}
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillSettingsAccountForm = async (page: Page) => {
+	const fakeFirstName = faker.person.firstName();
+	const fakeLastName = faker.person.lastName();
+	const fakePlayaName = faker.internet.username();
+	const fakeCity = faker.location.city();
+	const fakeSummary = faker.person.bio();
+	const fakeHistory_1 = faker.lorem.sentence();
+	const fakeHistory_2 = faker.lorem.sentence();
+	const fakeInstagram = `https://instagram.com/${faker.internet.username()}`;
+	const fakeFacebook = `https://facebook.com/${faker.internet.username()}`;
+
+	await page.fill('input[name="first_name"]', fakeFirstName);
+	await page.fill('input[name="last_name"]', fakeLastName);
+	await page.fill('input[name="playa_name"]', fakePlayaName);
+	await page.fill('input[name="city"]', fakeCity);
+	await page.fill('textarea[name="about_me"]', fakeSummary);
+
+	await page.locator('[aria-label="Visited BM`s select"]').click();
+	await page.locator('#react-select-2-option-0').click();
+
+	await page.locator('button[aria-label="Add history button"]').click();
+	await page.fill('textarea[name="history.0.value"]', fakeHistory_1);
+	await page.fill('textarea[name="history.1.value"]', fakeHistory_2);
+
+	await page.locator('button[aria-label="Add social button"]').click();
+	await page.fill('input[name="social_links.0.url"]', fakeInstagram);
+	await page.fill('input[name="social_links.1.url"]', fakeFacebook);
+
+	await page.click('button[type="submit"]');
+};
+
+export const resetSettingsAccountForm = async (page: Page) => {
+	const currentYear = new Date().getFullYear();
+
+	await page.fill('input[name="first_name"]', 'Test');
+	await page.fill('input[name="last_name"]', 'User');
+	await page.fill('input[name="playa_name"]', 'Fake Playa');
+	await page.fill('input[name="city"]', 'fakeTown');
+	await page.fill('textarea[name="about_me"]', '');
+
+	await page.locator(`[role="button"][aria-label="Remove ${currentYear}"]`).click();
+
+	await page.locator('button[aria-label="Remove history button"]').click();
+	await page.fill('textarea[name="history.0.value"]', '');
+
+	const removeSocialButtons = await page.locator('button[aria-label="Remove social button"]').all();
+
+	for (const button of removeSocialButtons) {
+		await button.click();
+	}
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillSettingsCampForm = async (page: Page) => {
+	const fakeCampName = faker.company.name();
+	const fakeCity = faker.location.city();
+	const fakeLink = faker.internet.url();
+	const fakeDescription = faker.lorem.paragraph();
+
+	await page.fill('input[name="camp_name"]', fakeCampName);
+	await page.fill('input[name="city"]', fakeCity);
+	await page.fill('input[name="camp_website"]', fakeLink);
+	await page.fill('textarea[name="camp_description"]', fakeDescription);
+
+	await page.click('button[type="submit"]');
+};
+
+export const resetSettingsCampForm = async (page: Page) => {
+	await page.fill('input[name="camp_name"]', 'camp for tests');
+	await page.fill('input[name="city"]', 'faketown');
+	await page.fill('input[name="camp_website"]', 'www.fake.com');
+	await page.fill('textarea[name="camp_description"]', '');
 
 	await page.click('button[type="submit"]');
 };

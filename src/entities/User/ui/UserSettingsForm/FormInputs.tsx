@@ -33,6 +33,7 @@ const FormInputs = memo((props: FormInputsProps) => {
 				</div>
 				<MultiSelect
 					isSearchable
+					aria-label={'Visited BM`s select'}
 					label={'Visited BM`s'}
 					placeholder={'Select or Write...'}
 					value={visitedBM || []}
