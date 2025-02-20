@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { getTestParameters, getURLs, login, fillInventoryForm } from '@shared/tests/utils/utils';
+import { getTestParameters, getURLs, login, fillFakeInventoryForm } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -32,7 +32,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await fillInventoryForm({ page, stage: 'create' });
+		await fillFakeInventoryForm({ page, stage: 'create' });
 		await expect(page.locator('text=Item created successfully!')).toBeVisible();
 
 		const editItemButton = page.locator('button[aria-label="Edit item button"]');
@@ -41,7 +41,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 
 		await expect(form).toBeVisible();
 
-		await fillInventoryForm({ page, stage: 'edit' });
+		await fillFakeInventoryForm({ page, stage: 'edit' });
 		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
 
 		await page.keyboard.press('Escape');

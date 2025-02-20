@@ -3,7 +3,15 @@ import { CognitoIdentityProviderClient, AdminDeleteUserCommand } from '@aws-sdk/
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { expect, type Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import fc from 'fast-check';
 import { format } from 'date-fns';
+
+interface DeleteUserProps {
+	cognitoPoolId: string;
+	email: string;
+	tableName: string;
+	campID: string;
+}
 
 const cognitoClient = new CognitoIdentityProviderClient({
 	region: 'us-east-1',
@@ -13,17 +21,23 @@ const client = new SSMClient({ region: 'us-east-1' });
 
 const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
 
-interface DeleteUserProps {
-	cognitoPoolId: string;
-	email: string;
-	tableName: string;
-	campID: string;
-}
+export const defaultUserData = {
+	firstName: 'Test',
+	lastName: 'User',
+	playaName: 'Fake Playa',
+	city: 'fakeTown',
+};
+
+export const defaultCampData = {
+	name: 'camp for tests',
+	city: 'faketown',
+	link: 'www.fake.com',
+};
 
 export const getParameter = async (name: string): Promise<string> => {
 	const resp = client.send(new GetParameterCommand({ Name: name }));
 	return resp.then(r => r.Parameter?.Value || '');
-}
+};
 
 export const deleteUser = async (props: DeleteUserProps): Promise<void> => {
 	const { email, cognitoPoolId, tableName, campID } = props;
@@ -48,7 +62,7 @@ export const deleteUser = async (props: DeleteUserProps): Promise<void> => {
 		console.error('Error deleting user', error);
 		throw error;
 	}
-}
+};
 
 export const getTestParameters = async (): Promise<{
 	TEST_COGNITO_POOL_ID: string;
@@ -86,7 +100,7 @@ export const getTestParameters = async (): Promise<{
 		CAMP_ID,
 		APP_URL,
 	};
-}
+};
 
 export const getURLs = async (campID?: string): Promise<Record<string, string>> => {
 	const APP_URL = await getParameter('/webapp/url');
@@ -102,7 +116,7 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		SETTINGS_ACCOUNT: `${APP_URL}/settings/account`,
 		SETTINGS_CAMP: `${APP_URL}/settings/camp`,
 	};
-}
+};
 
 export const login = async (
 	page: Page,
@@ -116,20 +130,54 @@ export const login = async (
 	await expect(page).toHaveURL(URLS.CAMPERS);
 };
 
-export const fillCamperDetailsForm = async (page: Page) => {
-	const fakeFirstName = faker.person.firstName();
-	const fakeLastName = faker.person.lastName();
-	const fakePlayaName = faker.internet.username();
-	const fakeCity = faker.location.city();
-	const fakeSummary = faker.person.bio();
-	const fakeHistory = faker.lorem.sentence();
-	const fakeInstagram = `https://instagram.com/${faker.internet.username()}`;
+export const generateFuzzData = () => {
+	const campName = fc.sample(fc.string({ minLength: 3, maxLength: 32 }), 1)[0];
+	const city = fc.sample(fc.string({ minLength: 2, maxLength: 32 }), 1)[0];
+	const firstName = fc.sample(fc.string({ minLength: 1, maxLength: 32 }), 1)[0];
+	const lastName = fc.sample(fc.string({ minLength: 1, maxLength: 32 }), 1)[0];
+	const playaName = fc.sample(fc.string({ minLength: 0, maxLength: 24 }), 1)[0];
+	const summary = fc.sample(fc.string({ minLength: 0, maxLength: 256 }), 1)[0];
+	const email = fc.sample(fc.emailAddress(), 1)[0];
 
-	await page.fill('input[name="first_name"]', fakeFirstName);
-	await page.fill('input[name="last_name"]', fakeLastName);
-	await page.fill('input[name="playa_name"]', fakePlayaName);
-	await page.fill('input[name="city"]', fakeCity);
-	await page.fill('textarea[name="about_me"]', fakeSummary);
+	return { campName, city, firstName, lastName, playaName, summary, email };
+};
+
+export const generateFakeData = () => {
+	const campName = faker.word.words({ count: { min: 1, max: 3 } }).replace(/\s+/g, '-');
+	const companyName = faker.company.name();
+	const city = faker.location.city();
+	const firstName = faker.person.firstName();
+	const lastName = faker.person.lastName();
+	const playaName = faker.internet.username();
+	const bio = faker.person.bio();
+	const sentence = faker.lorem.sentence();
+	const paragraph = faker.lorem.paragraph();
+	const email = faker.internet.email();
+	const password = faker.string.alphanumeric(6) +
+		faker.string.numeric(1) +
+		faker.string.symbol(1) +
+		faker.string.alpha(1).toUpperCase();
+	const instagram = `https://instagram.com/${faker.internet.username()}`;
+	const facebook = `https://facebook.com/${faker.internet.username()}`;
+	const randomDate = format(faker.date.future(), 'dd.MM.yyyy');
+	const itemName = faker.word.words(3);
+	const category = faker.commerce.department();
+	const price = faker.commerce.price({ min: 1, max: 10000, dec: 2 });
+	const quantity = faker.number.int({ min: 1, max: 1000 });
+	const link = faker.internet.url();
+
+	return { campName, companyName, city, firstName, lastName, playaName, bio, sentence, email, password, instagram, facebook, randomDate, itemName, category, price, quantity, paragraph, link };
+};
+
+export const fillCamperDetailsForm = async (page: Page) => {
+	const { firstName, lastName, playaName, city, sentence, instagram } = generateFakeData();
+	const { summary } = generateFuzzData();
+
+	await page.fill('input[name="first_name"]', firstName);
+	await page.fill('input[name="last_name"]', lastName);
+	await page.fill('input[name="playa_name"]', playaName);
+	await page.fill('input[name="city"]', city);
+	await page.fill('textarea[name="about_me"]', summary);
 
 	await page.locator('[aria-label="Visited BM`s select"]').click();
 	await page.locator('#react-select-2-option-0').click();
@@ -145,11 +193,11 @@ export const fillCamperDetailsForm = async (page: Page) => {
 
 	await page.locator('button[aria-label="Add history button"]').click();
 	await page.locator('button[aria-label="Remove history button"]').click();
-	await page.fill('textarea[name="history.0.value"]', fakeHistory);
+	await page.fill('textarea[name="history.0.value"]', sentence);
 
 	await page.locator('button[aria-label="Add social button"]').click();
 	await page.locator('button[aria-label="Remove social button"]').nth(1).click();
-	await page.fill('input[name="social_links.0.url"]', fakeInstagram);
+	await page.fill('input[name="social_links.0.url"]', instagram);
 
 	await page.click('button[type="submit"]');
 };
@@ -157,10 +205,10 @@ export const fillCamperDetailsForm = async (page: Page) => {
 export const resetCamperDetailsForm = async (page: Page) => {
 	const currentYear = new Date().getFullYear();
 
-	await page.fill('input[name="first_name"]', 'Test');
-	await page.fill('input[name="last_name"]', 'User');
-	await page.fill('input[name="playa_name"]', 'Fake Playa');
-	await page.fill('input[name="city"]', 'fakeTown');
+	await page.fill('input[name="first_name"]', defaultUserData.firstName);
+	await page.fill('input[name="last_name"]', defaultUserData.lastName);
+	await page.fill('input[name="playa_name"]', defaultUserData.playaName);
+	await page.fill('input[name="city"]', defaultUserData.city);
 	await page.fill('textarea[name="about_me"]', '');
 
 	await page.locator(`[role="button"][aria-label="Remove ${currentYear}"]`).click();
@@ -176,21 +224,19 @@ export const resetCamperDetailsForm = async (page: Page) => {
 	await page.click('button[type="submit"]');
 };
 
-export const createShiftsForm = async (page: Page) => {
-	const fakeShiftName = faker.word.words(3);
-	const fakeDescription = faker.lorem.sentence();
-	const fakeDate = format(faker.date.future(), 'dd.MM.yyyy');
+export const createFakeShiftsForm = async (page: Page) => {
+	const { itemName, sentence, randomDate } = generateFakeData();
 	const fakeTimeEnd = '16:00';
 	const fakeTimeStart_2 = '15:00';
 	const fakeTimeEnd_2 = '19:00';
 
-	await page.fill('input[name="title"]', fakeShiftName);
-	await page.fill('textarea[name="description"]', fakeDescription);
+	await page.fill('input[name="title"]', itemName);
+	await page.fill('textarea[name="description"]', sentence);
 
 	await page.locator('[aria-label="Members select"]').click();
 	await page.locator('#react-select-2-option-0').click();
 
-	await page.fill('input[aria-describedby="Datepicker"]', fakeDate);
+	await page.fill('input[aria-describedby="Datepicker"]', randomDate);
 	await page.keyboard.press('Enter');
 
 	await page.locator('button[aria-label="Add time button"]').click();
@@ -201,16 +247,15 @@ export const createShiftsForm = async (page: Page) => {
 	await page.click('button[type="submit"]');
 };
 
-export const editShiftsForm = async (page: Page) => {
-	const fakeShiftName = faker.word.words(3);
-	const fakeDescription = faker.lorem.sentence();
+export const editFakeShiftsForm = async (page: Page) => {
+	const { itemName, sentence } = generateFakeData();
 	const fakeToday = format(new Date(), 'dd.MM.yyyy');
 	const fakeTomorrow = format(new Date(new Date().setDate(new Date().getDate() + 1)), 'dd.MM.yyyy');
 	const fakeDate = `${fakeToday} - ${fakeTomorrow}`;
 	const fakeTimeEnd = '12:00';
 
-	await page.fill('input[name="title"]', fakeShiftName);
-	await page.fill('textarea[name="description"]', fakeDescription);
+	await page.fill('input[name="title"]', itemName);
+	await page.fill('textarea[name="description"]', sentence);
 
 	await page.fill('input[aria-describedby="Datepicker"]', fakeDate);
 	await page.keyboard.press('Enter');
@@ -223,52 +268,42 @@ export const editShiftsForm = async (page: Page) => {
 	await page.click('button[type="submit"]');
 };
 
-export const fillInventoryForm = async ({ page, stage }: { page: Page, stage: 'create' | 'edit' }) => {
-	const fakeTitle = faker.word.words(2);
-	const fakeDescription = faker.lorem.sentence();
-	const fakeCategory = faker.commerce.department();
-	const fakePrice = faker.commerce.price({ min: 10, max: 500, dec: 2 });
-	const fakeQuantity = faker.number.int({ min: 1, max: 100 });
+export const fillFakeInventoryForm = async ({ page, stage }: { page: Page, stage: 'create' | 'edit' }) => {
+	const { itemName, sentence, category, price, quantity } = generateFakeData();
 
-	await page.fill('input[name="title"]', fakeTitle);
-	await page.fill('input[name="description"]', fakeDescription);
-	await page.fill('input[name="price"]', fakePrice);
-	await page.fill('input[name="quantity"]', String(fakeQuantity));
+	await page.fill('input[name="title"]', itemName);
+	await page.fill('input[name="description"]', sentence);
+	await page.fill('input[name="price"]', price);
+	await page.fill('input[name="quantity"]', String(quantity));
 
 	if (stage === 'create') {
-		await page.fill('input[name="category"]', fakeCategory);
+		await page.fill('input[name="category"]', category);
 	}
 
 	await page.click('button[type="submit"]');
 };
 
 export const fillSettingsAccountForm = async (page: Page) => {
-	const fakeFirstName = faker.person.firstName();
-	const fakeLastName = faker.person.lastName();
-	const fakePlayaName = faker.internet.username();
-	const fakeCity = faker.location.city();
-	const fakeSummary = faker.person.bio();
-	const fakeHistory_1 = faker.lorem.sentence();
-	const fakeHistory_2 = faker.lorem.sentence();
-	const fakeInstagram = `https://instagram.com/${faker.internet.username()}`;
-	const fakeFacebook = `https://facebook.com/${faker.internet.username()}`;
+	const { firstName, lastName, playaName, city, summary } = generateFuzzData();
+	const { sentence, instagram, facebook } = generateFakeData();
+	const { sentence: sentence_2 } = generateFakeData();
 
-	await page.fill('input[name="first_name"]', fakeFirstName);
-	await page.fill('input[name="last_name"]', fakeLastName);
-	await page.fill('input[name="playa_name"]', fakePlayaName);
-	await page.fill('input[name="city"]', fakeCity);
-	await page.fill('textarea[name="about_me"]', fakeSummary);
+	await page.fill('input[name="first_name"]', firstName);
+	await page.fill('input[name="last_name"]', lastName);
+	await page.fill('input[name="playa_name"]', playaName);
+	await page.fill('input[name="city"]', city);
+	await page.fill('textarea[name="about_me"]', summary);
 
 	await page.locator('[aria-label="Visited BM`s select"]').click();
 	await page.locator('#react-select-2-option-0').click();
 
 	await page.locator('button[aria-label="Add history button"]').click();
-	await page.fill('textarea[name="history.0.value"]', fakeHistory_1);
-	await page.fill('textarea[name="history.1.value"]', fakeHistory_2);
+	await page.fill('textarea[name="history.0.value"]', sentence);
+	await page.fill('textarea[name="history.1.value"]', sentence_2);
 
 	await page.locator('button[aria-label="Add social button"]').click();
-	await page.fill('input[name="social_links.0.url"]', fakeInstagram);
-	await page.fill('input[name="social_links.1.url"]', fakeFacebook);
+	await page.fill('input[name="social_links.0.url"]', instagram);
+	await page.fill('input[name="social_links.1.url"]', facebook);
 
 	await page.click('button[type="submit"]');
 };
@@ -276,10 +311,10 @@ export const fillSettingsAccountForm = async (page: Page) => {
 export const resetSettingsAccountForm = async (page: Page) => {
 	const currentYear = new Date().getFullYear();
 
-	await page.fill('input[name="first_name"]', 'Test');
-	await page.fill('input[name="last_name"]', 'User');
-	await page.fill('input[name="playa_name"]', 'Fake Playa');
-	await page.fill('input[name="city"]', 'fakeTown');
+	await page.fill('input[name="first_name"]', defaultUserData.firstName);
+	await page.fill('input[name="last_name"]', defaultUserData.lastName);
+	await page.fill('input[name="playa_name"]', defaultUserData.playaName);
+	await page.fill('input[name="city"]', defaultUserData.city);
 	await page.fill('textarea[name="about_me"]', '');
 
 	await page.locator(`[role="button"][aria-label="Remove ${currentYear}"]`).click();
@@ -298,23 +333,21 @@ export const resetSettingsAccountForm = async (page: Page) => {
 };
 
 export const fillSettingsCampForm = async (page: Page) => {
-	const fakeCampName = faker.company.name();
-	const fakeCity = faker.location.city();
-	const fakeLink = faker.internet.url();
-	const fakeDescription = faker.lorem.paragraph();
+	const { campName, city, summary } = generateFuzzData();
+	const { link } = generateFakeData();
 
-	await page.fill('input[name="camp_name"]', fakeCampName);
-	await page.fill('input[name="city"]', fakeCity);
-	await page.fill('input[name="camp_website"]', fakeLink);
-	await page.fill('textarea[name="camp_description"]', fakeDescription);
+	await page.fill('input[name="camp_name"]', campName);
+	await page.fill('input[name="city"]', city);
+	await page.fill('input[name="camp_website"]', link);
+	await page.fill('textarea[name="camp_description"]', summary);
 
 	await page.click('button[type="submit"]');
 };
 
 export const resetSettingsCampForm = async (page: Page) => {
-	await page.fill('input[name="camp_name"]', 'camp for tests');
-	await page.fill('input[name="city"]', 'faketown');
-	await page.fill('input[name="camp_website"]', 'www.fake.com');
+	await page.fill('input[name="camp_name"]', defaultCampData.name);
+	await page.fill('input[name="city"]', defaultCampData.city);
+	await page.fill('input[name="camp_website"]', defaultCampData.link);
 	await page.fill('textarea[name="camp_description"]', '');
 
 	await page.click('button[type="submit"]');

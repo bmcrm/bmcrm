@@ -3,8 +3,8 @@ import {
 	getTestParameters,
 	getURLs,
 	login,
-	createShiftsForm,
-	editShiftsForm,
+	createFakeShiftsForm,
+	editFakeShiftsForm,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -38,7 +38,7 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await createShiftsForm(page);
+		await createFakeShiftsForm(page);
 		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
 
 		const editShiftButton = page.locator('button', { hasText: 'Edit' });
@@ -47,7 +47,7 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 
 		await expect(form).toBeVisible();
 
-		await editShiftsForm(page);
+		await editFakeShiftsForm(page);
 
 		await page.locator('button[aria-label="Delete shift button"]').click();
 		await expect(page.locator('text=Shift successfully removed')).toBeVisible();

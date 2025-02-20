@@ -138,12 +138,13 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 												</Tooltip>
 											)}
 											<Button
+												aria-label={'Toggle tooltip button'}
 												theme={ButtonTheme.CLEAR}
 												size={ButtonSize.TEXT}
 												className={styles.social__btn}
 												onClick={() => handleTooltipToggle(index)}
 											>
-												<Icon icon={<ThreeDotIcon/>} size={IconSize.SIZE_20}/>
+												<Icon icon={<ThreeDotIcon />} size={IconSize.SIZE_20}/>
 											</Button>
 											<FormikInput
 												name={`social_links.${index}`}
