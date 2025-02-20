@@ -4,7 +4,11 @@ import {
 	getURLs,
 	login,
 	fillSettingsAccountForm,
-	resetSettingsAccountForm, fillSettingsCampForm, resetSettingsCampForm,
+	resetSettingsAccountForm,
+	fillSettingsCampForm,
+	resetSettingsCampForm,
+	defaultUserData,
+	defaultCampData,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -33,12 +37,14 @@ test.describe('Check settings page, edit camper and camp forms', () => {
 
 		await fillSettingsAccountForm(page);
 
+		await page.waitForTimeout(1000);
+
 		await resetSettingsAccountForm(page);
 
-		await expect(page.locator('input[name="first_name"]')).toHaveValue('Test');
-		await expect(page.locator('input[name="last_name"]')).toHaveValue('User');
-		await expect(page.locator('input[name="playa_name"]')).toHaveValue('Fake Playa');
-		await expect(page.locator('input[name="city"]')).toHaveValue('fakeTown');
+		await expect(page.locator('input[name="first_name"]')).toHaveValue(defaultUserData.firstName);
+		await expect(page.locator('input[name="last_name"]')).toHaveValue(defaultUserData.lastName);
+		await expect(page.locator('input[name="playa_name"]')).toHaveValue(defaultUserData.playaName);
+		await expect(page.locator('input[name="city"]')).toHaveValue(defaultUserData.city);
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/campers') &&
@@ -57,9 +63,9 @@ test.describe('Check settings page, edit camper and camp forms', () => {
 
 		await resetSettingsCampForm(page);
 
-		await expect(page.locator('input[name="camp_name"]')).toHaveValue('camp for tests');
-		await expect(page.locator('input[name="city"]')).toHaveValue('faketown');
-		await expect(page.locator('input[name="camp_website"]')).toHaveValue('www.fake.com');
+		await expect(page.locator('input[name="camp_name"]')).toHaveValue(defaultCampData.name);
+		await expect(page.locator('input[name="city"]')).toHaveValue(defaultCampData.city);
+		await expect(page.locator('input[name="camp_website"]')).toHaveValue(defaultCampData.link);
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/camps') &&
