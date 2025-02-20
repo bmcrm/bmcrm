@@ -287,11 +287,12 @@ export const resetSettingsAccountForm = async (page: Page) => {
 	await page.locator('button[aria-label="Remove history button"]').click();
 	await page.fill('textarea[name="history.0.value"]', '');
 
-	const removeSocialButtons = await page.locator('button[aria-label="Remove social button"]').all();
-
-	for (const button of removeSocialButtons) {
-		await button.click();
+	while ((await page.locator('button[aria-label="Remove social button"]').count()) > 1) {
+		await page.locator('button[aria-label="Remove social button"]').first().click();
 	}
+
+	const lastInput = page.locator('input[name="social_links.0.url"]');
+	await lastInput.fill('');
 
 	await page.click('button[type="submit"]');
 };

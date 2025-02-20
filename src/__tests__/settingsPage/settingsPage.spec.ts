@@ -18,14 +18,14 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe.skip('Check settings page, edit camper and camp forms', () => {
+test.describe('Check settings page, edit camper and camp forms', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
 		URLS = await getURLs(TEST_PARAMS.CAMP_ID);
 	});
 
-	test.skip('Login and edit camper', async ({ page }) => {
+	test('Login and edit camper', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.SETTINGS_ACCOUNT);
@@ -47,7 +47,7 @@ test.describe.skip('Check settings page, edit camper and camp forms', () => {
 		);
 	});
 
-	test.skip('Login and edit camp', async ({ page }) => {
+	test('Login and edit camp', async ({ page }) => {
 		await login(page, URLS, TEST_PARAMS);
 
 		await page.goto(URLS.SETTINGS_CAMP);
