@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
-import { getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
+import { generateFakeData, generateFuzzData, getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -29,28 +28,32 @@ test.describe('Check camp overview page', () => {
 		await expect(page.locator('text=camp for tests')).toBeVisible();
 	});
 
-	test('Fake registration from the camp page', async ({ page }) => {
+	test('Fuzz registration from the camp page', async ({ page }) => {
 		await page.route('**/campers/create**', route => route.abort());
 
-		const fakePlayaName = faker.internet.username();
-		const fakeFirstName = faker.person.firstName();
-		const fakeLastName = faker.person.lastName();
-		const fakeEmail = faker.internet.email();
-		const fakePassword = faker.string.alphanumeric(6) +
-			faker.string.numeric(1) +
-			faker.string.symbol(1) +
-			faker.string.alpha(1).toUpperCase();
+		const { firstName, lastName, playaName, summary, email } = generateFuzzData();
+		const { password, instagram, facebook } = generateFakeData();
 
 		await page.goto(URLS.CAMP_OVERVIEW);
 
 		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
 		await expect(page.locator('text=camp for tests')).toBeVisible();
 
-		await page.fill('input[name="playa_name"]', fakePlayaName);
-		await page.fill('input[name="first_name"]', fakeFirstName);
-		await page.fill('input[name="last_name"]', fakeLastName);
-		await page.fill('input[name="email"]', fakeEmail);
-		await page.fill('input[name="password"]', fakePassword);
+		await page.fill('input[name="playa_name"]', playaName);
+		await page.fill('input[name="first_name"]', firstName);
+		await page.fill('input[name="last_name"]', lastName);
+		await page.fill('textarea[name="about_me"]', summary);
+		await page.fill('input[name="email"]', email);
+		await page.fill('input[name="password"]', password);
+
+		await page.locator('button[aria-label="Toggle tooltip button"]').click();
+		const addSocialButton = page.locator('button:has-text("Add link")');
+		await expect(addSocialButton).toBeVisible();
+		await addSocialButton.click();
+
+		await page.fill('input[name="social_links.0"]', instagram);
+		await page.fill('input[name="social_links.1"]', facebook);
+
 		await page.click('label[aria-label="Accept terms"]');
 		await page.click('button[type="submit"]');
 

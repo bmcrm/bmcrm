@@ -1,6 +1,14 @@
 import { test, expect } from '@playwright/test';
-import { faker } from '@faker-js/faker';
-import { deleteUser, getParameter, getTestParameters, getURLs, login } from '@shared/tests/utils/utils';
+import {
+  deleteUser,
+  generateFuzzData,
+  generateFakeData,
+  getParameter,
+  getTestParameters,
+  getURLs,
+  login,
+} from '@shared/tests/utils/utils';
+import { createSlug } from '@shared/lib/createSlug';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -26,33 +34,28 @@ test.describe('Testing login and register flow', () => {
     ]);
   });
 
-  test('successful register', async ({ page }) => {
-    const fakeCampName = faker.word.words({ count: { min: 1, max: 3 } }).replace(/\s+/g, '-');
-    const fakeCity = faker.location.city();
-    const fakeFirstName = faker.person.firstName();
-    const fakeLastName = faker.person.lastName();
-    const fakePlayaName = faker.internet.username();
-    const fakeEmail = faker.internet.email();
-    const fakePassword = faker.string.alphanumeric(6) +
-      faker.string.numeric(1) +
-      faker.string.symbol(1) +
-      faker.string.alpha(1).toUpperCase();
-
+  test('Fuzz registration from registration page', async ({ page }) => {
     await page.goto(URLS.REGISTER);
-    await page.fill('input[name="camp_name"]', fakeCampName);
-    await page.fill('input[name="city"]', fakeCity);
-    await page.fill('input[name="first_name"]', fakeFirstName);
-    await page.fill('input[name="last_name"]', fakeLastName);
-    await page.fill('input[name="playa_name"]', fakePlayaName);
-    await page.fill('input[name="email"]', fakeEmail);
-    await page.fill('input[name="password"]', fakePassword);
+
+    const { campName, city, firstName, lastName, playaName, email } = generateFuzzData();
+    const { password } = generateFakeData();
+
+    await page.fill('input[name="camp_name"]', campName);
+    await page.fill('input[name="city"]', city);
+    await page.fill('input[name="first_name"]', firstName);
+    await page.fill('input[name="last_name"]', lastName);
+    await page.fill('input[name="playa_name"]', playaName);
+    await page.fill('input[name="email"]', email);
+    await page.fill('input[name="password"]', password);
     await page.click('label[aria-label="Accept terms"]');
     await page.click('button[type="submit"]');
+
     await expect(page.locator('text=Account Verification')).toBeVisible();
+
     await deleteUser({
       cognitoPoolId: TEST_PARAMS.TEST_COGNITO_POOL_ID,
-      email: fakeEmail,
-      campID: fakeCampName,
+      email,
+      campID: createSlug(campName.replace(/\s+/g, '-')),
       tableName: CAMPERS_TABLE,
     });
   });

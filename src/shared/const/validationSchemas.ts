@@ -14,7 +14,12 @@ export const registrationSchema = yup.object().shape({
 		.max(32, 'Less than 32 characters'),
 	camp_id: yup.string().trim().required('Camp ID is required'),
 	role: yup.string(),
-	city: yup.string().trim().max(32, 'Less than 32 characters').required('City is required'),
+	city: yup
+		.string()
+		.trim()
+		.min(2, 'City name must be at least 2 characters')
+		.max(32, 'Less than 32 characters')
+		.required('City is required'),
 	camp_website: yup.string().matches(urlRegex, 'Invalid website address').max(32, 'Less than 32 characters'),
 	accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 	first_name: yup.string().trim().required('Field is required').max(32, 'First name must be less than 32 characters'),
@@ -131,7 +136,24 @@ export const userSettingsSchema = yup.object().shape({
 		.trim()
 		.required('Field is required')
 		.max(32, 'Last name must be less than 32 characters'),
-	playa_name: yup.string().trim(),
+	playa_name: yup.string().trim().max(24, 'Less than 24 characters'),
+	city: yup.string().trim().max(32, 'Less than 32 characters'),
+	about_me: yup
+		.string()
+		.trim()
+		.max(256, 'Less than 256 characters'),
+	social_links: yup.array().of(
+		yup.object().shape({
+			name: yup.string(),
+			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
+		})
+	),
+	history: yup.array().of(
+		yup.object().shape({
+			year: yup.number().integer().positive(),
+			value: yup.string().max(256, 'Less than 256 characters').notRequired(),
+		})
+	),
 });
 
 export const campSettingsSchema = yup.object().shape({
@@ -139,13 +161,19 @@ export const campSettingsSchema = yup.object().shape({
 		.string()
 		.trim()
 		.required('Camp name is required')
-		.min(3, 'Camp name must be at least 3 characters'),
-	city: yup.string().trim().max(32, 'Less than 32 characters').required('City is required'),
+		.min(3, 'Camp name must be at least 3 characters')
+		.max(32, 'Less than 32 characters'),
+	city: yup
+		.string()
+		.trim()
+		.min(2, 'City name must be at least 2 characters')
+		.max(32, 'Less than 32 characters')
+		.required('City is required'),
 	camp_website: yup
 		.string()
 		.trim()
 		.matches(urlRegex, 'Invalid website address'),
-	camp_description: yup.string().trim(),
+	camp_description: yup.string().trim().max(256, 'Less than 256 characters'),
 });
 
 export const createInventoryItemSchema = yup.object().shape({
@@ -169,6 +197,10 @@ export const editCamperSchema = yup.object().shape({
 		.max(32, 'Last name must be less than 32 characters'),
 	playa_name: yup.string().trim().max(24, 'Less than 24 characters'),
 	city: yup.string().trim().max(32, 'Less than 32 characters'),
+	about_me: yup
+		.string()
+		.trim()
+		.max(256, 'Less than 256 characters'),
 	role: yup
 		.mixed<CamperRole>()
 		.oneOf(Object.values(CamperRole) as CamperRole[], 'Invalid role selected'),
@@ -194,6 +226,18 @@ export const editCamperSchema = yup.object().shape({
 			})
 		)
 		.notRequired(),
+	history: yup.array().of(
+		yup.object().shape({
+			year: yup.number().integer().positive(),
+			value: yup.string().max(256, 'Less than 256 characters').notRequired(),
+		})
+	),
+	social_links: yup.array().of(
+		yup.object().shape({
+			name: yup.string(),
+			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
+		})
+	),
 });
 
 export const shiftSchema = yup.object().shape({
