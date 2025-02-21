@@ -4,7 +4,7 @@ import {
 	getURLs,
 	login,
 	createFakeShiftsForm,
-	editFakeShiftsForm,
+	editFakeShiftsForm, createFuzzShiftsForm, editFuzzShiftsForm,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -49,8 +49,26 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 
 		await editFakeShiftsForm(page);
 
-		await page.locator('button[aria-label="Delete shift button"]').click();
-		await expect(page.locator('text=Shift successfully removed')).toBeVisible();
+		await page.waitForTimeout(1000);
+
+		await addShiftButton.click();
+		await expect(form).toBeVisible();
+
+		await createFuzzShiftsForm(page);
+		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
+
+		await editShiftButton.nth(1).click();
+
+		await editFuzzShiftsForm(page);
+
+		let i = 0;
+		while (await page.locator('button[aria-label="Delete shift button"]').count() > 0) {
+			const button = page.locator('button[aria-label="Delete shift button"]').first();
+			await button.click();
+			await expect(page.locator('text=Shift successfully removed').nth(i)).toBeVisible();
+			i++;
+			await page.waitForTimeout(500);
+		}
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/shifts') &&

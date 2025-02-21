@@ -6,11 +6,22 @@ import { faker } from '@faker-js/faker';
 import fc from 'fast-check';
 import { format } from 'date-fns';
 
+export enum DataType {
+	FAKE = 'fake',
+	FUZZ = 'fuzz',
+}
+
 interface DeleteUserProps {
 	cognitoPoolId: string;
 	email: string;
 	tableName: string;
 	campID: string;
+}
+
+interface FillInventoryFormProps {
+	page: Page;
+	stage: 'create' | 'edit';
+	dataType: DataType;
 }
 
 const cognitoClient = new CognitoIdentityProviderClient({
@@ -132,6 +143,8 @@ export const login = async (
 
 export const generateFuzzData = () => {
 	const campName = fc.sample(fc.string({ minLength: 3, maxLength: 32 }), 1)[0];
+	const itemName = fc.sample(fc.string({ minLength: 1, maxLength: 5 }), 1)[0];
+	const category = fc.sample(fc.string({ minLength: 1, maxLength: 3 }), 1)[0];
 	const city = fc.sample(fc.string({ minLength: 2, maxLength: 32 }), 1)[0];
 	const firstName = fc.sample(fc.string({ minLength: 1, maxLength: 32 }), 1)[0];
 	const lastName = fc.sample(fc.string({ minLength: 1, maxLength: 32 }), 1)[0];
@@ -139,7 +152,7 @@ export const generateFuzzData = () => {
 	const summary = fc.sample(fc.string({ minLength: 0, maxLength: 256 }), 1)[0];
 	const email = fc.sample(fc.emailAddress(), 1)[0];
 
-	return { campName, city, firstName, lastName, playaName, summary, email };
+	return { campName, itemName, city, firstName, lastName, playaName, summary, email, category };
 };
 
 export const generateFakeData = () => {
@@ -247,6 +260,32 @@ export const createFakeShiftsForm = async (page: Page) => {
 	await page.click('button[type="submit"]');
 };
 
+export const createFuzzShiftsForm = async (page: Page) => {
+	const { itemName, summary } = generateFuzzData();
+	const { randomDate } = generateFakeData();
+	const fakeTimeEnd = '16:00';
+	const fakeTimeStart_2 = '15:00';
+	const fakeTimeEnd_2 = '19:00';
+
+	await page.fill('input[name="title"]', itemName);
+	await page.fill('textarea[name="description"]', summary);
+
+	await page.locator('[aria-label="Members select"]').click();
+	await page.locator('#react-select-4-option-0').click();
+
+	await page.fill('input[aria-describedby="Datepicker"]', randomDate);
+	await page.keyboard.press('Enter');
+
+	await page.locator('button[aria-label="Add time button"]').click();
+	await page.fill('input[name="time.0.end_time"]', fakeTimeEnd);
+	await page.fill('input[name="time.1.start_time"]', fakeTimeStart_2);
+	await page.fill('input[name="time.1.end_time"]', fakeTimeEnd_2);
+
+	await page.waitForTimeout(500);
+
+	await page.click('button[type="submit"]');
+};
+
 export const editFakeShiftsForm = async (page: Page) => {
 	const { itemName, sentence } = generateFakeData();
 	const fakeToday = format(new Date(), 'dd.MM.yyyy');
@@ -268,16 +307,53 @@ export const editFakeShiftsForm = async (page: Page) => {
 	await page.click('button[type="submit"]');
 };
 
-export const fillFakeInventoryForm = async ({ page, stage }: { page: Page, stage: 'create' | 'edit' }) => {
-	const { itemName, sentence, category, price, quantity } = generateFakeData();
+export const editFuzzShiftsForm = async (page: Page) => {
+	const { itemName, summary } = generateFuzzData();
+	const fakeToday = format(new Date(), 'dd.MM.yyyy');
+	const fakeTomorrow = format(new Date(new Date().setDate(new Date().getDate() + 1)), 'dd.MM.yyyy');
+	const fakeDate = `${fakeToday} - ${fakeTomorrow}`;
+	const fakeTimeEnd = '12:00';
 
 	await page.fill('input[name="title"]', itemName);
-	await page.fill('input[name="description"]', sentence);
+	await page.fill('textarea[name="description"]', summary);
+
+	await page.fill('input[aria-describedby="Datepicker"]', fakeDate);
+	await page.keyboard.press('Enter');
+
+	const removeTimeButtons = page.locator('button[aria-label="Remove time button"]');
+	await removeTimeButtons.click();
+
+	await page.fill('input[name="time.0.end_time"]', fakeTimeEnd);
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillInventoryForm = async ({ page, stage, dataType }: FillInventoryFormProps) => {
+	const { itemName, sentence, category, price, quantity } = generateFakeData();
+	const { itemName: fuzzItemName, summary, category: fuzzCategory } = generateFuzzData();
+
+	const data = {
+		title: {
+			[DataType.FAKE]: itemName,
+			[DataType.FUZZ]: fuzzItemName,
+		},
+		description: {
+			[DataType.FAKE]: sentence,
+      [DataType.FUZZ]: summary,
+		},
+		category: {
+			[DataType.FAKE]: category,
+      [DataType.FUZZ]: fuzzCategory,
+		},
+	};
+
+	await page.fill('input[name="title"]', data.title[dataType]);
+	await page.fill('input[name="description"]', data.description[dataType]);
 	await page.fill('input[name="price"]', price);
 	await page.fill('input[name="quantity"]', String(quantity));
 
 	if (stage === 'create') {
-		await page.fill('input[name="category"]', category);
+		await page.fill('input[name="category"]', data.category[dataType]);
 	}
 
 	await page.click('button[type="submit"]');
