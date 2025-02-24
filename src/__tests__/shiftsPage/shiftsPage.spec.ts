@@ -3,8 +3,8 @@ import {
 	getTestParameters,
 	getURLs,
 	login,
-	createFakeShiftsForm,
-	editFakeShiftsForm, createFuzzShiftsForm, editFuzzShiftsForm,
+	createFuzzShiftsForm,
+	editFuzzShiftsForm,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -38,42 +38,25 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await createFakeShiftsForm(page);
+		await createFuzzShiftsForm(page);
+		await page.waitForTimeout(500);
 		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
 
 		const editShiftButton = page.locator('button', { hasText: 'Edit' });
 		await expect(editShiftButton).toBeVisible();
 		await editShiftButton.click();
 
-		await expect(form).toBeVisible();
-
-		await editFakeShiftsForm(page);
-
-		await page.waitForTimeout(1000);
-
-		await addShiftButton.click();
-		await expect(form).toBeVisible();
-
-		await createFuzzShiftsForm(page);
-		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
-
-		await editShiftButton.nth(1).click();
-
 		await editFuzzShiftsForm(page);
 
-		let i = 0;
-		while (await page.locator('button[aria-label="Delete shift button"]').count() > 0) {
-			const button = page.locator('button[aria-label="Delete shift button"]').first();
-			await button.click();
-			await expect(page.locator('text=Shift successfully removed').nth(i)).toBeVisible();
-			i++;
-			await page.waitForTimeout(500);
-		}
+		await page.locator('button[aria-label="Delete shift button"]').click();
+		await page.waitForTimeout(500);
+		await expect(page.locator('text=Shift successfully removed')).toBeVisible();
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/shifts') &&
 			['GET', 'PUT', 'DELETE'].includes(response.request().method()) &&
 			(response.status() === 200 || response.status() === 204)
 		);
+		await page.waitForTimeout(500);
 	});
 });

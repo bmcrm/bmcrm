@@ -271,7 +271,7 @@ export const createFuzzShiftsForm = async (page: Page) => {
 	await page.fill('textarea[name="description"]', summary);
 
 	await page.locator('[aria-label="Members select"]').click();
-	await page.locator('#react-select-4-option-0').click();
+	await page.locator('#react-select-2-option-0').click();
 
 	await page.fill('input[aria-describedby="Datepicker"]', randomDate);
 	await page.keyboard.press('Enter');
