@@ -18,6 +18,7 @@ export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
 export const generateSocialName = (url: string) => {
 	const foundSocial = Object
 		.values(SocialIcons)
+		.sort((a, b) => b.length - a.length)
 		.find(social => url.toLowerCase().includes(social));
 
 	return foundSocial? foundSocial : 'default';
