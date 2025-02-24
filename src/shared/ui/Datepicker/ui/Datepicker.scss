@@ -27,6 +27,14 @@
 				background-color: var(--color-ruby-light);
 			}
 		}
+
+		&--selected {
+			background-color: var(--color-ruby-dark);
+
+			&:not([aria-disabled=true]):hover {
+				background-color: var(--color-ruby-light);
+			}
+		}
 	}
 
 	&__close-icon::after {

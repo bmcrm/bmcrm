@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react';
+import { format } from 'date-fns';
 import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { Icon, IconSize } from '@shared/ui/Icon';
@@ -27,6 +28,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 		created_at,
 		updated_at,
 		visitedBM,
+		birthdayDate,
 	}} = props;
 	const { tokens: { decodedIDToken } } = userState();
 	const canEdit = decodedIDToken?.role === CamperRole.TCO
@@ -64,9 +66,10 @@ const HeadContent = memo((props: HeadContentProps) => {
 			<a href={`mailto: ${email}`} aria-label={'Camper email'} className={styles.head__email}>{email}</a>
 			<ul className={styles.head__details}>
 				{city && <li>{city}</li>}
+				{birthdayDate && <li>Birthday: {format(birthdayDate, 'dd.MM.yyyy')}</li>}
 				<li>Added: {dateNormalize(created_at)}</li>
-				{visitedBM && visitedBM.length > 0 && <li>BM`s: {visitedBM.join(', ')}</li>}
 				<li>Updated: {dateNormalize(updated_at)}</li>
+				{visitedBM && visitedBM.length > 0 && <li>BM`s: {visitedBM.join(', ')}</li>}
 			</ul>
 		</div>
 	);

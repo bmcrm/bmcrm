@@ -7,33 +7,34 @@ import styles from './Datepicker.module.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Datepicker.scss';
 
-interface DatepickerProps {
+interface DatepickerRangeProps {
 	className?: string;
 	errorName?: string;
 	label?: string;
 	placeholder?: string;
 	style?: CSSProperties;
-	date?: Date | null;
-	onChange?: (date: Date | null) => void;
 	name?: string;
+	dateRange?: [Date | null | undefined, Date | null | undefined];
+	onChange?: (update: [Date | null, Date | null]) => void;
 	ariaDescribedBy?: string;
 	minDate?: Date;
 }
 
-const Datepicker = memo((props: DatepickerProps) => {
-	const { className, errorName, label, placeholder = 'Select or write...', style, date, ...rest } = props;
+const DatepickerRange = memo((props: DatepickerRangeProps) => {
+	const { className, errorName, label, placeholder = 'Select or write...', style, dateRange, ...rest } = props;
+	const [startDate, endDate] = dateRange ?? [null, null];
 
 	return (
 		<label className={classNames(styles.datepicker, {}, [className])} style={style}>
 			{label && <p className={styles.datepicker__caption}>{label}</p>}
 			<DatePicker
 				className={styles.datepicker__field}
+				selectsRange={true}
+				startDate={startDate}
+				endDate={endDate}
+				isClearable={true}
 				placeholderText={placeholder}
 				dateFormat={'dd.MM.yyyy'}
-				isClearable={true}
-				selected={date}
-				showIcon
-				calendarIconClassName={styles.datepicker__calendarIcon}
 				{...rest}
 			/>
 			{errorName && (
@@ -46,4 +47,4 @@ const Datepicker = memo((props: DatepickerProps) => {
 	);
 });
 
-export { Datepicker };
+export { DatepickerRange };

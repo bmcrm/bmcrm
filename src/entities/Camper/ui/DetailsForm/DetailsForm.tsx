@@ -70,7 +70,11 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 						}
 					}}
 				>
-					<DetailsFormBasics role={initialValues.role || CamperRole.CAMPER} visitedBM={values.visitedBM} />
+					<DetailsFormBasics
+						role={initialValues.role || CamperRole.CAMPER}
+						visitedBM={values.visitedBM}
+						birthdayDate={values.birthdayDate}
+					/>
 					<DetailsFormTags values={values} />
 					<FormikTextarea
 						name={'about_me'}
