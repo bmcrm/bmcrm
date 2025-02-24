@@ -245,7 +245,7 @@ export const shiftSchema = yup.object().shape({
 		.string()
 		.trim()
 		.required('Title is required')
-		.max(64, 'Title must be less than 64 characters'),
+		.max(32, 'Title must be less than 64 characters'),
 	description: yup
 		.string()
 		.trim()

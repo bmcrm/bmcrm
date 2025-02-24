@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { getTestParameters, getURLs, login, fillFakeInventoryForm } from '@shared/tests/utils/utils';
+import { fillInventoryForm, getTestParameters, getURLs, login, DataType } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -32,7 +32,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await fillFakeInventoryForm({ page, stage: 'create' });
+		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FAKE });
 		await expect(page.locator('text=Item created successfully!')).toBeVisible();
 
 		const editItemButton = page.locator('button[aria-label="Edit item button"]');
@@ -41,16 +41,44 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 
 		await expect(form).toBeVisible();
 
-		await fillFakeInventoryForm({ page, stage: 'edit' });
+		await fillInventoryForm({ page, stage: 'edit', dataType: DataType.FAKE });
 		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
 
 		await page.keyboard.press('Escape');
 
-		await page.locator('button[aria-label="Delete item button"]').click();
-		const deleteItemButton = page.locator('button', { hasText: 'YES, DELETE' });
-		await expect(deleteItemButton).toBeVisible();
-		await deleteItemButton.click();
-		await expect(page.locator('text=Item successfully removed')).toBeVisible();
+		const newAddItemButton = page.locator('button', { hasText: 'Add inventory' });
+		await expect(newAddItemButton).toBeVisible();
+		await newAddItemButton.click();
+		await expect(form).toBeVisible();
+
+		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FUZZ });
+		await expect(page.locator('text=Item created successfully!')).toBeVisible();
+
+		await editItemButton.nth(1).click();
+		await expect(form).toBeVisible();
+
+		await fillInventoryForm({ page, stage: 'edit', dataType: DataType.FUZZ });
+		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
+
+		await page.keyboard.press('Escape');
+
+		let i = 0;
+		while (await page.locator('button[aria-label="Delete item button"]').count() > 0) {
+			const button = page.locator('button[aria-label="Delete item button"]').first();
+			await button.click();
+			const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
+			await expect(confirmDeleteButton).toBeVisible();
+			await confirmDeleteButton.click();
+			await expect(page.locator('text=Item successfully removed').nth(i)).toBeVisible();
+			i++;
+			await page.waitForTimeout(500);
+		}
+
+		// await page.locator('button[aria-label="Delete item button"]').click();
+		// const deleteItemButton = page.locator('button', { hasText: 'YES, DELETE' });
+		// await expect(deleteItemButton).toBeVisible();
+		// await deleteItemButton.click();
+		// await expect(page.locator('text=Item successfully removed')).toBeVisible();
 
 		await page.waitForResponse((response) =>
 			response.url().includes('/inventory') &&
