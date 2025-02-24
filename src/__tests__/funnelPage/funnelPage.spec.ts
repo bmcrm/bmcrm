@@ -5,6 +5,7 @@ import {
 	login,
 	fillCamperDetailsForm,
 	resetCamperDetailsForm,
+	customWaitForResponse,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -46,20 +47,20 @@ test.describe('Check funnel page and edit user', () => {
 		await expect(form).toBeVisible();
 
 		await fillCamperDetailsForm(page);
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
 
 		await editButton.click();
 		await expect(form).toBeVisible();
 
 		await resetCamperDetailsForm(page);
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
 
 		await expect(page.locator('text=fakeTown')).toBeVisible();
 
 		await page.keyboard.press('Escape');
 
 		await expect(userItem).toBeVisible();
-
-		await page.waitForResponse((response) =>
-			response.url().includes('/campers') && response.request().method() === 'PATCH' && response.status() === 200
-		);
 	});
 });

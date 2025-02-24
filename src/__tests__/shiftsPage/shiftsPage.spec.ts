@@ -5,6 +5,7 @@ import {
 	login,
 	createFuzzShiftsForm,
 	editFuzzShiftsForm,
+	customWaitForResponse,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -39,6 +40,7 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 		await expect(form).toBeVisible();
 
 		await createFuzzShiftsForm(page);
+		await customWaitForResponse({ page, endpoint: '/shifts' });
 		await page.waitForTimeout(500);
 		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
 
@@ -47,16 +49,12 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 		await editShiftButton.click();
 
 		await editFuzzShiftsForm(page);
+		await customWaitForResponse({ page, endpoint: '/shifts' });
+		await page.waitForTimeout(500);
 
 		await page.locator('button[aria-label="Delete shift button"]').click();
 		await page.waitForTimeout(500);
 		await expect(page.locator('text=Shift successfully removed')).toBeVisible();
-
-		await page.waitForResponse((response) =>
-			response.url().includes('/shifts') &&
-			['GET', 'PUT', 'DELETE'].includes(response.request().method()) &&
-			(response.status() === 200 || response.status() === 204)
-		);
 		await page.waitForTimeout(500);
 	});
 });
