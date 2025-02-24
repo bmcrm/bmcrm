@@ -5,6 +5,7 @@ import {
 	login,
 	fillCamperDetailsForm,
 	resetCamperDetailsForm,
+	customWaitForResponse,
 } from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
@@ -39,6 +40,8 @@ test.describe('Check campers page and edit user', () => {
 		await expect(form).toBeVisible();
 
 		await fillCamperDetailsForm(page);
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
 
 		const emailLink = page.locator('a[aria-label="Camper email"]');
 		await expect(emailLink).toBeVisible();
@@ -50,15 +53,13 @@ test.describe('Check campers page and edit user', () => {
 		await expect(form).toBeVisible();
 
 		await resetCamperDetailsForm(page);
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
 
 		await expect(page.locator('li', { hasText: 'fakeTown' })).toBeVisible();
 
 		await page.keyboard.press('Escape');
 
 		await expect(page.locator('text=Test User')).toBeVisible();
-
-		await page.waitForResponse((response) =>
-			response.url().includes('/campers') && response.request().method() === 'PATCH' && response.status() === 200
-		);
 	});
 });

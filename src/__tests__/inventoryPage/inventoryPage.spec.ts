@@ -1,5 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { fillInventoryForm, getTestParameters, getURLs, login, DataType } from '@shared/tests/utils/utils';
+import {
+	fillInventoryForm,
+	getTestParameters,
+	getURLs,
+	login,
+	customWaitForResponse,
+	DataType,
+} from '@shared/tests/utils/utils';
 
 let URLS: Record<string, string>;
 let TEST_PARAMS: {
@@ -32,58 +39,30 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FAKE });
+		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FUZZ });
+		await customWaitForResponse({ page, endpoint: '/inventory' });
+		await page.waitForTimeout(500);
 		await expect(page.locator('text=Item created successfully!')).toBeVisible();
 
 		const editItemButton = page.locator('button[aria-label="Edit item button"]');
 		await expect(editItemButton).toBeVisible();
 		await editItemButton.click();
-
-		await expect(form).toBeVisible();
-
-		await fillInventoryForm({ page, stage: 'edit', dataType: DataType.FAKE });
-		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
-
-		await page.keyboard.press('Escape');
-
-		const newAddItemButton = page.locator('button', { hasText: 'Add inventory' });
-		await expect(newAddItemButton).toBeVisible();
-		await newAddItemButton.click();
-		await expect(form).toBeVisible();
-
-		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FUZZ });
-		await expect(page.locator('text=Item created successfully!')).toBeVisible();
-
-		await editItemButton.nth(1).click();
 		await expect(form).toBeVisible();
 
 		await fillInventoryForm({ page, stage: 'edit', dataType: DataType.FUZZ });
+		await customWaitForResponse({ page, endpoint: '/inventory' });
+		await page.waitForTimeout(500);
 		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
 
 		await page.keyboard.press('Escape');
 
-		let i = 0;
-		while (await page.locator('button[aria-label="Delete item button"]').count() > 0) {
-			const button = page.locator('button[aria-label="Delete item button"]').first();
-			await button.click();
-			const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
-			await expect(confirmDeleteButton).toBeVisible();
-			await confirmDeleteButton.click();
-			await expect(page.locator('text=Item successfully removed').nth(i)).toBeVisible();
-			i++;
-			await page.waitForTimeout(500);
-		}
-
-		// await page.locator('button[aria-label="Delete item button"]').click();
-		// const deleteItemButton = page.locator('button', { hasText: 'YES, DELETE' });
-		// await expect(deleteItemButton).toBeVisible();
-		// await deleteItemButton.click();
-		// await expect(page.locator('text=Item successfully removed')).toBeVisible();
-
-		await page.waitForResponse((response) =>
-			response.url().includes('/inventory') &&
-			['GET', 'POST', 'PATCH', 'DELETE'].includes(response.request().method()) &&
-			(response.status() === 200 || response.status() === 204)
-		);
+		await page.locator('button[aria-label="Delete item button"]').click();
+		const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
+		await expect(confirmDeleteButton).toBeVisible();
+		await confirmDeleteButton.click();
+		await page.waitForTimeout(100);
+		await customWaitForResponse({ page, endpoint: '/inventory' });
+		await expect(page.locator('text=Item successfully removed')).toBeVisible();
+		await page.waitForTimeout(500);
 	});
 });

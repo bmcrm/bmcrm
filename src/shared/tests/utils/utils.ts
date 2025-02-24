@@ -141,6 +141,14 @@ export const login = async (
 	await expect(page).toHaveURL(URLS.CAMPERS);
 };
 
+export const customWaitForResponse = ({ page, endpoint }: {page: Page, endpoint: string}) =>
+	page.waitForResponse(
+		(response) =>
+			response.url().includes(endpoint) &&
+			['GET', 'PATCH', 'POST', 'DELETE', 'PUT'].includes(response.request().method()) &&
+			(response.status() === 200 || response.status() === 204)
+	);
+
 export const generateFuzzData = () => {
 	const campName = fc.sample(fc.string({ minLength: 3, maxLength: 32 }), 1)[0];
 	const itemName = fc.sample(fc.string({ minLength: 1, maxLength: 5 }), 1)[0];
