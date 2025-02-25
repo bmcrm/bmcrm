@@ -12,7 +12,7 @@ const FunnelPage = () => {
 	const [campersByRole, setCampersByRole] = useState<ICampersByRole>({
 		[CamperRole.TCO]: [],
 		[CamperRole.COORG]: [],
-		[CamperRole.LEAD]: [],
+		[CamperRole.PROSPECT]: [],
 		[CamperRole.QUALIFIED]: [],
 		[CamperRole.INTENT]: [],
 		[CamperRole.CAMPER]: [],
@@ -27,7 +27,7 @@ const FunnelPage = () => {
 			const sortedCampers: ICampersByRole = {
 				[CamperRole.TCO]: [],
 				[CamperRole.COORG]: [],
-				[CamperRole.LEAD]: [],
+				[CamperRole.PROSPECT]: [],
 				[CamperRole.QUALIFIED]: [],
 				[CamperRole.INTENT]: [],
 				[CamperRole.CAMPER]: [],
@@ -52,7 +52,7 @@ const FunnelPage = () => {
 					<div className={styles.funnel__head}>
 						<Funnel
 							campers={{
-								[CamperRole.LEAD]: campersByRole[CamperRole.LEAD].length,
+								[CamperRole.PROSPECT]: campersByRole[CamperRole.PROSPECT].length,
 								[CamperRole.QUALIFIED]: campersByRole[CamperRole.QUALIFIED].length,
 								[CamperRole.INTENT]: campersByRole[CamperRole.INTENT].length,
 								[CamperRole.CAMPER]: campersByRole[CamperRole.CAMPER].length + campersByRole[CamperRole.TCO].length + campersByRole[CamperRole.COORG].length,

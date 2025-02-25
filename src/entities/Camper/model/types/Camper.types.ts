@@ -20,7 +20,7 @@ export interface FormikTag {
 export enum CamperRole {
   TCO = 'tco',
   COORG = 'co-organizer',
-  LEAD = 'lead',
+  PROSPECT = 'prospect',
   QUALIFIED = 'qualified',
   INTENT = 'intent',
   CAMPER = 'camper',

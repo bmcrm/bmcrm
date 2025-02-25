@@ -74,7 +74,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 				password: values.password.trim(),
 				about_me: values.about_me?.trim(),
 				social_links: userSocials,
-				role: CamperRole.LEAD,
+				role: CamperRole.PROSPECT,
 				accept: Boolean(values.accept),
 			};
 
