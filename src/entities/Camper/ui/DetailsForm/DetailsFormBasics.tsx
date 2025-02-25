@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { useFormikContext } from 'formik';
 import { BMYearsOptions } from '@shared/lib/generateBMYearsOptions';
 import { FormikInput } from '@shared/ui/FormikInput';
@@ -9,13 +9,15 @@ import { roleOptions } from '../../lib/generateSelectOptions';
 import { inputs } from '../../model/data/DetailsForm.data';
 import { CamperRole } from '@entities/Camper';
 import styles from './DetailsForm.module.scss';
+import { Datepicker } from '@shared/ui/Datepicker';
 
 type DetailsFormBasicsProps = {
 	role: CamperRole;
 	visitedBM?: string[];
+	birthdayDate?: Date | null;
 };
 
-const DetailsFormBasics = memo(({ role, visitedBM }: DetailsFormBasicsProps) => {
+const DetailsFormBasics = memo(({ role, visitedBM, birthdayDate }: DetailsFormBasicsProps) => {
 	const { setFieldValue } = useFormikContext();
 	const { tokens: { decodedIDToken } } = userState();
 	const currentYear = new Date().getFullYear();
@@ -25,6 +27,13 @@ const DetailsFormBasics = memo(({ role, visitedBM }: DetailsFormBasicsProps) => 
 			? roleOptions
 			: roleOptions.filter(option => option.value !== CamperRole.TCO),
 		[role]
+	);
+
+	const handleDatepickerChange = useCallback(
+		(date: Date | null) => {
+			void setFieldValue('birthdayDate', date);
+		},
+		[setFieldValue]
 	);
 
 	return (
@@ -49,15 +58,24 @@ const DetailsFormBasics = memo(({ role, visitedBM }: DetailsFormBasicsProps) => 
 					/>
 				))}
 			</div>
-			<MultiSelect
-				isSearchable
-				aria-label={'Visited BM`s select'}
-				label={'Visited BM`s'}
-				placeholder={'Select or Write...'}
-				value={visitedBM || []}
-				options={BMYearsOptions(currentYear)}
-				onChange={(newValue) => setFieldValue('visitedBM', newValue)}
-			/>
+			<div className={styles.form__row}>
+				<Datepicker
+					ariaDescribedBy={'Birthday date'}
+					errorName={'birthdayDate'}
+					label={'Birthday Date'}
+					date={birthdayDate}
+					onChange={handleDatepickerChange}
+				/>
+				<MultiSelect
+					isSearchable
+					aria-label={'Visited BM`s select'}
+					label={'Visited BM`s'}
+					placeholder={'Select or Write...'}
+					value={visitedBM || []}
+					options={BMYearsOptions(currentYear)}
+					onChange={(newValue) => setFieldValue('visitedBM', newValue)}
+				/>
+			</div>
 			{(decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG) && (
 				<CustomSelect
 					name={'role'}

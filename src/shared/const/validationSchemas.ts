@@ -154,6 +154,7 @@ export const userSettingsSchema = yup.object().shape({
 			value: yup.string().max(256, 'Less than 256 characters').notRequired(),
 		})
 	),
+	birthdayDate: yup.date().notRequired(),
 });
 
 export const campSettingsSchema = yup.object().shape({
@@ -238,6 +239,7 @@ export const editCamperSchema = yup.object().shape({
 			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
 		})
 	),
+	birthdayDate: yup.date().notRequired(),
 });
 
 export const shiftSchema = yup.object().shape({

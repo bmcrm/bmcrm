@@ -15,7 +15,7 @@
 
 	&__field {
 		width: 100%;
-		padding: 5px 10px;
+		padding: 10px 10px 10px 30px !important;
 		border: 2px solid var(--color-input-orange);
 		border-radius: 10px;
 		background-color: rgba(255, 255, 255, .02);
@@ -31,6 +31,13 @@
 			outline: none;
 			border-color: var(--color-ruby-dark);
 		}
+	}
+
+	&__calendar-icon {
+		z-index: 1;
+		top: 50%;
+		translate: 0 -50%;
+		fill: var(--color-ruby-dark);
 	}
 
 	&__error {

@@ -1,10 +1,10 @@
 .select {
 	position: relative;
-	width: 100%;
-	color: var(--color-black);
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
+	width: 100%;
+	color: var(--color-black);
 
 	&:active {
 		border-color: var(--color-black);
@@ -27,15 +27,41 @@
 		font-weight: 500;
 	}
 
-	&__field {
+	&__wrapper {
+		position: relative;
 		width: 100%;
+
+		&:before {
+			content: '';
+			position: absolute;
+			z-index: 1;
+			top: 50%;
+			right: 10px;
+			translate: 0 -50%;
+			display: block;
+			width: 15px;
+			height: 15px;
+			background-image: url('@shared/assets/icons/clear-sort_icon.svg');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+	}
+
+	&__field {
+		position: relative;
+		display: block;
+		width: 100%;
+		-webkit-appearance: none;
+		appearance: none;
+		padding: 10px 20px;
 		border-radius: 10px;
 		border: 2px solid var(--color-input-orange);
 		background-color: rgba(255, 255, 255, .02);
 		backdrop-filter: blur(4px);
-		padding: 10px 20px;
 		cursor: pointer;
 		font: var(--font-s);
+		color: var(--color-black);
 		outline: none;
 
 		&:focus {

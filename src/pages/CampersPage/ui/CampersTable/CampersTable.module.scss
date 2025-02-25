@@ -1,3 +1,5 @@
+@use '@app/styles/breakpoints';
+
 .table {
 
 	&__cell {
@@ -6,6 +8,14 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: 5px;
+
+		&.name {
+			min-width: 160px;
+
+			@media (width < breakpoints.$lg) {
+				min-width: unset;
+			}
+		}
 	}
 
 	&__link {
@@ -14,5 +24,22 @@
         text-decoration: underline;
       }
 		}
+	}
+
+	&__camper-name {
+		cursor: pointer;
+
+		@media (hover: hover) {
+			&:hover {
+        text-decoration: underline;
+      }
+		}
+	}
+
+	&__socials {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
 	}
 }

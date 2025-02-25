@@ -4,7 +4,7 @@ import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { Datepicker, DatepickerTime } from '@shared/ui/Datepicker';
+import { DatepickerRange, DatepickerTime } from '@shared/ui/Datepicker';
 import type { IShift } from '../../model/types/Shift.types';
 import styles from './ShiftForm.module.scss';
 import PlusIcon from '@shared/assets/icons/plus_icon.svg';
@@ -31,11 +31,12 @@ const FormDate = memo((props: FormDateProps) => {
 
 	return (
 		<div className={classNames(styles.form__row, {}, [className])}>
-			<Datepicker
+			<DatepickerRange
 				style={{ maxWidth: isMobile ? '100%' : 250 }}
-				ariaLabel={'Datepicker'}
+				ariaDescribedBy={'Datepicker'}
 				errorName={'start_date'}
 				label={'Date'}
+				minDate={new Date()}
 				dateRange={[start_date, end_date]}
 				onChange={handleDatepickerChange}
 			/>
