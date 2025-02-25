@@ -33,17 +33,19 @@ const CustomSelect = memo((props: CustomSelectProps) => {
 	return (
 		<label className={classNames(styles.select, {}, [className])}>
 			{label && <p className={styles.select__caption}>{label}</p>}
-			<select
-				className={classNames(styles.select__field, {}, [])}
-				onChange={handleChange}
-				name={name}
-				value={selectedValue ?? undefined}
-				{...otherProps}
-			>
-				{options.map(({ value, label }) =>
-					<option key={value} value={value}>{label}</option>
-				)}
-			</select>
+			<div className={styles.select__wrapper}>
+				<select
+					className={classNames(styles.select__field, {}, [])}
+					onChange={handleChange}
+					name={name}
+					value={selectedValue ?? undefined}
+					{...otherProps}
+				>
+					{options.map(({ value, label }) =>
+						<option key={value} value={value}>{label}</option>
+					)}
+				</select>
+			</div>
 			<ErrorMessage name={name} render={msg => <CustomErrorMessage message={msg} />}/>
 		</label>
 	);

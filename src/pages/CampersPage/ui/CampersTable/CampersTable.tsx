@@ -1,33 +1,39 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
 import { useToggle } from '@shared/hooks/useToggle';
+import { classNames } from '@shared/lib/classNames';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { filterTags, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonSize } from '@shared/ui/Button';
 import { CamperTag, CamperTagTheme } from '@features/CamperTag';
-import { CamperDetailsModal } from '@widgets/CamperDetailsModal';
+import { SocialIcon } from '@features/SocialIcon';
+import { CamperDetailsModal, CamperDetailsModalTheme } from '@widgets/CamperDetailsModal';
 import { userState } from '@entities/User';
 import { CamperRole, type ICamper } from '@entities/Camper';
 import styles from './CampersTable.module.scss';
 
 type CampersTableProps = {
-	className?: string;
 	campers: ICamper[];
 };
 
-const CampersTable = (props: CampersTableProps) => {
-	const { campers } = props;
+const CampersTable = ({ campers }: CampersTableProps) => {
 	const [camperEmail, setCamperEmail] = useState('');
+	const [detailsTheme, setDetailsTheme] = useState<CamperDetailsModalTheme>(CamperDetailsModalTheme.EDIT);
 	const { isOpen, open, close } = useToggle();
 	const { tokens: { decodedIDToken } } = userState();
 	const portalTargetRef = useRef<HTMLDivElement>(null);
 	const tableScrollRef = useRef<HTMLDivElement>(null);
 	const canEdit = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
-	const handleOpenDetails = useCallback((email: string) => {
-		setCamperEmail(email);
-		open();
-	}, [open]);
+	const handleOpenDetails = useCallback(
+		({ email, detailsTheme }: { email: string, detailsTheme: CamperDetailsModalTheme }) => {
+			setCamperEmail(email);
+			setDetailsTheme(detailsTheme);
+			open();
+		},
+		[open]
+	);
 
 	const columns = useMemo<ColumnDef<ICamper>[]>(
 		() => [
@@ -42,12 +48,17 @@ const CampersTable = (props: CampersTableProps) => {
 					const currentUser = decodedIDToken?.email === email;
 
 					return (
-						<div className={styles.table__cell}>
-							<p>{firstName} {lastName}</p>
+						<div className={classNames(styles.table__cell, {}, [styles.name])}>
+							<p
+								className={styles.table__camperName}
+								onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.DEFAULT })}
+							>
+								{firstName} {lastName}
+							</p>
 							{(canEdit || currentUser) && (
 								<Button
 									size={ButtonSize.S}
-									onClick={() => handleOpenDetails(email)}
+									onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.EDIT })}
 									style={{ marginLeft: 'auto' }}
 								>
 									Edit
@@ -60,6 +71,18 @@ const CampersTable = (props: CampersTableProps) => {
 			{
 				accessorKey: 'playa_name',
 				header: 'Playa Name',
+				cell: (info) => (
+					<p style={{ wordBreak: 'break-word' }}>
+						{info.getValue() as string}
+					</p>
+				),
+			},
+			{
+				accessorKey: 'birthdayDate',
+				header: 'Birthday',
+				cell: (info) => info.getValue()
+					? format(info.getValue() as string, 'dd.MM.yyyy')
+					: '',
 			},
 			{
 				accessorKey: 'role',
@@ -70,12 +93,28 @@ const CampersTable = (props: CampersTableProps) => {
 				accessorKey: 'email',
 				header: 'Email',
 				cell: (info) => (
-					<a href={`mailto:${info.getValue()}`} className={styles.table__link}>{info.getValue() as ReactNode}</a>
+					<div style={{ minWidth: 180 }}>
+						<a href={`mailto:${info.getValue()}`} className={styles.table__link}>{info.getValue() as ReactNode}</a>
+					</div>
 				),
 			},
 			{
 				accessorKey: 'city',
 				header: 'City',
+			},
+			{
+				accessorKey: 'social_links',
+				header: 'Socials',
+				cell: (info) => {
+					const row = info.row.original;
+					const socials = row.social_links || [];
+
+					return (
+						<div className={styles.table__socials}>
+							{socials.map((social, i) => <SocialIcon key={i} social={social} />)}
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'tags',
@@ -87,7 +126,7 @@ const CampersTable = (props: CampersTableProps) => {
 					const tags = row.tags || {};
 
 					return (
-						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
+						<div className={styles.table__cell} style={{ justifyContent: 'center', minWidth: 200 }}>
 							{Object.entries(tags).map(([name, details], i) => (
 								<CamperTag
 									key={`${name}-${i}`}
@@ -127,6 +166,7 @@ const CampersTable = (props: CampersTableProps) => {
 			/>
 			<CamperDetailsModal
 				camperEmail={camperEmail}
+				theme={detailsTheme}
 				isOpen={isOpen}
 				onClose={close}
 			/>
