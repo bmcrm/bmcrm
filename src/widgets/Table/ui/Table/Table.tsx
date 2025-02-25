@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type RefObject } from 'react';
+import { useCallback, useRef, useState, useEffect, type RefObject } from 'react';
 import {
 	useReactTable,
 	getCoreRowModel,
@@ -10,12 +10,14 @@ import {
 	type VisibilityState,
 } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
+import { useLocalStorage } from '@shared/hooks/useLocalStorage';
 import { TableHead } from '../TableHead/TableHead';
 import { TableBody } from '../TableBody/TableBody';
 import { TableControl } from '../TableControl/TableControl';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { InviteButton } from '@features/InviteButton';
 import { userState } from '@entities/User';
+import { localStorageVars } from '@shared/const/localStorage';
 import { CamperRole } from '@entities/Camper';
 import { TableControlTheme } from '../../model/types/TableControl.types';
 import styles from './Table.module.scss';
@@ -38,9 +40,19 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const { tokens: { decodedIDToken } } = userState();
+	const { getStorage } = useLocalStorage();
 	const canInvite = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 	const finalPortalRef = portalTargetRef || internalPortalTargetRef;
 	const finalScrollRef = tableScrollRef || innerTableScrollRef;
+
+	useEffect(() => {
+		const storedVisibility = getStorage(localStorageVars.CAMPERS_TABLE_COLUMNS);
+
+		if (storedVisibility) {
+			const parsedVisibility = JSON.parse(storedVisibility);
+			setColumnVisibility(parsedVisibility);
+		}
+	}, [getStorage]);
 
 	const table = useReactTable({
 		columns,

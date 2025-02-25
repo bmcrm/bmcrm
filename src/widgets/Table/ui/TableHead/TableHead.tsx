@@ -27,7 +27,7 @@ const TableHead = <TData extends object>({ table, portalTargetRef, tableScrollRe
 								<p className={styles.table__row} style={{ flexWrap: 'wrap' }}>
 									{flexRender(
 										header.column.columnDef.header,
-										header.getContext()
+										header.getContext(),
 									)}
 									{header.column.getIsSorted() && (
 										<Icon
@@ -39,12 +39,14 @@ const TableHead = <TData extends object>({ table, portalTargetRef, tableScrollRe
 										<Icon icon={<FilterIcon/>} size={IconSize.SIZE_12} />
 									)}
 								</p>
-								<TableControl
-									portalTargetRef={portalTargetRef}
-									tableScrollRef={tableScrollRef}
-									theme={TableControlTheme.COLUMN}
-									header={header}
-								/>
+								{header.column.id !== 'social_links' && (
+									<TableControl
+										portalTargetRef={portalTargetRef}
+										tableScrollRef={tableScrollRef}
+										theme={TableControlTheme.COLUMN}
+										header={header}
+									/>
+								)}
 							</div>
 						)
 					}

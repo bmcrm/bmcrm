@@ -1,3 +1,3 @@
 export enum localStorageVars {
-	STORAGE = 'storage',
+	CAMPERS_TABLE_COLUMNS = 'campers_table_columns',
 }
