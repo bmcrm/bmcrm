@@ -17,7 +17,7 @@ const FunnelCards = memo((props: FunnelCardsProps) => {
 
 	return (
 		<div className={classNames(styles.cards, {}, [className])} style={customStyles}>
-			<FunnelCard title={'Leads'} users={campersByRole[CamperRole.LEAD]} />
+			<FunnelCard title={'Prospect'} users={campersByRole[CamperRole.PROSPECT]} />
 			<FunnelCard title={'Qualified'} users={campersByRole[CamperRole.QUALIFIED]} />
 			<FunnelCard title={'Intent'} users={campersByRole[CamperRole.INTENT]} />
 			<FunnelCard

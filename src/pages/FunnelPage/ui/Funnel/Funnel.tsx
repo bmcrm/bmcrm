@@ -42,7 +42,7 @@ const Funnel = memo(({ className, campers }: FunnelProps) => {
 
 	const stages = useMemo(() => [
 		{
-			count: campers[CamperRole.LEAD],
+			count: campers[CamperRole.PROSPECT],
 			color: ProgressColors.ORANGE_LIGHT,
 			description:
 				'Potential fetchCampers who have expressed interest in participating but have not yet confirmed their participation',

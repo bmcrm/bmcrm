@@ -1,25 +1,23 @@
 import { type CamperSocial } from '@entities/Camper';
-import { SocialIcons } from '../model/types/SocialIcon.types';
+import { socialDomainPatterns, SocialIcons } from '../model/types/SocialIcon.types';
 
-export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
-	const socialNetworks = Object.values(SocialIcons);
-	const urlsArray = Array.isArray(urls) ? urls : [urls];
+export const generateSocialName = (url: string): SocialIcons => {
+	const lowerUrl = url.toLowerCase();
 
-	return urlsArray.map(url => {
-		const foundSocial = socialNetworks.find(social => url.toLowerCase().includes(social));
+	for (const [social, pattern] of Object.entries(socialDomainPatterns)) {
+		if (pattern.test(lowerUrl)) {
+			return social as SocialIcons;
+		}
+	}
 
-		return {
-			name: foundSocial ? foundSocial : 'default',
-			url: url,
-		};
-	});
+	return SocialIcons.DEFAULT;
 };
 
-export const generateSocialName = (url: string) => {
-	const foundSocial = Object
-		.values(SocialIcons)
-		.sort((a, b) => b.length - a.length)
-		.find(social => url.toLowerCase().includes(social));
+export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {
+	const urlsArray = Array.isArray(urls) ? urls : [urls];
 
-	return foundSocial? foundSocial : 'default';
+	return urlsArray.map(url => ({
+		name: generateSocialName(url),
+		url,
+	}));
 };
