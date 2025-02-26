@@ -68,5 +68,9 @@
 			outline: none;
 			border-color: var(--color-ruby-dark);
 		}
+
+		&:disabled {
+			color: var(--color-neutral);
+		}
 	}
 }

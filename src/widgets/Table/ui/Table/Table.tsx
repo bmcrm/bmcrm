@@ -16,6 +16,7 @@ import { TableBody } from '../TableBody/TableBody';
 import { TableControl } from '../TableControl/TableControl';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { InviteButton } from '@features/InviteButton';
+import { CreateButton } from '@features/CreateButton';
 import { userState } from '@entities/User';
 import { localStorageVars } from '@shared/const/localStorage';
 import { CamperRole } from '@entities/Camper';
@@ -26,6 +27,7 @@ type TableProps<TData extends object> = {
 	className?: string;
 	title?: string;
 	isInviteButton?: boolean;
+	isCreateButton?: boolean;
 	data: TData[];
 	columns: ColumnDef<TData>[];
 	portalTargetRef?: RefObject<HTMLDivElement>;
@@ -33,7 +35,7 @@ type TableProps<TData extends object> = {
 };
 
 const Table = <TData extends object>(props: TableProps<TData>) => {
-	const { className, title, isInviteButton, data, columns, portalTargetRef, tableScrollRef } = props;
+	const { className, title, isInviteButton, isCreateButton, data, columns, portalTargetRef, tableScrollRef } = props;
 	const internalPortalTargetRef = useRef<HTMLDivElement>(null);
 	const innerTableScrollRef = useRef<HTMLDivElement>(null);
 	const [sorting, setSorting] = useState<SortingState>([]);
@@ -41,7 +43,7 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const { tokens: { decodedIDToken } } = userState();
 	const { getStorage } = useLocalStorage();
-	const canInvite = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
+	const canControl = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 	const finalPortalRef = portalTargetRef || internalPortalTargetRef;
 	const finalScrollRef = tableScrollRef || innerTableScrollRef;
 
@@ -78,9 +80,14 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 	return (
 		<div className={classNames(styles.table, {}, [className])}>
 			<div className={styles.table__header}>
-				<div className={styles.table__row} style={{ gap: 10 }}>
+				<div className={styles.table__row} style={{ gap: 10, flexWrap: 'wrap' }}>
 					{title && <h2 className={styles.table__title}>{title}</h2>}
-					{isInviteButton && canInvite && <InviteButton size={ButtonSize.S} />}
+					{((isInviteButton && canControl) || (isCreateButton && canControl)) && (
+						<div className={classNames(styles.table__buttons, {}, ['ml-a'])}>
+							{isInviteButton && canControl && <InviteButton size={ButtonSize.S} />}
+							{isCreateButton && canControl && <CreateButton size={ButtonSize.S} />}
+						</div>
+					)}
 				</div>
 				<div className={classNames(styles.table__row, {}, ['ml-a'])} style={{ gap: 10 }}>
 					<Button

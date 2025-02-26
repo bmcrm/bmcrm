@@ -108,6 +108,13 @@
 		column-gap: 5px;
 	}
 
+	&__buttons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		column-gap: 5px;
+	}
+
 	.btn-reset {
 		color: var(--color-black);
 

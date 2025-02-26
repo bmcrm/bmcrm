@@ -37,15 +37,16 @@ export interface ICamper {
   camp_website?: string;
   role: CamperRole;
   avatar?: string;
-  email_confirmed: boolean;
+  email_confirmed: boolean | 'adminCreated';
   about_me?: string;
   social_links?: CamperSocial[];
   history?: CamperHistory[];
-  updated_at: string;
+  updated_at?: string;
   created_at: string;
   tags?: CamperTags;
   visitedBM?: string[];
   birthdayDate?: Date | null;
+  createdBy?: string;
 }
 
 export type IFormikCamper = Omit<ICamper, 'tags'> & {

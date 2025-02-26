@@ -27,4 +27,12 @@ export const camperApi = {
 
 		return response.data;
 	},
+	createCamper: async (payload: Partial<ICamper>) => {
+		const endpoint = `${CAMPER_ENDPOINT}/create-camper`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.post(endpoint, payload, { headers });
+
+		return response.data;
+	},
 };
