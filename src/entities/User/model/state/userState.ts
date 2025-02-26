@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { localStorageVars } from '@shared/const/localStorage';
 import type { IIDToken } from '../types/User.types';
 
 interface IUserState {
@@ -39,7 +40,7 @@ const userState = create<IUserState>()(
 				},
 			}),
 			{
-				name: 'auth',
+				name: localStorageVars.AUTH,
 				storage: createJSONStorage(() => localStorage),
 			},
 		)
