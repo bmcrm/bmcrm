@@ -6,11 +6,12 @@ import { useLocalStorage } from '@shared/hooks/useLocalStorage';
 import { userApi } from '../api/userApi';
 import { userState } from '../model/state/userState';
 import { userKeys } from '../model/const/userKeys';
+import { localStorageVars } from '@shared/const/localStorage';
 import type { IIDToken } from '../model/types/User.types';
 
 const useRefreshTokens = () => {
 	const { set } = userState();
-	const { clearStorage } = useLocalStorage();
+	const { removeStorage } = useLocalStorage();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
 		mutationKey: userKeys.tokens,
@@ -33,7 +34,7 @@ const useRefreshTokens = () => {
 			}
 		},
 		onError: (error) => {
-			clearStorage();
+			removeStorage(localStorageVars.AUTH);
 			errorHandler(error);
 		},
 	});
