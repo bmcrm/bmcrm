@@ -1,0 +1,19 @@
+@use '@app/styles/breakpoints';
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 490px;
+	max-width: 100%;
+
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		@media (width < breakpoints.$md) {
+			flex-direction: column;
+		}
+	}
+}

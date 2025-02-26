@@ -1,16 +1,18 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, type ReactNode } from 'react';
 import { format } from 'date-fns';
 import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { Icon, IconSize } from '@shared/ui/Icon';
+import { TooltipIcon } from '@features/TooltipIcon';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { userState } from '@entities/User';
-import { CamperRole, type ICamper } from '@entities/Camper';
+import { useGetCampers, type ICamper, CamperRole } from '@entities/Camper';
 import { CamperDetailsModalTheme } from '../../model/types/CamperDetailsModal.types';
 import styles from './DetailsHead.module.scss';
 import CheckIcon from '@shared/assets/icons/check.svg';
 import ClockIcon from '@shared/assets/icons/clock.svg';
 import EditIcon from '@shared/assets/icons/edit_icon.svg';
+import CreatedCamperIcon from '@shared/assets/icons/admin-created_icon.svg';
 
 type HeadContentProps = {
 	camper: ICamper;
@@ -29,8 +31,22 @@ const HeadContent = memo((props: HeadContentProps) => {
 		updated_at,
 		visitedBM,
 		birthdayDate,
+		createdBy,
 	}} = props;
 	const { tokens: { decodedIDToken } } = userState();
+	const { data: campers } = useGetCampers();
+
+	const createdCamper = campers?.find(camper => camper.email === createdBy);
+	const createdCamperName = createdCamper?.first_name && createdCamper?.last_name
+		? `${createdCamper?.first_name} ${createdCamper?.last_name}`
+		: 'admin';
+
+	const currentStatus = email_confirmed === true
+		? 'true'
+		: email_confirmed === false
+			? 'false'
+			: 'adminCreated';
+
 	const canEdit = decodedIDToken?.role === CamperRole.TCO
 		|| decodedIDToken?.role === CamperRole.COORG
 		|| decodedIDToken?.email === email;
@@ -40,15 +56,33 @@ const HeadContent = memo((props: HeadContentProps) => {
 		[email, first_name, last_name, playa_name]
 	);
 
+	const statusIcons: Record<string, { icon: ReactNode; color?: string, text: string }> = {
+		true: {
+			icon: <CheckIcon />,
+			color: '--color-green-light',
+			text: 'Confirmed',
+		},
+		false: {
+			icon: <ClockIcon />,
+			color: '--color-neutral',
+			text: 'Not confirmed',
+		},
+		adminCreated: {
+			icon: <CreatedCamperIcon />,
+			text: `Created by ${createdCamperName}`,
+		},
+	};
+
 	return (
 		<div className={styles.head__content}>
 			<div className={styles.head__title}>
 				<h2>{capitalizedName ?? 'Loading...'}</h2>
 				<div className={styles.head__status}>
-					<Icon
-						icon={email_confirmed ? <CheckIcon /> : <ClockIcon />}
-						size={IconSize.SIZE_24}
-						style={{ color: `var(${email_confirmed ? '--color-green-light' : '--color-neutral'})` }}
+					<TooltipIcon
+						icon={statusIcons[currentStatus].icon}
+						iconSize={IconSize.SIZE_24}
+						tooltipText={statusIcons[currentStatus].text}
+						iconStyle={{ color: `var(${statusIcons[currentStatus].color})` }}
 					/>
 					{canEdit && (
 						<Button
@@ -68,7 +102,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 				{city && <li>{city}</li>}
 				{birthdayDate && <li>Birthday: {format(birthdayDate, 'dd.MM.yyyy')}</li>}
 				<li>Added: {dateNormalize(created_at)}</li>
-				<li>Updated: {dateNormalize(updated_at)}</li>
+				{updated_at && <li>Updated: {dateNormalize(updated_at)}</li>}
 				{visitedBM && visitedBM.length > 0 && <li>BM`s: {visitedBM.join(', ')}</li>}
 			</ul>
 		</div>

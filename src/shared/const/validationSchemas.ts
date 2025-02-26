@@ -284,3 +284,10 @@ export const shiftSchema = yup.object().shape({
 		)
 		.min(1, 'At least one time entry is required'),
 });
+
+export const createCamperSchema = yup.object().shape({
+	role: yup.string().oneOf(Object.values(CamperRole), 'Invalid role'),
+	first_name: yup.string().trim().required('Field is required').max(32, 'First name must be less than 32 characters'),
+	last_name: yup.string().trim().required('Field is required').max(32, 'Last name must be less than 32 characters'),
+	email: yup.string().trim().email('Invalid email address').required('Email is required'),
+});

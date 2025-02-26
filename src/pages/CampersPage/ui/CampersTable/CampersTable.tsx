@@ -148,7 +148,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
-				cell: (info) => dateNormalize(info.getValue() as string),
+				cell: (info) => info.getValue() ? dateNormalize(info.getValue() as string) : '',
 			},
 		],
 		[handleOpenDetails, decodedIDToken?.email]
@@ -163,6 +163,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				portalTargetRef={portalTargetRef}
 				tableScrollRef={tableScrollRef}
 				isInviteButton
+				isCreateButton
 			/>
 			<CamperDetailsModal
 				camperEmail={camperEmail}

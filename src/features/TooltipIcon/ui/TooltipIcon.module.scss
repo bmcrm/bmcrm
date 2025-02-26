@@ -1,0 +1,23 @@
+.wrapper {
+	position: relative;
+	width: max-content;
+	max-width: 100%;
+
+	&:hover {
+		.tooltip {
+			display: block;
+		}
+	}
+}
+
+.tooltip {
+	display: none;
+	z-index: 1;
+	right: -10px;
+	bottom: calc(100% + 3px);
+	width: max-content;
+	padding: 2px 10px;
+	border-radius: 10px;
+	background-color: var(--color-orange-light);
+	font: var(--font-xs);
+}
