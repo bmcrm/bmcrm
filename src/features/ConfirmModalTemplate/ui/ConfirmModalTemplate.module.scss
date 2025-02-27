@@ -1,0 +1,39 @@
+.modal {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	> * {
+		+ h3 {
+			margin-top: 20px;
+		}
+	}
+
+	h3 {
+		font: var(--font-l);
+		text-align: center;
+
+		+ button {
+			margin-top: 20px;
+		}
+	}
+
+	button {
+		+ button {
+			margin-top: 5px;
+		}
+	}
+
+	&__close {
+		margin-left: auto;
+		margin-right: auto;
+		color: var(--color-neutral);
+
+		@media (hover: hover) {
+			&:hover {
+        color: var(--color-black);
+      }
+		}
+	}
+}

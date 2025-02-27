@@ -40,7 +40,7 @@
 			}
 		}
 
-		+ button {
+		+ .form__buttons {
 			margin-top: 40px;
 
 			@media (width < breakpoints.$md) {
@@ -66,5 +66,13 @@
 		@media (width < breakpoints.$lg) {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	&__buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 }

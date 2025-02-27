@@ -7,6 +7,7 @@ export { useGetCampers } from './hooks/useGetCampers';
 export { useUpdateCamper } from './hooks/useUpdateCamper';
 export { useInviteCamper } from './hooks/useInviteCamper';
 export { useCreateCamper } from './hooks/useCreateCamper';
+export { useDeleteCamper } from './hooks/useDeleteCamper';
 
 export {
 	type ICamper,

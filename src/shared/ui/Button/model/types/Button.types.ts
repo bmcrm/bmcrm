@@ -2,6 +2,7 @@ export enum ButtonTheme {
   PRIMARY = 'btn--primary',
   OUTLINE = 'btn--outline',
   CLEAR = 'btn--clear',
+  PASSIVE = 'btn--passive',
 }
 
 export enum ButtonColor {

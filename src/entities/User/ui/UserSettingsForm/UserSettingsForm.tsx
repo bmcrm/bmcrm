@@ -2,9 +2,9 @@ import { memo, useCallback, useMemo } from 'react';
 import { Form, Formik } from 'formik';
 import { userSettingsFormInitial } from '../../lib/generateInitialValues';
 import { useGetCampers, type ICamper } from '@entities/Camper';
-import { FormInputs } from './FormInputs';
-import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
+import { FormInputs } from './FormInputs';
+import { FormButtons } from './FormButtons';
 import { userSettingsSchema } from '@shared/const/validationSchemas';
 import { userState } from '../../model/state/userState';
 import styles from './UserSettingsForm.module.scss';
@@ -46,7 +46,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
           {({ values }) => (
             <Form className={styles.form}>
               <FormInputs values={values} />
-              <Button type={'submit'} className={'m-centred'}>Save changes</Button>
+              <FormButtons camperEmail={currentCamper.email} role={currentCamper?.role} />
             </Form>
           )}
         </Formik>

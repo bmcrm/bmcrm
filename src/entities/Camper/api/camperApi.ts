@@ -35,4 +35,11 @@ export const camperApi = {
 
 		return response.data;
 	},
+	deleteCamper: async (email: string) => {
+		const encodedEmail = encodeURIComponent(email);
+		const endpoint = `${CAMPER_ENDPOINT}/${encodedEmail}`;
+		const headers = createAuthHeaders();
+
+		await axios.delete(endpoint, { headers });
+	},
 };
