@@ -4,6 +4,12 @@
 	align-items: center;
 	justify-content: center;
 
+	> * {
+		+ h3 {
+			margin-top: 20px;
+		}
+	}
+
 	h3 {
 		font: var(--font-l);
 		text-align: center;
