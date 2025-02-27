@@ -6,6 +6,7 @@ import { classNames } from '@shared/lib/classNames';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { filterTags, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonSize } from '@shared/ui/Button';
+import { DeleteCamperButton } from '@features/DeleteCamperButton';
 import { CamperTag, CamperTagTheme } from '@features/CamperTag';
 import { SocialIcon } from '@features/SocialIcon';
 import { CamperDetailsModal, CamperDetailsModalTheme } from '@widgets/CamperDetailsModal';
@@ -24,7 +25,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 	const { tokens: { decodedIDToken } } = userState();
 	const portalTargetRef = useRef<HTMLDivElement>(null);
 	const tableScrollRef = useRef<HTMLDivElement>(null);
-	const canEdit = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
+	const canControl = decodedIDToken?.role === CamperRole.TCO || decodedIDToken?.role === CamperRole.COORG;
 
 	const handleOpenDetails = useCallback(
 		({ email, detailsTheme }: { email: string, detailsTheme: CamperDetailsModalTheme }) => {
@@ -45,7 +46,18 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 					const firstName = row.first_name || '';
 					const lastName = row.last_name || '';
 					const email = row.email || '';
+					const role = row.role || '';
 					const currentUser = decodedIDToken?.email === email;
+					const isTCO = role === CamperRole.TCO;
+					const isCOORG = role === CamperRole.COORG;
+					const isCurrentUserTCO = decodedIDToken?.role === CamperRole.TCO;
+					const isCurrentUserCOORG = decodedIDToken?.role === CamperRole.COORG;
+
+					const canDelete = isCurrentUserTCO
+						? !currentUser
+						: isCurrentUserCOORG
+							? !isTCO && (currentUser || !isCOORG)
+							: currentUser;
 
 					return (
 						<div className={classNames(styles.table__cell, {}, [styles.name])}>
@@ -55,14 +67,16 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 							>
 								{firstName} {lastName}
 							</p>
-							{(canEdit || currentUser) && (
-								<Button
-									size={ButtonSize.S}
-									onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.EDIT })}
-									style={{ marginLeft: 'auto' }}
-								>
-									Edit
-								</Button>
+							{(canControl || currentUser) && (
+								<div className={styles.table__buttons}>
+									<Button
+										size={ButtonSize.S}
+										onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.EDIT })}
+									>
+										Edit
+									</Button>
+									{canDelete && <DeleteCamperButton camperEmail={email} camperName={`${firstName} ${lastName}`} icon />}
+								</div>
 							)}
 						</div>
 					);

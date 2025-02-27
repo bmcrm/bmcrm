@@ -32,10 +32,21 @@
   }
   &--outline {
     background-color: transparent;
+
     @media (hover: hover) {
       &:hover {
         background-color: var(--color-ruby-dark);
         box-shadow: 0 0 10px 0 #5d0b2a inset;
+      }
+    }
+  }
+  &--passive {
+    background-color: var(--color-neutral);
+    border-color: var(--color-neutral);
+
+    @media (hover: hover) {
+      &:hover {
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .5) inset;
       }
     }
   }

@@ -83,7 +83,13 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 					/>
 					<DetailsFormHistory history={values.history} />
 					<DetailsFormSocials socials={values.social_links} />
-					<DetailsFormButtons handleCancel={handleCancel} />
+					<DetailsFormButtons
+						handleCancel={handleCancel}
+						onClose={onClose}
+						role={initialValues.role}
+						camperEmail={camperEmail}
+						camperName={`${initialValues.first_name} ${initialValues.last_name}`}
+					/>
 				</Form>
 			)}
 		</Formik>

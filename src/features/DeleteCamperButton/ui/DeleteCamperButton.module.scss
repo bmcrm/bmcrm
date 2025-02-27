@@ -1,0 +1,20 @@
+.btn {
+	&.icon {
+		padding: 3px;
+	}
+
+	&.neutral {
+		@media (hover: hover) {
+			&:hover {
+        color: var(--color-black);
+			}
+		}
+	}
+	&.black {
+		@media (hover: hover) {
+			&:hover {
+        color: var(--color-black);
+			}
+		}
+	}
+}

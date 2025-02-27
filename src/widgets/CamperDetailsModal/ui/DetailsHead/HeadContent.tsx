@@ -4,7 +4,8 @@ import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TooltipIcon } from '@features/TooltipIcon';
-import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { DeleteCamperButton } from '@features/DeleteCamperButton';
 import { userState } from '@entities/User';
 import { useGetCampers, type ICamper, CamperRole } from '@entities/Camper';
 import { CamperDetailsModalTheme } from '../../model/types/CamperDetailsModal.types';
@@ -17,10 +18,11 @@ import CreatedCamperIcon from '@shared/assets/icons/admin-created_icon.svg';
 type HeadContentProps = {
 	camper: ICamper;
 	setTheme: (theme: CamperDetailsModalTheme) => void;
+	onClose?: () => void;
 };
 
 const HeadContent = memo((props: HeadContentProps) => {
-	const { setTheme, camper: {
+	const { setTheme, onClose, camper: {
 		first_name,
 		last_name,
 		playa_name,
@@ -32,6 +34,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 		visitedBM,
 		birthdayDate,
 		createdBy,
+		role,
 	}} = props;
 	const { tokens: { decodedIDToken } } = userState();
 	const { data: campers } = useGetCampers();
@@ -50,6 +53,12 @@ const HeadContent = memo((props: HeadContentProps) => {
 	const canEdit = decodedIDToken?.role === CamperRole.TCO
 		|| decodedIDToken?.role === CamperRole.COORG
 		|| decodedIDToken?.email === email;
+
+	const canDelete = decodedIDToken?.role === CamperRole.TCO
+		? decodedIDToken?.email !== email
+		: decodedIDToken?.role === CamperRole.COORG
+			? role !== CamperRole.TCO && (decodedIDToken?.email === email || role !== CamperRole.COORG)
+			: decodedIDToken?.email === email;
 
 	const capitalizedName = useMemo(
 		() => capitalizedCamperName({ first_name, last_name, playa_name, email }),
@@ -85,15 +94,29 @@ const HeadContent = memo((props: HeadContentProps) => {
 						iconStyle={{ color: `var(${statusIcons[currentStatus].color})` }}
 					/>
 					{canEdit && (
-						<Button
-							theme={ButtonTheme.CLEAR}
-							size={ButtonSize.TEXT}
-							className={styles.head__editBtn}
-							onClick={() => setTheme(CamperDetailsModalTheme.EDIT)}
-							aria-label={'Edit details button'}
-						>
-							<Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
-						</Button>
+						<>
+							<Button
+								theme={ButtonTheme.CLEAR}
+								size={ButtonSize.TEXT}
+								className={styles.head__editBtn}
+								onClick={() => setTheme(CamperDetailsModalTheme.EDIT)}
+								aria-label={'Edit details button'}
+							>
+								<Icon icon={<EditIcon />} size={IconSize.SIZE_24} />
+							</Button>
+							{canDelete && (
+								<DeleteCamperButton
+									camperEmail={email}
+									camperName={`${first_name} ${last_name}`}
+									additionalHandler={onClose}
+									buttonTheme={ButtonTheme.CLEAR}
+									buttonSize={ButtonSize.TEXT}
+									buttonColor={ButtonColor.NEUTRAL}
+									iconSize={IconSize.SIZE_24}
+									icon
+								/>
+							)}
+						</>
 					)}
 				</div>
 			</div>

@@ -1,0 +1,1 @@
+export { default as DeleteCamperButton } from './ui/DeleteCamperButton';

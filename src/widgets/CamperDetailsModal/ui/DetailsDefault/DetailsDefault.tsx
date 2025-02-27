@@ -15,17 +15,18 @@ type DetailsDefaultProps = {
 	className?: string;
 	camper: ICamper;
 	setTheme: (theme: CamperDetailsModalTheme) => void;
+	onClose?: () => void;
 };
 
 const DetailsDefault = memo((props: DetailsDefaultProps) => {
-	const { className, camper, setTheme } = props;
+	const { className, camper, setTheme, onClose } = props;
 	const { role, about_me, history, tags, social_links } = camper;
 	const isHistory = history?.some(h => h.value.length > 0);
 	const { isMobile } = useMedia();
 
 	return (
 		<div className={classNames(styles.details, {}, [className])}>
-			<DetailsHead camper={camper} setTheme={setTheme} />
+			<DetailsHead camper={camper} setTheme={setTheme} onClose={onClose} />
 			<div className={styles.details__row}>
 				<DetailsRole role={role} />
 				{isMobile && social_links && social_links.length > 0 && (

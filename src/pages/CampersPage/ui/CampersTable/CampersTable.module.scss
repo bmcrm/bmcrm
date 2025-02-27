@@ -42,4 +42,12 @@
 		justify-content: center;
 		gap: 5px;
 	}
+
+	&__buttons {
+		display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+		margin-left: auto;
+	}
 }

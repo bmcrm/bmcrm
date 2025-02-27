@@ -5,13 +5,14 @@ import { Image } from '@shared/ui/Image';
 import { InventoryBadge } from '@shared/ui/InventoryBadge';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { InventoryConfirmDeleteModal } from '@features/InventoryConfirmDeleteModal';
+import { ConfirmModalTemplate } from '@features/ConfirmModalTemplate';
 import { InventoryDetailsModal, InventoryDetailsModalTheme } from '@widgets/InventoryDetailsModal';
 import { useDeleteInventoryItem, useGetInventory, type IInventoryItem } from '@entities/Inventory';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
 import { userState } from '@entities/User';
 import { CamperRole } from '@entities/Camper';
 import styles from './InventoryCard.module.scss';
+import DeleteImg from '@shared/assets/images/inventory/confirm-delete.png';
 import DefaultImg from '@shared/assets/images/inventory/no-img.webp';
 import DeleteIcon from '@shared/assets/icons/delete.svg';
 import EditIcon from '@shared/assets/icons/edit_icon.svg';
@@ -120,11 +121,13 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 				handleDelete={confirmOpen}
 				theme={modalTheme}
 			/>
-			<InventoryConfirmDeleteModal
+			<ConfirmModalTemplate
 				isOpen={isConfirmOpen}
 				onClose={confirmClose}
-				itemTitle={title}
-				handleDelete={handleDelete}
+				title={<>Are you sure you want to delete the item "{title}"?</>}
+				imgSrc={DeleteImg}
+				btnLabel={'YES, DELETE'}
+				handler={handleDelete}
 			/>
 		</>
 	);

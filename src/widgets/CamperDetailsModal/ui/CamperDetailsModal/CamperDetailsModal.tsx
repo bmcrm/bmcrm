@@ -23,7 +23,7 @@ const CamperDetailsModal = memo((props: CamperDetailsModalProps) => {
   }, [theme, isOpen]);
 
   const detailsContent: Record<CamperDetailsModalTheme, ReactNode> = {
-    [CamperDetailsModalTheme.DEFAULT]: <DetailsDefault camper={camper} setTheme={setCurrentTheme} />,
+    [CamperDetailsModalTheme.DEFAULT]: <DetailsDefault camper={camper} setTheme={setCurrentTheme} onClose={onClose} />,
     [CamperDetailsModalTheme.EDIT]: <DetailsEdit camper={camper} setTheme={setCurrentTheme} onClose={onClose} />,
   };
 
