@@ -112,6 +112,7 @@ const HeadContent = memo((props: HeadContentProps) => {
 									buttonTheme={ButtonTheme.CLEAR}
 									buttonSize={ButtonSize.TEXT}
 									buttonColor={ButtonColor.NEUTRAL}
+									buttonAriaLabel={'Delete camper button in details modal'}
 									iconSize={IconSize.SIZE_24}
 									icon
 								/>

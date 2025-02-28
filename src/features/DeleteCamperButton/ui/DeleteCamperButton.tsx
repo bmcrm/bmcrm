@@ -20,6 +20,7 @@ type DeleteCamperButtonProps = {
 	buttonTheme?: ButtonTheme;
 	buttonColor?: ButtonColor;
 	additionalHandler?: () => void;
+	buttonAriaLabel?: string;
 };
 
 const DeleteCamperButton = memo((props: DeleteCamperButtonProps) => {
@@ -33,6 +34,7 @@ const DeleteCamperButton = memo((props: DeleteCamperButtonProps) => {
 		buttonSize = ButtonSize.S,
 		buttonTheme,
 		buttonColor,
+		buttonAriaLabel,
 		additionalHandler,
 	} = props;
 	const { mutateAsync: deleteCamper } = useDeleteCamper();
@@ -66,6 +68,7 @@ const DeleteCamperButton = memo((props: DeleteCamperButtonProps) => {
 		<>
 			<Button
 				className={classNames(styles.btn, mods, [className])}
+				aria-label={buttonAriaLabel ?? 'Delete camper button'}
 				theme={buttonTheme}
 				size={buttonSize}
 				color={buttonColor}
