@@ -146,7 +146,7 @@ export const customWaitForResponse = ({ page, endpoint }: {page: Page, endpoint:
 		(response) =>
 			response.url().includes(endpoint) &&
 			['GET', 'PATCH', 'POST', 'DELETE', 'PUT'].includes(response.request().method()) &&
-			(response.status() === 200 || response.status() === 204)
+			(response.status() === 200 || response.status() === 201 || response.status() === 204)
 	);
 
 export const generateFuzzData = () => {
@@ -219,6 +219,17 @@ export const fillCamperDetailsForm = async (page: Page) => {
 	await page.locator('button[aria-label="Add social button"]').click();
 	await page.locator('button[aria-label="Remove social button"]').nth(1).click();
 	await page.fill('input[name="social_links.0.url"]', instagram);
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillCreateCamperForm = async (page: Page) => {
+	const { firstName, lastName } = generateFuzzData();
+	const { email } = generateFakeData();
+
+	await page.fill('input[name="email"]', email);
+	await page.fill('input[name="first_name"]', firstName);
+	await page.fill('input[name="last_name"]', lastName);
 
 	await page.click('button[type="submit"]');
 };

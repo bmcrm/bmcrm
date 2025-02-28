@@ -5,6 +5,7 @@ import {
 	login,
 	fillCamperDetailsForm,
 	resetCamperDetailsForm,
+	fillCreateCamperForm,
 	customWaitForResponse,
 } from '@shared/tests/utils/utils';
 
@@ -61,5 +62,37 @@ test.describe('Check campers page and edit user', () => {
 		await page.keyboard.press('Escape');
 
 		await expect(page.locator('text=Test User')).toBeVisible();
+	});
+
+	test('Login, create and delete camper', async ({ page }) => {
+		await login(page, URLS, TEST_PARAMS);
+
+		await page.goto(URLS.CAMPERS);
+		await expect(page).toHaveURL(URLS.CAMPERS);
+
+		const createCamperButton = page.locator('button', { hasText: 'Create' });
+		await expect(createCamperButton).toBeVisible();
+		await createCamperButton.click();
+
+		const form = page.locator('form');
+		await expect(form).toBeVisible();
+
+		await fillCreateCamperForm(page);
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
+
+		await expect(page.locator('td', { hasText: 'prospect' })).toBeVisible();
+
+		const deleteCamperButton = page.locator('button[aria-label="Delete camper button"]');
+		await expect(deleteCamperButton).toBeVisible();
+		await deleteCamperButton.click();
+		const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
+		await expect(confirmDeleteButton).toBeVisible();
+		await confirmDeleteButton.click();
+
+		await customWaitForResponse({ page, endpoint: '/campers' });
+		await page.waitForTimeout(500);
+
+		await expect(page.locator('td', { hasText: 'prospect' })).toHaveCount(0);
 	});
 });
