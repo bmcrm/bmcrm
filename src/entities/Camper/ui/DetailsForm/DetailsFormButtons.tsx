@@ -27,7 +27,13 @@ const DetailsFormButtons = memo((props: DetailsFormButtonsProps) => {
 		<div className={styles.form__buttons}>
 			<Button type={'submit'}>Save</Button>
 			{canDelete && (
-				<DeleteCamperButton camperEmail={camperEmail} camperName={camperName} additionalHandler={onClose} icon />
+				<DeleteCamperButton
+					camperEmail={camperEmail}
+					camperName={camperName}
+					additionalHandler={onClose}
+					buttonAriaLabel={'Delete camper button in edit modal'}
+					icon
+				/>
 			)}
 			<Button
 				className={styles.form__btnCancel}
