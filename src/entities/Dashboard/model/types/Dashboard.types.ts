@@ -1,0 +1,1 @@
+export type IBirthdays = Record<string, string[]>;
