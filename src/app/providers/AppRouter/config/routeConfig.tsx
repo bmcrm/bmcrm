@@ -13,6 +13,7 @@ import { CampOverviewPage } from '@pages/CampOverviewPage';
 import { NotFound } from '@widgets/CampNotFound';
 import { SettingsPage, SettingsAccount, SettingsCamp } from '@pages/SettingsPage';
 import { CampersPage } from '@pages/CampersPage';
+import { HomePage } from '@pages/HomePage';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -20,6 +21,7 @@ export type AppRouterProps = {
 } & RouteProps;
 
 export enum AppRoutes {
+  HOME = 'home',
   DASHBOARD = 'dashboard',
   FINANCES = 'finances',
   FUNNEL = 'funnel',
@@ -37,7 +39,8 @@ export enum AppRoutes {
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
-  [AppRoutes.DASHBOARD]: '/',
+  [AppRoutes.HOME]: '/',
+  [AppRoutes.DASHBOARD]: '/dashboard',
   [AppRoutes.FUNNEL]: '/funnel',
   [AppRoutes.FINANCES]: '/finances',
   [AppRoutes.INVENTORY]: '/inventory',
@@ -54,6 +57,11 @@ export const RoutePath: Record<AppRoutes, string> = {
 };
 
 export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
+  [AppRoutes.HOME]: {
+    path: RoutePath.home,
+    element: <HomePage />,
+    authOnly: true,
+  },
   [AppRoutes.DASHBOARD]: {
     path: RoutePath.dashboard,
     element: <DashboardPage />,

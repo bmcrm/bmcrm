@@ -1,0 +1,43 @@
+@use '@app/styles/breakpoints';
+
+.calendar {
+	width: 400px;
+	border-radius: 5px;
+	border: 1px solid var(--color-neutral);
+	font-family: var(--font-family-main), sans-serif;
+
+	@media (width < breakpoints.$md) {
+		margin-left: auto;
+		margin-right: auto;
+		overflow: hidden;
+	}
+
+	&__icon {
+		position: absolute;
+		top: 2px;
+		right: 2px;
+	}
+
+	&__tile {
+		position: relative;
+		overflow: visible !important;
+
+		&:hover {
+			.tooltip {
+        display: block;
+      }
+		}
+	}
+}
+
+.tooltip {
+	display: none;
+	z-index: 1;
+	bottom: calc(100% - 3px);
+	width: max-content;
+	max-width: 300px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: var(--color-neutral);
+	color: var(--color-black);
+}
