@@ -20,8 +20,8 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 	const { mutate: deleteShift } = useDeleteShift();
 
 	const handleDelete = useCallback(() => {
-    deleteShift(shift_id);
-  }, [deleteShift, shift_id]);
+    deleteShift({ shiftID: shift_id, title });
+  }, [deleteShift, shift_id, title]);
 
 	return (
 		<li className={classNames(styles.item, {}, [className])}>

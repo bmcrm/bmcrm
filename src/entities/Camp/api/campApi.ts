@@ -1,11 +1,19 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { CAMP_ENDPOINT } from '@shared/const/endpoints';
-import type { ICamp } from '../model/types/Camp.types';
+import type { ICamp, ICampEvent } from '../model/types/Camp.types';
 
 export const campApi = {
 	getCamp: async (campID: string): Promise<ICamp> => {
 		const endpoint = `${CAMP_ENDPOINT}/${campID}`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
+	getCampEvents: async (): Promise<ICampEvent[]> => {
+		const endpoint = `${CAMP_ENDPOINT}/events`;
 		const headers = createAuthHeaders();
 
 		const response = await axios.get(endpoint, { headers });

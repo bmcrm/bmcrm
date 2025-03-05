@@ -4,6 +4,7 @@ export { DetailsFormHistory } from './ui/DetailsForm/DetailsFormHistory';
 export { DetailsFormSocials } from './ui/DetailsForm/DetailsFormSocials';
 
 export { useGetCampers } from './hooks/useGetCampers';
+export { useGetBirthdays } from './hooks/useGetBirthdays';
 export { useUpdateCamper } from './hooks/useUpdateCamper';
 export { useInviteCamper } from './hooks/useInviteCamper';
 export { useCreateCamper } from './hooks/useCreateCamper';
@@ -17,5 +18,6 @@ export {
 	type CamperHistory,
 	type CamperTags,
 	type ICampersByRole,
+	type CampersBirthdays,
 	CamperRole,
 } from './model/types/Camper.types';

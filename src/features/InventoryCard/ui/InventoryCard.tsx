@@ -46,13 +46,14 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 
 			deleteItem({
 				itemID: id,
+				title,
 				category,
 				...(isLastItem ? { lastItem: isLastItem } : {}),
 			});
 		} catch {
 			return;
 		}
-  }, [category, close, confirmClose, deleteItem, id, inventory]);
+  }, [category, close, confirmClose, deleteItem, id, inventory, title]);
 
 	const handleOpenModal = useCallback(
 		(theme: InventoryDetailsModalTheme) => {

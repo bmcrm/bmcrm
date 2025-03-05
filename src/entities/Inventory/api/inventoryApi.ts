@@ -48,8 +48,8 @@ export const inventoryApi = {
 
     return response.data;
 	},
-	deleteInventoryItem: async (itemID: string) => {
-		const endpoint = `${INVENTORY_ENDPOINT}/${itemID}`;
+	deleteInventoryItem: async ({ itemID, title }: { itemID: string; title: string }) => {
+		const endpoint = `${INVENTORY_ENDPOINT}/${itemID}?title=${encodeURIComponent(title)}`;
 		const headers = createAuthHeaders();
 
 		await axios.delete(endpoint, { headers });

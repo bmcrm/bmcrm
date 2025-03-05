@@ -1,11 +1,19 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
-import type { ICamper, IInviteCamperData } from '../model/types/Camper.types';
+import type { CampersBirthdays, ICamper, IInviteCamperData } from '../model/types/Camper.types';
 
 export const camperApi = {
-	getCampers: async (camperEmail?: string | null): Promise<ICamper[]> => {
+	getCampers: async (camperEmail?: string | null): Promise<CampersBirthdays> => {
 		const endpoint = `${CAMPER_ENDPOINT}${camperEmail ? `/${camperEmail}` : ''}`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
+	getBirthdays: async (): Promise<ICamper[]> => {
+		const endpoint = `${CAMPER_ENDPOINT}/birthdays`;
 		const headers = createAuthHeaders();
 
 		const response = await axios.get(endpoint, { headers });

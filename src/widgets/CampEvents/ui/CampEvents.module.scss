@@ -1,0 +1,29 @@
+@use '@app/styles/breakpoints';
+
+.events {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	width: 100%;
+	padding: 20px;
+	border-radius: 15px;
+	border: 1px solid var(--color-orange-dark);
+	background-color: var(--color-white);
+
+	@media (width < breakpoints.$md) {
+		padding: 10px;
+	}
+
+	&__title {
+		font: var(--font-m);
+		font-weight: 500;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		max-height: 300px;
+		overflow-y: auto;
+	}
+}

@@ -7,6 +7,7 @@ import { useLogout } from '@entities/User';
 import { RoutePath } from '@app/providers/AppRouter';
 import styles from './UserAvatarTooltip.module.scss';
 import SettingsIcon from '@shared/assets/icons/settings_icon.svg';
+import DashboardIcon from '@shared/assets/icons/camp_monocolor.svg';
 import LogoutIcon from '@shared/assets/icons/logout_icon.svg';
 
 type UserAvatarTooltipProps = {
@@ -33,6 +34,16 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
           >
             <Icon icon={<SettingsIcon />} size={IconSize.SIZE_24} />
             <span className={styles.text}>Setting</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            to={RoutePath.dashboard}
+            className={classNames(styles.tooltip__link, {}, [])}
+            onClick={onClick}
+          >
+            <Icon icon={<DashboardIcon />} size={IconSize.SIZE_24} />
+            <span className={styles.text}>Dashboard</span>
           </Link>
         </li>
         <li>

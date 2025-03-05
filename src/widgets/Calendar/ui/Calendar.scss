@@ -1,5 +1,4 @@
 .react-calendar {
-
 	&__tile {
 
 		&--now {
@@ -20,6 +19,15 @@
 				&:hover, &:focus {
 					background: var(--color-ruby-dark);
 				}
+			}
+		}
+
+		&--hasActive {
+			background: var(--color-ruby-dark);
+			color: var(--color-white);
+
+			&:enabled:hover, &:enabled:focus {
+				background: var(--color-ruby-light);
 			}
 		}
 	}

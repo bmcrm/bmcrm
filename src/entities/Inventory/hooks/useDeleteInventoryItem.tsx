@@ -10,6 +10,7 @@ import type { IInventoryItem } from '../model/types/Inventory.types';
 
 interface MutationFnProps {
 	itemID: string;
+	title: string;
 	category: string;
 	lastItem?: boolean;
 }
@@ -21,7 +22,7 @@ const useDeleteInventoryItem = () => {
 	const { deletionCount, incrementDeletionCount, decrementDeletionCount } = inventoryState();
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
-		mutationFn: ({ itemID }: MutationFnProps) => inventoryApi.deleteInventoryItem(itemID),
+		mutationFn: ({ itemID, title }: MutationFnProps) => inventoryApi.deleteInventoryItem({ itemID, title }),
 		onMutate: async ({ itemID, lastItem, category }) => {
 			incrementDeletionCount();
 
