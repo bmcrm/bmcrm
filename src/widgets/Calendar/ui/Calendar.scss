@@ -1,4 +1,5 @@
 .react-calendar {
+
 	&__tile {
 
 		&--now {
@@ -29,6 +30,22 @@
 			&:enabled:hover, &:enabled:focus {
 				background: var(--color-ruby-light);
 			}
+		}
+	}
+
+	&__month-view {
+		&__days {
+			&__day {
+				&--weekend {
+					color: var(--color-orange-dark);
+				}
+			}
+		}
+	}
+
+	&__navigation {
+		button {
+			border-radius: 15px;
 		}
 	}
 }

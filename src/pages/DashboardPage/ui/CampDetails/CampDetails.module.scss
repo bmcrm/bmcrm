@@ -1,0 +1,65 @@
+@use '@app/styles/breakpoints';
+
+.details {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	flex-grow: 1;
+
+	&__heading {
+		h1 {
+			font: var(--font-xxl);
+			font-weight: 400;
+		}
+		p {
+			color: var(--color-neutral);
+		}
+	}
+
+	&__address {
+		display: flex;
+		gap: 30px;
+
+		&-item {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+		}
+
+		&-link {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+
+			@media (hover: hover) {
+				&:hover {
+          text-decoration: underline;
+        }
+			}
+		}
+	}
+
+	&__campers {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 10px;
+
+		@media (width < breakpoints.$lg) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		&-item {
+			padding: 10px 20px;
+			border-radius: 10px;
+			background-color: var(--color-white);
+
+			.caption {
+				text-transform: capitalize;
+			}
+			.counter {
+				font: var(--font-xl);
+				font-weight: 500;
+			}
+		}
+	}
+}

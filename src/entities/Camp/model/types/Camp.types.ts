@@ -10,6 +10,11 @@ export interface ICampEvent {
   timestamp: string;
 }
 
+export interface ICalendarEvent {
+  title: string;
+  date: Date | null;
+}
+
 export interface ICamp {
   camp_id: string;
   tco?: string;

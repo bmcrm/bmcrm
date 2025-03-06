@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { CAMP_ENDPOINT } from '@shared/const/endpoints';
-import type { ICamp, ICampEvent } from '../model/types/Camp.types';
+import { ICalendarEvent, ICamp, ICampEvent } from '../model/types/Camp.types';
 
 export const campApi = {
 	getCamp: async (campID: string): Promise<ICamp> => {
@@ -9,6 +9,14 @@ export const campApi = {
 		const headers = createAuthHeaders();
 
 		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
+	createCalendarEvent: async (event: ICalendarEvent) => {
+		const endpoint = `${CAMP_ENDPOINT}/create-event`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.post(endpoint, event, { headers });
 
 		return response.data;
 	},

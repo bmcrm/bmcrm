@@ -31,10 +31,9 @@
 		position: relative;
 		width: 100%;
 
-		&:before {
+		&:after {
 			content: '';
 			position: absolute;
-			z-index: 1;
 			top: 50%;
 			right: 10px;
 			translate: 0 -50%;

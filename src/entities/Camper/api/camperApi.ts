@@ -4,7 +4,7 @@ import { CAMPER_ENDPOINT } from '@shared/const/endpoints';
 import type { CampersBirthdays, ICamper, IInviteCamperData } from '../model/types/Camper.types';
 
 export const camperApi = {
-	getCampers: async (camperEmail?: string | null): Promise<CampersBirthdays> => {
+	getCampers: async (camperEmail?: string | null): Promise<ICamper[]> => {
 		const endpoint = `${CAMPER_ENDPOINT}${camperEmail ? `/${camperEmail}` : ''}`;
 		const headers = createAuthHeaders();
 
@@ -12,7 +12,7 @@ export const camperApi = {
 
 		return response.data;
 	},
-	getBirthdays: async (): Promise<ICamper[]> => {
+	getBirthdays: async (): Promise<CampersBirthdays> => {
 		const endpoint = `${CAMPER_ENDPOINT}/birthdays`;
 		const headers = createAuthHeaders();
 

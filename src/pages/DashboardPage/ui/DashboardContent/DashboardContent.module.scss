@@ -1,3 +1,5 @@
+@use '@app/styles/breakpoints';
+
 .content {
 	display: flex;
 	flex-direction: column;
@@ -5,6 +7,10 @@
 
 	&__row {
 		display: flex;
-		gap: 20px;
+		gap: 40px 20px;
+
+		@media (width < breakpoints.$md) {
+			flex-direction: column;
+		}
 	}
 }

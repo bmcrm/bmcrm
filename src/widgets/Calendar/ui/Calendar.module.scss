@@ -2,18 +2,16 @@
 
 .calendar {
 	position: relative;
-	width: 400px;
+	width: 100%;
 
 	@media (width < breakpoints.$md) {
-		margin-left: auto;
-		margin-right: auto;
 		overflow: hidden;
 	}
 
 	&__item {
 		width: 100%;
 		border-radius: 15px;
-		border: 1px solid var(--color-neutral);
+		border: 1px solid var(--color-orange-dark);
 		font-family: var(--font-family-main), sans-serif;
 	}
 
@@ -26,6 +24,7 @@
 	&__tile {
 		position: relative;
 		overflow: visible !important;
+		border-radius: 15px;
 
 		&:hover {
 			.tooltip {
@@ -40,12 +39,15 @@
 .tooltip {
 	display: none;
 	z-index: 1;
+	right: 5px;
 	bottom: calc(100% - 3px);
 	width: max-content;
 	max-width: 300px;
-	padding: 5px;
-	border-radius: 5px;
-	background-color: var(--color-neutral);
+	padding: 5px 10px;
+	border-radius: 10px;
+	border: 1px solid #DDD;
+	background-color: var(--color-secondary-bg);
+	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .15);
 	color: var(--color-black);
 
 	@media (width < breakpoints.$md) {

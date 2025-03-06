@@ -106,7 +106,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 							<Tooltip
 								ref={tooltipRef}
 								className={classNames(styles.tooltip, { [styles.show]: showTooltip }, [])}
-								properties={tooltipPosition || {}}
+								properties={isMobile && tooltipPosition ? tooltipPosition : {}}
 							>
 								<p>Birthday: {birthdayPeople.join(', ')}</p>
 							</Tooltip>
