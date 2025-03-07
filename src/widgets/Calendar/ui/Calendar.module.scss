@@ -4,10 +4,6 @@
 	position: relative;
 	width: 100%;
 
-	@media (width < breakpoints.$md) {
-		overflow: hidden;
-	}
-
 	&__item {
 		width: 100%;
 		border-radius: 15px;
@@ -15,10 +11,10 @@
 		font-family: var(--font-family-main), sans-serif;
 	}
 
-	&__icon {
+	&__icons {
 		position: absolute;
-		top: 2px;
-		right: 2px;
+		top: 1px;
+		right: 4px;
 	}
 
 	&__tile {
@@ -48,16 +44,75 @@
 	border: 1px solid #DDD;
 	background-color: var(--color-secondary-bg);
 	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .15);
+	font: var(--font-s);
+	text-align: left;
 	color: var(--color-black);
 
 	@media (width < breakpoints.$md) {
-		max-width: 150px;
-		font: var(--font-s);
+		max-width: 180px;
 	}
 
 	&.show {
 		@media (width < breakpoints.$md) {
 			display: block;
+		}
+	}
+
+	.caption {
+		font-weight: 500;
+	}
+
+	&__birthdays {
+		+ .tooltip__events {
+			margin-top: 5px;
+		}
+	}
+
+	&__events {
+
+		&-list {
+			padding-left: 20px;
+
+			@media (width < breakpoints.$md) {
+				padding-left: 10px;
+			}
+		}
+
+		&-item {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+			padding-left: 10px;
+			word-break: break-word;
+
+			&:before {
+				content: '';
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background-color: var(--color-ruby-dark);
+        border-radius: 50%;
+			}
+		}
+
+		&-control {
+			display: flex;
+			align-items: center;
+			gap: 3px;
+		}
+
+		&-btn {
+			color: var(--color-black);
+
+			@media (hover: hover) {
+				&:hover {
+					color: var(--color-ruby-dark);
+				}
+			}
 		}
 	}
 }

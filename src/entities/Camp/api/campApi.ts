@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { CAMP_ENDPOINT } from '@shared/const/endpoints';
-import { ICalendarEvent, ICamp, ICampEvent } from '../model/types/Camp.types';
+import type { ICalendarEvent, ICamp, ICampEvent, ICreateCalendarEvent } from '../model/types/Camp.types';
 
 export const campApi = {
 	getCamp: async (campID: string): Promise<ICamp> => {
@@ -12,19 +12,27 @@ export const campApi = {
 
 		return response.data;
 	},
-	createCalendarEvent: async (event: ICalendarEvent) => {
-		const endpoint = `${CAMP_ENDPOINT}/create-event`;
-		const headers = createAuthHeaders();
-
-		const response = await axios.post(endpoint, event, { headers });
-
-		return response.data;
-	},
 	getCampEvents: async (): Promise<ICampEvent[]> => {
 		const endpoint = `${CAMP_ENDPOINT}/events`;
 		const headers = createAuthHeaders();
 
 		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
+	getCalendarEvents: async (): Promise<ICalendarEvent[]> => {
+		const endpoint = `${CAMP_ENDPOINT}/events/calendar`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.get(endpoint, { headers });
+
+		return response.data;
+	},
+	createCalendarEvent: async (event: ICreateCalendarEvent) => {
+		const endpoint = `${CAMP_ENDPOINT}/events/calendar`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.post(endpoint, event, { headers });
 
 		return response.data;
 	},

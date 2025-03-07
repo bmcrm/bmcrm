@@ -4,14 +4,14 @@ import { errorHandler } from '@shared/lib/errorHandler';
 import { campKeys } from '../model/const/campKeys';
 import { campApi } from '../api/campApi';
 
-type UseGetCampEventsProps = {
+type UseGetCalendarEventsProps = {
 	enabled?: boolean;
 }
 
-const useGetCampEvents = ({ enabled = true }: UseGetCampEventsProps = {}) => {
+const useGetCalendarEvents = ({ enabled = true }: UseGetCalendarEventsProps = {}) => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery({
-		queryKey: campKeys.campEvents,
-		queryFn: campApi.getCampEvents,
+		queryKey: campKeys.calendarEvents,
+		queryFn: campApi.getCalendarEvents,
 		staleTime: 0,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,
@@ -27,4 +27,4 @@ const useGetCampEvents = ({ enabled = true }: UseGetCampEventsProps = {}) => {
 	return { data, isLoading, isSuccess, isError };
 };
 
-export { useGetCampEvents };
+export { useGetCalendarEvents };

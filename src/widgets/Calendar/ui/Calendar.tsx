@@ -2,21 +2,27 @@ import {
 	memo,
 	useCallback,
 	useEffect,
-	useState,
 	useRef,
-	type MouseEvent as ReactMouseEvent,
+	useState,
 	type CSSProperties,
+	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import Calendar from 'react-calendar';
-import { parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Tooltip } from '@shared/ui/Tooltip';
 import { FormLoader } from '@features/FormLoader';
+import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { Icon, IconSize } from '@shared/ui/Icon';
 import { useGetBirthdays } from '@entities/Camper';
+import { useGetCalendarEvents } from '@entities/Camp';
+import { useCalendarEvents } from '../hooks/useCalendarEvents';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.scss';
 import styles from './Calendar.module.scss';
+import EditIcon from '@shared/assets/icons/edit_icon.svg';
+import TrashIcon from '@shared/assets/icons/delete.svg';
 
 type CalendarProps = {
 	className?: string;
@@ -25,9 +31,13 @@ type CalendarProps = {
 const CustomCalendar = memo(({ className }: CalendarProps) => {
 	const { isMobile } = useMedia();
 	const { data: birthdays, isLoading: isBirthdaysLoading } = useGetBirthdays();
+	const { data: customEvents, isLoading: isCustomEventsLoading } = useGetCalendarEvents();
 	const [activeDay, setActiveDay] = useState<string | null>(null);
 	const [tooltipPosition, setTooltipPosition] = useState<CSSProperties | null>(null);
 	const tooltipRef = useRef<HTMLDivElement>(null);
+	const isLoading = isBirthdaysLoading || isCustomEventsLoading;
+
+	const calendarEvents = useCalendarEvents(birthdays, customEvents);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +59,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 		(date: Date, event: ReactMouseEvent<HTMLButtonElement>) => {
 			if (!birthdays || !isMobile) return;
 
-			const formattedDayMonth = `${date.getMonth()}-${date.getDate()}`;
+			const formattedDayMonth = format(date, "MM-dd");
 			const isClickOnTooltip = (event.target as Element).closest(`.${styles.tooltip}`) !== null;
 			const clientX = event.clientX;
 			const screenWidth = window.innerWidth;
@@ -76,39 +86,70 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 
 	return (
 		<div className={classNames(styles.calendar, {}, [className])}>
-			{isBirthdaysLoading && <FormLoader />}
+			{isLoading && <FormLoader />}
 			<Calendar
 				className={styles.calendar__item}
 				tileClassName={styles.calendar__tile}
 				onClickDay={handleClickDay}
+
 				tileContent={({ date }) => {
-					if (!birthdays) return null;
+					const formattedDate = format(date, 'MM-dd');
+					const fullDate = format(date, 'yyyy-MM-dd');
 
-					const formattedDayMonth = `${date.getMonth()}-${date.getDate()}`;
-					const showTooltip = !!tooltipPosition && activeDay === formattedDayMonth;
+					const showTooltip = !!tooltipPosition && activeDay === formattedDate;
 
-					const birthdayPeople = Object.entries(birthdays)
-						.filter(([isoDate]) => {
-							const birthday = parseISO(isoDate);
+					const eventsForDate = calendarEvents
+						.filter((e) => e.date === formattedDate || e.date === fullDate);
 
-							return (
-								birthday.getMonth() === date.getMonth() &&
-								birthday.getDate() === date.getDate()
-							);
-						})
-						.flatMap(([, names]) => names);
+					if (eventsForDate.length === 0) return null;
 
-					if (birthdayPeople.length === 0) return null;
+					const birthdays = eventsForDate.flatMap((e) => e.birthdays ?? []);
+					const customEvents = eventsForDate.flatMap((e) => e.customEvents ?? []);
 
 					return (
 						<>
-							<span className={styles.calendar__icon}>🎂</span>
+							<ul className={styles.calendar__icons}>
+								{birthdays.length > 0 && <li>🎂</li>}
+								{customEvents.length > 0 && <li>📅</li>}
+							</ul>
 							<Tooltip
 								ref={tooltipRef}
 								className={classNames(styles.tooltip, { [styles.show]: showTooltip }, [])}
 								properties={isMobile && tooltipPosition ? tooltipPosition : {}}
 							>
-								<p>Birthday: {birthdayPeople.join(', ')}</p>
+								{birthdays.length > 0 && (
+									<p className={styles.tooltip__birthdays}>
+										🎂 <span className={styles.caption}>Birthdays:</span> {birthdays.join(', ')}
+									</p>
+								)}
+								{customEvents.length > 0 && (
+									<div className={styles.tooltip__events}>
+										<p className={styles.caption}>📅 Events:</p>
+										<ul className={styles.tooltip__eventsList}>
+											{customEvents.map((event) => (
+												<li key={event.timestamp} className={styles.tooltip__eventsItem}>
+													{event.title}
+													<div className={styles.tooltip__eventsControl}>
+														<Button
+															theme={ButtonTheme.CLEAR}
+															size={ButtonSize.TEXT}
+															className={styles.tooltip__eventsBtn}
+														>
+															<Icon icon={<EditIcon />} size={IconSize.SIZE_16} />
+														</Button>
+														<Button
+															theme={ButtonTheme.CLEAR}
+															size={ButtonSize.TEXT}
+															className={styles.tooltip__eventsBtn}
+														>
+															<Icon icon={<TrashIcon />} size={IconSize.SIZE_16} />
+														</Button>
+													</div>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
 							</Tooltip>
 						</>
 					);

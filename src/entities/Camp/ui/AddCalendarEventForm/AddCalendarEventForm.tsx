@@ -8,7 +8,7 @@ import { FormLoader } from '@features/FormLoader';
 import { useCreateCalendarEvent } from '../../hooks/useCreateCalendarEvent';
 import { createCalendarEventSchema } from '@shared/const/validationSchemas';
 import { initialValues } from '../../model/data/AddCalendarEventForm.data';
-import type { ICalendarEvent } from '../../model/types/Camp.types';
+import { ICreateCalendarEvent } from '../../model/types/Camp.types';
 import styles from './AddCalendarEventForm.module.scss';
 
 type AddCalendarEventFormProps = {
@@ -20,7 +20,7 @@ const AddCalendarEventForm = memo(({ className, onClose }: AddCalendarEventFormP
 	const { mutateAsync: createEvent, isPending } = useCreateCalendarEvent();
 
 	const handleSubmit = useCallback(
-		async (values: ICalendarEvent) => {
+		async (values: ICreateCalendarEvent) => {
 			await createEvent(values);
 			onClose();
 		},
@@ -35,7 +35,7 @@ const AddCalendarEventForm = memo(({ className, onClose }: AddCalendarEventFormP
 						<FormikInput name={'title'} label={'Event Name'} placeholder={'Daily Campsite MOOP'}/>
 						<Datepicker
 							ariaDescribedBy={'Event date'}
-							errorName={'date'}
+							errorName={'timestamp'}
 							label={'Event Date'}
 							date={values.date}
 							onChange={(date) => setFieldValue('date', date)}

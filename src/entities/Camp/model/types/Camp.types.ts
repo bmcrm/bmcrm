@@ -10,9 +10,16 @@ export interface ICampEvent {
   timestamp: string;
 }
 
-export interface ICalendarEvent {
+export interface ICreateCalendarEvent {
   title: string;
   date: Date | null;
+}
+
+export interface ICalendarEvent {
+  camp_id: string;
+  date: string;
+  event: string;
+  timestamp: string;
 }
 
 export interface ICamp {
