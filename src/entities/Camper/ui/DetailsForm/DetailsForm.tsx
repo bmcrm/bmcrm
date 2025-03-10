@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { normalizeTags } from '../../lib/normalizeTags';
@@ -27,32 +27,41 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 	const { className, initialValues, handleCancel, onClose, camperEmail } = props;
 	const { mutate: updateCamper } = useUpdateCamper();
 	const { decrementModalCount } = appState();
+	const [isDirty, setIsDirty] = useState(false);
 
-	const handleSubmit = useCallback((values: Partial<IFormikCamper>) => {
-		const { social_links, role, tags, ...rest } = values;
+	const handleSubmit = useCallback(
+		(values: Partial<IFormikCamper>) => {
+			if (!isDirty) {
+				handleCancel();
+				return;
+			}
 
-		const updatedSocial = social_links
-			?.filter((social) => social.url)
-			.map(({ url }) => ({ url, name: generateSocialName(url) }));
+			const { social_links, role, tags, ...rest } = values;
 
-		const normalizedTags = tags ? normalizeTags(tags) : null;
+			const updatedSocial = social_links
+				?.filter((social) => social.url)
+				.map(({ url }) => ({ url, name: generateSocialName(url) }));
 
-		const payload: Partial<ICamper> = {
-			email: camperEmail,
-			...rest,
-			...(initialValues.role === CamperRole.TCO ? {} : { role }),
-			...(updatedSocial ? { social_links: updatedSocial } : {}),
-			...(normalizedTags ? { tags: normalizedTags } : {}),
-		};
+			const normalizedTags = tags ? normalizeTags(tags) : null;
 
-		if (initialValues.role !== values.role) {
-			decrementModalCount()
-			onClose?.();
-		}
+			const payload: Partial<ICamper> = {
+				email: camperEmail,
+				...rest,
+				...(initialValues.role === CamperRole.TCO ? {} : { role }),
+				...(updatedSocial ? { social_links: updatedSocial } : {}),
+				...(normalizedTags ? { tags: normalizedTags } : {}),
+			};
 
-		updateCamper(payload);
-		handleCancel();
-	}, [camperEmail, handleCancel, initialValues.role, updateCamper, onClose, decrementModalCount]);
+			if (initialValues.role !== values.role) {
+				decrementModalCount()
+				onClose?.();
+			}
+
+			updateCamper(payload);
+			handleCancel();
+		},
+		[camperEmail, onClose, decrementModalCount, isDirty, handleCancel, initialValues.role, updateCamper]
+	);
 
 	return (
 		<Formik
@@ -61,37 +70,45 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 			onSubmit={handleSubmit}
 			enableReinitialize
 		>
-			{({ values }) => (
-				<Form
-					className={classNames(styles.form, {}, [className])}
-					onKeyDown={(e) => {
-						if (e.key === 'Enter') {
-							e.preventDefault();
-						}
-					}}
-				>
-					<DetailsFormBasics
-						role={initialValues.role || CamperRole.CAMPER}
-						visitedBM={values.visitedBM}
-						birthdayDate={values.birthdayDate}
-					/>
-					<DetailsFormTags values={values} />
-					<FormikTextarea
-						name={'about_me'}
-						placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
-						label={'Summary'}
-					/>
-					<DetailsFormHistory history={values.history} />
-					<DetailsFormSocials socials={values.social_links} />
-					<DetailsFormButtons
-						handleCancel={handleCancel}
-						onClose={onClose}
-						role={initialValues.role}
-						camperEmail={camperEmail}
-						camperName={`${initialValues.first_name} ${initialValues.last_name}`}
-					/>
-				</Form>
-			)}
+			{({ values, dirty }) => {
+
+				useEffect(() => {
+					setIsDirty(dirty);
+				}, [dirty])
+
+				return (
+					<Form
+						className={classNames(styles.form, {}, [className])}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+							}
+						}}
+					>
+						<DetailsFormBasics
+							role={initialValues.role || CamperRole.CAMPER}
+							visitedBM={values.visitedBM}
+							birthdayDate={values.birthdayDate}
+						/>
+						<DetailsFormTags values={values}/>
+						<FormikTextarea
+							name={'about_me'}
+							placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
+							label={'Summary'}
+						/>
+						<DetailsFormHistory history={values.history}/>
+						<DetailsFormSocials socials={values.social_links}/>
+						<DetailsFormButtons
+							handleCancel={handleCancel}
+							onClose={onClose}
+							role={initialValues.role}
+							camperEmail={camperEmail}
+							camperName={`${initialValues.first_name} ${initialValues.last_name}`}
+							dirty={dirty}
+						/>
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 });

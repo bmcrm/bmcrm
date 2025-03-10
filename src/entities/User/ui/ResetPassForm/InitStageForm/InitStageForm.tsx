@@ -14,13 +14,15 @@ type InitStageFormProps = {
 
 const InitStageForm = memo(({ onSubmit }: InitStageFormProps) => (
   <Formik validationSchema={initResetPassSchema} onSubmit={onSubmit} initialValues={{ email: '' }}>
-    <Form className={styles.form}>
-      <FormikInput name={'email'} type={'email'} label={'Email'} placeholder={'example@gmail.com'}/>
-      <Button type={'submit'} className={styles.btn} fluid>
-        <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
-        SEND
-      </Button>
-    </Form>
+    {({ dirty }) => (
+      <Form className={styles.form}>
+        <FormikInput name={'email'} type={'email'} label={'Email'} placeholder={'example@gmail.com'}/>
+        <Button type={'submit'} className={styles.btn} disabled={!dirty} fluid>
+          <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
+          SEND
+        </Button>
+      </Form>
+    )}
   </Formik>
 ));
 

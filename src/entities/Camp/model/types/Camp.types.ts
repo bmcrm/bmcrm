@@ -4,6 +4,24 @@ interface CampersNotes {
   };
 }
 
+export interface ICampEvent {
+  camp_id: string;
+  event: string;
+  timestamp: string;
+}
+
+export interface ICreateCalendarEvent {
+  title: string;
+  date: Date | null;
+}
+
+export interface ICalendarEvent {
+  camp_id: string;
+  date: string;
+  event: string;
+  timestamp: string;
+}
+
 export interface ICamp {
   camp_id: string;
   tco?: string;

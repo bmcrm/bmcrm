@@ -45,15 +45,24 @@ const Nav = memo((props: NavProps) => {
 	return (
 		<nav ref={navRef} className={classNames(styles.nav, mods, [className])}>
 			<div className={styles.nav__inner}>
-				{isTablet && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose} />}
+				{isTablet && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose}/>}
 				<ul className={styles.nav__list}>
 					{decodedIDToken && (generateNavList(decodedIDToken.camp_id).map(item => (
 						<li key={item.path}>
-							<CustomNavLink link={item} onClick={handleCLose} />
+							<CustomNavLink link={item} onClick={handleCLose}/>
 						</li>
 					)))}
 					{isTablet && (
 						<>
+							<li>
+								<CustomNavLink
+									link={{
+										path: RoutePath.dashboard,
+										text: 'Dashboard',
+									}}
+									onClick={handleCLose}
+								/>
+							</li>
 							<li>
 								<CustomNavLink
 									theme={CustomNavLinkTheme.ICON}
@@ -73,7 +82,7 @@ const Nav = memo((props: NavProps) => {
 									onClick={handleLogout}
 									style={{ gap: 10 }}
 								>
-									<Icon icon={<LogoutIcon />} size={IconSize.SIZE_20} />
+									<Icon icon={<LogoutIcon/>} size={IconSize.SIZE_20}/>
 									Log Out
 								</Button>
 							</li>

@@ -1,0 +1,51 @@
+.react-calendar {
+
+	&__tile {
+
+		&--now {
+			background: var(--color-ruby-light);
+
+			&:enabled {
+				&:hover, &:focus {
+					background: var(--color-ruby-dark);
+					color: var(--color-white);
+				}
+			}
+		}
+
+		&--active {
+			background: var(--color-ruby-dark);
+
+			&:enabled {
+				&:hover, &:focus {
+					background: var(--color-ruby-dark);
+				}
+			}
+		}
+
+		&--hasActive {
+			background: var(--color-ruby-dark);
+			color: var(--color-white);
+
+			&:enabled:hover, &:enabled:focus {
+				background: var(--color-ruby-light);
+			}
+		}
+	}
+
+	&__month-view {
+		&__days {
+			&__day {
+				&--weekend {
+					color: var(--color-orange-dark);
+				}
+			}
+		}
+	}
+
+	&__navigation {
+		button {
+			border-radius: 15px;
+		}
+	}
+}

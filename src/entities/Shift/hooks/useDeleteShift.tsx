@@ -13,7 +13,7 @@ const useDeleteShift = () => {
 
 	const { mutate, isPending, isSuccess, isError } = useMutation({
 		mutationFn: shiftApi.deleteShift,
-		onMutate: async (shiftID) => {
+		onMutate: async ({ shiftID }) => {
 			incrementDeletionCount();
 
 			await queryClient.cancelQueries({ queryKey: shiftKeys.allShifts });

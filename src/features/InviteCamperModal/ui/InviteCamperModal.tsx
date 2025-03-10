@@ -61,23 +61,25 @@ const InviteCamperModal = memo(({ isOpen, onClose }: InviteCamperModalProps) => 
         <h2 className={styles.title}>Invite User by Email</h2>
         <p className={styles.subtitle}>Please enter the email address of the user you want to invite</p>
         <Formik validationSchema={inviteMemberSchema} onSubmit={handleSubmit} initialValues={{ email: '' }}>
-          <Form className={styles.inviteModal__form}>
-            <FormikInput name={'email'} placeholder={'Email'} />
-            <div className={styles.divider} />
-            <div className={styles.copy__wrapper}>
-              <h4>Invite user by link</h4>
-              <button
-                className={styles.copy}
-                type='button'
-                onClick={() => handleCopyClick(`${window.location.origin}/id/${decodedIDToken!.camp_id}`)}
-              >
-                Copy link <Icon size={IconSize.SIZE_28} icon={<CopyIcon />} />
-              </button>
-            </div>
-            <Button type={'submit'} className={'m-centred'}>
-              Send Invitation
-            </Button>
-          </Form>
+          {({ dirty }) => (
+            <Form className={styles.inviteModal__form}>
+              <FormikInput name={'email'} placeholder={'Email'} />
+              <div className={styles.divider} />
+              <div className={styles.copy__wrapper}>
+                <h4>Invite user by link</h4>
+                <button
+                  className={styles.copy}
+                  type='button'
+                  onClick={() => handleCopyClick(`${window.location.origin}/id/${decodedIDToken!.camp_id}`)}
+                >
+                  Copy link <Icon size={IconSize.SIZE_28} icon={<CopyIcon />} />
+                </button>
+              </div>
+              <Button type={'submit'} className={'m-centred'} disabled={!dirty}>
+                Send Invitation
+              </Button>
+            </Form>
+          )}
         </Formik>
       </div>
     </Modal>

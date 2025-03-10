@@ -38,16 +38,18 @@ const CampSettingsForm = memo(({ onSubmit }: CampSettingsFormProps) => {
         onSubmit={onSubmit}
         enableReinitialize
       >
-        <Form className={styles.form}>
-          <div className={styles.form__inner}>
-            <div className={styles.form__inputs}>
-              {inputsData.map(input => <FormikInput key={input.name} {...input} />)}
-              <FormikTextarea name={'camp_description'} label={'Description'} placeholder={'Lorem ipsum dolor sit amet...'} />
+        {({ dirty }) => (
+          <Form className={styles.form}>
+            <div className={styles.form__inner}>
+              <div className={styles.form__inputs}>
+                {inputsData.map(input => <FormikInput key={input.name} {...input} />)}
+                <FormikTextarea name={'camp_description'} label={'Description'} placeholder={'Lorem ipsum dolor sit amet...'} />
+              </div>
+              <Image maxWidth={360} borderRadius={isMobile ? 15 : 30}/>
             </div>
-            <Image maxWidth={360} borderRadius={isMobile ? 15 : 30}/>
-          </div>
-          <Button type={'submit'} className={'m-centred'}>Save changes</Button>
-        </Form>
+            <Button type={'submit'} className={'m-centred'} disabled={!dirty}>Save changes</Button>
+          </Form>
+        )}
       </Formik>
       {isLoading && <FormLoader />}
     </>

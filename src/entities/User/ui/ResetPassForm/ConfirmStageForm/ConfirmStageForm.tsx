@@ -15,15 +15,17 @@ type ConfirmStageFormProps = {
 
 const ConfirmStageForm = memo(({ onSubmit }: ConfirmStageFormProps) => (
   <Formik validationSchema={confirmResetPassSchema} onSubmit={onSubmit} initialValues={initialValues}>
-    <Form className={styles.form}>
-      {inputsData.map(input => (
-        <FormikInput key={input.name} {...input} />
-      ))}
-      <Button type={'submit'} className={styles.btn} fluid>
-        <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
-        RESET PASSWORD
-      </Button>
-    </Form>
+    {({ dirty }) => (
+      <Form className={styles.form}>
+        {inputsData.map(input => (
+          <FormikInput key={input.name} {...input} />
+        ))}
+        <Button type={'submit'} className={styles.btn} disabled={!dirty} fluid>
+          <Icon icon={<CampIcon />} size={IconSize.SIZE_20} />
+          RESET PASSWORD
+        </Button>
+      </Form>
+    )}
   </Formik>
 ));
 

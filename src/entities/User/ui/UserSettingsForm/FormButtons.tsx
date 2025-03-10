@@ -9,11 +9,12 @@ type FormButtonsProps = {
 	className?: string;
 	role?: CamperRole;
 	camperEmail: string;
+	dirty: boolean
 };
 
-const FormButtons = memo(({ className, role, camperEmail }: FormButtonsProps) => (
+const FormButtons = memo(({ className, role, camperEmail, dirty }: FormButtonsProps) => (
 	<div className={classNames(styles.form__buttons, {}, [className])}>
-		<Button type={'submit'}>Save changes</Button>
+		<Button type={'submit'} disabled={!dirty}>Save changes</Button>
 		{role !== CamperRole.TCO && (
 			<DeleteCamperButton
 				camperEmail={camperEmail}

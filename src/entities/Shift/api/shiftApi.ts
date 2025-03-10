@@ -26,8 +26,8 @@ export const shiftApi = {
 
 		return response.data;
 	},
-	deleteShift: async (shiftID: string) => {
-		const endpoint = `${SHIFT_ENDPOINT}/${shiftID}`;
+	deleteShift: async ({ shiftID, title }: { shiftID: string; title: string }) => {
+		const endpoint = `${SHIFT_ENDPOINT}/${shiftID}?title=${encodeURIComponent(title)}`;
 		const headers = createAuthHeaders();
 
 		await axios.delete(endpoint, { headers });

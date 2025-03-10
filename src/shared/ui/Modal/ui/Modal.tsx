@@ -9,11 +9,12 @@ interface ModalProps {
   className?: string;
   children?: ReactNode;
   isOpen: boolean;
+  isOverflow?: boolean;
   onClose?: () => void;
 }
 
 const Modal = (props: ModalProps) => {
-  const { className, children, isOpen, onClose } = props;
+  const { className, children, isOpen, isOverflow = false, onClose } = props;
   const { isMounted, isClosing, modalRef, close } = useModal({
     isOpen,
     onClose,
@@ -23,6 +24,7 @@ const Modal = (props: ModalProps) => {
   const mods = {
     [styles.open]: isOpen,
     [styles.closing]: isClosing,
+    [styles.overflow]: isOverflow,
   };
 
   const onContentClick = useCallback((e: MouseEvent) => {

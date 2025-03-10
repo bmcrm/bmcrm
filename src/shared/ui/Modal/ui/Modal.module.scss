@@ -23,6 +23,11 @@
   &.closing {
     opacity: 0;
   }
+  &.overflow {
+    .modal__content {
+      overflow: visible;
+    }
+  }
 
   &__overlay {
     display: flex;

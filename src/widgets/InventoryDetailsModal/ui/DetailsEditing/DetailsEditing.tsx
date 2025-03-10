@@ -75,7 +75,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 			validationSchema={createInventoryItemSchema}
 			enableReinitialize
 		>
-			{({ values, handleChange }) => (
+			{({ values, handleChange, dirty }) => (
 				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__inner}>
 						<InventorySlider
@@ -117,7 +117,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 						</div>
 					</div>
 					<div className={styles.form__buttons}>
-						<Button type={'submit'}>Save</Button>
+						<Button type={'submit'} disabled={!dirty}>Save</Button>
 						<Button
 							className={styles.form__btn}
 							theme={ButtonTheme.CLEAR}

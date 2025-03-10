@@ -4,9 +4,8 @@ import { classNames } from '@shared/lib/classNames';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { useLogout } from '@entities/User';
-import { RoutePath } from '@app/providers/AppRouter';
+import { links } from '../../model/data/userAvatar.data';
 import styles from './UserAvatarTooltip.module.scss';
-import SettingsIcon from '@shared/assets/icons/settings_icon.svg';
 import LogoutIcon from '@shared/assets/icons/logout_icon.svg';
 
 type UserAvatarTooltipProps = {
@@ -25,16 +24,14 @@ const UserAvatarTooltip = memo(({ className, onClick }: UserAvatarTooltipProps) 
   return (
     <div className={classNames(styles.tooltip, {}, [className])}>
       <ul className={styles.tooltip__list}>
-        <li>
-          <Link
-            to={RoutePath.settings_account}
-            className={classNames(styles.tooltip__link, {}, [])}
-            onClick={onClick}
-          >
-            <Icon icon={<SettingsIcon />} size={IconSize.SIZE_24} />
-            <span className={styles.text}>Setting</span>
-          </Link>
-        </li>
+        {links.map(({ to, text, icon }) => (
+          <li key={text}>
+            <Link to={to} className={styles.tooltip__link} onClick={onClick}>
+              <Icon icon={icon} size={IconSize.SIZE_24} />
+              <span className={styles.text}>{text}</span>
+            </Link>
+          </li>
+        ))}
         <li>
           <Button
             theme={ButtonTheme.CLEAR}

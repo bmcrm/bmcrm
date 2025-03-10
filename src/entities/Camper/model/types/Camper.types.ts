@@ -8,6 +8,8 @@ export interface CamperSocial {
   url: string;
 }
 
+export type CampersBirthdays = Record<string, string[]>;
+
 export type CamperTags = {
   [key: string]: string[];
 };
