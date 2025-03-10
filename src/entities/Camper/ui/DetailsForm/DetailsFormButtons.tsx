@@ -11,10 +11,11 @@ type DetailsFormButtonsProps = {
 	camperEmail: string;
 	camperName?: string;
 	onClose?: () => void;
+	dirty: boolean;
 };
 
 const DetailsFormButtons = memo((props: DetailsFormButtonsProps) => {
-	const { handleCancel, role, camperEmail, camperName, onClose } = props;
+	const { handleCancel, role, camperEmail, camperName, onClose, dirty } = props;
 	const { tokens: { decodedIDToken } } = userState();
 
 	const canDelete = decodedIDToken?.role === CamperRole.TCO
@@ -25,7 +26,7 @@ const DetailsFormButtons = memo((props: DetailsFormButtonsProps) => {
 
 	return (
 		<div className={styles.form__buttons}>
-			<Button type={'submit'}>Save</Button>
+			<Button type={'submit'} disabled={!dirty}>Save</Button>
 			{canDelete && (
 				<DeleteCamperButton
 					camperEmail={camperEmail}

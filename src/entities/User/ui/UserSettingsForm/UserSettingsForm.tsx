@@ -43,10 +43,10 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
           onSubmit={handleSubmit}
           enableReinitialize
         >
-          {({ values }) => (
+          {({ values, dirty }) => (
             <Form className={styles.form}>
               <FormInputs values={values} />
-              <FormButtons camperEmail={currentCamper.email} role={currentCamper?.role} />
+              <FormButtons camperEmail={currentCamper.email} role={currentCamper?.role} dirty={dirty} />
             </Form>
           )}
         </Formik>

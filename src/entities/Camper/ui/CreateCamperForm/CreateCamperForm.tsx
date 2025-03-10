@@ -35,15 +35,17 @@ const CreateCamperForm = memo(({ onClose }: CreateCamperFormProps) => {
 	return (
 		<>
 			<Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={createCamperSchema}>
-				<Form className={styles.form}>
-					<FormikInput name={'email'} label={'Email'} placeholder={'cole@gmail.com'} />
-					<div className={styles.form__row}>
-						<FormikInput name={'first_name'} label={'First Name'} placeholder={'Larry'} />
-						<FormikInput name={'last_name'} label={'Last Name'} placeholder={'Harvey'} />
-					</div>
-					<CustomSelect name={'role'} label={'Role'} options={filteredRoleOptions} />
-					<Button type={'submit'} className={'m-centred'}>Create</Button>
-				</Form>
+				{({ dirty }) => (
+					<Form className={styles.form}>
+						<FormikInput name={'email'} label={'Email'} placeholder={'cole@gmail.com'} />
+						<div className={styles.form__row}>
+							<FormikInput name={'first_name'} label={'First Name'} placeholder={'Larry'} />
+							<FormikInput name={'last_name'} label={'Last Name'} placeholder={'Harvey'} />
+						</div>
+						<CustomSelect name={'role'} label={'Role'} options={filteredRoleOptions} />
+						<Button type={'submit'} className={'m-centred'} disabled={!dirty}>Create</Button>
+					</Form>
+				)}
 			</Formik>
 			{isPending && <FormLoader />}
 		</>

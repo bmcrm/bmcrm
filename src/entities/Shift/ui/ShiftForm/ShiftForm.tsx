@@ -60,11 +60,11 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 	return (
 		<>
 			<Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={shiftSchema} enableReinitialize>
-				{({ values }) => (
+				{({ values, dirty }) => (
 					<Form className={classNames(styles.form, {}, [className])}>
 						<FormBasic members={values.members ?? []} />
 						<FormDate values={values} />
-						<Button type={'submit'} className={'m-centred'} fluid={isMobile}>Save</Button>
+						<Button type={'submit'} className={'m-centred'} disabled={!dirty} fluid={isMobile}>Save</Button>
 					</Form>
 				)}
 			</Formik>

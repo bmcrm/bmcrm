@@ -44,4 +44,10 @@ export const campApi = {
 
     return response.data;
 	},
+	deleteCalendarEvent: async (timestamp: string) => {
+		const endpoint = `${CAMP_ENDPOINT}/events/calendar/${timestamp}`;
+		const headers = createAuthHeaders();
+
+		await axios.delete(endpoint, { headers });
+	},
 };

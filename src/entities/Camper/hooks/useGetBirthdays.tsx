@@ -13,6 +13,8 @@ const useGetBirthdays = ({ enabled = true }: UseGetBirthdaysProps = {}) => {
 		queryKey: camperKeys.campersBirthdays,
 		queryFn: camperApi.getBirthdays,
 		staleTime: 10 * 60 * 1000,
+		refetchOnMount: 'always',
+		refetchOnWindowFocus: true,
 		enabled,
 	});
 

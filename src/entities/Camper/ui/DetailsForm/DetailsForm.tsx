@@ -104,6 +104,7 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 							role={initialValues.role}
 							camperEmail={camperEmail}
 							camperName={`${initialValues.first_name} ${initialValues.last_name}`}
+							dirty={dirty}
 						/>
 					</Form>
 				);

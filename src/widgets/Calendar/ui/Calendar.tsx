@@ -16,7 +16,7 @@ import { FormLoader } from '@features/FormLoader';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { useGetBirthdays } from '@entities/Camper';
-import { useGetCalendarEvents } from '@entities/Camp';
+import { useDeleteCalendarEvent, useGetCalendarEvents } from '@entities/Camp';
 import { useCalendarEvents } from '../hooks/useCalendarEvents';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.scss';
@@ -32,6 +32,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 	const { isMobile } = useMedia();
 	const { data: birthdays, isLoading: isBirthdaysLoading } = useGetBirthdays();
 	const { data: customEvents, isLoading: isCustomEventsLoading } = useGetCalendarEvents();
+	const { mutate: deleteEvent } = useDeleteCalendarEvent();
 	const [activeDay, setActiveDay] = useState<string | null>(null);
 	const [tooltipPosition, setTooltipPosition] = useState<CSSProperties | null>(null);
 	const tooltipRef = useRef<HTMLDivElement>(null);
@@ -84,6 +85,10 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 		[birthdays, isMobile, activeDay]
 	);
 
+	const handleDeleteEvent = useCallback((timestamp: string) => {
+		deleteEvent(timestamp);
+	}, [deleteEvent]);
+
 	return (
 		<div className={classNames(styles.calendar, {}, [className])}>
 			{isLoading && <FormLoader />}
@@ -91,7 +96,6 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 				className={styles.calendar__item}
 				tileClassName={styles.calendar__tile}
 				onClickDay={handleClickDay}
-
 				tileContent={({ date }) => {
 					const formattedDate = format(date, 'MM-dd');
 					const fullDate = format(date, 'yyyy-MM-dd');
@@ -126,9 +130,9 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 									<div className={styles.tooltip__events}>
 										<p className={styles.caption}>📅 Events:</p>
 										<ul className={styles.tooltip__eventsList}>
-											{customEvents.map((event) => (
-												<li key={event.timestamp} className={styles.tooltip__eventsItem}>
-													{event.title}
+											{customEvents.map(({ timestamp, title }) => (
+												<li key={timestamp} className={styles.tooltip__eventsItem}>
+													{title}
 													<div className={styles.tooltip__eventsControl}>
 														<Button
 															theme={ButtonTheme.CLEAR}
@@ -141,6 +145,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 															theme={ButtonTheme.CLEAR}
 															size={ButtonSize.TEXT}
 															className={styles.tooltip__eventsBtn}
+															onClick={() => handleDeleteEvent(timestamp)}
 														>
 															<Icon icon={<TrashIcon />} size={IconSize.SIZE_16} />
 														</Button>

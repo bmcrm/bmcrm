@@ -95,57 +95,59 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 			onSubmit={handleSubmit}
 			enableReinitialize
 		>
-			<Form className={styles.form}>
-				{isPending && <FormLoader/>}
-				<div className={styles.form__inner}>
-					{inputs.default.map(({ name, placeholder, label }) => (
-						<FormikInput key={name} name={name} label={label} placeholder={placeholder} />
-					))}
-					<div className={styles.form__row}>
-						{inputs.row.map(({ name, placeholder, label, type }) => (
-							<FormikInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
+			{({ dirty }) => (
+				<Form className={styles.form}>
+					{isPending && <FormLoader/>}
+					<div className={styles.form__inner}>
+						{inputs.default.map(({ name, placeholder, label }) => (
+							<FormikInput key={name} name={name} label={label} placeholder={placeholder} />
 						))}
+						<div className={styles.form__row}>
+							{inputs.row.map(({ name, placeholder, label, type }) => (
+								<FormikInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
+							))}
+						</div>
+						<FilesInput
+							theme={FilesInputTheme.ADD_INVENTORY}
+							name={'image'}
+							label={<>Photo <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(max. 5 photos)</span></>}
+							onFilesAdded={handleFilesAdded}
+							previewsLength={imagePreviews.length}
+						/>
 					</div>
-					<FilesInput
-						theme={FilesInputTheme.ADD_INVENTORY}
-						name={'image'}
-						label={<>Photo <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(max. 5 photos)</span></>}
-						onFilesAdded={handleFilesAdded}
-						previewsLength={imagePreviews.length}
-					/>
-				</div>
-				<ul className={styles.form__preview}>
-					{imagePreviews.map((preview, index) => (
-						<li key={index} className={styles.form__previewItem}>
-							<Image
-								src={preview.previewUrl}
-								alt={`Preview ${index}`}
-								customStyles={{ height: '65px' }}
-							/>
-							<Button
-								className={styles.btnRemove}
-								theme={ButtonTheme.CLEAR}
-								size={ButtonSize.TEXT}
-								onClick={() => handleRemoveImage(index)}
-							>
-								<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
-							</Button>
-						</li>
-					))}
-				</ul>
-				<div className={styles.form__buttons}>
-					<Button type={'submit'}>Save</Button>
-					<Button
-						theme={ButtonTheme.CLEAR}
-						size={ButtonSize.TEXT}
-						color={ButtonColor.NEUTRAL}
-						className={styles.btnCancel}
-						onClick={onClose}
-					>
-						Cancel
-					</Button>
-				</div>
-			</Form>
+					<ul className={styles.form__preview}>
+						{imagePreviews.map((preview, index) => (
+							<li key={index} className={styles.form__previewItem}>
+								<Image
+									src={preview.previewUrl}
+									alt={`Preview ${index}`}
+									customStyles={{ height: '65px' }}
+								/>
+								<Button
+									className={styles.btnRemove}
+									theme={ButtonTheme.CLEAR}
+									size={ButtonSize.TEXT}
+									onClick={() => handleRemoveImage(index)}
+								>
+									<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
+								</Button>
+							</li>
+						))}
+					</ul>
+					<div className={styles.form__buttons}>
+						<Button type={'submit'} disabled={!dirty}>Save</Button>
+						<Button
+							theme={ButtonTheme.CLEAR}
+							size={ButtonSize.TEXT}
+							color={ButtonColor.NEUTRAL}
+							className={styles.btnCancel}
+							onClick={onClose}
+						>
+							Cancel
+						</Button>
+					</div>
+				</Form>
+			)}
 		</Formik>
 	);
 });
