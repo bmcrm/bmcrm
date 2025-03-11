@@ -12,6 +12,7 @@ const useCreateCalendarEvent = () => {
 		mutationFn: campApi.createCalendarEvent,
 		onSuccess: () => {
 			void queryClient.invalidateQueries({ queryKey: campKeys.calendarEvents });
+			void queryClient.invalidateQueries({ queryKey: campKeys.campEvents });
 			success('Event created successfully!');
 		},
 		onError: (error) => errorHandler(error),

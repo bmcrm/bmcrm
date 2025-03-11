@@ -13,7 +13,7 @@ const useGetCampEvents = ({ enabled = true }: UseGetCampEventsProps = {}) => {
 		queryKey: campKeys.campEvents,
 		queryFn: campApi.getCampEvents,
 		staleTime: 0,
-		refetchOnMount: true,
+		refetchOnMount: 'always',
 		refetchOnWindowFocus: true,
 		enabled,
 	});

@@ -1,34 +1,22 @@
 @use '@app/styles/breakpoints';
 
-.calendar {
+.tile {
 	position: relative;
-	width: 100%;
+	overflow: visible !important;
+	border-radius: 15px;
 
-	&__item {
-		width: 100%;
-		border-radius: 15px;
-		border: 1px solid var(--color-orange-dark);
-		font-family: var(--font-family-main), sans-serif;
+	&:hover {
+		.tooltip {
+			@media (width >= breakpoints.$md) {
+				display: block;
+			}
+		}
 	}
 
 	&__icons {
 		position: absolute;
 		top: 1px;
 		right: 4px;
-	}
-
-	&__tile {
-		position: relative;
-		overflow: visible !important;
-		border-radius: 15px;
-
-		&:hover {
-			.tooltip {
-				@media (width >= breakpoints.$md) {
-					display: block;
-				}
-      }
-		}
 	}
 }
 
@@ -89,13 +77,13 @@
 
 			&:before {
 				content: '';
-        position: absolute;
-        top: 8px;
-        left: 0;
-        width: 6px;
-        height: 6px;
-        background-color: var(--color-ruby-dark);
-        border-radius: 50%;
+				position: absolute;
+				top: 8px;
+				left: 0;
+				width: 6px;
+				height: 6px;
+				background-color: var(--color-ruby-dark);
+				border-radius: 50%;
 			}
 		}
 
