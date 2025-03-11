@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 import { CAMP_ENDPOINT } from '@shared/const/endpoints';
-import type { ICalendarEvent, ICamp, ICampEvent, ICreateCalendarEvent } from '../model/types/Camp.types';
+import type { ICalendarEvent, ICamp, ICampEvent } from '../model/types/Camp.types';
 
 export const campApi = {
 	getCamp: async (campID: string): Promise<ICamp> => {
@@ -28,7 +28,7 @@ export const campApi = {
 
 		return response.data;
 	},
-	createCalendarEvent: async (event: ICreateCalendarEvent) => {
+	createCalendarEvent: async (event: Partial<ICalendarEvent>) => {
 		const endpoint = `${CAMP_ENDPOINT}/events/calendar`;
 		const headers = createAuthHeaders();
 
@@ -43,6 +43,14 @@ export const campApi = {
     const response = await axios.patch(endpoint, payload, { headers });
 
     return response.data;
+	},
+	editCalendarEvent: async (event: ICalendarEvent) => {
+		const endpoint = `${CAMP_ENDPOINT}/events/calendar/${event.timestamp}`;
+		const headers = createAuthHeaders();
+
+		const response = await axios.patch(endpoint, event, { headers });
+
+		return response.data;
 	},
 	deleteCalendarEvent: async (timestamp: string) => {
 		const endpoint = `${CAMP_ENDPOINT}/events/calendar/${timestamp}`;

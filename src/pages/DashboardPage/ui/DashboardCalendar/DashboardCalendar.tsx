@@ -3,7 +3,7 @@ import { classNames } from '@shared/lib/classNames';
 import { useToggle } from '@shared/hooks/useToggle';
 import { Button } from '@shared/ui/Button';
 import { Calendar } from '@widgets/Calendar';
-import { AddCalendarEventModal } from '@features/AddCalendarEventModal';
+import { CalendarEventModal } from '@features/CalendarEventModal';
 import styles from './DashboardCalendar.module.scss';
 
 type DashboardCalendarProps = {
@@ -17,11 +17,9 @@ const DashboardCalendar = memo(({ className }: DashboardCalendarProps) => {
 		<>
 			<div className={classNames(styles.calendar, {}, [className])}>
 				<Calendar />
-				<Button className={'mt-10'} onClick={open} fluid>
-					Add event
-				</Button>
+				<Button className={'mt-10'} onClick={open} fluid>Add event</Button>
 			</div>
-			<AddCalendarEventModal isOpen={isOpen} onClose={close} />
+			<CalendarEventModal isOpen={isOpen} onClose={close} />
 		</>
 	);
 });

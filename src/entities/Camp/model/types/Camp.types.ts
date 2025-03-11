@@ -10,8 +10,8 @@ export interface ICampEvent {
   timestamp: string;
 }
 
-export interface ICreateCalendarEvent {
-  title: string;
+export interface IFormCalendarEvent {
+  event: string;
   date: Date | null;
 }
 

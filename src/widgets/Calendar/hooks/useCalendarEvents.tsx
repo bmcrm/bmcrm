@@ -34,14 +34,16 @@ const useCalendarEvents = (
 
 				if (existingEvent) {
 					existingEvent.customEvents?.push({
-						title: event.event,
+						event: event.event,
 						timestamp: event.timestamp,
+						date: event.date,
+						camp_id: event.camp_id,
 					});
 				} else {
 					events.push({
 						date: formattedDate,
 						type: CalendarEventType.CUSTOM,
-						customEvents: [{ title: event.event, timestamp: event.timestamp }],
+						customEvents: [{ event: event.event, timestamp: event.timestamp, date: event.date, camp_id: event.camp_id }],
 					});
 				}
 			});

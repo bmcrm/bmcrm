@@ -293,7 +293,7 @@ export const createCamperSchema = yup.object().shape({
 });
 
 export const createCalendarEventSchema = yup.object().shape({
-	title: yup
+	event: yup
 		.string()
 		.trim()
 		.required('Title is required')
