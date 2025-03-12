@@ -1,5 +1,6 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
+import { IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
@@ -37,6 +38,7 @@ const DatepickerTime = memo((props: DatepickerTimeProps) => {
 				timeFormat={'HH:mm'}
 				showTimeSelect
 				showTimeSelectOnly
+				customInput={<IMaskInput mask={'00:00'} />}
 			/>
 			{name && (
 				<ErrorMessage

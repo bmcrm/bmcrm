@@ -90,14 +90,14 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 							visitedBM={values.visitedBM}
 							birthdayDate={values.birthdayDate}
 						/>
-						<DetailsFormTags values={values}/>
+						<DetailsFormTags values={values} />
 						<FormikTextarea
 							name={'about_me'}
 							placeholder={'Burner from 2021. Working in IT, 29 y.o.'}
 							label={'Summary'}
 						/>
-						<DetailsFormHistory history={values.history}/>
-						<DetailsFormSocials socials={values.social_links}/>
+						<DetailsFormHistory history={values.history} />
+						<DetailsFormSocials socials={values.social_links} />
 						<DetailsFormButtons
 							handleCancel={handleCancel}
 							onClose={onClose}

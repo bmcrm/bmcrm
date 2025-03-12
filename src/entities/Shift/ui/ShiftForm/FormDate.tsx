@@ -39,6 +39,9 @@ const FormDate = memo((props: FormDateProps) => {
 				minDate={new Date()}
 				dateRange={[start_date, end_date]}
 				onChange={handleDatepickerChange}
+				mask={'00.00.0000 - 00.00.0000'}
+				showMonthDropdown
+				showYearDropdown
 			/>
 			<FieldArray name={'time'}>
 				{({ push, remove }) => (

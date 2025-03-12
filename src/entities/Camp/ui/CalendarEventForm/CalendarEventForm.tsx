@@ -64,6 +64,9 @@ const CalendarEventForm = memo(({ className, onClose, currentEvent }: CalendarEv
 							date={values.date}
 							onChange={(date) => setFieldValue('date', date)}
 							minDate={new Date()}
+							mask={'00.00.0000'}
+							showMonthDropdown
+							showYearDropdown
 						/>
 						<Button type={'submit'} className={'m-centred'}>Save</Button>
 					</Form>

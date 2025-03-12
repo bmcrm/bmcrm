@@ -1,5 +1,6 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
+import { IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
@@ -18,10 +19,13 @@ interface DatepickerRangeProps {
 	onChange?: (update: [Date | null, Date | null]) => void;
 	ariaDescribedBy?: string;
 	minDate?: Date;
+	showMonthDropdown?: boolean;
+	showYearDropdown?: boolean;
+	mask?: string;
 }
 
 const DatepickerRange = memo((props: DatepickerRangeProps) => {
-	const { className, errorName, label, placeholder = 'Select or write...', style, dateRange, ...rest } = props;
+	const { className, errorName, label, placeholder = 'Select or write...', style, dateRange, mask, ...rest } = props;
 	const [startDate, endDate] = dateRange ?? [null, null];
 
 	return (
@@ -35,6 +39,8 @@ const DatepickerRange = memo((props: DatepickerRangeProps) => {
 				isClearable={true}
 				placeholderText={placeholder}
 				dateFormat={'dd.MM.yyyy'}
+				dropdownMode={'select'}
+				customInput={<IMaskInput mask={mask} />}
 				{...rest}
 			/>
 			{errorName && (
