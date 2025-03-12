@@ -9,5 +9,13 @@ export interface ICalendarDay {
 	date: string;
 	type: CalendarEventType;
 	birthdays?: string[];
-	customEvents?: ICalendarEvent[];
+	customEvents?: CustomCalendarEvent[];
+}
+
+export interface CustomCalendarEvent {
+	event: string;
+	timestamp: string;
+	date: string;
+	camp_id: string;
+	originalEvent: ICalendarEvent;
 }

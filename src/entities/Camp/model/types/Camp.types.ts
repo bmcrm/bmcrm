@@ -12,12 +12,14 @@ export interface ICampEvent {
 
 export interface IFormCalendarEvent {
   event: string;
-  date: Date | null;
+  startDate: Date | null;
+  endDate?: Date | null;
 }
 
 export interface ICalendarEvent {
   camp_id: string;
-  date: string;
+  startDate: string;
+  endDate?: string;
   event: string;
   timestamp: string;
 }

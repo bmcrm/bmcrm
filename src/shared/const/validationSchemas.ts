@@ -298,5 +298,6 @@ export const createCalendarEventSchema = yup.object().shape({
 		.trim()
 		.required('Title is required')
 		.max(24, 'Title must be less than 24 characters'),
-	date: yup.date().required('Date is required'),
+	startDate: yup.date().required('Date is required'),
+	endDate: yup.date().notRequired(),
 });
