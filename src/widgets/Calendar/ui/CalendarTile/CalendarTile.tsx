@@ -74,7 +74,7 @@ const CalendarTile = memo((props: CalendarTileProps) => {
 								<li key={event.timestamp} className={styles.tooltip__eventsItem}>
 									{event.event}
 									<div className={styles.tooltip__eventsControl}>
-										<span className={styles.tooltip__eventsBtn} onClick={() => handleEditEvent(event)}>
+										<span className={styles.tooltip__eventsBtn} onClick={() => handleEditEvent(event.originalEvent)}>
 											<Icon icon={<EditIcon/>} size={IconSize.SIZE_16}/>
 										</span>
 										<span className={styles.tooltip__eventsBtn} onClick={() => handleDeleteEvent(event.timestamp)}>
