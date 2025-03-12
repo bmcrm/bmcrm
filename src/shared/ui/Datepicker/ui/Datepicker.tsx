@@ -1,5 +1,6 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
+import { IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
@@ -18,10 +19,13 @@ interface DatepickerProps {
 	name?: string;
 	ariaDescribedBy?: string;
 	minDate?: Date;
+	showMonthDropdown?: boolean;
+	showYearDropdown?: boolean;
+	mask?: string;
 }
 
 const Datepicker = memo((props: DatepickerProps) => {
-	const { className, errorName, label, placeholder = 'Select or write...', style, date, ...rest } = props;
+	const { className, errorName, label, placeholder = 'Select or write...', style, date, mask, ...rest } = props;
 
 	return (
 		<label className={classNames(styles.datepicker, {}, [className])} style={style}>
@@ -33,7 +37,9 @@ const Datepicker = memo((props: DatepickerProps) => {
 				isClearable={true}
 				selected={date}
 				showIcon
+				dropdownMode={'select'}
 				calendarIconClassName={styles.datepicker__calendarIcon}
+				customInput={<IMaskInput mask={mask} />}
 				{...rest}
 			/>
 			{errorName && (
