@@ -36,10 +36,9 @@ const FormDate = memo((props: FormDateProps) => {
 				ariaDescribedBy={'Datepicker'}
 				errorName={'start_date'}
 				label={'Date'}
-				minDate={new Date()}
+				minDate={new Date(new Date().setHours(0, 0, 0, 0))}
 				dateRange={[start_date, end_date]}
 				onChange={handleDatepickerChange}
-				mask={'00.00.0000 - 00.00.0000'}
 				showMonthDropdown
 				showYearDropdown
 			/>

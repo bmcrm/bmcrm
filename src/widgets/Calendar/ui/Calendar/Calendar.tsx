@@ -8,7 +8,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import Calendar from 'react-calendar';
-import { format } from 'date-fns';
+import { addYears, format, subYears } from 'date-fns';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToggle } from '@shared/hooks/useToggle';
@@ -36,6 +36,8 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 	const tooltipRef = useRef<HTMLDivElement>(null);
 	const { isOpen, open, close } = useToggle();
 	const isLoading = isBirthdaysLoading || isCustomEventsLoading;
+	const minDate = subYears(new Date(), 50);
+	const maxDate = addYears(new Date(), 50);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -89,6 +91,8 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 				{isLoading && <FormLoader />}
 				<Calendar
 					className={styles.calendar__item}
+					minDate={minDate}
+					maxDate={maxDate}
 					tileClassName={tileStyles.tile}
 					onClickDay={handleClickDay}
 					tileContent={({ date }) => (

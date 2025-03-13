@@ -9,8 +9,8 @@ export const generateNavList = (campID: string): NavLinkType[] => ([
     icon: <CampIcon />,
   },
   {
-    path: RoutePath.funnel,
-    text: 'Funnel',
+    path: RoutePath.dashboard,
+    text: 'Dashboard',
   },
   {
     path: RoutePath.campers,

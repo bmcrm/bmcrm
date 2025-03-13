@@ -14,7 +14,7 @@ const useGetCampEvents = ({ enabled = true }: UseGetCampEventsProps = {}) => {
 		queryFn: campApi.getCampEvents,
 		staleTime: 0,
 		refetchOnMount: 'always',
-		refetchOnWindowFocus: true,
+		refetchOnWindowFocus: 'always',
 		enabled,
 	});
 

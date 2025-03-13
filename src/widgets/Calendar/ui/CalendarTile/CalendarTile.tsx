@@ -1,15 +1,16 @@
-import { memo, useCallback, type CSSProperties, type Dispatch, type RefObject, type SetStateAction } from 'react';
+import { type CSSProperties, type Dispatch, memo, type RefObject, type SetStateAction, useCallback } from 'react';
 import { format } from 'date-fns';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Tooltip } from '@shared/ui/Tooltip';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { useCalendarEvents } from '../../hooks/useCalendarEvents';
-import { useDeleteCalendarEvent, type ICalendarEvent } from '@entities/Camp';
+import { type ICalendarEvent, useDeleteCalendarEvent } from '@entities/Camp';
 import type { CampersBirthdays } from '@entities/Camper';
 import styles from './CalendarTile.module.scss';
 import EditIcon from '@shared/assets/icons/edit_icon.svg';
 import TrashIcon from '@shared/assets/icons/delete.svg';
+import CalendarIcon from '@shared/assets/icons/calendar_icon.svg';
 
 type CalendarTileProps = {
 	date: Date;
@@ -24,7 +25,7 @@ type CalendarTileProps = {
 
 const CalendarTile = memo((props: CalendarTileProps) => {
 	const { date, birthdays, customEvents, tooltipRef, tooltipPosition, activeDay, setCurrentEvent, openEditModal } = props;
-	const { isMobile } = useMedia();
+	const { isMobile, isTablet } = useMedia();
 	const { mutate: deleteEvent } = useDeleteCalendarEvent();
 	const formattedDate = format(date, 'MM-dd');
 	const fullDate = format(date, 'yyyy-MM-dd');
@@ -53,8 +54,16 @@ const CalendarTile = memo((props: CalendarTileProps) => {
 	return (
 		<>
 			<ul className={styles.tile__icons}>
-				{calendarBirthdays.length > 0 && <li>🎂</li>}
-				{calendarCustomEvents.length > 0 && <li>📅</li>}
+				{calendarBirthdays.length > 0 && <li className={'calendar-icon'}>🎂</li>}
+				{calendarCustomEvents.length > 0 && (
+					<li>
+						<Icon
+							className={'calendar-icon'}
+							icon={<CalendarIcon />}
+							size={isTablet ? IconSize.SIZE_10 : IconSize.SIZE_12}
+						/>
+					</li>
+				)}
 			</ul>
 			<Tooltip
 				ref={tooltipRef}
@@ -68,17 +77,20 @@ const CalendarTile = memo((props: CalendarTileProps) => {
 				)}
 				{calendarCustomEvents.length > 0 && (
 					<div className={styles.tooltip__events}>
-						<p className={styles.caption}>📅 Events:</p>
+						<p className={styles.caption}>
+							<Icon style={{ color: 'var(--color-ruby-dark)' }} icon={<CalendarIcon />} size={IconSize.SIZE_12} />
+							Events:
+						</p>
 						<ul className={styles.tooltip__eventsList}>
 							{calendarCustomEvents.map((event) => (
 								<li key={event.timestamp} className={styles.tooltip__eventsItem}>
 									{event.event}
 									<div className={styles.tooltip__eventsControl}>
 										<span className={styles.tooltip__eventsBtn} onClick={() => handleEditEvent(event.originalEvent)}>
-											<Icon icon={<EditIcon/>} size={IconSize.SIZE_16}/>
+											<Icon icon={<EditIcon />} size={IconSize.SIZE_16}/>
 										</span>
 										<span className={styles.tooltip__eventsBtn} onClick={() => handleDeleteEvent(event.timestamp)}>
-											<Icon icon={<TrashIcon/>} size={IconSize.SIZE_16}/>
+											<Icon icon={<TrashIcon />} size={IconSize.SIZE_16}/>
 										</span>
 									</div>
 								</li>
