@@ -65,7 +65,7 @@ const DetailsFormBasics = memo(({ role, visitedBM, birthdayDate }: DetailsFormBa
 					label={'Birthday Date'}
 					date={birthdayDate}
 					onChange={handleDatepickerChange}
-					mask={'00.00.0000'}
+					maxDate={new Date()}
 					showMonthDropdown
 					showYearDropdown
 				/>

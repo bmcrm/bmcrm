@@ -44,6 +44,9 @@ const FormInputs = memo((props: FormInputsProps) => {
 						label={'Birthday Date'}
 						date={birthdayDate}
 						onChange={handleDatepickerChange}
+						maxDate={new Date()}
+						showMonthDropdown
+						showYearDropdown
 					/>
 					<MultiSelect
 						isSearchable

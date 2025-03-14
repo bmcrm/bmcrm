@@ -66,14 +66,13 @@ const CalendarEventForm = memo(({ className, onClose, currentEvent }: CalendarEv
 							ariaDescribedBy={'Event date'}
 							errorName={'startDate'}
 							label={'Event Date'}
-							minDate={new Date()}
+							minDate={new Date(new Date().setHours(0, 0, 0, 0))}
 							dateRange={[values.startDate, values.endDate]}
 							onChange={(dateRange: [Date | null, Date | null]) => {
 								const [start, end] = dateRange;
 								void setFieldValue('startDate', start);
 								void setFieldValue('endDate', end);
 							}}
-							mask={'00.00.0000 - 00.00.0000'}
 							showMonthDropdown
 							showYearDropdown
 						/>

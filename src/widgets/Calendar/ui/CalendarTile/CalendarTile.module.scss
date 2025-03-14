@@ -15,8 +15,13 @@
 
 	&__icons {
 		position: absolute;
-		top: 1px;
-		right: 4px;
+		top: 3px;
+		right: 5px;
+
+		@media (width < breakpoints.$lg) {
+			top: 5px;
+			right: 2px;
+		}
 	}
 }
 
@@ -47,10 +52,18 @@
 	}
 
 	.caption {
+		display: flex;
+		align-items: center;
+		gap: 4px;
 		font-weight: 500;
 	}
 
 	&__birthdays {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 4px;
+
 		+ .tooltip__events {
 			margin-top: 5px;
 		}

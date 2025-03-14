@@ -4,9 +4,9 @@ import { IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
-import styles from './Datepicker.module.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Datepicker.scss';
+import styles from './Datepicker.module.scss';
 
 type DatepickerTimeProps = {
 	className?: string;
@@ -28,8 +28,9 @@ const DatepickerTime = memo((props: DatepickerTimeProps) => {
 			{label && <p className={styles.datepicker__caption}>{label}</p>}
 			<DatePicker
 				name={name}
-				placeholderText={placeholder}
 				className={styles.datepicker__field}
+				calendarClassName={styles.datepicker__calendar}
+				placeholderText={placeholder}
 				selected={time}
 				onChange={onChange}
 				timeIntervals={timeIntervals}
@@ -41,10 +42,7 @@ const DatepickerTime = memo((props: DatepickerTimeProps) => {
 				customInput={<IMaskInput mask={'00:00'} />}
 			/>
 			{name && (
-				<ErrorMessage
-					name={name}
-					render={() => <CustomErrorMessage className={styles.datepicker__error} />}
-				/>
+				<ErrorMessage name={name} render={() => <CustomErrorMessage className={styles.datepicker__error} />} />
 			)}
 		</label>
 	);

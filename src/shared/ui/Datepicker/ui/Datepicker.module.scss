@@ -33,6 +33,12 @@
 		}
 	}
 
+	&__calendar {
+		border-radius: 15px;
+		border: 1px solid var(--color-neutral);
+		font-family: var(--font-family-main), sans-serif;
+	}
+
 	&__calendar-icon {
 		z-index: 1;
 		top: 50%;

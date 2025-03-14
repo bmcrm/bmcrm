@@ -56,15 +56,6 @@ const Nav = memo((props: NavProps) => {
 						<>
 							<li>
 								<CustomNavLink
-									link={{
-										path: RoutePath.dashboard,
-										text: 'Dashboard',
-									}}
-									onClick={handleCLose}
-								/>
-							</li>
-							<li>
-								<CustomNavLink
 									theme={CustomNavLinkTheme.ICON}
 									link={{
 										path: RoutePath.settings_account,
