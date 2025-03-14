@@ -46,8 +46,10 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 			const target = event.target as Node;
 
 			if (tooltipRef.current && !tooltipRef.current.contains(target)) {
-				setTooltipPosition(null);
-				setActiveDay(null);
+				setTimeout(() => {
+					setTooltipPosition(null);
+					setActiveDay(null);
+				}, 0)
 			}
 		};
 
@@ -58,7 +60,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 
 	const handleClickDay = useCallback(
 		(date: Date, event: ReactMouseEvent<HTMLButtonElement>) => {
-			if (!birthdays || !isMobile) return;
+			if ((!birthdays && !customEvents) || !isMobile) return;
 
 			const formattedDayMonth = format(date, 'MM-dd');
 			const isClickOnTooltip = (event.target as Element).closest(`.${styles.tooltip}`) !== null;
@@ -82,7 +84,7 @@ const CustomCalendar = memo(({ className }: CalendarProps) => {
 				});
 			}
 		},
-		[birthdays, isMobile, activeDay]
+		[birthdays, isMobile, activeDay, customEvents]
 	);
 
 	return (
