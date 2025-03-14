@@ -67,12 +67,12 @@ const CampDetails = memo(({ className }: CampDetailsProps) => {
 							<p className={styles.counter}>{campersCount[CamperRole.PROSPECT]}</p>
 						</li>
 						<li className={styles.details__campersItem}>
-							<p className={styles.caption}>{CamperRole.QUALIFIED}</p>
-							<p className={styles.counter}>{campersCount[CamperRole.QUALIFIED]}</p>
-						</li>
-						<li className={styles.details__campersItem}>
 							<p className={styles.caption}>{CamperRole.INTENT}</p>
 							<p className={styles.counter}>{campersCount[CamperRole.INTENT]}</p>
+						</li>
+						<li className={styles.details__campersItem}>
+							<p className={styles.caption}>{CamperRole.QUALIFIED}</p>
+							<p className={styles.counter}>{campersCount[CamperRole.QUALIFIED]}</p>
 						</li>
 						<li className={styles.details__campersItem}>
 							<p className={styles.caption}>{CamperRole.CAMPER}</p>

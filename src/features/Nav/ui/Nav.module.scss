@@ -59,9 +59,11 @@
     display: flex;
     gap: 30px;
 
+    @media (width < breakpoints.$xl) {
+      gap: 20px;
+    }
     @media (width < breakpoints.$lg) {
       flex-direction: column;
-      gap: 20px;
     }
     @media (width < breakpoints.$md) {
       gap: 15px;

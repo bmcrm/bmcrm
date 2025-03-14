@@ -65,9 +65,9 @@ const DetailsFormBasics = memo(({ role, visitedBM, birthdayDate }: DetailsFormBa
 					label={'Birthday Date'}
 					date={birthdayDate}
 					onChange={handleDatepickerChange}
-					maxDate={new Date()}
+					// maxDate={new Date()}
 					showMonthDropdown
-					showYearDropdown
+					// showYearDropdown
 				/>
 				<MultiSelect
 					isSearchable

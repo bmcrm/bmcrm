@@ -43,8 +43,8 @@ const InventoryPlaceholder = memo((props: InventoryPlaceholderProps) => {
 		[InventoryPlaceholderTheme.INVALID_SEARCH]: {
 			image: InvalidCategoryImg,
 			alt: 'Invalid search',
-			title: 'There is no such item',
-			desc: <p className={styles.empty__text}>Try using a different search query.</p>,
+			title: 'No items found',
+			desc: null,
 			button: null,
 		},
 	};

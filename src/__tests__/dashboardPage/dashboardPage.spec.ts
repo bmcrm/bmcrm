@@ -43,7 +43,6 @@ test.describe('Create, edit and remove calendar event on dashboard page', () => 
 		await customWaitForResponse({ page, endpoint: '/calendar' });
 		await page.waitForTimeout(1000);
 
-		// const todayButton = page.locator('.react-calendar__tile--now');
 		const eventsList = page.locator('ul[aria-label="events list"]');
 		await expect(eventsList).toBeVisible();
 		await eventsList.hover();
