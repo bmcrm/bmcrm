@@ -4,7 +4,7 @@ import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { expect, type Page } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import fc from 'fast-check';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 export enum DataType {
 	FAKE = 'fake',
@@ -26,7 +26,7 @@ interface FillInventoryFormProps {
 
 interface FillCalendarEventFormProps {
 	page: Page;
-	date: 'today' | 'future';
+	date: 'today' | 'tomorrow';
 }
 
 const cognitoClient = new CognitoIdentityProviderClient({
@@ -188,13 +188,14 @@ export const generateFakeData = () => {
 	const facebook = `https://facebook.com/${faker.internet.username()}`;
 	const randomDate = format(faker.date.future(), 'dd.MM.yyyy');
 	const todayDate = format(new Date(), 'dd.MM.yyyy');
+	const tomorrowDate = format(addDays(new Date(), 1), 'dd.MM.yyyy');
 	const itemName = faker.word.words(3);
 	const category = faker.commerce.department();
 	const price = faker.commerce.price({ min: 1, max: 10000, dec: 2 });
 	const quantity = faker.number.int({ min: 1, max: 1000 });
 	const link = faker.internet.url();
 
-	return { campName, companyName, city, firstName, lastName, playaName, bio, sentence, email, password, instagram, facebook, randomDate, todayDate, itemName, category, price, quantity, paragraph, link };
+	return { campName, companyName, city, firstName, lastName, playaName, bio, sentence, email, password, instagram, facebook, randomDate, todayDate, tomorrowDate, itemName, category, price, quantity, paragraph, link };
 };
 
 export const fillCamperDetailsForm = async (page: Page) => {
@@ -457,10 +458,10 @@ export const resetSettingsCampForm = async (page: Page) => {
 
 export const fillCalendarEventForm = async ({ page, date }: FillCalendarEventFormProps) => {
 	const { itemName } = generateFuzzData();
-	const { todayDate, randomDate } = generateFakeData();
+	const { todayDate, tomorrowDate } = generateFakeData();
 
 	await page.fill('input[name="event"]', itemName);
-	await page.fill('input[aria-describedby="Event date"]', date === 'today' ? todayDate : randomDate);
+	await page.fill('input[aria-describedby="Event date"]', date === 'today' ? todayDate : tomorrowDate);
 
 	await page.click('button[type="submit"]');
 };
