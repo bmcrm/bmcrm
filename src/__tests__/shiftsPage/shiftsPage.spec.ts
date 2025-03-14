@@ -39,18 +39,20 @@ test.describe('Check shifts page, create, edit and remove shift', () => {
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
+		await page.waitForTimeout(1000);
 		await createFuzzShiftsForm(page);
 		await customWaitForResponse({ page, endpoint: '/shifts' });
-		await page.waitForTimeout(500);
+		await page.waitForTimeout(1000);
 		await expect(page.locator('text=Shift created successfully!')).toBeVisible();
 
 		const editShiftButton = page.locator('button', { hasText: 'Edit' });
 		await expect(editShiftButton).toBeVisible();
 		await editShiftButton.click();
 
+		await page.waitForTimeout(1000);
 		await editFuzzShiftsForm(page);
 		await customWaitForResponse({ page, endpoint: '/shifts' });
-		await page.waitForTimeout(500);
+		await page.waitForTimeout(1000);
 
 		await page.locator('button[aria-label="Delete shift button"]').click();
 		await page.waitForTimeout(500);

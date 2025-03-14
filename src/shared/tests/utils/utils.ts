@@ -24,6 +24,11 @@ interface FillInventoryFormProps {
 	dataType: DataType;
 }
 
+interface FillCalendarEventFormProps {
+	page: Page;
+	date: 'today' | 'future';
+}
+
 const cognitoClient = new CognitoIdentityProviderClient({
 	region: 'us-east-1',
 });
@@ -126,6 +131,7 @@ export const getURLs = async (campID?: string): Promise<Record<string, string>> 
 		INVENTORY: `${APP_URL}/inventory`,
 		SETTINGS_ACCOUNT: `${APP_URL}/settings/account`,
 		SETTINGS_CAMP: `${APP_URL}/settings/camp`,
+		DASHBOARD: `${APP_URL}/dashboard`,
 	};
 };
 
@@ -146,7 +152,7 @@ export const customWaitForResponse = ({ page, endpoint }: {page: Page, endpoint:
 		(response) =>
 			response.url().includes(endpoint) &&
 			['GET', 'PATCH', 'POST', 'DELETE', 'PUT'].includes(response.request().method()) &&
-			(response.status() === 200 || response.status() === 201 || response.status() === 204)
+			[200, 201, 202, 204, 304].includes(response.status())
 	);
 
 export const generateFuzzData = () => {
@@ -181,13 +187,14 @@ export const generateFakeData = () => {
 	const instagram = `https://instagram.com/${faker.internet.username()}`;
 	const facebook = `https://facebook.com/${faker.internet.username()}`;
 	const randomDate = format(faker.date.future(), 'dd.MM.yyyy');
+	const todayDate = format(new Date(), 'dd.MM.yyyy');
 	const itemName = faker.word.words(3);
 	const category = faker.commerce.department();
 	const price = faker.commerce.price({ min: 1, max: 10000, dec: 2 });
 	const quantity = faker.number.int({ min: 1, max: 1000 });
 	const link = faker.internet.url();
 
-	return { campName, companyName, city, firstName, lastName, playaName, bio, sentence, email, password, instagram, facebook, randomDate, itemName, category, price, quantity, paragraph, link };
+	return { campName, companyName, city, firstName, lastName, playaName, bio, sentence, email, password, instagram, facebook, randomDate, todayDate, itemName, category, price, quantity, paragraph, link };
 };
 
 export const fillCamperDetailsForm = async (page: Page) => {
@@ -444,6 +451,16 @@ export const resetSettingsCampForm = async (page: Page) => {
 	await page.fill('input[name="city"]', defaultCampData.city);
 	await page.fill('input[name="camp_website"]', defaultCampData.link);
 	await page.fill('textarea[name="camp_description"]', '');
+
+	await page.click('button[type="submit"]');
+};
+
+export const fillCalendarEventForm = async ({ page, date }: FillCalendarEventFormProps) => {
+	const { itemName } = generateFuzzData();
+	const { todayDate, randomDate } = generateFakeData();
+
+	await page.fill('input[name="event"]', itemName);
+	await page.fill('input[aria-describedby="Event date"]', date === 'today' ? todayDate : randomDate);
 
 	await page.click('button[type="submit"]');
 };

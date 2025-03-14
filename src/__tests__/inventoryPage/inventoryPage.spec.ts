@@ -39,9 +39,10 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
+		await page.waitForTimeout(1000);
 		await fillInventoryForm({ page, stage: 'create', dataType: DataType.FUZZ });
 		await customWaitForResponse({ page, endpoint: '/inventory' });
-		await page.waitForTimeout(500);
+		await page.waitForTimeout(1000);
 		await expect(page.locator('text=Item created successfully!')).toBeVisible();
 
 		const editItemButton = page.locator('button[aria-label="Edit item button"]');
@@ -49,9 +50,10 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		await editItemButton.click();
 		await expect(form).toBeVisible();
 
+		await page.waitForTimeout(1000);
 		await fillInventoryForm({ page, stage: 'edit', dataType: DataType.FUZZ });
 		await customWaitForResponse({ page, endpoint: '/inventory' });
-		await page.waitForTimeout(500);
+		await page.waitForTimeout(1000);
 		await expect(page.locator('text=Item updated successfully!')).toBeVisible();
 
 		await page.keyboard.press('Escape');
