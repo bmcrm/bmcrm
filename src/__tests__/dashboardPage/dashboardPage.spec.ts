@@ -43,21 +43,22 @@ test.describe('Create, edit and remove calendar event on dashboard page', () => 
 		await customWaitForResponse({ page, endpoint: '/calendar' });
 		await page.waitForTimeout(1000);
 
-		const todayButton = page.locator('.react-calendar__tile--now');
-		await expect(todayButton).toBeVisible();
-		await todayButton.hover();
-		const editEventButton = page.locator('button[aria-label="edit event button"]');
+		// const todayButton = page.locator('.react-calendar__tile--now');
+		const eventsList = page.locator('ul[aria-label="events list"]');
+		await expect(eventsList).toBeVisible();
+		await eventsList.hover();
+		const editEventButton = page.locator('span[aria-label="edit event button"]');
 		await expect(editEventButton).toBeVisible();
 		await editEventButton.click();
 		await expect(form).toBeVisible();
 
 		await page.waitForTimeout(1000);
-		await fillCalendarEventForm({ page, date: 'future' });
+		await fillCalendarEventForm({ page, date: 'tomorrow' });
 		await customWaitForResponse({ page, endpoint: '/calendar' });
 		await page.waitForTimeout(1000);
 
-		await todayButton.hover();
-		const deleteEventButton = page.locator('button[aria-label="delete event button"]');
+		await eventsList.hover();
+		const deleteEventButton = page.locator('span[aria-label="delete event button"]');
 		await expect(deleteEventButton).toBeVisible();
 		await deleteEventButton.click();
 		await customWaitForResponse({ page, endpoint: '/calendar' });

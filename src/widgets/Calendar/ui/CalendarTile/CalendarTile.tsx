@@ -53,7 +53,7 @@ const CalendarTile = memo((props: CalendarTileProps) => {
 
 	return (
 		<>
-			<ul className={styles.tile__icons}>
+			<ul className={styles.tile__icons} aria-label={'events list'}>
 				{calendarBirthdays.length > 0 && <li className={'calendar-icon'}>🎂</li>}
 				{calendarCustomEvents.length > 0 && (
 					<li>
