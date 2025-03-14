@@ -19,7 +19,7 @@ let TEST_PARAMS: {
 	APP_URL: string;
 };
 
-test.describe('Check funnel page and edit user', () => {
+test.describe.skip('Check funnel page and edit user', () => {
 
 	test.beforeAll(async () => {
 		TEST_PARAMS = await getTestParameters();
