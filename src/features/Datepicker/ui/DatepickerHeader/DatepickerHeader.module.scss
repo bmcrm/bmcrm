@@ -1,0 +1,17 @@
+.header {
+	padding-left: 10px;
+	padding-right: 10px;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+
+	&__btn {
+		color: var(--color-black);
+
+		@media (hover: hover) {
+			&:hover {
+				scale: 1.3;
+			}
+		}
+	}
+}

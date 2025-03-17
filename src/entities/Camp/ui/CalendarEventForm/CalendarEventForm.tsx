@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { classNames } from '@shared/lib/classNames';
 import { generateCalendarInitials } from '../../lib/generateInitialValues';
 import { FormikInput } from '@shared/ui/FormikInput';
-import { DatepickerRange } from '@shared/ui/Datepicker';
+import { DatepickerRange } from '@features/Datepicker';
 import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
 import { useCreateCalendarEvent } from '../../hooks/useCreateCalendarEvent';

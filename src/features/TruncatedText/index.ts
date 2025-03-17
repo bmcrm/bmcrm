@@ -1,0 +1,1 @@
+export { default as TruncatedText } from './ui/TruncatedText/TruncatedText';

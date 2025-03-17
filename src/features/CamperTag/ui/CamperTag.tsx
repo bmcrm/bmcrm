@@ -78,7 +78,7 @@ const CamperTag = memo((props: CamperTagProps) => {
 			onMouseLeave={close}
 		>
 			<p className={styles.tag__name}>{name}</p>
-			{isOpen && details && (
+			{isOpen && details.length > 0 && (
 				<>
 					{portalTargetRef?.current ? (
 						<Portal element={portalTargetRef.current}>{tooltip}</Portal>

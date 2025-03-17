@@ -4,7 +4,7 @@ import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { DatepickerRange, DatepickerTime } from '@shared/ui/Datepicker';
+import { DatepickerRange, DatepickerTime } from '@features/Datepicker';
 import type { IShift } from '../../model/types/Shift.types';
 import styles from './ShiftForm.module.scss';
 import PlusIcon from '@shared/assets/icons/plus_icon.svg';

@@ -9,29 +9,44 @@
   width: max-content;
   max-width: 100%;
   cursor: pointer;
-  border: 1px solid var(--color-ruby-dark);
   transition: 0.1s ease;
-
-  // active
-
-  &:active {
-    background-color: #750e34;
-    border-color: #750e34;
-  }
 
   // styles
 
   &--primary {
     background-color: var(--color-ruby-dark);
+    border: 1px solid var(--color-ruby-dark);
 
     @media (hover: hover) {
       &:hover {
         box-shadow: 0 0 10px 0 #5d0b2a inset;
       }
     }
+
+    &:active {
+      background-color: #750e34;
+      border-color: #750e34;
+    }
+  }
+  &--secondary {
+    background: var(--gradient-yellow);
+    border: 1px solid var(--color-orange-light);
+
+    @media (hover: hover) {
+      &:hover {
+        box-shadow: 0 0 10px 0 #BE8A29FF inset;
+        border-color: #BE8A29FF;
+      }
+    }
+
+    &:active {
+      background: #BE8A29FF;
+      border-color: #BE8A29FF;
+    }
   }
   &--outline {
     background-color: transparent;
+    border: 1px solid var(--color-ruby-dark);
 
     @media (hover: hover) {
       &:hover {
@@ -39,10 +54,31 @@
         box-shadow: 0 0 10px 0 #5d0b2a inset;
       }
     }
+
+    &:active {
+      background-color: #750e34;
+      border-color: #750e34;
+    }
+  }
+  &--outline-neutral {
+    background-color: transparent;
+    border: 1px solid var(--color-neutral);
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-black);
+        border-color: var(--color-black);
+      }
+    }
+
+    &:active {
+      background-color: #750e34;
+      border-color: #750e34;
+    }
   }
   &--passive {
     background-color: var(--color-neutral);
-    border-color: var(--color-neutral);
+    border: 1px solid var(--color-neutral);
 
     @media (hover: hover) {
       &:hover {

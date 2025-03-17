@@ -4,11 +4,16 @@
 	max-width: 150px;
 	padding: 0;
 	border-radius: 10px;
-	background-color: var(--color-neutral);
+	background-color: var(--color-secondary-bg);
+	border: 1px solid var(--color-white);
+	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .15);
 	color: var(--color-black);
 
 	&__row {
-		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		padding: 8px 10px;
 
 		&.fluid {
 			padding-left: 0;
@@ -16,19 +21,19 @@
 		}
 
 		+ .tooltip__row {
-			border-top: 1px solid var(--color-black);
+			border-top: 1px solid var(--color-neutral);
 		}
 	}
 
 	&__column {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 10px;
 	}
 
 	&__btn {
 		justify-content: flex-start;
-		gap: 10px;
+		gap: 5px;
 		padding-left: 10px;
 		padding-right: 10px;
 
@@ -40,7 +45,8 @@
 	}
 
 	&__caption {
-		font: var(--font-s);
+		font: var(--font-xs);
+		font-weight: 600;
 
 		+ .tooltip__flex, + .tooltip__column {
 			margin-top: 5px;
