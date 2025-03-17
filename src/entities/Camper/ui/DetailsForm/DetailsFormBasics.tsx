@@ -4,7 +4,7 @@ import { BMYearsOptions } from '@shared/lib/generateBMYearsOptions';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { MultiSelect } from '@shared/ui/MultiSelect';
-import { Datepicker } from '@shared/ui/Datepicker';
+import { Datepicker } from '@features/Datepicker';
 import { userState } from '@entities/User';
 import { roleOptions } from '../../lib/generateSelectOptions';
 import { inputs } from '../../model/data/DetailsForm.data';
@@ -65,9 +65,7 @@ const DetailsFormBasics = memo(({ role, visitedBM, birthdayDate }: DetailsFormBa
 					label={'Birthday Date'}
 					date={birthdayDate}
 					onChange={handleDatepickerChange}
-					maxDate={new Date()}
 					showMonthDropdown
-					showYearDropdown
 				/>
 				<MultiSelect
 					isSearchable

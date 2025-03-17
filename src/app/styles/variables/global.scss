@@ -11,7 +11,7 @@
   --color-neutral-dark: #767676;
   --color-ruby-dark: #8b103e;
   --color-ruby-light: #e54051;
-  --color-orange-dark: #fe912a;
+  --color-orange-dark: #b05800;
   --color-orange-light: #feca5c;
   --color-orange-pastel: #ffdd95;
   --color-green-light: #4ECB71;
@@ -19,6 +19,7 @@
   --color-overlay-bg: rgba(0, 0, 0, .5);
   --gradient-ruby: linear-gradient(90deg, var(--color-ruby-light) 0%, var(--color-ruby-dark) 100%);
   --gradient-orange: linear-gradient(90deg, var(--color-orange-light) 0%, var(--color-orange-dark) 100%);
+  --gradient-yellow: linear-gradient(0deg, var(--color-input-orange) 0%, var(--color-input-orange) 100%), linear-gradient(93deg, var(--color-orange-light) 1.32%, var(--color-orange-dark) 98.68%);
 
   // fonts
 

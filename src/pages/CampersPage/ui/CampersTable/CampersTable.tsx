@@ -1,18 +1,21 @@
-import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { useToggle } from '@shared/hooks/useToggle';
 import { classNames } from '@shared/lib/classNames';
 import { dateNormalize } from '@shared/lib/dateNormalize';
 import { filterTags, multiValueFilter, Table } from '@widgets/Table';
-import { Button, ButtonSize } from '@shared/ui/Button';
+import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
+import { Icon, IconSize } from '@shared/ui/Icon';
 import { DeleteCamperButton } from '@features/DeleteCamperButton';
 import { CamperTag, CamperTagTheme } from '@features/CamperTag';
 import { SocialIcon } from '@features/SocialIcon';
+import { TruncatedText } from '@features/TruncatedText';
 import { CamperDetailsModal, CamperDetailsModalTheme } from '@widgets/CamperDetailsModal';
 import { userState } from '@entities/User';
 import { CamperRole, type ICamper } from '@entities/Camper';
 import styles from './CampersTable.module.scss';
+import EditIcon from '@shared/assets/icons/edit_icon.svg';
 
 type CampersTableProps = {
 	campers: ICamper[];
@@ -70,12 +73,22 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 							{(canControl || currentUser) && (
 								<div className={styles.table__buttons}>
 									<Button
-										size={ButtonSize.S}
+										size={ButtonSize.TEXT}
+										className={styles.table__btn}
 										onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.EDIT })}
 									>
-										Edit
+										<Icon icon={<EditIcon />} size={IconSize.SIZE_12} />
 									</Button>
-									{canDelete && <DeleteCamperButton camperEmail={email} camperName={`${firstName} ${lastName}`} icon />}
+									{canDelete && (
+										<DeleteCamperButton
+											camperEmail={email}
+											camperName={`${firstName} ${lastName}`}
+											buttonColor={ButtonColor.NEUTRAL}
+											buttonTheme={ButtonTheme.OUTLINE_NEUTRAL}
+											iconSize={IconSize.SIZE_12}
+											icon
+										/>
+									)}
 								</div>
 							)}
 						</div>
@@ -86,16 +99,14 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				accessorKey: 'playa_name',
 				header: 'Playa Name',
 				cell: (info) => (
-					<p style={{ wordBreak: 'break-word' }}>
-						{info.getValue() as string}
-					</p>
+					<TruncatedText text={info.getValue() as string} maxLength={15} nowrap />
 				),
 			},
 			{
 				accessorKey: 'birthdayDate',
 				header: 'Birthday',
 				cell: (info) => info.getValue()
-					? format(info.getValue() as string, 'dd.MM.yyyy')
+					? format(info.getValue() as string, 'dd.MM')
 					: '',
 			},
 			{
@@ -107,14 +118,15 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				accessorKey: 'email',
 				header: 'Email',
 				cell: (info) => (
-					<div style={{ minWidth: 180 }}>
-						<a href={`mailto:${info.getValue()}`} className={styles.table__link}>{info.getValue() as ReactNode}</a>
-					</div>
+					<TruncatedText text={info.getValue() as string} url={`mailto:${info.getValue()}`} maxLength={15} nowrap />
 				),
 			},
 			{
 				accessorKey: 'city',
 				header: 'City',
+				cell: (info) => (
+					<TruncatedText text={info.getValue() as string} maxLength={10} nowrap />
+				),
 			},
 			{
 				accessorKey: 'social_links',
@@ -140,7 +152,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 					const tags = row.tags || {};
 
 					return (
-						<div className={styles.table__cell} style={{ justifyContent: 'center', minWidth: 200 }}>
+						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
 							{Object.entries(tags).map(([name, details], i) => (
 								<CamperTag
 									key={`${name}-${i}`}
@@ -165,7 +177,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				cell: (info) => info.getValue() ? dateNormalize(info.getValue() as string) : '',
 			},
 		],
-		[handleOpenDetails, decodedIDToken?.email]
+		[handleOpenDetails, decodedIDToken?.email, decodedIDToken?.role]
 	);
 
 	return (

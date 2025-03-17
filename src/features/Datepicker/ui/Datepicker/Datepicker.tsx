@@ -1,11 +1,11 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
-import { IMaskInput } from 'react-imask';
+import { IMask, IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
-import { addYears, subYears } from 'date-fns';
 import { enGB } from 'date-fns/locale/en-GB';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
+import { DatepickerHeader } from '../DatepickerHeader/DatepickerHeader.tsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Datepicker.scss';
 import styles from './Datepicker.module.scss';
@@ -24,7 +24,6 @@ interface DatepickerProps {
 	maxDate?: Date;
 	showMonthDropdown?: boolean;
 	showYearDropdown?: boolean;
-	mask?: string;
 }
 
 const Datepicker = memo((props: DatepickerProps) => {
@@ -35,14 +34,10 @@ const Datepicker = memo((props: DatepickerProps) => {
 		placeholder = 'Select or write...',
 		style,
 		date,
-		mask,
 		minDate,
 		maxDate,
 		...rest
 	} = props;
-
-	const fixedMinDate = subYears(new Date(), 100);
-	const fixedMaxDate = addYears(new Date(), 50);
 
 	return (
 		<label className={classNames(styles.datepicker, {}, [className])} style={style}>
@@ -54,23 +49,40 @@ const Datepicker = memo((props: DatepickerProps) => {
 				popperPlacement={'top'}
 				locale={enGB}
 				placeholderText={placeholder}
-				dateFormat={'dd.MM.yyyy'}
+				dateFormat={'dd.MM'}
 				isClearable={true}
 				selected={date}
 				showIcon
 				dropdownMode={'select'}
-				minDate={minDate || fixedMinDate}
-				maxDate={maxDate || fixedMaxDate}
+				renderCustomHeader={(props) => <DatepickerHeader {...props} />}
 				customInput={<IMaskInput
-					mask={Date}
 					autofix={'pad'}
-					min={minDate || fixedMinDate}
-					max={maxDate || fixedMaxDate}
+					mask={Date}
+					pattern={'d{.}`m'}
+					blocks={{
+						d: { mask: IMask.MaskedRange, from: 1, to: 31, maxLength: 2 },
+						m: { mask: IMask.MaskedRange, from: 1, to: 12, maxLength: 2 },
+					}}
+					format={(date: Date | null) => {
+						if (!date) return '';
+						const day = String(date.getDate()).padStart(2, '0');
+						const month = String(date.getMonth() + 1).padStart(2, '0');
+						return `${day}.${month}`;
+					}}
+					parse={(str: string) => {
+						const parts = str.split('.').map(Number);
+						const day = parts[0];
+						const month = parts[1];
+
+						if (!day || !month) return null;
+
+						return new Date(new Date().getFullYear(), month - 1, day);
+					}}
 				/>}
 				{...rest}
 			/>
 			{errorName && (
-				<ErrorMessage name={errorName} render={(msg) => <CustomErrorMessage message={msg} />} />
+				<ErrorMessage name={errorName} render={(msg) => <CustomErrorMessage message={msg}/>}/>
 			)}
 		</label>
 	);

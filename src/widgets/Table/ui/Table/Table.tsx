@@ -1,12 +1,12 @@
-import { useCallback, useRef, useState, useEffect, type RefObject } from 'react';
+import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import {
-	useReactTable,
+	type ColumnDef,
+	type ColumnFiltersState,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
 	type SortingState,
-	type ColumnDef,
-	type ColumnFiltersState,
+	useReactTable,
 	type VisibilityState,
 } from '@tanstack/react-table';
 import { classNames } from '@shared/lib/classNames';
@@ -85,7 +85,7 @@ const Table = <TData extends object>(props: TableProps<TData>) => {
 					{((isInviteButton && canControl) || (isCreateButton && canControl)) && (
 						<div className={classNames(styles.table__buttons, {}, ['ml-a'])}>
 							{isInviteButton && canControl && <InviteButton size={ButtonSize.S} />}
-							{isCreateButton && canControl && <CreateButton size={ButtonSize.S} />}
+							{isCreateButton && canControl && <CreateButton theme={ButtonTheme.SECONDARY} size={ButtonSize.S} />}
 						</div>
 					)}
 				</div>

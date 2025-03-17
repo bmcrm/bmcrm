@@ -8,6 +8,7 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: 5px;
+		max-width: 200px;
 
 		&.name {
 			min-width: 160px;
@@ -37,9 +38,11 @@
 	}
 
 	&__socials {
+		max-width: 110px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-wrap: wrap;
 		gap: 5px;
 	}
 
@@ -49,5 +52,10 @@
     align-items: center;
     gap: 5px;
 		margin-left: auto;
+	}
+
+	&__btn {
+		padding: 2px;
+		border-radius: 50%;
 	}
 }

@@ -36,7 +36,7 @@ const TableContent = <TData extends object>({ table }: TableContentProps<TData>)
 
 	return (
 		<div className={styles.tooltip__row}>
-			<h4 className={styles.tooltip__caption}>Columns visibility:</h4>
+			<h4 className={styles.tooltip__caption}>Columns:</h4>
 			<div className={styles.tooltip__column}>
 				<CustomCheckbox
 					label={'Toggle All'}

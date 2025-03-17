@@ -6,7 +6,7 @@ import { Avatar } from '@shared/ui/Avatar';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { MultiSelect } from '@shared/ui/MultiSelect';
-import { Datepicker } from '@shared/ui/Datepicker';
+import { Datepicker } from '@features/Datepicker';
 import { DetailsFormHistory, DetailsFormSocials, type ICamper } from '@entities/Camper';
 import { inputsData } from '../../model/data/UserSettingsForm.data';
 import styles from './UserSettingsForm.module.scss';
@@ -44,9 +44,7 @@ const FormInputs = memo((props: FormInputsProps) => {
 						label={'Birthday Date'}
 						date={birthdayDate}
 						onChange={handleDatepickerChange}
-						maxDate={new Date()}
 						showMonthDropdown
-						showYearDropdown
 					/>
 					<MultiSelect
 						isSearchable
