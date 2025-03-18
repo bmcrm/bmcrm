@@ -76,6 +76,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 										size={ButtonSize.TEXT}
 										className={styles.table__btn}
 										onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.EDIT })}
+										aria-label={'Edit camper button'}
 									>
 										<Icon icon={<EditIcon />} size={IconSize.SIZE_12} />
 									</Button>
