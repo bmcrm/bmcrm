@@ -33,7 +33,7 @@ test.describe('Check campers page and edit user', () => {
 		await page.goto(URLS.CAMPERS);
 		await expect(page).toHaveURL(URLS.CAMPERS);
 
-		const editCamperButton = page.locator('button', { hasText: 'Edit' });
+		const editCamperButton = page.locator('button[aria-label="Edit camper button"]');
 		await expect(editCamperButton).toBeVisible();
 		await editCamperButton.click();
 
