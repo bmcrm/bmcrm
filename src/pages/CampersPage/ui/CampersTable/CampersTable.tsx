@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { useToggle } from '@shared/hooks/useToggle';
+import { useMedia } from '@shared/hooks/useMedia';
 import { classNames } from '@shared/lib/classNames';
-import { dateNormalize } from '@shared/lib/dateNormalize';
+import { dateFormatter } from '@shared/lib/dateFormatter';
 import { filterTags, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
@@ -25,6 +25,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 	const [camperEmail, setCamperEmail] = useState('');
 	const [detailsTheme, setDetailsTheme] = useState<CamperDetailsModalTheme>(CamperDetailsModalTheme.EDIT);
 	const { isOpen, open, close } = useToggle();
+	const { isExtraLargePCBreakpoint } = useMedia();
 	const { tokens: { decodedIDToken } } = userState();
 	const portalTargetRef = useRef<HTMLDivElement>(null);
 	const tableScrollRef = useRef<HTMLDivElement>(null);
@@ -44,6 +45,9 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 			{
 				accessorKey: 'first_name',
 				header: 'Name',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.name]),
+				},
 				cell: (info) => {
 					const row = info.row.original;
 					const firstName = row.first_name || '';
@@ -63,7 +67,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 							: currentUser;
 
 					return (
-						<div className={classNames(styles.table__cell, {}, [styles.name])}>
+						<div className={classNames(styles.table__row, {}, [styles.wrap])}>
 							<p
 								className={styles.table__camperName}
 								onClick={() => handleOpenDetails({ email, detailsTheme: CamperDetailsModalTheme.DEFAULT })}
@@ -71,7 +75,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 								{firstName} {lastName}
 							</p>
 							{(canControl || currentUser) && (
-								<div className={styles.table__buttons}>
+								<div className={classNames(styles.table__row, {}, ['ml-a'])}>
 									<Button
 										size={ButtonSize.TEXT}
 										className={styles.table__btn}
@@ -99,45 +103,76 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 			{
 				accessorKey: 'playa_name',
 				header: 'Playa Name',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.playa]),
+				},
 				cell: (info) => (
-					<TruncatedText text={info.getValue() as string} maxLength={15} nowrap />
+					<TruncatedText
+						text={info.getValue() as string}
+						maxLength={isExtraLargePCBreakpoint ? 15 : 25}
+						nowrap
+					/>
 				),
 			},
 			{
 				accessorKey: 'birthdayDate',
 				header: 'Birthday',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.birthday]),
+				},
 				cell: (info) => info.getValue()
-					? format(info.getValue() as string, 'dd.MM')
+					? dateFormatter(info.getValue() as string, 'withoutYear')
 					: '',
 			},
 			{
 				accessorKey: 'role',
 				header: 'Role',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.role]),
+				},
 				filterFn: multiValueFilter,
 			},
 			{
 				accessorKey: 'email',
 				header: 'Email',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.email]),
+				},
 				cell: (info) => (
-					<TruncatedText text={info.getValue() as string} url={`mailto:${info.getValue()}`} maxLength={15} nowrap />
+					<TruncatedText
+						text={info.getValue() as string}
+						url={`mailto:${info.getValue()}`}
+						maxLength={isExtraLargePCBreakpoint ? 15 : 25}
+						nowrap
+					/>
 				),
 			},
 			{
 				accessorKey: 'city',
 				header: 'City',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.city]),
+				},
 				cell: (info) => (
-					<TruncatedText text={info.getValue() as string} maxLength={10} nowrap />
+					<TruncatedText
+						text={info.getValue() as string}
+						maxLength={isExtraLargePCBreakpoint ? 10 : 20}
+						nowrap
+					/>
 				),
 			},
 			{
 				accessorKey: 'social_links',
 				header: 'Socials',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.socials]),
+				},
 				cell: (info) => {
 					const row = info.row.original;
 					const socials = row.social_links || [];
 
 					return (
-						<div className={styles.table__socials}>
+						<div className={classNames(styles.table__row, {}, [styles.center, styles.wrap, 'm-centred'])}>
 							{socials.map((social, i) => <SocialIcon key={i} social={social} />)}
 						</div>
 					);
@@ -148,12 +183,15 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				header: 'Tags',
 				filterFn: filterTags,
 				enableSorting: false,
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.tags]),
+				},
 				cell: (info) => {
 					const row = info.row.original;
 					const tags = row.tags || {};
 
 					return (
-						<div className={styles.table__cell} style={{ justifyContent: 'center' }}>
+						<div className={classNames(styles.table__row, {}, [styles.center, styles.wrap])}>
 							{Object.entries(tags).map(([name, details], i) => (
 								<CamperTag
 									key={`${name}-${i}`}
@@ -170,15 +208,23 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 			{
 				accessorKey: 'created_at',
 				header: 'Created At',
-				cell: (info) => dateNormalize(info.getValue() as string),
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.date]),
+				},
+				cell: (info) => dateFormatter(info.getValue() as string),
 			},
 			{
 				accessorKey: 'updated_at',
 				header: 'Updated At',
-				cell: (info) => info.getValue() ? dateNormalize(info.getValue() as string) : '',
+				meta: {
+					className: classNames(styles.table__cell, {}, [styles.date]),
+				},
+				cell: (info) => info.getValue()
+					? dateFormatter(info.getValue() as string)
+					: '',
 			},
 		],
-		[handleOpenDetails, decodedIDToken?.email, decodedIDToken?.role]
+		[handleOpenDetails, decodedIDToken?.email, decodedIDToken?.role, isExtraLargePCBreakpoint]
 	);
 
 	return (

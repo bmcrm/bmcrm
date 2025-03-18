@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react';
 import { format } from 'date-fns';
 import { classNames } from '@shared/lib/classNames';
+import { dateFormatter } from '@shared/lib/dateFormatter';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { useDeleteShift, type IShift } from '@entities/Shift';
@@ -28,8 +29,8 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 			<div className={styles.item__inner}>
 				<div className={styles.item__column}>
 					<strong className={styles.item__caption}>
-						{start_date && format(new Date(start_date), 'dd.MM.yyyy')}
-						{end_date && ` - ${format(new Date(end_date), 'dd.MM.yyyy')}`}
+						{start_date && dateFormatter(start_date)}
+						{end_date && ` - ${dateFormatter(end_date)}`}
 					</strong>
 					<div className={styles.item__columnInner}>
 						<p className={styles.item__text}>{title}</p>
