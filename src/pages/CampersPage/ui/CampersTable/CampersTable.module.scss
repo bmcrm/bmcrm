@@ -3,19 +3,78 @@
 .table {
 
 	&__cell {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		gap: 5px;
-		max-width: 200px;
+		&.role {
+			width: 120px;
 
+			@media (width <= breakpoints.$xxl) {
+				width: 110px;
+			}
+		}
+		&.birthday {
+			width: 110px;
+		}
+		&.date {
+			width: 130px;
+
+			@media (width <= breakpoints.$xxl) {
+				width: 110px;
+			}
+		}
+		&.city {
+			@media (width > breakpoints.$xxl) {
+				width: 180px;
+			}
+		}
+		&.socials {
+			width: 110px;
+
+			@media (width > breakpoints.$xxl) {
+				width: 180px;
+			}
+		}
+		&.tags {
+			min-width: 200px;
+
+			@media (width < breakpoints.$xs) {
+				min-width: 140px;
+			}
+		}
+		&.email {
+			@media (width > breakpoints.$xxl) {
+				width: 220px;
+			}
+		}
 		&.name {
-			min-width: 160px;
+			min-width: 200px;
 
 			@media (width < breakpoints.$lg) {
-				min-width: unset;
+				min-width: 140px;
 			}
+			@media (width < breakpoints.$xs) {
+				min-width: 100px;
+			}
+		}
+		&.playa {
+			@media (width > breakpoints.$xxl) {
+				width: 200px;
+			}
+		}
+	}
+
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+
+		&:not(&.center) {
+			justify-content: space-between;
+		}
+
+		&.center {
+			justify-content: center;
+		}
+		&.wrap {
+			flex-wrap: wrap;
 		}
 	}
 
@@ -35,23 +94,6 @@
         text-decoration: underline;
       }
 		}
-	}
-
-	&__socials {
-		max-width: 110px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-wrap: wrap;
-		gap: 5px;
-	}
-
-	&__buttons {
-		display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-		margin-left: auto;
 	}
 
 	&__btn {

@@ -20,7 +20,7 @@ const CampEvents = memo((props: CampEventsProps) => {
 			{isLoading && <Loader className={'m-centred mt-10'} />}
 			<ul className={styles.events__list}>
 				{campEvents?.map(({ timestamp, event }, i) => (
-					<li key={i}>[{format(parseISO(timestamp), 'MMM d, yyyy')}]: {event}</li>
+					<li key={i}>{format(parseISO(timestamp), 'MMM d, yyyy')}: {event}</li>
 				))}
 			</ul>
 		</div>

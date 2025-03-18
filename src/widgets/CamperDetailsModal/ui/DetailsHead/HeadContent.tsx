@@ -1,7 +1,6 @@
 import { memo, useMemo, type ReactNode } from 'react';
-import { format } from 'date-fns';
 import { capitalizedCamperName } from '@shared/lib/capitalizedCamperName';
-import { dateNormalize } from '@shared/lib/dateNormalize';
+import { dateFormatter } from '@shared/lib/dateFormatter';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TooltipIcon } from '@features/TooltipIcon';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
@@ -124,9 +123,9 @@ const HeadContent = memo((props: HeadContentProps) => {
 			<a href={`mailto: ${email}`} aria-label={'Camper email'} className={styles.head__email}>{email}</a>
 			<ul className={styles.head__details}>
 				{city && <li>{city}</li>}
-				{birthdayDate && <li>Birthday: {format(birthdayDate, 'dd.MM')}</li>}
-				<li>Added: {dateNormalize(created_at)}</li>
-				{updated_at && <li>Updated: {dateNormalize(updated_at)}</li>}
+				{birthdayDate && <li>Birthday: {dateFormatter(birthdayDate, 'withoutYear')}</li>}
+				<li>Added: {dateFormatter(created_at)}</li>
+				{updated_at && <li>Updated: {dateFormatter(updated_at)}</li>}
 				{visitedBM && visitedBM.length > 0 && <li>BM`s: {visitedBM.join(', ')}</li>}
 			</ul>
 		</div>

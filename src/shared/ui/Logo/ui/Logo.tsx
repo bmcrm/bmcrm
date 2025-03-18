@@ -10,7 +10,7 @@ type LogoProps = {
 	to?: string;
 };
 
-const Logo = memo(({ className, to = RoutePath.funnel }: LogoProps) => (
+const Logo = memo(({ className, to = RoutePath.campers }: LogoProps) => (
 	<strong className={classNames(styles.logo, {}, [className])}>
 		<Link to={to} className={styles.logo__link}><LogoIcon /></Link>
 	</strong>

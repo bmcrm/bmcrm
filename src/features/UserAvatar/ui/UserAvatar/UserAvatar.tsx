@@ -49,7 +49,7 @@ const UserAvatar = memo((props: UserAvatarProps) => {
 
   if (theme === UserAvatarTheme.MOBILE) {
     return (
-      <Link to={RoutePath.funnel} className={classNames(styles.avatar, {}, [className])} onClick={onClick}>
+      <Link to={RoutePath.campers} className={classNames(styles.avatar, {}, [className])} onClick={onClick}>
         <Avatar size={42} alt={capitalizedName ?? 'avatar'} src={null} />
         {commonContent}
       </Link>

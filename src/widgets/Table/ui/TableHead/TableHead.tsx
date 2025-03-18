@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
 import { flexRender, type Table } from '@tanstack/react-table';
+import { classNames } from '@shared/lib/classNames';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { TableControl } from '../TableControl/TableControl';
 import { TableControlTheme } from '../../model/types/TableControl.types';
@@ -18,40 +19,45 @@ const TableHead = <TData extends object>({ table, portalTargetRef, tableScrollRe
 	<thead>
 	{table.getHeaderGroups().map((headerGroup) => (
 		<tr key={headerGroup.id}>
-			{headerGroup.headers.map((header) => (
-				<th key={header.id} className={styles.table__cell}>
-					{header.isPlaceholder
-						? null
-						: (
-							<div className={styles.table__row}>
-								<p className={styles.table__row} style={{ flexWrap: 'wrap' }}>
-									{flexRender(
-										header.column.columnDef.header,
-										header.getContext(),
-									)}
-									{header.column.getIsSorted() && (
-										<Icon
-											icon={header.column.getIsSorted() === 'asc' ? <AscIcon /> : <DescIcon />}
-											size={IconSize.SIZE_20}
+			{headerGroup.headers.map((header) => {
+				const meta = header.column.columnDef.meta as { className?: string } | undefined;
+				const className = meta?.className;
+
+				return (
+					<th key={header.id} className={classNames(styles.table__cell, {}, [className])}>
+						{header.isPlaceholder
+							? null
+							: (
+								<div className={styles.table__row}>
+									<p className={styles.table__row} style={{ flexWrap: 'wrap' }}>
+										{flexRender(
+											header.column.columnDef.header,
+											header.getContext(),
+										)}
+										{header.column.getIsSorted() && (
+											<Icon
+												icon={header.column.getIsSorted() === 'asc' ? <AscIcon /> : <DescIcon />}
+												size={IconSize.SIZE_20}
+											/>
+										)}
+										{header.column.getIsFiltered() && (
+											<Icon icon={<FilterIcon/>} size={IconSize.SIZE_12} />
+										)}
+									</p>
+									{header.column.id !== 'social_links' && (
+										<TableControl
+											portalTargetRef={portalTargetRef}
+											tableScrollRef={tableScrollRef}
+											theme={TableControlTheme.COLUMN}
+											header={header}
 										/>
 									)}
-									{header.column.getIsFiltered() && (
-										<Icon icon={<FilterIcon/>} size={IconSize.SIZE_12} />
-									)}
-								</p>
-								{header.column.id !== 'social_links' && (
-									<TableControl
-										portalTargetRef={portalTargetRef}
-										tableScrollRef={tableScrollRef}
-										theme={TableControlTheme.COLUMN}
-										header={header}
-									/>
-								)}
-							</div>
-						)
-					}
-				</th>
-			))}
+								</div>
+							)
+						}
+					</th>
+				);
+			})}
 		</tr>
 	))}
 	</thead>
