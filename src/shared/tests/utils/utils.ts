@@ -186,9 +186,9 @@ export const generateFakeData = () => {
 		faker.string.alpha(1).toUpperCase();
 	const instagram = `https://instagram.com/${faker.internet.username()}`;
 	const facebook = `https://facebook.com/${faker.internet.username()}`;
-	const randomDate = format(faker.date.future(), 'dd.MM.yyyy');
-	const todayDate = format(new Date(), 'dd.MM.yyyy');
-	const tomorrowDate = format(addDays(new Date(), 1), 'dd.MM.yyyy');
+	const randomDate = format(faker.date.future(), 'MM/dd/yyyy');
+	const todayDate = format(new Date(), 'MM/dd/yyyy');
+	const tomorrowDate = format(addDays(new Date(), 1), 'MM/dd/yyyy');
 	const itemName = faker.word.words(3);
 	const category = faker.commerce.department();
 	const price = faker.commerce.price({ min: 1, max: 10000, dec: 2 });

@@ -62,7 +62,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
 		await expect(confirmDeleteButton).toBeVisible();
 		await confirmDeleteButton.click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(1000);
 		await customWaitForResponse({ page, endpoint: '/inventory' });
 		await expect(page.locator('text=Item successfully removed')).toBeVisible();
 		await page.waitForTimeout(500);
