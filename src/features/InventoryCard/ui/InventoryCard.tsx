@@ -78,7 +78,7 @@ const InventoryCard = memo(({ className, item }: InventoryCardProps) => {
 				</div>
 				<div className={styles.card__body}>
 					<h3 className={styles.card__title}>{title}</h3>
-					<p className={styles.card__desc}>{description}</p>
+					{description && <p className={styles.card__desc}>{description}</p>}
 					<div className={styles.card__badges}>
 						<InventoryBadge label={<><span style={{ font: 'var(--font-s)' }}>{quantity}</span> quantity</>}/>
 						<InventoryBadge label={<><span style={{ font: 'var(--font-s)' }}>${price}</span> price 1pc</>}/>

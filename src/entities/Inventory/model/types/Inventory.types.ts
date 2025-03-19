@@ -5,7 +5,7 @@ export interface IInventory {
 
 export interface IInventoryItem {
   title: string;
-  description: string;
+  description?: string;
   quantity: number | string;
   price: number | string;
   category: string;

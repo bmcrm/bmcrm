@@ -28,7 +28,7 @@ const DetailsDefault = memo((props: DetailsDefaultProps) => {
 			)}
 			<div className={styles.details__content}>
 				<h2 className={styles.details__title}>{title}</h2>
-				<p className={styles.details__desc}>{description}</p>
+				{description && <p className={styles.details__desc}>{description}</p>}
 				<div className={styles.details__badges}>
 					<InventoryBadge label={<>quantity: <span style={{ font: 'var(--font-m)' }}>{quantity}</span></>} />
 					<InventoryBadge label={<>price 1pc: <span style={{ font: 'var(--font-m)' }}>${price}</span></>} />
