@@ -1,9 +1,9 @@
 import { memo, type CSSProperties } from 'react';
 import DatePicker from 'react-datepicker';
-import { IMaskInput } from 'react-imask';
+import { IMask, IMaskInput } from 'react-imask';
 import { ErrorMessage } from 'formik';
 import { addYears, subYears } from 'date-fns';
-import { enGB } from 'date-fns/locale/en-GB';
+import {  enUS } from 'date-fns/locale';
 import { classNames } from '@shared/lib/classNames';
 import { CustomErrorMessage } from '@shared/ui/CustomErrorMessage';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -42,6 +42,8 @@ const DatepickerRange = memo((props: DatepickerRangeProps) => {
 
 	const fixedMinDate = subYears(new Date(), 100);
 	const fixedMaxDate = addYears(new Date(), 50);
+	const minYear = (minDate || fixedMinDate).getFullYear();
+	const maxYear = (maxDate || fixedMaxDate).getFullYear();
 
 	return (
 		<label className={classNames(styles.datepicker, {}, [className])} style={style}>
@@ -51,14 +53,14 @@ const DatepickerRange = memo((props: DatepickerRangeProps) => {
 				calendarClassName={styles.datepicker__calendar}
 				calendarIconClassName={styles.datepicker__calendarIcon}
 				popperPlacement={'top'}
-				locale={enGB}
+				locale={enUS}
 				showIcon
 				selectsRange={true}
 				startDate={startDate}
 				endDate={endDate}
 				isClearable={true}
 				placeholderText={placeholder}
-				dateFormat={'dd.MM.yyyy'}
+				dateFormat={'MM/dd/yyyy'}
 				dropdownMode={'select'}
 				minDate={minDate || fixedMinDate}
 				maxDate={fixedMaxDate}
@@ -67,15 +69,61 @@ const DatepickerRange = memo((props: DatepickerRangeProps) => {
 					blocks={{
 						'from': {
 							mask: Date,
-							min: minDate || fixedMinDate,
-							max: fixedMaxDate,
+							pattern: '`m{/}`d{/}`y',
 							autofix: 'pad',
+							blocks: {
+								m: { mask: IMask.MaskedRange, from: 1, to: 12, maxLength: 2 },
+								d: { mask: IMask.MaskedRange, from: 1, to: 31, maxLength: 2 },
+								y: { mask: IMask.MaskedRange, from: minYear, to: maxYear },
+							},
+							format: (date: Date | null) => {
+								if (!date) return '';
+
+								const month = String(date.getMonth() + 1).padStart(2, '0');
+								const day = String(date.getDate()).padStart(2, '0');
+								const year = String(date.getFullYear());
+
+								return `${month}/${day}/${year}`;
+							},
+							parse: (str: string) => {
+								const parts = str.split('/').map(Number);
+								const month = parts[0];
+								const day = parts[1];
+								const year = parts[2];
+
+								if (!day || !month || !year) return null;
+
+								return new Date(year, month - 1, day);
+							},
 						},
 						'to': {
 							mask: Date,
-							min: minDate || fixedMinDate,
-							max: fixedMaxDate,
+							pattern: '`m{/}`d{/}`y',
 							autofix: 'pad',
+							blocks: {
+								m: { mask: IMask.MaskedRange, from: 1, to: 12, maxLength: 2 },
+								d: { mask: IMask.MaskedRange, from: 1, to: 31, maxLength: 2 },
+								y: { mask: IMask.MaskedRange, from: minYear, to: maxYear },
+							},
+							format: (date: Date | null) => {
+								if (!date) return '';
+
+								const month = String(date.getMonth() + 1).padStart(2, '0');
+								const day = String(date.getDate()).padStart(2, '0');
+								const year = String(date.getFullYear());
+
+								return `${month}/${day}/${year}`;
+							},
+							parse: (str: string) => {
+								const parts = str.split('/').map(Number);
+								const month = parts[0];
+								const day = parts[1];
+								const year = parts[2];
+
+								if (!day || !month || !year) return null;
+
+								return new Date(year, month - 1, day);
+							},
 						},
 					}}
 				/>}
