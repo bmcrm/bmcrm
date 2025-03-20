@@ -11,6 +11,7 @@ import { CustomSelect } from '@shared/ui/CustomSelect';
 import { useGetCategories, useUpdateInventoryItem, type IInventoryItem } from '@entities/Inventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
+import type { IFilesWithPreview } from '@shared/ui/FilesInput';
 import styles from './DetailsEditing.module.scss';
 
 type DetailsEditingProps = {
@@ -22,9 +23,7 @@ type DetailsEditingProps = {
 
 const DetailsEditing = memo((props: DetailsEditingProps) => {
 	const { className, item, cancelEdit, onClose } = props;
-	const { images, id, category } = item;
-	const [currentImages, setCurrentImages] = useState<string[]>(images ? images : []);
-	const [newImages, setNewImages] = useState<{ file: File; previewUrl: string }[]>([]);
+	const { id, category } = item;
 	const [deletedImages, setDeletedImages] = useState<string[]>([]);
 	const { isMobile } = useMedia();
 	const { initialValues, initialData } = generateInitialValues(item);
@@ -36,37 +35,40 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 		label: category.charAt(0).toUpperCase() + category.slice(1).toLowerCase(),
 	}));
 
-	const handleCancelEdit = useCallback(() => {
+	const handleCancelEdit = useCallback((newImages: IFilesWithPreview[]) => {
 		newImages.forEach(file => URL.revokeObjectURL(file.previewUrl));
 		cancelEdit();
-	}, [cancelEdit, newImages]);
+	}, [cancelEdit]);
 
-	const submitHandler = useCallback(async (values: Partial<IInventoryItem>) => {
-		const files = newImages.map(img => img.file);
-		const isChangedCategory = category !== values.category;
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { images: _, ...filteredValues } = values;
+	const submitHandler = useCallback(
+		async (values: Partial<IInventoryItem> & { files: IFilesWithPreview[] }) => {
+			const files = values.files.map(img => img.file);
+			const isChangedCategory = category !== values.category;
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { images, ...filteredValues } = values;
 
-		const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
-			...filteredValues,
-			files,
-			id,
-			...(currentImages.length > 0 ? { images: currentImages } : {}),
-			...(deletedImages.length > 0 ? { deletedImages } : {}),
-			...(isChangedCategory ? { oldCategory: category } : {}),
-		};
+			const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
+				...filteredValues,
+				files,
+				id,
+				...(images && images?.length > 0 ? { images } : {}),
+				...(deletedImages.length > 0 ? { deletedImages } : {}),
+				...(isChangedCategory ? { oldCategory: category } : {}),
+			};
 
-		await updateInventory(inventoryItem);
+			await updateInventory(inventoryItem);
 
-		if (isChangedCategory) {
-			await new Promise<void>((resolve) => {
-				onClose();
-				setTimeout(resolve, MODAL_ANIMATION_DELAY + 100);
-			});
-		}
+			if (isChangedCategory) {
+				await new Promise<void>((resolve) => {
+					onClose();
+					setTimeout(resolve, MODAL_ANIMATION_DELAY + 100);
+				});
+			}
 
-		handleCancelEdit();
-	}, [category, currentImages, deletedImages, handleCancelEdit, id, newImages, onClose, updateInventory]);
+			handleCancelEdit(values.files);
+		},
+		[category, deletedImages, handleCancelEdit, id, onClose, updateInventory]
+	);
 
 	return (
 		<Formik
@@ -75,16 +77,16 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 			validationSchema={createInventoryItemSchema}
 			enableReinitialize
 		>
-			{({ values, handleChange, dirty }) => (
+			{({ values, handleChange, dirty, setFieldValue }) => (
 				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__inner}>
 						<InventorySlider
-							currentImages={currentImages}
 							customStyles={{ maxWidth: isMobile ? '100%' : '55%' }}
 							theme={InventorySliderTheme.EDIT}
-							newImages={newImages}
-							setCurrentImages={setCurrentImages}
-							setNewImages={setNewImages}
+							currentImages={values.images}
+							newImages={values.files}
+							setCurrentImages={(images: string[]) => setFieldValue('images', images)}
+							setNewImages={(files: IFilesWithPreview[]) => setFieldValue('files', files)}
 							setDeletedImages={setDeletedImages}
 						/>
 						<div className={styles.form__content}>
@@ -112,7 +114,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 								))}
 							</div>
 							{selectOptions && (
-								<CustomSelect label={'Category'} name={'category'} options={selectOptions} />
+								<CustomSelect label={'Category'} name={'category'} options={selectOptions}/>
 							)}
 						</div>
 					</div>
@@ -122,12 +124,12 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 							className={styles.form__btn}
 							theme={ButtonTheme.CLEAR}
 							size={ButtonSize.TEXT}
-							onClick={handleCancelEdit}
+							onClick={() => handleCancelEdit(values.files)}
 						>
 							Cancel
 						</Button>
 					</div>
-					{isPending && <FormLoader />}
+					{isPending && <FormLoader/>}
 				</Form>
 			)}
 		</Formik>

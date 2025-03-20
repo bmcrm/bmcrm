@@ -54,19 +54,4 @@ export const inventoryApi = {
 
 		await axios.delete(endpoint, { headers });
 	},
-	getPresignedUrl: async (fileName: string) => {
-		const endpoint = `${INVENTORY_ENDPOINT}/upload`;
-		const headers = createAuthHeaders();
-
-		const response = await axios.post(endpoint, { fileName }, { headers });
-
-		return response.data.uploadURL;
-	},
-	uploadFileToS3: async ({ file, uploadURL }: { file: File, uploadURL: string }) => {
-		const headers = {
-			'Content-Type': file.type,
-		};
-
-		return await axios.put(uploadURL, file, { headers });
-	},
 };
