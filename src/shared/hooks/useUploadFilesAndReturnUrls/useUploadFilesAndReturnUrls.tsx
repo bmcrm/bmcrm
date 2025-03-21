@@ -19,9 +19,10 @@ export const useUploadFilesAndReturnUrls = () => {
 
 			const results = await Promise.allSettled(
 				files.map(async (file) => {
-					const uploadURL = await getPresignedUrl({ fileName: file.name, endpoint });
+					const { fileURL, uploadURL } = await getPresignedUrl({ fileName: file.name, endpoint });
 					await uploadFileToS3({ file, uploadURL });
-					return uploadURL.split('?')[0];
+
+					return fileURL;
 				}),
 			);
 

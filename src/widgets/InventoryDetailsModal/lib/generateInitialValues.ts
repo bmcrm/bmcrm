@@ -1,5 +1,5 @@
 import type { IInventoryItem } from '@entities/Inventory';
-import type { IFilesWithPreview } from '@shared/ui/FilesInput';
+import type { IFilesWithPreview } from '@features/FilesInput';
 
 export const generateInitialValues = (item: IInventoryItem) => {
 	const { title, description, price, quantity, category, images } = item;

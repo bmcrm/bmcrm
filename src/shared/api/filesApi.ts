@@ -2,12 +2,12 @@ import axios from 'axios';
 import { createAuthHeaders } from '@shared/lib/createAuthHeaders';
 
 export const filesApi = {
-	getPresignedUrl: async ({ fileName, endpoint }: { fileName: string, endpoint: string }) => {
+	getPresignedUrl: async ({ fileName, endpoint }: { fileName: string, endpoint: string }): Promise<{ uploadURL: string; fileURL: string }> => {
 		const headers = createAuthHeaders();
 
-		const response = await axios.post(endpoint, { fileName }, { headers });
+		const { data } = await axios.post(endpoint, { fileName }, { headers });
 
-		return response.data.uploadURL;
+		return data;
 	},
 	uploadFileToS3: async ({ file, uploadURL }: { file: File, uploadURL: string }) => {
 		const headers = {

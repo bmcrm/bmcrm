@@ -1,4 +1,4 @@
-import type { IFilesWithPreview } from '@shared/ui/FilesInput';
+import type { IFilesWithPreview } from '@features/FilesInput';
 
 export const inputs = {
 	default: [

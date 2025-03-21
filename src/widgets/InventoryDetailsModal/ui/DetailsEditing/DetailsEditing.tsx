@@ -11,7 +11,7 @@ import { CustomSelect } from '@shared/ui/CustomSelect';
 import { useGetCategories, useUpdateInventoryItem, type IInventoryItem } from '@entities/Inventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { MODAL_ANIMATION_DELAY } from '@shared/const/animations';
-import type { IFilesWithPreview } from '@shared/ui/FilesInput';
+import type { IFilesWithPreview } from '@features/FilesInput';
 import styles from './DetailsEditing.module.scss';
 
 type DetailsEditingProps = {
@@ -114,7 +114,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 								))}
 							</div>
 							{selectOptions && (
-								<CustomSelect label={'Category'} name={'category'} options={selectOptions}/>
+								<CustomSelect label={'Category'} name={'category'} options={selectOptions} />
 							)}
 						</div>
 					</div>
@@ -129,7 +129,7 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 							Cancel
 						</Button>
 					</div>
-					{isPending && <FormLoader/>}
+					{isPending && <FormLoader />}
 				</Form>
 			)}
 		</Formik>

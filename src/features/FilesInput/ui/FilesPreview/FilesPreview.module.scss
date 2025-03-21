@@ -1,0 +1,24 @@
+.preview {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 90px);
+	gap: 10px;
+
+	&__item {
+		position: relative;
+	}
+
+	&__btn-remove {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background-color: var(--color-orange-pastel);
+		border-radius: 0 0 0 5px;
+		color: var(--color-ruby-dark);
+
+		@media (hover: hover) {
+			&:hover {
+				scale: 1.1;
+			}
+		}
+	}
+}

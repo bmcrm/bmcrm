@@ -1,20 +1,17 @@
 import { memo, useCallback, useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import { compressImages } from '@shared/lib/compressImages';
-import { isDuplicateFile } from '../../lib/checkDuplicateFiles';
+import { isDuplicateFile } from '@shared/lib/checkDuplicateFiles';
 import { useToast } from '@shared/hooks/useToast';
 import { FormikInput } from '@shared/ui/FormikInput';
-import { FilesInput, FilesInputTheme, type IFilesWithPreview } from '@shared/ui/FilesInput';
+import { FilesInput, FilesPreview, FilesInputTheme, type IFilesWithPreview } from '@features/FilesInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
-import { Icon, IconSize } from '@shared/ui/Icon';
-import { Image } from '@shared/ui/Image';
 import { FormLoader } from '@features/FormLoader';
 import { useAddInventory } from '../../hooks/useAddInventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { initialValues, inputs } from '../../model/data/AddInventoryForm.data';
 import type { IInventoryItem } from '../../model/types/Inventory.types';
 import styles from './AddInventoryForm.module.scss';
-import DeletePreviewIcon from '@shared/assets/icons/cross.svg';
 
 type AddInventoryFormProps = {
 	onClose: () => void;
@@ -115,25 +112,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 								previewsLength={values.files.length}
 							/>
 						</div>
-						<ul className={styles.form__preview}>
-							{values.files.map((preview, index) => (
-								<li key={index} className={styles.form__previewItem}>
-									<Image
-										src={preview.previewUrl}
-										alt={`Preview ${index}`}
-										customStyles={{ height: '65px' }}
-									/>
-									<Button
-										className={styles.btnRemove}
-										theme={ButtonTheme.CLEAR}
-										size={ButtonSize.TEXT}
-										onClick={() => handleRemoveImage(index)}
-									>
-										<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
-									</Button>
-								</li>
-							))}
-						</ul>
+						<FilesPreview files={values.files} handleRemove={(i: number) => handleRemoveImage(i)} />
 						<div className={styles.form__buttons}>
 							<Button type={'submit'} disabled={!dirty}>Save</Button>
 							<Button
