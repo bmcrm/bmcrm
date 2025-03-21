@@ -1,3 +1,5 @@
+import type { IFilesWithPreview } from '@features/FilesInput';
+
 export const inputs = {
 	default: [
 		{
@@ -38,4 +40,5 @@ export const initialValues = {
 	category: '',
 	price: '',
 	quantity: '',
+	files: [] as IFilesWithPreview[],
 };

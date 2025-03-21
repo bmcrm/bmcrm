@@ -19,8 +19,8 @@
 			grid-template-columns: 1fr;
 		}
 
-		+ .item__control {
-			margin-top: 10px;
+		+ .item__gallery {
+			margin-top: 20px;
 		}
 	}
 
@@ -104,6 +104,12 @@
 
 	&__text {
 		font: var(--font-s);
+	}
+
+	&__gallery {
+		+ .item__control {
+			margin-top: 10px;
+		}
 	}
 
 	&__control {

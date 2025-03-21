@@ -1,0 +1,1 @@
+export { isDuplicateFile } from './checkDuplicateFiles';

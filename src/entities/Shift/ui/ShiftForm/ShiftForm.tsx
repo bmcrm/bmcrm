@@ -7,9 +7,11 @@ import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
 import { FormBasic } from './FormBasic';
 import { FormDate } from './FormDate';
+import { FormAuxiliary } from './FormAuxiliary';
 import { useCreateShift } from '../../hooks/useCreateShift';
 import { useEditShift } from '../../hooks/useEditShift';
 import { shiftSchema } from '@shared/const/validationSchemas';
+import type { IFilesWithPreview } from '@features/FilesInput';
 import type { IShift } from '../../model/types/Shift.types';
 import { ShiftFormTheme } from '../../model/types/ShiftForm.types';
 import styles from './ShiftForm.module.scss';
@@ -33,12 +35,21 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 	);
 
 	const submitHandlers = {
-		[ShiftFormTheme.CREATE]: async (values: Partial<IShift>, formikHelpers?: FormikHelpers<Partial<IShift>>) => {
-			await createShift(values);
+		[ShiftFormTheme.CREATE]: async (values: Partial<IShift> & { newFiles: IFilesWithPreview[] }, formikHelpers?: FormikHelpers<Partial<IShift> & { newFiles: IFilesWithPreview[] }>) => {
+			const { newFiles, ...rest } = values;
+			const mappedFiles = newFiles.map(preview => preview.file);
+
+			const shift: Partial<IShift> & { newFiles: File[] } = {
+				...rest,
+				newFiles: mappedFiles,
+			};
+
+			await createShift(shift);
+
 			formikHelpers?.resetForm();
 			onClose?.();
 		},
-		[ShiftFormTheme.EDIT]: (values: Partial<IShift>) => {
+		[ShiftFormTheme.EDIT]: (values: Partial<IShift> & { newFiles: IFilesWithPreview[] }) => {
 			const editedShift = {
 				...currentShift,
         ...values,
@@ -50,7 +61,7 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 	};
 
 	const handleSubmit = useCallback(
-		(values: Partial<IShift>, formikHelpers: FormikHelpers<Partial<IShift>>) => {
+		(values: Partial<IShift> & { newFiles: IFilesWithPreview[] }, formikHelpers: FormikHelpers<Partial<IShift> & { newFiles: IFilesWithPreview[] }>) => {
 			const handler = submitHandlers[theme];
 			handler?.(values, formikHelpers);
 		},
@@ -64,6 +75,7 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 					<Form className={classNames(styles.form, {}, [className])}>
 						<FormBasic members={values.members ?? []} />
 						<FormDate values={values} />
+						<FormAuxiliary files={values.files} newFiles={values.newFiles} />
 						<Button type={'submit'} className={'m-centred'} disabled={!dirty} fluid={isMobile}>Save</Button>
 					</Form>
 				)}

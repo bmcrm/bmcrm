@@ -28,6 +28,9 @@
 		&.dragging {
 			border-color: var(--color-ruby-dark);
 		}
+		&.column {
+			flex-direction: column;
+		}
 
 		@media (hover: hover) {
 			&:hover {
@@ -44,5 +47,12 @@
 		height: 0;
 		visibility: hidden;
 		opacity: 0;
+	}
+
+	&__icons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
 	}
 }

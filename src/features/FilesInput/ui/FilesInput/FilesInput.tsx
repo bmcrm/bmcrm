@@ -8,12 +8,10 @@ import {
 	type InputHTMLAttributes,
 	type ReactNode
 } from 'react';
-import { classNames } from '@shared/lib/classNames';
-import { Icon, IconSize } from '@shared/ui/Icon';
-import { FilesInputTheme } from '../model/types/FilesInput.types';
+import { classNames, type Mods } from '@shared/lib/classNames';
+import { content } from '../../model/data/filesInput.data';
+import { FilesInputTheme } from '../../model/types/FilesInput.types';
 import styles from './FilesInput.module.scss';
-import FileUploadIcon from '@shared/assets/icons/file-upload_icon.svg';
-import PlusIcon from '@shared/assets/icons/plus_icon.svg';
 
 interface FilesInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	className?: string;
@@ -21,14 +19,28 @@ interface FilesInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	name: string;
 	label?: string | ReactNode;
 	previewsLength?: number;
+	accept?: string;
 	onFilesAdded: (files: File[]) => void;
 }
 
 const FilesInput = memo((props: FilesInputProps) => {
-	const { className, name, label, previewsLength, theme, onFilesAdded, ...rest } = props;
+	const {
+		className,
+		name,
+		label,
+		previewsLength,
+		theme,
+		accept = 'image/jpeg, image/png, image/webp',
+		onFilesAdded,
+		...rest
+	} = props;
 	const [isDragging, setIsDragging] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const showContent = previewsLength ? previewsLength < 5 : true;
+	const fakeMods: Mods = {
+		[styles.dragging]: isDragging,
+		[styles.column]: theme === FilesInputTheme.ADD_SHIFT,
+	};
 
 	const handleFileChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
@@ -73,20 +85,19 @@ const FilesInput = memo((props: FilesInputProps) => {
 			{showContent && (
 				<>
 					<div
-						className={classNames(styles.input__fake, { [styles.dragging]: isDragging }, [])}
+						className={classNames(styles.input__fake, fakeMods, [])}
 						onClick={handleClick}
 						onDrop={handleDrop}
 						onDragOver={handleDragOver}
 						onDragLeave={handleDragLeave}
 					>
-						{theme === FilesInputTheme.ADD_INVENTORY && (
+						{content[theme] && (
 							<>
-								<Icon icon={<FileUploadIcon />} size={IconSize.SIZE_40} />
-								<p>{isDragging ? 'Drop files here' : 'Select or drag a photo'}</p>
+								<ul className={styles.input__icons}>
+									{content[theme].icons.map((icon, i) => <li key={i}>{icon}</li>)}
+								</ul>
+								{content[theme].text && <p>{isDragging ? 'Drop files here' : content[theme].text}</p>}
 							</>
-						)}
-						{theme === FilesInputTheme.EDIT_INVENTORY && (
-							<Icon icon={<PlusIcon />} size={IconSize.SIZE_24} />
 						)}
 					</div>
 					<input
@@ -94,7 +105,7 @@ const FilesInput = memo((props: FilesInputProps) => {
 						className={styles.input__field}
 						type={'file'}
 						name={name}
-						accept={'image/jpeg, image/png, image/webp'}
+						accept={accept}
 						onChange={handleFileChange}
 						multiple
 						{...rest}
