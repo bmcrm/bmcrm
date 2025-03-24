@@ -37,7 +37,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 					</strong>
 					<div className={styles.item__columnInner}>
 						<p className={styles.item__text}>{title}</p>
-						<p className={styles.item__text}>{description}</p>
+						{description && <p className={styles.item__text}>{description}</p>}
 					</div>
 				</div>
 				<div className={styles.item__column}>
@@ -60,9 +60,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 					</div>
 				</div>
 			</div>
-			{files && files.length > 0 && (
-				<ShiftGallery files={files} className={styles.item__gallery} />
-			)}
+			{files && files.length > 0 && <ShiftGallery files={files} className={styles.item__gallery} />}
 			{canControl && (
 				<div className={styles.item__control}>
 					<Button

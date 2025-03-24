@@ -21,4 +21,5 @@ export const generateShiftFormValues = (currentShift?: IShift | null): Partial<I
 		}],
 	files: currentShift?.files ?? [],
 	newFiles: [],
+	removedFiles: currentShift?.removedFiles ?? [],
 });

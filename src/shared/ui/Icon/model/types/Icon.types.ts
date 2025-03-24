@@ -16,4 +16,5 @@ export enum IconSize {
   SIZE_36 = 'icon-36',
   SIZE_38 = 'icon-38',
   SIZE_40 = 'icon-40',
+  SIZE_FILL = 'icon-fill',
 }

@@ -1,7 +1,16 @@
+import type { IFilesWithPreview } from '@features/FilesInput';
+
 type IProps = {
 	file: File;
-	currentFiles: { file: File; previewUrl: string }[];
+	currentFiles: IFilesWithPreview[];
 }
 
-export const isDuplicateFile = ({ currentFiles, file }: IProps) =>
-	currentFiles.some(preview => preview.file.name === file.name && preview.file.lastModified === file.lastModified);
+export const isDuplicateFile = ({ currentFiles, file }: IProps) => currentFiles.some(preview => {
+	const existingFile = preview instanceof File ? preview : preview.file;
+
+	return (
+		existingFile.name === file.name &&
+		existingFile.type === file.type &&
+		Math.abs(existingFile.lastModified - file.lastModified) < 1000
+	);
+});

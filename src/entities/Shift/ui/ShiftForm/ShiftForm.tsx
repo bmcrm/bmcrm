@@ -26,8 +26,9 @@ type ShiftFormProps = {
 const ShiftForm = memo((props: ShiftFormProps) => {
 	const { className, onClose, theme = ShiftFormTheme.CREATE, currentShift } = props;
 	const { isMobile } = useMedia();
-	const { mutateAsync: createShift, isPending } = useCreateShift();
-	const { mutate: editShift } = useEditShift();
+	const { mutateAsync: createShift, isPending: isCreatePending } = useCreateShift();
+	const { mutateAsync: editShift, isPending: isEditPending } = useEditShift();
+	const isPending = isCreatePending || isEditPending;
 
 	const initialValues = useMemo(
 		() => generateShiftFormValues(currentShift),
@@ -49,13 +50,18 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 			formikHelpers?.resetForm();
 			onClose?.();
 		},
-		[ShiftFormTheme.EDIT]: (values: Partial<IShift> & { newFiles: IFilesWithPreview[] }) => {
-			const editedShift = {
+		[ShiftFormTheme.EDIT]: async (values: Partial<IShift> & { newFiles: IFilesWithPreview[] }) => {
+			const { newFiles, ...rest } = values;
+			const mappedFiles = newFiles.map(preview => preview.file);
+
+
+			const editedShift: Partial<IShift> & { newFiles: File[] } = {
 				...currentShift,
-        ...values,
+				...rest,
+				newFiles: mappedFiles,
 			};
 
-			editShift(editedShift);
+			await editShift(editedShift);
 			onClose?.();
 		},
 	};
@@ -75,7 +81,7 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 					<Form className={classNames(styles.form, {}, [className])}>
 						<FormBasic members={values.members ?? []} />
 						<FormDate values={values} />
-						<FormAuxiliary files={values.files} newFiles={values.newFiles} />
+						<FormAuxiliary currentFiles={values.files} newFiles={values.newFiles} removedFiles={values.removedFiles} />
 						<Button type={'submit'} className={'m-centred'} disabled={!dirty} fluid={isMobile}>Save</Button>
 					</Form>
 				)}

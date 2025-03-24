@@ -123,7 +123,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 							<SwiperSlide key={`main-${i}-${image}`} style={{ height: 'auto' }}>
 								<div className={styles.gallery__item}>
 									<Image src={image} alt={`slide-${i + 1}`} className={styles.gallery__img} />
-									{isEditing && (
+									{isEditing && image && (
 										<Button
 											theme={ButtonTheme.CLEAR}
 											size={ButtonSize.TEXT}
@@ -166,7 +166,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 						<SwiperSlide key={`thumb-${i}-${image}`} style={{ height: 'auto' }}>
 							<div className={classNames(styles.gallery__item, {}, [styles.thumb])}>
 								<Image src={image} alt={`thumb-${i + 1}`} className={styles.gallery__img} />
-								{isEditing && (
+								{isEditing && image && (
 									<Button
 										theme={ButtonTheme.CLEAR}
 										size={ButtonSize.TEXT}

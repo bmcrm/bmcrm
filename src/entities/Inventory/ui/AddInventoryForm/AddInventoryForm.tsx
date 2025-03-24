@@ -53,7 +53,11 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 			{({ dirty, values, setFieldValue }) => {
 
 				useEffect(() => {
-					return () => values.files.forEach(file => URL.revokeObjectURL(file.previewUrl));
+					return () => values.files.forEach(file => {
+						if (file.previewUrl) {
+							URL.revokeObjectURL(file.previewUrl);
+						}
+					});
 				}, [values.files]);
 
 				const handleFilesAdded = useCallback(
@@ -83,7 +87,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 					(index: number) => {
 						const previewToRemove = values.files[index];
 
-						if (previewToRemove) {
+						if (previewToRemove && previewToRemove.previewUrl) {
 							URL.revokeObjectURL(previewToRemove.previewUrl);
 						}
 
@@ -112,7 +116,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 								previewsLength={values.files.length}
 							/>
 						</div>
-						<FilesPreview files={values.files} handleRemove={(i: number) => handleRemoveImage(i)} />
+						<FilesPreview newFiles={values.files} handleRemoveNew={(i: number) => handleRemoveImage(i)} />
 						<div className={styles.form__buttons}>
 							<Button type={'submit'} disabled={!dirty}>Save</Button>
 							<Button

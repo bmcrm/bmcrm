@@ -36,7 +36,11 @@ const DetailsEditing = memo((props: DetailsEditingProps) => {
 	}));
 
 	const handleCancelEdit = useCallback((newImages: IFilesWithPreview[]) => {
-		newImages.forEach(file => URL.revokeObjectURL(file.previewUrl));
+		newImages.forEach(file => {
+			if (file.previewUrl) {
+				URL.revokeObjectURL(file.previewUrl);
+			}
+		});
 		cancelEdit();
 	}, [cancelEdit]);
 

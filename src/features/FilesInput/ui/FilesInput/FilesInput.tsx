@@ -19,6 +19,7 @@ interface FilesInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	name: string;
 	label?: string | ReactNode;
 	previewsLength?: number;
+	maxLength?: number;
 	accept?: string;
 	onFilesAdded: (files: File[]) => void;
 }
@@ -29,14 +30,15 @@ const FilesInput = memo((props: FilesInputProps) => {
 		name,
 		label,
 		previewsLength,
+		maxLength = 5,
 		theme,
-		accept = 'image/jpeg, image/png, image/webp',
+		accept = 'image/*',
 		onFilesAdded,
 		...rest
 	} = props;
 	const [isDragging, setIsDragging] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const showContent = previewsLength ? previewsLength < 5 : true;
+	const showContent = previewsLength ? previewsLength < maxLength : true;
 	const fakeMods: Mods = {
 		[styles.dragging]: isDragging,
 		[styles.column]: theme === FilesInputTheme.ADD_SHIFT,

@@ -1,0 +1,1 @@
+export { isPDF } from './checkPDF';

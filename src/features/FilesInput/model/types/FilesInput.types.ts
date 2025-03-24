@@ -6,5 +6,5 @@ export enum FilesInputTheme {
 
 export interface IFilesWithPreview {
 	file: File;
-	previewUrl: string;
+	previewUrl?: string;
 }
