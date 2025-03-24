@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, type ReactElement, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, type ReactElement } from 'react';
 import { Modal } from '@shared/ui/Modal';
 import { DetailsDefault } from '../DetailsDefault/DetailsDefault';
 import { DetailsEditing } from '../DetailsEditing/DetailsEditing';
@@ -18,8 +18,12 @@ const InventoryDetailsModal = memo((props: InventoryDetailsModalProps) => {
 	const [currentTheme, setCurrentTheme] = useState<InventoryDetailsModalTheme>(theme);
 
 	useEffect(() => {
-		setCurrentTheme(theme);
-	}, [theme]);
+		if (isOpen) {
+			setCurrentTheme(theme);
+		} else {
+			setCurrentTheme(InventoryDetailsModalTheme.DEFAULT);
+		}
+	}, [isOpen, theme]);
 
 	const closeHandler = useCallback(() => {
 		setCurrentTheme(InventoryDetailsModalTheme.DEFAULT);
@@ -35,7 +39,7 @@ const InventoryDetailsModal = memo((props: InventoryDetailsModalProps) => {
 		[InventoryDetailsModalTheme.EDIT]: <DetailsEditing
 			item={item}
 			cancelEdit={() => setCurrentTheme(InventoryDetailsModalTheme.DEFAULT)}
-			onClose={onClose}
+			onClose={closeHandler}
 		/>,
 	};
 

@@ -1,14 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { errorHandler } from '@shared/lib/errorHandler';
-import { inventoryApi } from '../api/inventoryApi';
+import { filesApi } from '@shared/api/filesApi';
 
-const useGetPresignedUrl = () => {
+export const useGetPresignedUrl = () => {
 	const { mutate, mutateAsync, isPending } = useMutation({
-		mutationFn: inventoryApi.getPresignedUrl,
+		mutationFn: filesApi.getPresignedUrl,
 		onError: (error) => errorHandler(error),
 	});
 
 	return { mutate, mutateAsync, isPending };
 };
-
-export { useGetPresignedUrl };

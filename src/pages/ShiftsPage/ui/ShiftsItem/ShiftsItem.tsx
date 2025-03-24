@@ -1,9 +1,11 @@
 import { memo, useCallback } from 'react';
 import { format } from 'date-fns';
+import { useToggle } from '@shared/hooks/useToggle';
 import { classNames } from '@shared/lib/classNames';
 import { dateFormatter } from '@shared/lib/dateFormatter';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
+import { ShiftGallery } from '../ShiftGallery/ShiftGallery';
 import { useDeleteShift, type IShift } from '@entities/Shift';
 import styles from './ShiftsItem.module.scss';
 import DeleteIcon from '@shared/assets/icons/delete.svg';
@@ -17,8 +19,9 @@ type ShiftsItemProps = {
 
 const ShiftsItem = memo((props: ShiftsItemProps) => {
 	const { className, shift, onEditShift, canControl } = props;
-	const { start_date, end_date, time, title, description, members, shift_id } = shift;
+	const { start_date, end_date, time, title, description, members, shift_id, files } = shift;
 	const { mutate: deleteShift } = useDeleteShift();
+	const {} = useToggle();
 
 	const handleDelete = useCallback(() => {
     deleteShift({ shiftID: shift_id, title });
@@ -34,7 +37,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 					</strong>
 					<div className={styles.item__columnInner}>
 						<p className={styles.item__text}>{title}</p>
-						<p className={styles.item__text}>{description}</p>
+						{description && <p className={styles.item__text}>{description}</p>}
 					</div>
 				</div>
 				<div className={styles.item__column}>
@@ -57,6 +60,7 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 					</div>
 				</div>
 			</div>
+			{files && files.length > 0 && <ShiftGallery files={files} className={styles.item__gallery} />}
 			{canControl && (
 				<div className={styles.item__control}>
 					<Button

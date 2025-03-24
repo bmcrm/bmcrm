@@ -1,43 +1,34 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import { compressImages } from '@shared/lib/compressImages';
-import { isDuplicateFile } from '../../lib/checkDuplicateFiles';
+import { isDuplicateFile } from '@shared/lib/checkDuplicateFiles';
 import { useToast } from '@shared/hooks/useToast';
 import { FormikInput } from '@shared/ui/FormikInput';
-import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
+import { FilesInput, FilesPreview, FilesInputTheme, type IFilesWithPreview } from '@features/FilesInput';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
-import { Icon, IconSize } from '@shared/ui/Icon';
-import { Image } from '@shared/ui/Image';
 import { FormLoader } from '@features/FormLoader';
 import { useAddInventory } from '../../hooks/useAddInventory';
 import { createInventoryItemSchema } from '@shared/const/validationSchemas';
 import { initialValues, inputs } from '../../model/data/AddInventoryForm.data';
 import type { IInventoryItem } from '../../model/types/Inventory.types';
 import styles from './AddInventoryForm.module.scss';
-import DeletePreviewIcon from '@shared/assets/icons/cross.svg';
 
 type AddInventoryFormProps = {
 	onClose: () => void;
 };
 
 const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
-	const [imagePreviews, setImagePreviews] = useState<{ file: File; previewUrl: string }[]>([]);
 	const { mutateAsync: createItem, isPending } = useAddInventory();
 	const { error } = useToast();
 
-	useEffect(() => {
-		return () => {
-			imagePreviews?.forEach(file => URL.revokeObjectURL(file.previewUrl));
-		};
-	}, [imagePreviews]);
-
 	const handleSubmit = useCallback(
-		async (values: Partial<IInventoryItem>, options: { resetForm: () => void }) => {
-			const files = imagePreviews.map(preview => preview.file);
+		async (values: Partial<IInventoryItem> & { files: IFilesWithPreview[] }, options: { resetForm: () => void }) => {
+			const { files, ...rest } = values;
+			const mappedFiles = values.files.map(preview => preview.file);
 
 			const inventoryItem: Partial<IInventoryItem> & { files: File[] } = {
-				...values,
-				files,
+				...rest,
+				files: mappedFiles,
 				category: values.category?.toLowerCase(),
 				price: parseFloat(String(values.price)),
 				quantity: parseInt(String(values.quantity), 10),
@@ -49,43 +40,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 			options.resetForm();
 			onClose();
 		},
-		[createItem, imagePreviews, onClose]
-	);
-
-	const handleFilesAdded = useCallback(
-		async (files: File[]) => {
-
-			if (imagePreviews.length + files.length > 5) {
-				error('You can only upload up to 5 images.');
-				return;
-			}
-
-			const uniqueFiles = files.filter(file => !isDuplicateFile({ currentFiles: imagePreviews, file }));
-
-			if (uniqueFiles.length === 0) {
-				error('Duplicate files are not allowed.');
-				return;
-			}
-
-			const compressedFiles = await compressImages({ files });
-			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
-
-			setImagePreviews((prev) => [...prev, ...validFiles]);
-		},
-		[error, imagePreviews]
-	);
-
-	const handleRemoveImage = useCallback(
-		(index: number) => {
-			const previewToRemove = imagePreviews[index];
-
-			if (previewToRemove) {
-				URL.revokeObjectURL(previewToRemove.previewUrl);
-			}
-
-			setImagePreviews(prev => prev.filter((_, i) => i !== index));
-		},
-		[imagePreviews]
+		[onClose, createItem]
 	);
 
 	return (
@@ -95,59 +50,88 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 			onSubmit={handleSubmit}
 			enableReinitialize
 		>
-			{({ dirty }) => (
-				<Form className={styles.form}>
-					{isPending && <FormLoader/>}
-					<div className={styles.form__inner}>
-						{inputs.default.map(({ name, placeholder, label }) => (
-							<FormikInput key={name} name={name} label={label} placeholder={placeholder} />
-						))}
-						<div className={styles.form__row}>
-							{inputs.row.map(({ name, placeholder, label, type }) => (
-								<FormikInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
+			{({ dirty, values, setFieldValue }) => {
+
+				useEffect(() => {
+					return () => values.files.forEach(file => {
+						if (file.previewUrl) {
+							URL.revokeObjectURL(file.previewUrl);
+						}
+					});
+				}, [values.files]);
+
+				const handleFilesAdded = useCallback(
+					async (addedFiles: File[], currentFiles: IFilesWithPreview[]) => {
+
+						if (currentFiles.length + addedFiles.length > 5) {
+							error('You can only upload up to 5 images.');
+							return;
+						}
+
+						const uniqueFiles = addedFiles.filter(file => !isDuplicateFile({ currentFiles: currentFiles, file }));
+
+						if (uniqueFiles.length === 0) {
+							error('Duplicate files are not allowed.');
+							return;
+						}
+
+						const compressedFiles = await compressImages({ files: addedFiles });
+						const validFiles = compressedFiles.filter(Boolean) as IFilesWithPreview[];
+
+						void setFieldValue('files', [...currentFiles, ...validFiles]);
+					},
+					[error, setFieldValue]
+				);
+
+				const handleRemoveImage = useCallback(
+					(index: number) => {
+						const previewToRemove = values.files[index];
+
+						if (previewToRemove && previewToRemove.previewUrl) {
+							URL.revokeObjectURL(previewToRemove.previewUrl);
+						}
+
+						void setFieldValue('files', values.files.filter((_, i) => i !== index));
+					},
+					[values.files, setFieldValue]
+				);
+
+				return (
+					<Form className={styles.form}>
+						{isPending && <FormLoader/>}
+						<div className={styles.form__inner}>
+							{inputs.default.map(({ name, placeholder, label }) => (
+								<FormikInput key={name} name={name} label={label} placeholder={placeholder} />
 							))}
+							<div className={styles.form__row}>
+								{inputs.row.map(({ name, placeholder, label, type }) => (
+									<FormikInput key={name} type={type} name={name} label={label} placeholder={placeholder} />
+								))}
+							</div>
+							<FilesInput
+								theme={FilesInputTheme.ADD_INVENTORY}
+								name={'image'}
+								label={<>Photo <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(max. 5 photos)</span></>}
+								onFilesAdded={(files: File[]) => handleFilesAdded(files, values.files)}
+								previewsLength={values.files.length}
+							/>
 						</div>
-						<FilesInput
-							theme={FilesInputTheme.ADD_INVENTORY}
-							name={'image'}
-							label={<>Photo <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(max. 5 photos)</span></>}
-							onFilesAdded={handleFilesAdded}
-							previewsLength={imagePreviews.length}
-						/>
-					</div>
-					<ul className={styles.form__preview}>
-						{imagePreviews.map((preview, index) => (
-							<li key={index} className={styles.form__previewItem}>
-								<Image
-									src={preview.previewUrl}
-									alt={`Preview ${index}`}
-									customStyles={{ height: '65px' }}
-								/>
-								<Button
-									className={styles.btnRemove}
-									theme={ButtonTheme.CLEAR}
-									size={ButtonSize.TEXT}
-									onClick={() => handleRemoveImage(index)}
-								>
-									<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
-								</Button>
-							</li>
-						))}
-					</ul>
-					<div className={styles.form__buttons}>
-						<Button type={'submit'} disabled={!dirty}>Save</Button>
-						<Button
-							theme={ButtonTheme.CLEAR}
-							size={ButtonSize.TEXT}
-							color={ButtonColor.NEUTRAL}
-							className={styles.btnCancel}
-							onClick={onClose}
-						>
-							Cancel
-						</Button>
-					</div>
-				</Form>
-			)}
+						<FilesPreview newFiles={values.files} handleRemoveNew={(i: number) => handleRemoveImage(i)} />
+						<div className={styles.form__buttons}>
+							<Button type={'submit'} disabled={!dirty}>Save</Button>
+							<Button
+								theme={ButtonTheme.CLEAR}
+								size={ButtonSize.TEXT}
+								color={ButtonColor.NEUTRAL}
+								className={styles.btnCancel}
+								onClick={onClose}
+							>
+								Cancel
+							</Button>
+						</div>
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 });

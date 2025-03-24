@@ -1,41 +1,30 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { errorHandler } from '@shared/lib/errorHandler';
+import { useUploadFilesAndReturnUrls } from '@shared/hooks/useUploadFilesAndReturnUrls';
+import { SHIFT_ENDPOINT } from '@shared/const/endpoints';
 import { shiftApi } from '../api/shiftApi';
 import { shiftKeys } from '../model/const/shiftKeys';
-import type { IShiftResponse } from '../model/types/Shift.types';
+import type { IShift } from '../model/types/Shift.types';
 
 const useEditShift = () => {
 	const queryClient = useQueryClient();
+	const { uploadFiles } = useUploadFilesAndReturnUrls();
 
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
-		mutationFn: shiftApi.editShift,
-		onMutate: async (editedShift) => {
-			await queryClient.cancelQueries({ queryKey: shiftKeys.allShifts });
+		mutationFn: async (editedShift: Partial<IShift> & { newFiles: File[] }) => {
+			const { newFiles, files, ...rest } = editedShift;
 
-			const previousShift = queryClient.getQueryData<IShiftResponse>(shiftKeys.allShifts);
+			const uploadedImageUrls = await uploadFiles({ files: newFiles, endpoint: `${SHIFT_ENDPOINT}/generate-upload-url` });
 
-			queryClient.setQueryData<IShiftResponse>(shiftKeys.allShifts, (oldShift) => {
-				if (!oldShift) return oldShift;
+			const shift = {
+				...rest,
+				files: [...(files ? files : []), ...uploadedImageUrls],
+			};
 
-				const currentShifts = oldShift.items;
-
-				const updatedShifts = currentShifts.map((shift) =>
-					shift.shift_id === editedShift.shift_id
-						? { ...shift, ...editedShift }
-						: shift
-				);
-
-				return { items: updatedShifts };
-			});
-
-			return { previousShift };
+			return shiftApi.editShift(shift);
 		},
-		onError: (error, _, context) => {
-			if (context?.previousShift) {
-				queryClient.setQueryData(shiftKeys.allShifts, context.previousShift);
-			}
-			errorHandler(error);
-		},
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: shiftKeys.allShifts }),
+		onError: (error) => errorHandler(error),
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };

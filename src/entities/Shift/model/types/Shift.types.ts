@@ -23,4 +23,6 @@ export interface IShift {
 	start_date?: Date | null;
 	end_date?: Date | null;
 	time: IShiftTime[];
+	files?: string[];
+	removedFiles?: string[];
 }

@@ -2,43 +2,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { errorHandler } from '@shared/lib/errorHandler';
 import { useToast } from '@shared/hooks/useToast';
 import { logger, LogLevel, LogSource } from '@shared/lib/logger';
-import { useGetPresignedUrl } from './useGetPresignedUrl';
-import { useUploadFileToS3 } from './useUploadFileToS3';
+import { useUploadFilesAndReturnUrls } from '@shared/hooks/useUploadFilesAndReturnUrls';
 import { userState } from '@entities/User';
+import { INVENTORY_ENDPOINT } from '@shared/const/endpoints';
 import { inventoryApi } from '../api/inventoryApi';
 import { inventoryKeys } from '../model/const/inventoryKeys';
 import type { IInventoryItem } from '../model/types/Inventory.types';
 
 const useUpdateInventoryItem = () => {
-	const { success, error } = useToast();
-	const { tokens: { decodedIDToken } } = userState();
 	const queryClient = useQueryClient();
-	const { mutateAsync: getPresignedUrl } = useGetPresignedUrl();
-	const { mutateAsync: uploadFileToS3 } = useUploadFileToS3();
+	const { uploadFiles } = useUploadFilesAndReturnUrls();
+	const { success } = useToast();
+	const { tokens: { decodedIDToken } } = userState();
 
 	const { mutate, mutateAsync, isPending, isSuccess, isError } = useMutation({
 		mutationFn: async (item: Partial<IInventoryItem & { files: File[] }>) => {
 			const { files, images, ...rest } = item;
-			const uploadedImageUrls: string[] = [];
 
-			if (files && files.length > 0) {
-				const results = await Promise.allSettled(
-					files.map(async (file) => {
-						const uploadURL = await getPresignedUrl(file.name);
-						await uploadFileToS3({ file, uploadURL });
-						return uploadURL.split('?')[0];
-					}),
-				);
-
-				results.forEach((result, index) => {
-					if (result.status === 'fulfilled') {
-						uploadedImageUrls.push(result.value);
-					} else {
-						error(`Failed to upload file: ${files[index].name}`)
-						console.error(`Failed to upload file: ${files[index].name}`, result.reason);
-					}
-				});
-			}
+			const uploadedImageUrls = await uploadFiles({ files, endpoint: `${INVENTORY_ENDPOINT}/upload` });
 
 			const inventoryItem = {
 				...rest,

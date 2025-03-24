@@ -14,13 +14,13 @@ import type { Swiper as ISwiper } from 'swiper/types';
 import { Thumbs } from 'swiper/modules';
 import { classNames } from '@shared/lib/classNames';
 import { compressImages } from '@shared/lib/compressImages';
+import { isDuplicateFile } from '@shared/lib/checkDuplicateFiles';
 import { useMedia } from '@shared/hooks/useMedia';
 import { useToast } from '@shared/hooks/useToast';
 import { Image } from '@shared/ui/Image';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { FilesInput, FilesInputTheme } from '@shared/ui/FilesInput';
-import { isDuplicateFile } from '@entities/Inventory';
+import { FilesInput, FilesInputTheme, type IFilesWithPreview } from '@features/FilesInput';
 import { InventorySliderTheme } from '../model/types/InventorySlider.types';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
@@ -34,9 +34,9 @@ type InventorySliderProps = {
 	customStyles?: CSSProperties;
 	theme?: InventorySliderTheme;
 	currentImages?: string[];
-	newImages?: { file: File; previewUrl: string }[];
-	setCurrentImages?: Dispatch<SetStateAction<string[]>>;
-	setNewImages?: Dispatch<SetStateAction<{ file: File, previewUrl: string }[]>>;
+	newImages?: IFilesWithPreview[];
+	setCurrentImages?: (images: string[]) => void;
+	setNewImages?: (files: IFilesWithPreview[]) => void;
 	setDeletedImages?: Dispatch<SetStateAction<string[]>>;
 };
 
@@ -76,9 +76,9 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 			}
 
 			const compressedFiles = await compressImages({ files });
-			const validFiles = compressedFiles.filter(Boolean) as { file: File; previewUrl: string }[];
+			const validFiles = compressedFiles.filter(Boolean) as IFilesWithPreview[];
 
-			setNewImages?.(prev => [...prev, ...validFiles]);
+			setNewImages?.([...(newImages ? newImages : []), ...validFiles]);
 		},
 		[error, newImages, setNewImages]
 	);
@@ -90,13 +90,12 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 
 	const handleRemoveImg = useCallback((img: string) => {
 		if (currentImages?.includes(img)) {
-			setCurrentImages?.(prevState => prevState.filter(ci => ci !== img));
+			setCurrentImages?.(currentImages?.filter(ci => ci !== img));
 			setDeletedImages?.(prevState => [...prevState, img]);
 		}
 
 		if (newImages?.some((newImg) => newImg.previewUrl === img)) {
-			setNewImages?.((prev) =>
-				prev.filter((newImg) => newImg.previewUrl !== img));
+			setNewImages?.(newImages.filter((newImg) => newImg.previewUrl !== img));
 		}
 	}, [currentImages, newImages, setCurrentImages, setDeletedImages, setNewImages]);
 
@@ -124,7 +123,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 							<SwiperSlide key={`main-${i}-${image}`} style={{ height: 'auto' }}>
 								<div className={styles.gallery__item}>
 									<Image src={image} alt={`slide-${i + 1}`} className={styles.gallery__img} />
-									{isEditing && (
+									{isEditing && image && (
 										<Button
 											theme={ButtonTheme.CLEAR}
 											size={ButtonSize.TEXT}
@@ -167,7 +166,7 @@ const InventorySlider = memo((props: InventorySliderProps) => {
 						<SwiperSlide key={`thumb-${i}-${image}`} style={{ height: 'auto' }}>
 							<div className={classNames(styles.gallery__item, {}, [styles.thumb])}>
 								<Image src={image} alt={`thumb-${i + 1}`} className={styles.gallery__img} />
-								{isEditing && (
+								{isEditing && image && (
 									<Button
 										theme={ButtonTheme.CLEAR}
 										size={ButtonSize.TEXT}

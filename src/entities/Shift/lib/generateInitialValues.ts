@@ -1,6 +1,7 @@
 import type { IShift } from '../model/types/Shift.types';
+import type { IFilesWithPreview } from '@features/FilesInput';
 
-export const generateShiftFormValues = (currentShift?: IShift | null): Partial<IShift> => ({
+export const generateShiftFormValues = (currentShift?: IShift | null): Partial<IShift> & { newFiles: IFilesWithPreview[] } => ({
 	title: currentShift?.title ?? '',
 	description: currentShift?.description ?? '',
 	members: currentShift?.members ?? [],
@@ -18,4 +19,7 @@ export const generateShiftFormValues = (currentShift?: IShift | null): Partial<I
 				return now;
 			})(),
 		}],
+	files: currentShift?.files ?? [],
+	newFiles: [],
+	removedFiles: currentShift?.removedFiles ?? [],
 });

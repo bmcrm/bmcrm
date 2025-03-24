@@ -1,15 +1,17 @@
 import type { IInventoryItem } from '@entities/Inventory';
+import type { IFilesWithPreview } from '@features/FilesInput';
 
 export const generateInitialValues = (item: IInventoryItem) => {
 	const { title, description, price, quantity, category, images } = item;
 
-	const initialValues: Partial<Omit<IInventoryItem, 'lastItem'>> = {
+	const initialValues: Partial<IInventoryItem> & { files: IFilesWithPreview[] } = {
 		title,
 		description,
 		price,
     quantity,
     category,
     images,
+		files: [],
 	};
 
 	const initialData = {

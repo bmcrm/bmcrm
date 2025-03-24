@@ -15,12 +15,9 @@
 			grid-template-columns: 2fr 1fr;
 			gap: 10px;
 		}
-		@media (width < breakpoints.$md) {
-			grid-template-columns: 1fr;
-		}
 
-		+ .item__control {
-			margin-top: 10px;
+		+ .item__gallery {
+			margin-top: 20px;
 		}
 	}
 
@@ -54,10 +51,18 @@
 
 			.item__caption {
 				padding-right: 15px;
+
+				@media (width < breakpoints.$lg) {
+					padding-right: 0;
+				}
 			}
 
 			.item__column-inner {
 				padding-right: 15px;
+
+				@media (width < breakpoints.$lg) {
+					padding-right: 0;
+				}
 			}
 		}
 		&:last-child {
@@ -104,6 +109,12 @@
 
 	&__text {
 		font: var(--font-s);
+	}
+
+	&__gallery {
+		+ .item__control {
+			margin-top: 10px;
+		}
 	}
 
 	&__control {

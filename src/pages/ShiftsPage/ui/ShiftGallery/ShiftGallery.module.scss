@@ -1,0 +1,44 @@
+@use '@app/styles/breakpoints';
+
+.gallery {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+
+	@media (width < breakpoints.$sm) {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
+
+	&__item {
+		width: 150px;
+		height: 100px;
+		border-radius: 10px;
+		border: 1px solid var(--color-orange-light);
+		cursor: pointer;
+
+		@media (width < breakpoints.$sm) {
+			width: 100%;
+		}
+
+		@media (hover: hover) {
+      &:hover {
+        border-color: var(--color-ruby-light);
+      }
+    }
+	}
+
+	&__img {
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	&__pdf {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		color: var(--color-ruby-dark);
+	}
+}
