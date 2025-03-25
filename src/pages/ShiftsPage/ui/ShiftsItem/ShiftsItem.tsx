@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react';
 import { format } from 'date-fns';
-import { useToggle } from '@shared/hooks/useToggle';
 import { classNames } from '@shared/lib/classNames';
 import { dateFormatter } from '@shared/lib/dateFormatter';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
@@ -21,7 +20,6 @@ const ShiftsItem = memo((props: ShiftsItemProps) => {
 	const { className, shift, onEditShift, canControl } = props;
 	const { start_date, end_date, time, title, description, members, shift_id, files } = shift;
 	const { mutate: deleteShift } = useDeleteShift();
-	const {} = useToggle();
 
 	const handleDelete = useCallback(() => {
     deleteShift({ shiftID: shift_id, title });
