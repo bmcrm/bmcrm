@@ -1,0 +1,1 @@
+export { hasExtension } from './checkExtension';

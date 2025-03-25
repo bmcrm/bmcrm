@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { classNames } from '@shared/lib/classNames';
-import { isPDF } from '@shared/lib/checkPDF';
+import { hasExtension } from '@shared/lib/checkExtension';
 import { Image } from '@shared/ui/Image';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
@@ -8,29 +8,39 @@ import type { IFilesWithPreview } from '../../model/types/FilesInput.types';
 import styles from './FilesPreview.module.scss';
 import DeletePreviewIcon from '@shared/assets/icons/cross.svg';
 import PdfIcon from '@shared/assets/icons/pdf_icon.svg';
+import TxtIcon from '@shared/assets/icons/txt_icon.svg';
 
 type FilesPreviewProps = {
 	className?: string;
 	currentFiles?: string[];
 	newFiles?: IFilesWithPreview[];
-	handleRemoveCurrent?: (i: number) => void;
-	handleRemoveNew?: (i: number) => void;
+	handleRemoveCurrent?: (fileName: string) => void;
+	handleRemoveNew?: (fileName: string) => void;
 };
 
 const FilesPreview = memo((props: FilesPreviewProps) => {
 	const { className, currentFiles, newFiles, handleRemoveCurrent, handleRemoveNew } = props;
-	const imageFiles = currentFiles?.filter(file => !isPDF(file));
-	const pdfFiles = currentFiles?.filter(file => isPDF(file));
-	const sortedFiles = [...(imageFiles ? imageFiles : []), ...(pdfFiles ? pdfFiles : [])];
+	const imageFiles = currentFiles?.filter(file => !hasExtension(file, ['.pdf', '.txt']));
+	const pdfFiles = currentFiles?.filter(file => hasExtension(file, ['.pdf']));
+	const txtFiles = currentFiles?.filter(file => hasExtension(file, ['.txt']));
+	const sortedFiles = [
+		...(imageFiles ? imageFiles : []),
+		...(pdfFiles ? pdfFiles : []),
+		...(txtFiles ? txtFiles : []),
+	];
 
 	return (
 		<div >
 			<ul className={classNames(styles.preview, {}, [className])}>
 				{sortedFiles?.map((preview, index) => (
 					<li key={index} className={styles.preview__item}>
-						{isPDF(preview) ? (
+						{hasExtension(preview, ['.pdf']) ? (
 							<div className={styles.preview__pdf}>
 								<Icon icon={<PdfIcon />} size={IconSize.SIZE_FILL} />
+							</div>
+						) : hasExtension(preview, ['.txt']) ? (
+							<div className={styles.preview__pdf}>
+								<Icon icon={<TxtIcon />} size={IconSize.SIZE_FILL} />
 							</div>
 						) : (
 							<Image
@@ -43,7 +53,7 @@ const FilesPreview = memo((props: FilesPreviewProps) => {
 							className={styles.preview__btnRemove}
 							theme={ButtonTheme.CLEAR}
 							size={ButtonSize.TEXT}
-							onClick={() => handleRemoveCurrent?.(index)}
+							onClick={() => handleRemoveCurrent?.(preview)}
 						>
 							<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
 						</Button>
@@ -53,6 +63,7 @@ const FilesPreview = memo((props: FilesPreviewProps) => {
 					const existingFile = preview instanceof File ? preview : preview.file;
 					const isImage = existingFile.type.startsWith('image/');
 					const isPDF = existingFile.type === 'application/pdf';
+					const isTXT = existingFile.type === 'text/plain';
 
 					return (
 						<li key={index} className={styles.preview__item}>
@@ -69,11 +80,16 @@ const FilesPreview = memo((props: FilesPreviewProps) => {
 									<Icon icon={<PdfIcon />} size={IconSize.SIZE_FILL} />
 								</div>
 							)}
+							{isTXT && (
+								<div className={styles.preview__pdf} title={existingFile.name}>
+									<Icon icon={<TxtIcon />} size={IconSize.SIZE_FILL} />
+								</div>
+							)}
 							<Button
 								className={styles.preview__btnRemove}
 								theme={ButtonTheme.CLEAR}
 								size={ButtonSize.TEXT}
-								onClick={() => handleRemoveNew?.(index)}
+								onClick={() => handleRemoveNew?.(existingFile.name)}
 							>
 								<Icon icon={<DeletePreviewIcon />} size={IconSize.SIZE_16} />
 							</Button>

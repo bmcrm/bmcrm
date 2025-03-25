@@ -1,1 +1,0 @@
-export const isPDF = (file: string) => file.toLowerCase().endsWith('.pdf');

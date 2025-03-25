@@ -1,13 +1,12 @@
 import { memo, useCallback, useMemo } from 'react';
 import { Form, Formik, type FormikHelpers } from 'formik';
-import { useMedia } from '@shared/hooks/useMedia';
 import { classNames } from '@shared/lib/classNames';
 import { generateShiftFormValues } from '../../lib/generateInitialValues';
-import { Button } from '@shared/ui/Button';
 import { FormLoader } from '@features/FormLoader';
 import { FormBasic } from './FormBasic';
 import { FormDate } from './FormDate';
 import { FormAuxiliary } from './FormAuxiliary';
+import { FormButtons } from './FormButtons';
 import { useCreateShift } from '../../hooks/useCreateShift';
 import { useEditShift } from '../../hooks/useEditShift';
 import { shiftSchema } from '@shared/const/validationSchemas';
@@ -25,7 +24,6 @@ type ShiftFormProps = {
 
 const ShiftForm = memo((props: ShiftFormProps) => {
 	const { className, onClose, theme = ShiftFormTheme.CREATE, currentShift } = props;
-	const { isMobile } = useMedia();
 	const { mutateAsync: createShift, isPending: isCreatePending } = useCreateShift();
 	const { mutateAsync: editShift, isPending: isEditPending } = useEditShift();
 	const isPending = isCreatePending || isEditPending;
@@ -82,11 +80,11 @@ const ShiftForm = memo((props: ShiftFormProps) => {
 						<FormBasic members={values.members ?? []} />
 						<FormDate values={values} />
 						<FormAuxiliary currentFiles={values.files} newFiles={values.newFiles} removedFiles={values.removedFiles} />
-						<Button type={'submit'} className={'m-centred'} disabled={!dirty} fluid={isMobile}>Save</Button>
+						<FormButtons dirty={dirty} />
 					</Form>
 				)}
 			</Formik>
-			{isPending && <FormLoader />}
+			{isPending && <FormLoader className={styles.form__loader} />}
 		</>
 	);
 });

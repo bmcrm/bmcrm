@@ -8,7 +8,6 @@ import { filterTags, multiValueFilter, Table } from '@widgets/Table';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { DeleteCamperButton } from '@features/DeleteCamperButton';
-import { CamperTag, CamperTagTheme } from '@features/CamperTag';
 import { SocialIcon } from '@features/SocialIcon';
 import { TruncatedText } from '@features/TruncatedText';
 import { CamperDetailsModal, CamperDetailsModalTheme } from '@widgets/CamperDetailsModal';
@@ -191,16 +190,15 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 					const tags = row.tags || {};
 
 					return (
-						<div className={classNames(styles.table__row, {}, [styles.center, styles.wrap])}>
-							{Object.entries(tags).map(([name, details], i) => (
-								<CamperTag
-									key={`${name}-${i}`}
-									theme={CamperTagTheme.TABLE}
-									tag={{ name, details }}
-									portalTargetRef={portalTargetRef}
-									tableScrollRef={tableScrollRef}
-								/>
-							))}
+						<div className={styles.table__row}>
+
+							<ul className={styles.table__tags}>
+								{Object.entries(tags).map(([name, details]) => (
+									<li key={name}>
+										<span className={'fw-600'}>{name}</span>: {details.join(', ')}
+									</li>
+								))}
+							</ul>
 						</div>
 					);
 				},

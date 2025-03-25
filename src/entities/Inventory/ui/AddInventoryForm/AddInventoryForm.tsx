@@ -84,14 +84,14 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 				);
 
 				const handleRemoveImage = useCallback(
-					(index: number) => {
-						const previewToRemove = values.files[index];
+					(fileName: string) => {
+						const previewToRemove = values.files.find(file => file.file.name === fileName);
 
 						if (previewToRemove && previewToRemove.previewUrl) {
 							URL.revokeObjectURL(previewToRemove.previewUrl);
 						}
 
-						void setFieldValue('files', values.files.filter((_, i) => i !== index));
+						void setFieldValue('files', values.files.filter((file) => file.file.name !== fileName));
 					},
 					[values.files, setFieldValue]
 				);
@@ -116,7 +116,7 @@ const AddInventoryForm = memo(({ onClose }: AddInventoryFormProps) => {
 								previewsLength={values.files.length}
 							/>
 						</div>
-						<FilesPreview newFiles={values.files} handleRemoveNew={(i: number) => handleRemoveImage(i)} />
+						<FilesPreview newFiles={values.files} handleRemoveNew={(fileName: string) => handleRemoveImage(fileName)} />
 						<div className={styles.form__buttons}>
 							<Button type={'submit'} disabled={!dirty}>Save</Button>
 							<Button

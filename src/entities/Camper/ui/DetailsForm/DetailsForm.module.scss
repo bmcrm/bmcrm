@@ -16,10 +16,24 @@
 	}
 
 	&__buttons {
+		position: sticky;
+		bottom: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 10px;
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: -20px;
+			left: 50%;
+			translate: -50%;
+			width: calc(100% + 40px);
+			height: calc(100% + 40px);
+			background-color: rgba(248, 248, 248, .5);
+			backdrop-filter: blur(5px);
+		}
 	}
 
 	&__group {

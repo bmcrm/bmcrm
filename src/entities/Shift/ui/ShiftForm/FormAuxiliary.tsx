@@ -38,11 +38,14 @@ const FormAuxiliary = memo((props: FormAuxiliaryProps) => {
 			const pdfFiles = uniqueFiles
 				.filter((file) => file.type === 'application/pdf')
 				.map(file => ({ file }));
+			const txtFiles = uniqueFiles
+				.filter((file) => file.type === 'text/plain')
+				.map(file => ({ file }));
 
 			const compressedImages = await compressImages({ files: imageFiles });
 			const validImageFiles = compressedImages.filter(Boolean) as IFilesWithPreview[];
 
-			const validFiles = [...newFiles, ...validImageFiles, ...pdfFiles];
+			const validFiles = [...newFiles, ...validImageFiles, ...pdfFiles, ...txtFiles];
 
 			void setFieldValue('newFiles', validFiles);
 		},
@@ -50,27 +53,27 @@ const FormAuxiliary = memo((props: FormAuxiliaryProps) => {
 	);
 
 	const handleRemoveCurrent = useCallback(
-		(index: number) => {
-			const target = currentFiles?.[index];
+		(fileName: string) => {
+			const target = currentFiles?.find((file) => file === fileName);
 
 			if (target) {
 				void setFieldValue('removedFiles', [...(removedFiles ? removedFiles : []), target]);
 			}
 
-			void setFieldValue('files', currentFiles?.filter((_, i) => i !== index));
+			void setFieldValue('files', currentFiles?.filter((file) => file !== fileName));
 		},
 		[setFieldValue, currentFiles, removedFiles]
 	);
 
 	const handleRemoveNew = useCallback(
-		(index: number) => {
-			const previewToRemove = newFiles?.[index];
+		(fileName: string) => {
+			const previewToRemove = newFiles?.find(file => file.file.name === fileName);
 
 			if (previewToRemove && previewToRemove.previewUrl) {
 				URL.revokeObjectURL(previewToRemove.previewUrl);
 			}
 
-			void setFieldValue('newFiles', newFiles?.filter((_, i) => i !== index));
+			void setFieldValue('newFiles', newFiles?.filter((file) => file.file.name !== fileName));
 		},
 		[setFieldValue, newFiles]
 	);
@@ -83,15 +86,15 @@ const FormAuxiliary = memo((props: FormAuxiliaryProps) => {
 				label={<>Auxiliary means <span style={{ font: 'var(--font-s)', color: 'var(--color-neutral)' }}>(not necessarily)</span></>}
 				onFilesAdded={(addedFiles: File[]) => handleFilesAdded(addedFiles, newFiles)}
 				previewsLength={(newFiles?.length || 0) + (currentFiles?.length || 0)}
-				accept={'image/*, application/pdf'}
+				accept={'image/*, application/pdf, text/plain'}
 				maxLength={7}
 			/>
 			{((currentFiles && currentFiles.length > 0) || (newFiles && newFiles.length > 0)) && (
 				<FilesPreview
 					currentFiles={currentFiles}
 					newFiles={newFiles}
-					handleRemoveCurrent={(i: number) => handleRemoveCurrent(i)}
-					handleRemoveNew={(i: number) => handleRemoveNew(i)}
+					handleRemoveCurrent={(fileName: string) => handleRemoveCurrent(fileName)}
+					handleRemoveNew={(fileName: string) => handleRemoveNew(fileName)}
 				/>
 			)}
 		</div>
