@@ -233,12 +233,6 @@ export const editCamperSchema = yup.object().shape({
 			value: yup.string().max(256, 'Less than 256 characters').notRequired(),
 		})
 	),
-	social_links: yup.array().of(
-		yup.object().shape({
-			name: yup.string(),
-			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
-		})
-	),
 	birthdayDate: yup.date().notRequired(),
 });
 

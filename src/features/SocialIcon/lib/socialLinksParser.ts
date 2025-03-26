@@ -1,16 +1,16 @@
 import { type CamperSocial } from '@entities/Camper';
-import { socialDomainPatterns, SocialIcons } from '../model/types/SocialIcon.types';
+import { socialDomainPatterns, SocialNetworks } from '../model/types/SocialIcon.types';
 
-export const generateSocialName = (url: string): SocialIcons => {
+export const generateSocialName = (url: string): SocialNetworks => {
 	const lowerUrl = url.toLowerCase();
 
 	for (const [social, pattern] of Object.entries(socialDomainPatterns)) {
 		if (pattern.test(lowerUrl)) {
-			return social as SocialIcons;
+			return social as SocialNetworks;
 		}
 	}
 
-	return SocialIcons.DEFAULT;
+	return SocialNetworks.DEFAULT;
 };
 
 export const socialLinksParser = (urls: string | string[]): CamperSocial[] => {

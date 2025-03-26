@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { classNames } from '@shared/lib/classNames';
+import { normalizeSocialLinks } from '../../lib/normalizeSocialLinks';
 import { normalizeTags } from '../../lib/normalizeTags';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { DetailsFormBasics } from './DetailsFormBasics';
@@ -9,7 +10,6 @@ import { DetailsFormHistory } from './DetailsFormHistory';
 import { DetailsFormSocials } from './DetailsFormSocials';
 import { DetailsFormButtons } from './DetailsFormButtons';
 import { useUpdateCamper } from '../../hooks/useUpdateCamper';
-import { generateSocialName } from '@features/SocialIcon';
 import { appState } from '@entities/App';
 import { editCamperSchema } from '@shared/const/validationSchemas';
 import { CamperRole, type ICamper, type IFormikCamper } from '../../model/types/Camper.types';
@@ -36,19 +36,16 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 				return;
 			}
 
-			const { social_links, role, tags, ...rest } = values;
+			const { socials, role, tags, ...rest } = values;
 
-			const updatedSocial = social_links
-				?.filter((social) => social.url)
-				.map(({ url }) => ({ url, name: generateSocialName(url) }));
-
+			const social_links = normalizeSocialLinks(socials);
 			const normalizedTags = tags ? normalizeTags(tags) : null;
 
 			const payload: Partial<ICamper> = {
 				email: camperEmail,
 				...rest,
 				...(initialValues.role === CamperRole.TCO ? {} : { role }),
-				...(updatedSocial ? { social_links: updatedSocial } : {}),
+				...(social_links ? { social_links } : {}),
 				...(normalizedTags ? { tags: normalizedTags } : {}),
 			};
 
@@ -97,7 +94,7 @@ const DetailsForm = memo((props: DetailsFormProps) => {
 							label={'Summary'}
 						/>
 						<DetailsFormHistory history={values.history} />
-						<DetailsFormSocials socials={values.social_links} />
+						<DetailsFormSocials socials={values.socials} />
 						<DetailsFormButtons
 							handleCancel={handleCancel}
 							onClose={onClose}

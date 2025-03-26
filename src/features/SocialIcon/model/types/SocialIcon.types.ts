@@ -1,4 +1,4 @@
-export enum SocialIcons {
+export enum SocialNetworks {
   X = 'x',
   TWITTER = 'twitter',
   FACEBOOK = 'facebook',
@@ -17,18 +17,18 @@ export enum SocialIcons {
 }
 
 export const socialDomainPatterns = {
-  [SocialIcons.X]: /(?:https?:\/\/)?(?:www\.)?x\.com/i,
-  [SocialIcons.TWITTER]: /(?:https?:\/\/)?(?:www\.)?twitter\.com/i,
-  [SocialIcons.FACEBOOK]: /(?:https?:\/\/)?(?:www\.)?facebook\.com/i,
-  [SocialIcons.INSTAGRAM]: /(?:https?:\/\/)?(?:www\.)?instagram\.com/i,
-  [SocialIcons.TELEGRAM]: /(?:https?:\/\/)?(?:www\.)?t\.me/i,
-  [SocialIcons.WHATSAPP]: /(?:https?:\/\/)?(?:www\.)?wa\.me/i,
-  [SocialIcons.YOUTUBE]: /(?:https?:\/\/)?(?:www\.)?youtube\.com/i,
-  [SocialIcons.TIKTOK]: /(?:https?:\/\/)?(?:www\.)?tiktok\.com/i,
-  [SocialIcons.VIBER]: /(?:https?:\/\/)?(?:www\.)?viber\.com/i,
-  [SocialIcons.SNAPCHAT]: /(?:https?:\/\/)?(?:www\.)?snapchat\.com/i,
-  [SocialIcons.REDDIT]: /(?:https?:\/\/)?(?:www\.)?reddit\.com/i,
-  [SocialIcons.LINKEDIN]: /(?:https?:\/\/)?(?:www\.)?linkedin\.com/i,
-  [SocialIcons.DISCORD]: /(?:https?:\/\/)?(?:www\.)?discord\.com/i,
-  [SocialIcons.VK]: /(?:https?:\/\/)?(?:www\.)?vk\.com/i,
+  [SocialNetworks.X]: /(?:https?:\/\/)?(?:www\.)?x\.com/i,
+  [SocialNetworks.TWITTER]: /(?:https?:\/\/)?(?:www\.)?twitter\.com/i,
+  [SocialNetworks.FACEBOOK]: /(?:https?:\/\/)?(?:www\.)?facebook\.com/i,
+  [SocialNetworks.INSTAGRAM]: /(?:https?:\/\/)?(?:www\.)?instagram\.com/i,
+  [SocialNetworks.TELEGRAM]: /(?:https?:\/\/)?(?:www\.)?t\.me/i,
+  [SocialNetworks.WHATSAPP]: /(?:https?:\/\/)?(?:www\.)?wa\.me/i,
+  [SocialNetworks.YOUTUBE]: /(?:https?:\/\/)?(?:www\.)?youtube\.com/i,
+  [SocialNetworks.TIKTOK]: /(?:https?:\/\/)?(?:www\.)?tiktok\.com/i,
+  [SocialNetworks.VIBER]: /(?:https?:\/\/)?(?:www\.)?viber\.com/i,
+  [SocialNetworks.SNAPCHAT]: /(?:https?:\/\/)?(?:www\.)?snapchat\.com/i,
+  [SocialNetworks.REDDIT]: /(?:https?:\/\/)?(?:www\.)?reddit\.com/i,
+  [SocialNetworks.LINKEDIN]: /(?:https?:\/\/)?(?:www\.)?linkedin\.com/i,
+  [SocialNetworks.DISCORD]: /(?:https?:\/\/)?(?:www\.)?discord\.com/i,
+  [SocialNetworks.VK]: /(?:https?:\/\/)?(?:www\.)?vk\.com/i,
 };
