@@ -4,11 +4,12 @@
   @media (width < breakpoints.$lg) {
     position: fixed;
     z-index: 110;
-    top: 60px;
+    top: 0;
     right: 0;
     width: 100%;
-    height: calc(100% - 60px);
-    transition: transform 0.2s ease;
+    height: 100%;
+    padding-top: 60px;
+    transition: transform .2s ease;
     transform: translateX(200vw);
   }
 

@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { SocialNetworks, SocialNetworksData } from '@features/SocialIcon';
 import { CamperRole } from '@entities/Camper';
 
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
@@ -107,6 +108,30 @@ export const camperRegistrationSchema = yup.object().shape({
 		.matches(/[0-9]/, 'Numbers')
 		.matches(/\W/, 'Special character')
 		.required('Password is required'),
+	socials: yup
+		.array()
+		.of(
+			yup.object().shape({
+				socialName: yup
+					.mixed<SocialNetworks>()
+					.oneOf(Object.keys(SocialNetworksData) as SocialNetworks[], 'Invalid social network')
+					.required('Social network is required'),
+				userName: yup
+					.string()
+					.trim()
+					.notRequired()
+					.test('custom-social-url', 'Enter a valid URL', function (value) {
+						const { socialName } = this.parent;
+						if (!value) return true; // Якщо поле порожнє — не перевіряємо
+
+						if (socialName === SocialNetworks.DEFAULT) {
+							return /^(https?:\/\/)?([\w.-]+)+\.\w{2,}(:\d+)?(\/.*)?$/.test(value);
+						}
+						return !/^https?:\/\//.test(value); // Якщо це не DEFAULT, то забороняємо URL
+					}),
+			})
+		)
+		.notRequired(),
 });
 
 export const userSettingsSchema = yup.object().shape({
@@ -133,6 +158,30 @@ export const userSettingsSchema = yup.object().shape({
 		})
 	),
 	birthdayDate: yup.date().notRequired(),
+	socials: yup
+		.array()
+		.of(
+			yup.object().shape({
+				socialName: yup
+					.mixed<SocialNetworks>()
+					.oneOf(Object.keys(SocialNetworksData) as SocialNetworks[], 'Invalid social network')
+					.required('Social network is required'),
+				userName: yup
+					.string()
+					.trim()
+					.notRequired()
+					.test('custom-social-url', 'Enter a valid URL', function (value) {
+						const { socialName } = this.parent;
+						if (!value) return true; // Якщо поле порожнє — не перевіряємо
+
+						if (socialName === SocialNetworks.DEFAULT) {
+							return /^(https?:\/\/)?([\w.-]+)+\.\w{2,}(:\d+)?(\/.*)?$/.test(value);
+						}
+						return !/^https?:\/\//.test(value); // Якщо це не DEFAULT, то забороняємо URL
+					}),
+			})
+		)
+		.notRequired(),
 });
 
 export const campSettingsSchema = yup.object().shape({
@@ -212,6 +261,30 @@ export const editCamperSchema = yup.object().shape({
 		})
 	),
 	birthdayDate: yup.date().notRequired(),
+	socials: yup
+		.array()
+		.of(
+			yup.object().shape({
+				socialName: yup
+					.mixed<SocialNetworks>()
+					.oneOf(Object.keys(SocialNetworksData) as SocialNetworks[], 'Invalid social network')
+					.required('Social network is required'),
+				userName: yup
+					.string()
+					.trim()
+					.notRequired()
+					.test('custom-social-url', 'Enter a valid URL', function (value) {
+						const { socialName } = this.parent;
+						if (!value) return true; // Якщо поле порожнє — не перевіряємо
+
+						if (socialName === SocialNetworks.DEFAULT) {
+							return /^(https?:\/\/)?([\w.-]+)+\.\w{2,}(:\d+)?(\/.*)?$/.test(value);
+						}
+						return !/^https?:\/\//.test(value); // Якщо це не DEFAULT, то забороняємо URL
+					}),
+			})
+		)
+		.notRequired(),
 });
 
 export const shiftSchema = yup.object().shape({

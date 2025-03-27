@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useRef, type MouseEvent } from 'react';
 import { useMedia } from '@shared/hooks/useMedia';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { classNames, type Mods } from '@shared/lib/classNames';
@@ -40,10 +40,16 @@ const Nav = memo((props: NavProps) => {
 	const handleLogout = useCallback(() => {
 		handleCLose?.();
 		logout();
-	}, [handleCLose, logout])
+	}, [handleCLose, logout]);
+
+	const handleNavClick = useCallback((e: MouseEvent) => {
+		if (e.target === navRef.current) {
+			handleCLose?.();
+		}
+	}, [handleCLose]);
 
 	return (
-		<nav ref={navRef} className={classNames(styles.nav, mods, [className])}>
+		<nav ref={navRef} className={classNames(styles.nav, mods, [className])} onClick={handleNavClick}>
 			<div className={styles.nav__inner}>
 				{isTablet && <UserAvatar theme={UserAvatarTheme.MOBILE} onClick={handleCLose}/>}
 				<ul className={styles.nav__list}>

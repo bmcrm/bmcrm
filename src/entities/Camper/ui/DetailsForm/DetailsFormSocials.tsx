@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useFormikContext, FieldArray } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { CustomSelect } from '@shared/ui/CustomSelect';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { Button, ButtonSize, ButtonTheme } from '@shared/ui/Button';
@@ -36,7 +36,7 @@ const DetailsFormSocials = memo(({ socials }: DetailsFormSocialsProps) => {
 							</Button>
 						)}
 					</div>
-					<ul className={styles.form__list}>
+					<ul className={styles.form__list} style={{ gap: '20px' }}>
 						{socials?.map((s, i, array) => (
 							<li key={i} className={styles.form__listItemSocial}>
 								<div className={styles.form__listItemSocialInner}>
@@ -46,7 +46,10 @@ const DetailsFormSocials = memo(({ socials }: DetailsFormSocialsProps) => {
 										options={socialOptions}
 										value={s.socialName}
 									/>
-									<FormikInput name={`socials.${i}.userName`} placeholder={'User name'} />
+									<FormikInput
+										name={`socials.${i}.userName`}
+										placeholder={s.socialName === SocialNetworks.DEFAULT ? 'https://*social*/*user*' : 'User name'}
+									/>
 								</div>
 								<Button
 									aria-label={'Remove social button'}
