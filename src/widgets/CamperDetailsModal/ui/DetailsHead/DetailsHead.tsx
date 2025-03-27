@@ -19,6 +19,7 @@ const DetailsHead = memo((props: DetailsHeadProps) => {
 	const { className, setTheme, camper, onClose } = props;
 	const { playa_name, avatar, social_links } = camper;
 	const { isMobile } = useMedia();
+	const filteredSocials = social_links?.filter(sl => sl.name && sl.url);
 
 	return (
 		<div className={classNames(styles.head, {}, [className])}>
@@ -29,8 +30,8 @@ const DetailsHead = memo((props: DetailsHeadProps) => {
 				className={styles.head__avatar}
 			/>
 			<HeadContent camper={camper} setTheme={setTheme} onClose={onClose} />
-			{social_links && social_links.length > 0 && !isMobile && (
-				<DetailsSocial socials={social_links} />
+			{filteredSocials && filteredSocials.length > 0 && !isMobile && (
+				<DetailsSocial socials={filteredSocials} />
 			)}
 		</div>
 	);

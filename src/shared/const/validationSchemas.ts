@@ -3,8 +3,6 @@ import { CamperRole } from '@entities/Camper';
 
 const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
 
-const socialRegex = /^https:\/\/.+\/.+$/;
-
 export const registrationSchema = yup.object().shape({
 	camp_name: yup
 		.string()
@@ -76,14 +74,6 @@ export const confirmResetPassSchema = yup.object().shape({
 		.required('Password confirmation is required'),
 });
 
-export const addSocialSchema = yup.object().shape({
-	url: yup
-		.string()
-		.trim()
-		.required('URL is required!')
-		.matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
-});
-
 export const camperRegistrationSchema = yup.object().shape({
 	accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 	first_name: yup
@@ -109,12 +99,6 @@ export const camperRegistrationSchema = yup.object().shape({
 		.trim()
 		.email('Invalid email address')
 		.required('Email is required'),
-	social_links: yup.array().of(
-		yup
-			.string()
-			.trim()
-			.matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
-	),
 	password: yup
 		.string()
 		.trim()
@@ -142,12 +126,6 @@ export const userSettingsSchema = yup.object().shape({
 		.string()
 		.trim()
 		.max(256, 'Less than 256 characters'),
-	social_links: yup.array().of(
-		yup.object().shape({
-			name: yup.string(),
-			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
-		})
-	),
 	history: yup.array().of(
 		yup.object().shape({
 			year: yup.number().integer().positive(),
@@ -231,12 +209,6 @@ export const editCamperSchema = yup.object().shape({
 		yup.object().shape({
 			year: yup.number().integer().positive(),
 			value: yup.string().max(256, 'Less than 256 characters').notRequired(),
-		})
-	),
-	social_links: yup.array().of(
-		yup.object().shape({
-			name: yup.string(),
-			url: yup.string().trim().matches(socialRegex, 'URL must be in the format https://*social*/*user*'),
 		})
 	),
 	birthdayDate: yup.date().notRequired(),

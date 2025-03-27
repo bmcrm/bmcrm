@@ -169,10 +169,11 @@ const CampersTable = ({ campers }: CampersTableProps) => {
 				cell: (info) => {
 					const row = info.row.original;
 					const socials = row.social_links || [];
+					const filteredSocials = socials?.filter(sl => sl.name && sl.url);
 
 					return (
 						<div className={classNames(styles.table__row, {}, [styles.center, styles.wrap, 'm-centred'])}>
-							{socials.map((social, i) => <SocialIcon key={i} social={social} />)}
+							{filteredSocials.map((social, i) => <SocialIcon key={i} social={social} />)}
 						</div>
 					);
 				},

@@ -13,6 +13,8 @@ export { default as UserSettingsForm } from './ui/UserSettingsForm/UserSettingsF
 export { default as InitStageForm } from './ui/ResetPassForm/InitStageForm/InitStageForm';
 export { default as ConfirmStageForm } from './ui/ResetPassForm/ConfirmStageForm/ConfirmStageForm';
 
+export { extractUserName } from './lib/extractUserName';
+
 export type {
   IIDToken,
   ICamperRegistrationData,

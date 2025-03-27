@@ -1,3 +1,5 @@
+import { SocialNetworksData } from '@features/SocialIcon';
+
 export const inputs = {
 	name: [
 		{
@@ -24,3 +26,8 @@ export const inputs = {
 		},
 	],
 };
+
+export const socialOptions = Object.entries(SocialNetworksData).map(([key, { label }]) => ({
+	value: key,
+	label: label,
+}));

@@ -87,6 +87,17 @@
 			gap: 5px;
 		}
 
+		&-item-social-inner {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			width: 100%;
+
+			@media (width < breakpoints.$md) {
+				flex-direction: column;
+			}
+		}
+
 		&-item-tag {
 			display: grid;
 			grid-template-columns: 300px 1fr;
@@ -118,5 +129,13 @@
         color: var(--color-black);
       }
     }
+	}
+
+	&__select {
+		max-width: 150px;
+
+		@media (width < breakpoints.$md) {
+			max-width: 100%;
+		}
 	}
 }

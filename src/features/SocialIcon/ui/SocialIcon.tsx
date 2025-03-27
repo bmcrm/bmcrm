@@ -2,9 +2,9 @@ import { memo } from 'react';
 import { classNames } from '@shared/lib/classNames';
 import { useMedia } from '@shared/hooks/useMedia';
 import { Icon, IconSize } from '@shared/ui/Icon';
-import { socialIconsList } from '../lib/socialIconsList';
+import { SocialNetworksData } from '../model/data/socialIcon.data';
 import type { CamperSocial } from '@entities/Camper';
-import { SocialIcons } from '../model/types/SocialIcon.types';
+import { SocialNetworks } from '../model/types/SocialIcon.types';
 import styles from './SocialIcon.module.scss';
 
 type SocialIconProps = {
@@ -19,7 +19,7 @@ const SocialIcon = memo((props: SocialIconProps) => {
   return (
     <a href={url} target={'_blank'} className={classNames(styles.link, {}, [className])}>
       <Icon
-        icon={socialIconsList[name as SocialIcons]}
+        icon={SocialNetworksData[name || SocialNetworks.DEFAULT].icon}
         size={isMobile ? IconSize.SIZE_20 : IconSize.SIZE_24}
       />
     </a>

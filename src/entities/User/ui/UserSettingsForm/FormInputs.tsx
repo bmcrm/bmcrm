@@ -7,17 +7,17 @@ import { FormikInput } from '@shared/ui/FormikInput';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { MultiSelect } from '@shared/ui/MultiSelect';
 import { Datepicker } from '@features/Datepicker';
-import { DetailsFormHistory, DetailsFormSocials, type ICamper } from '@entities/Camper';
+import { DetailsFormHistory, DetailsFormSocials, type FormikSocials, type ICamper } from '@entities/Camper';
 import { inputsData } from '../../model/data/UserSettingsForm.data';
 import styles from './UserSettingsForm.module.scss';
 
 type FormInputsProps = {
 	className?: string;
-	values?: Partial<ICamper>;
+	values?: Partial<ICamper> & { socials: FormikSocials[] };
 };
 
 const FormInputs = memo((props: FormInputsProps) => {
-	const { className, values: { birthdayDate, history, social_links, visitedBM } = {} } = props;
+	const { className, values: { birthdayDate, history, socials, visitedBM } = {} } = props;
 	const { setFieldValue } = useFormikContext();
 	const currentYear = new Date().getFullYear();
 
@@ -65,7 +65,7 @@ const FormInputs = memo((props: FormInputsProps) => {
 					label={'Summary'}
 				/>
 				<DetailsFormHistory history={history} />
-				<DetailsFormSocials socials={social_links} />
+				<DetailsFormSocials socials={socials} />
 			</div>
 		</div>
 	);

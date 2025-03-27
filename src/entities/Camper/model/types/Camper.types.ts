@@ -1,10 +1,12 @@
+import { SocialNetworks } from '@features/SocialIcon';
+
 export interface CamperHistory {
   year: string;
   value: string;
 }
 
 export interface CamperSocial {
-  name: string;
+  name: SocialNetworks;
   url: string;
 }
 
@@ -17,6 +19,11 @@ export type CamperTags = {
 export interface FormikTag {
   tagName: string;
   tagDetails: string[];
+}
+
+export interface FormikSocials {
+  socialName: SocialNetworks;
+  userName: string;
 }
 
 export enum CamperRole {
@@ -51,8 +58,9 @@ export interface ICamper {
   createdBy?: string;
 }
 
-export type IFormikCamper = Omit<ICamper, 'tags'> & {
+export type IFormikCamper = Omit<ICamper, 'tags' | 'social_links'> & {
   tags: FormikTag[];
+  socials: FormikSocials[];
 };
 
 export interface IInviteCamperData {
