@@ -156,7 +156,10 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 													options={socialOptions}
 													value={s.socialName}
 												/>
-												<FormikInput name={`socials.${index}.userName`} placeholder={'User name'} />
+												<FormikInput
+													name={`socials.${index}.userName`}
+													placeholder={s.socialName === SocialNetworks.DEFAULT ? 'https://*social*/*user*' : 'User name'}
+												/>
 											</div>
 										</div>
 									))}

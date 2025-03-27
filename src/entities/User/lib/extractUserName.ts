@@ -5,6 +5,11 @@ export const extractUserName = (url: string, name: SocialNetworks) => {
 	if (!domain) return url;
 
 	const normalizedUrl = url.replace(/^https?:\/\/(www\.)?/, '');
+	const normalizedDomain = domain.replace(/^https?:\/\/(www\.)?/, '');
 
-	return normalizedUrl.replace(domain.replace(/^https?:\/\/(www\.)?/, ''), '').replace(/^\/+/, '');
+	const domainPattern = normalizedDomain.includes('@')
+		? normalizedDomain.replace('@', '')
+		: normalizedDomain;
+
+	return normalizedUrl.replace(domainPattern, '').replace(/^\/+/, '');
 };

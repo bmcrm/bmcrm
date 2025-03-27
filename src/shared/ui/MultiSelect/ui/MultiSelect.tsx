@@ -62,6 +62,7 @@ const MultiSelect = memo((props: MultiSelectProps) => {
 							borderColor: state.isFocused ? 'var(--color-ruby-dark)' : 'var(--color-input-orange)',
 							boxShadow: 'none',
 						},
+						paddingLeft: '12px',
 					}),
 					option: (baseStyles, state) => ({
 						...baseStyles,

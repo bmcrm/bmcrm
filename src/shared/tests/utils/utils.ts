@@ -434,6 +434,9 @@ export const resetSettingsAccountForm = async (page: Page) => {
 		await page.locator('button[aria-label="Remove social button"]').first().click();
 	}
 
+	await page.selectOption('select[name="socials.0.socialName"]', 'default');
+	await page.fill('input[name="socials.0.userName"]', '');
+
 	await page.click('button[type="submit"]');
 };
 
