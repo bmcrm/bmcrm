@@ -1,4 +1,5 @@
 import { FormikInputTheme } from '@shared/ui/FormikInput';
+import { SocialNetworks } from '@features/SocialIcon';
 
 export const inputs = {
 	name: [
@@ -38,5 +39,5 @@ export const initialData = {
 	about_me: '',
 	email: '',
 	password: '',
-	social_links: [''],
+	socials: [{ socialName: SocialNetworks.DEFAULT, userName: '' }],
 };

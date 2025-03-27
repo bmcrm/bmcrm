@@ -10,6 +10,10 @@ export { useInviteCamper } from './hooks/useInviteCamper';
 export { useCreateCamper } from './hooks/useCreateCamper';
 export { useDeleteCamper } from './hooks/useDeleteCamper';
 
+export { socialOptions } from './model/data/DetailsForm.data';
+
+export { normalizeSocialLinks } from './lib/normalizeSocialLinks';
+
 export {
 	type ICamper,
 	type IFormikCamper,
@@ -19,5 +23,6 @@ export {
 	type CamperTags,
 	type ICampersByRole,
 	type CampersBirthdays,
+	type FormikSocials,
 	CamperRole,
 } from './model/types/Camper.types';

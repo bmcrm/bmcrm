@@ -19,7 +19,7 @@ const SocialIcon = memo((props: SocialIconProps) => {
   return (
     <a href={url} target={'_blank'} className={classNames(styles.link, {}, [className])}>
       <Icon
-        icon={SocialNetworksData[name ?? SocialNetworks.DEFAULT].icon}
+        icon={SocialNetworksData[name || SocialNetworks.DEFAULT].icon}
         size={isMobile ? IconSize.SIZE_20 : IconSize.SIZE_24}
       />
     </a>

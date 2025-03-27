@@ -4,14 +4,15 @@ import { classNames } from '@shared/lib/classNames';
 import { FormikInput } from '@shared/ui/FormikInput';
 import { FormikTextarea } from '@shared/ui/FormikTextarea';
 import { FormikCheckbox } from '@shared/ui/FormikCheckbox';
+import { CustomSelect } from '@shared/ui/CustomSelect';
 import { Button, ButtonColor, ButtonSize, ButtonTheme } from '@shared/ui/Button';
 import { Icon, IconSize } from '@shared/ui/Icon';
 import { Tooltip } from '@shared/ui/Tooltip';
-import { socialLinksParser } from '@features/SocialIcon';
+import { SocialNetworks } from '@features/SocialIcon';
+import { normalizeSocialLinks, CamperRole, socialOptions } from '@entities/Camper';
 import { camperRegistrationSchema } from '@shared/const/validationSchemas';
 import { initialData, inputs } from '../../model/data/CamperRegisterForm.data';
-import { type ICamperRegistrationData } from '../../model/types/User.types';
-import { CamperRole } from '@entities/Camper';
+import type { ICamperRegistrationData } from '../../model/types/User.types';
 import styles from './CamperRegisterForm.module.scss';
 import CampIcon from '@shared/assets/icons/camp.svg';
 import ThreeDotIcon from '@shared/assets/icons/three-dot_icon.svg';
@@ -25,12 +26,12 @@ type CamperRegisterFormProps = {
 
 const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 	const { onSubmit, className } = props;
-	const [tooltipsVisible, setTooltipsVisible] = useState<boolean[]>(initialData.social_links.map(() => false));
+	const [tooltipsVisible, setTooltipsVisible] = useState<boolean[]>(initialData.socials.map(() => false));
 
 	useEffect(() => {
 		setTooltipsVisible(values =>
-			values.length !== initialData.social_links.length
-				? new Array(initialData.social_links.length).fill(false)
+			values.length !== initialData.socials.length
+				? new Array(initialData.socials.length).fill(false)
 				: values
 		);
 	}, []);
@@ -39,7 +40,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as HTMLElement;
 
-			if (!target.closest(`.${styles.tooltip}`) && !target.closest(`.${styles.social__btn}`)) {
+			if (!target.closest(`.${styles.tooltip}`) && !target.closest(`.${styles.socials__btn}`)) {
 				setTooltipsVisible(tooltipsVisible.map(() => false));
 			}
 		};
@@ -62,9 +63,8 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 
 	const onSubmitHandler = useCallback(
 		(values: typeof initialData, { resetForm }: { resetForm: () => void }) => {
-			const userSocials = values.social_links && !values.social_links?.every(link => link === '')
-				? socialLinksParser(values.social_links)
-				: [];
+
+			const social_links = normalizeSocialLinks(values.socials);
 
 			const data: Omit<ICamperRegistrationData, 'camp_name' | 'camp_id'> = {
 				first_name: values.first_name.trim(),
@@ -73,9 +73,9 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 				email: values.email.trim(),
 				password: values.password.trim(),
 				about_me: values.about_me?.trim(),
-				social_links: userSocials,
 				role: CamperRole.PROSPECT,
 				accept: Boolean(values.accept),
+				...(social_links ? { social_links } : {})
 			};
 
 			onSubmit(data, resetForm);
@@ -89,11 +89,11 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 				<Form className={classNames(styles.form, {}, [className])}>
 					<div className={styles.form__item}>
 						<FormikInput name={'playa_name'} placeholder={'Playa Name'} label={'Playa Name'}/>
-						<FieldArray name={'social_links'}>
+						<FieldArray name={'socials'}>
 							{({ remove, push }) => (
 								<>
-									{values?.social_links?.map((_, index: number, arr) => (
-										<div key={index} className={styles.social__wrapper}>
+									{values?.socials?.map((s, index, arr) => (
+										<div key={index} className={styles.socials}>
 											{tooltipsVisible[index] && (
 												<Tooltip
 													className={styles.tooltip}
@@ -109,7 +109,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 														size={ButtonSize.TEXT}
 														color={ButtonColor.BLACK}
 														onClick={() => {
-															push('');
+															push({ socialName: SocialNetworks.DEFAULT, userName: '' });
 															handleTooltipToggle(index);
 														}}
 														disabled={arr.length > 4}
@@ -128,7 +128,7 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 															remove(index);
 															handleTooltipToggle(index);
 														}}
-														disabled={arr.length < 2}
+														disabled={arr.length === 1}
 													>
                               <span className={styles.tooltip__icon}>
                                 <Icon icon={<MinusIcon />} size={IconSize.SIZE_10}/>
@@ -137,20 +137,27 @@ const CamperRegisterForm = memo((props: CamperRegisterFormProps) => {
 													</Button>
 												</Tooltip>
 											)}
-											<Button
-												aria-label={'Toggle tooltip button'}
-												theme={ButtonTheme.CLEAR}
-												size={ButtonSize.TEXT}
-												className={styles.social__btn}
-												onClick={() => handleTooltipToggle(index)}
-											>
-												<Icon icon={<ThreeDotIcon />} size={IconSize.SIZE_20}/>
-											</Button>
-											<FormikInput
-												name={`social_links.${index}`}
-												placeholder={'https://www.facebook.com/'}
-												label={'Social media link'}
-											/>
+											<div className={styles.socials__caption}>
+												<p>Social media link</p>
+												<Button
+													aria-label={'Toggle tooltip button'}
+													theme={ButtonTheme.CLEAR}
+													size={ButtonSize.TEXT}
+													className={styles.socials__btn}
+													onClick={() => handleTooltipToggle(index)}
+												>
+													<Icon icon={<ThreeDotIcon />} size={IconSize.SIZE_20}/>
+												</Button>
+											</div>
+											<div className={styles.socials__row}>
+												<CustomSelect
+													className={styles.socials__select}
+													name={`socials.${index}.socialName`}
+													options={socialOptions}
+													value={s.socialName}
+												/>
+												<FormikInput name={`socials.${index}.userName`} placeholder={'User name'} />
+											</div>
 										</div>
 									))}
 								</>

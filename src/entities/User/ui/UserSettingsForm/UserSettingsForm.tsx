@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import { Form, Formik } from 'formik';
 import { userSettingsFormInitial } from '../../lib/generateInitialValues';
-import { useGetCampers, type ICamper } from '@entities/Camper';
+import { useGetCampers, normalizeSocialLinks, type ICamper, type FormikSocials } from '@entities/Camper';
 import { FormLoader } from '@features/FormLoader';
 import { FormInputs } from './FormInputs';
 import { FormButtons } from './FormButtons';
@@ -18,15 +18,19 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
   const { data: [currentCamper] = [], isLoading } = useGetCampers({ camperEmail: decodedIDToken?.email });
 
   const initialValues = useMemo(
-    () => currentCamper ? userSettingsFormInitial(currentCamper) : {},
+    () => userSettingsFormInitial(currentCamper),
     [currentCamper]
   );
 
   const handleSubmit = useCallback(
-    (values: Partial<ICamper>) => {
+    (values: Partial<ICamper> & { socials: FormikSocials[] }) => {
+      const { socials, ...rest } = values;
+      const social_links = normalizeSocialLinks(socials);
+
       const payload: Partial<ICamper> = {
         email: currentCamper ? currentCamper.email : '',
-        ...values,
+        ...(social_links ? { social_links } : {}),
+        ...rest,
       };
 
       onSubmit(payload);
@@ -36,7 +40,7 @@ const UserSettingsForm = memo(({ onSubmit }: UserSettingsFormProps) => {
 
   return (
     <>
-      {currentCamper && (
+      {currentCamper && initialValues && (
         <Formik
           validationSchema={userSettingsSchema}
           initialValues={initialValues}

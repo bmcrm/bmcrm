@@ -32,7 +32,7 @@ test.describe('Check camp overview page', () => {
 		await page.route('**/campers/create**', route => route.abort());
 
 		const { firstName, lastName, playaName, summary, email } = generateFuzzData();
-		const { password, instagram, facebook } = generateFakeData();
+		const { password } = generateFakeData();
 
 		await page.goto(URLS.CAMP_OVERVIEW);
 
@@ -51,8 +51,10 @@ test.describe('Check camp overview page', () => {
 		await expect(addSocialButton).toBeVisible();
 		await addSocialButton.click();
 
-		await page.fill('input[name="social_links.0"]', instagram);
-		await page.fill('input[name="social_links.1"]', facebook);
+		await page.selectOption('select[name="socials.0.socialName"]', 'facebook');
+		await page.fill('input[name="socials.0.userName"]', 'testFacebook');
+		await page.selectOption('select[name="socials.1.socialName"]', 'instagram');
+		await page.fill('input[name="socials.1.userName"]', 'testInstagram');
 
 		await page.click('label[aria-label="Accept terms"]');
 		await page.click('button[type="submit"]');

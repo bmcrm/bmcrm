@@ -1,13 +1,14 @@
-import { extractUserName } from './extractUserName';
+import { extractUserName } from '@entities/User';
 import type { ICamper, IFormikCamper } from '@entities/Camper';
 import { SocialNetworks } from '@features/SocialIcon';
 
 export const generateInitialValues = (camper: ICamper): Partial<IFormikCamper> => {
 	const { first_name, last_name, playa_name, city, role, about_me, history, social_links, tags, visitedBM, birthdayDate } = camper;
 	const currentYear = new Date().getFullYear();
+	const filteredSocials = social_links?.filter(sl => sl.name && sl.url);
 
-	const socials = social_links && social_links.length > 0
-		? social_links.map(({ name, url }) => ({
+	const socials = filteredSocials && filteredSocials.length > 0
+		? filteredSocials.map(({ name, url }) => ({
 			socialName: name,
 			userName: extractUserName(url, name),
 		}))

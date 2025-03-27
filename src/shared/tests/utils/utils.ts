@@ -199,7 +199,7 @@ export const generateFakeData = () => {
 };
 
 export const fillCamperDetailsForm = async (page: Page) => {
-	const { firstName, lastName, playaName, city, sentence, instagram } = generateFakeData();
+	const { firstName, lastName, playaName, city, sentence } = generateFakeData();
 	const { summary } = generateFuzzData();
 
 	await page.fill('input[name="first_name"]', firstName);
@@ -226,7 +226,9 @@ export const fillCamperDetailsForm = async (page: Page) => {
 
 	await page.locator('button[aria-label="Add social button"]').click();
 	await page.locator('button[aria-label="Remove social button"]').nth(1).click();
-	await page.fill('input[name="social_links.0.url"]', instagram);
+
+	await page.selectOption('select[name="socials.0.socialName"]', 'facebook');
+	await page.fill('input[name="socials.0.userName"]', 'testUser');
 
 	await page.click('button[type="submit"]');
 };
@@ -388,7 +390,7 @@ export const fillInventoryForm = async ({ page, stage, dataType }: FillInventory
 
 export const fillSettingsAccountForm = async (page: Page) => {
 	const { firstName, lastName, playaName, city, summary } = generateFuzzData();
-	const { sentence, instagram, facebook } = generateFakeData();
+	const { sentence } = generateFakeData();
 	const { sentence: sentence_2 } = generateFakeData();
 
 	await page.fill('input[name="first_name"]', firstName);
@@ -405,8 +407,11 @@ export const fillSettingsAccountForm = async (page: Page) => {
 	await page.fill('textarea[name="history.1.value"]', sentence_2);
 
 	await page.locator('button[aria-label="Add social button"]').click();
-	await page.fill('input[name="social_links.0.url"]', instagram);
-	await page.fill('input[name="social_links.1.url"]', facebook);
+
+	await page.selectOption('select[name="socials.0.socialName"]', 'facebook');
+	await page.fill('input[name="socials.0.userName"]', 'testFacebook');
+	await page.selectOption('select[name="socials.1.socialName"]', 'instagram');
+	await page.fill('input[name="socials.1.userName"]', 'testInstagram');
 
 	await page.click('button[type="submit"]');
 };
@@ -428,9 +433,6 @@ export const resetSettingsAccountForm = async (page: Page) => {
 	while ((await page.locator('button[aria-label="Remove social button"]').count()) > 1) {
 		await page.locator('button[aria-label="Remove social button"]').first().click();
 	}
-
-	const lastInput = page.locator('input[name="social_links.0.url"]');
-	await lastInput.fill('');
 
 	await page.click('button[type="submit"]');
 };
