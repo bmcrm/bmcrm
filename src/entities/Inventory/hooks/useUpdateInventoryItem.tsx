@@ -41,7 +41,7 @@ const useUpdateInventoryItem = () => {
 			}
 
 			success('Item updated successfully!');
-			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item updated successfully', {
+			logger(LogLevel.INFO, LogSource.WEBAPP, 'Inventory item updated successfully', {
 				camp_id: decodedIDToken?.camp_id,
 				user: decodedIDToken?.email,
 				imageCount: variables.images?.length,

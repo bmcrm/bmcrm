@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { errorHandler } from '@shared/lib/errorHandler';
 import { campKeys } from '../model/const/campKeys';
 import { campApi } from '../api/campApi';
-import { AxiosError } from 'axios';
 
 type UseGetCampProps = {
 	campID: string;

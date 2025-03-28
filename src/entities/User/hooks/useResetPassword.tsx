@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@shared/hooks/useToast';
 import { errorHandler } from '@shared/lib/errorHandler';
+import { logger, LogLevel, LogSource } from '@shared/lib/logger';
 import { userApi } from '../api/userApi';
 import type { IInitResetPassData, IConfirmResetPassData } from '../model/types/User.types';
 import { IResetPassStages, type IResetPassPayload } from '../model/types/UseResetPassword.types';
@@ -35,7 +36,10 @@ const useResetPassword = () => {
 			const { toast } = stages[variables.stage];
 			toast?.();
 		},
-		onError: (error) => errorHandler(error),
+		onError: (error, variables) => {
+			errorHandler(error);
+			logger(LogLevel.ERROR, LogSource.WEBAPP, 'Error during reset password', { user: variables.data.email });
+		},
 	});
 
 	return { mutate, mutateAsync, isPending, isSuccess, isError };
