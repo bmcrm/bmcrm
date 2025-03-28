@@ -37,7 +37,7 @@ const useAddInventory = () => {
 			}
 
 			success('Item created successfully!');
-			logger(LogLevel.INFO, LogSource.WEBAPP, 'Item created successfully', {
+			logger(LogLevel.INFO, LogSource.WEBAPP, 'Inventory item created successfully', {
 				camp_id: decodedIDToken?.camp_id,
 				user: decodedIDToken?.email,
 				imageCount: variables.images?.length,
