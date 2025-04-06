@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs: # could be ${{ github.event.inputs.env }} or ${{inputs.env}}
       env:
-        description: "Target deploy environment"
+        description: 'Target deploy environment'
         type: string
         required: false
         default: 'dev'
