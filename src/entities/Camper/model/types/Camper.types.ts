@@ -37,6 +37,7 @@ export enum CamperRole {
 
 export interface ICamper {
   camp_id: string;
+  custom_email?: string;
   email: string;
   city: string;
   camp_name: string;

@@ -119,17 +119,20 @@ const CampersTable = ({ campers }: CampersTableProps) => {
         filterFn: multiValueFilter,
       },
       {
-        accessorKey: 'email',
+        accessorFn: row => row.custom_email || row.email,
+        id: 'email',
         header: 'Email',
         meta: {
           className: classNames(styles.table__cell, {}, [styles.email]),
         },
-        cell: info =>
-          (info.getValue() as string).startsWith('id-') ? (
+        cell: info => {
+          const email = info.getValue() as string;
+          return email.startsWith('id-') ? (
             '-'
           ) : (
-            <TruncatedText text={info.getValue() as string} url={`mailto:${info.getValue()}`} maxLength={isExtraLargePCBreakpoint ? 15 : 25} nowrap />
-          ),
+            <TruncatedText text={email} url={`mailto:${email}`} maxLength={isExtraLargePCBreakpoint ? 15 : 25} nowrap />
+          );
+        },
       },
       {
         accessorKey: 'city',
