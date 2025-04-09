@@ -166,6 +166,7 @@ export const createInventoryItemSchema = yup.object().shape({
 });
 
 export const editCamperSchema = yup.object().shape({
+  custom_email: yup.string().trim().email('Invalid email address'),
   first_name: yup.string().trim().required('Field is required').max(32, 'First name must be less than 32 characters'),
   last_name: yup.string().trim().required('Field is required').max(32, 'Last name must be less than 32 characters'),
   playa_name: yup.string().trim().max(24, 'Less than 24 characters'),
