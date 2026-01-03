@@ -6,6 +6,7 @@ export type NavLinkType = {
   icon?: ReactElement;
   logout?: boolean;
   disabled?: boolean;
+  hidden?: boolean;
 };
 
 export enum CustomNavLinkTheme {

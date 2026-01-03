@@ -14,6 +14,7 @@ import { NotFound } from '@widgets/CampNotFound';
 import { SettingsPage, SettingsAccount, SettingsCamp } from '@pages/SettingsPage';
 import { CampersPage } from '@pages/CampersPage';
 import { HomePage } from '@pages/HomePage';
+import { CampLayout } from '@entities/Camp/ui/CampLayout/CampLayout';
 
 export type AppRouterProps = {
   authOnly?: boolean;
@@ -35,6 +36,7 @@ export enum AppRoutes {
   RESET_PASS = 'reset_pass',
   CAMP_OVERVIEW = 'camp_overview',
   CAMPERS = 'campers',
+  CAMP_LAYOUT = 'camp_layout',
   NOT_FOUND = 'not_found',
 }
 
@@ -53,6 +55,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.RESET_PASS]: '/reset-password',
   [AppRoutes.CAMP_OVERVIEW]: '/id/',
   [AppRoutes.CAMPERS]: '/campers',
+  [AppRoutes.CAMP_LAYOUT]: '/camp_layout',
   [AppRoutes.NOT_FOUND]: '*',
 };
 
@@ -102,6 +105,11 @@ export const routeConfig: Partial<Record<AppRoutes, AppRouterProps>> = {
   [AppRoutes.CAMP_OVERVIEW]: {
     path: `${RoutePath.camp_overview}:id`,
     element: <CampOverviewPage />,
+  },
+  [AppRoutes.CAMP_LAYOUT]: {
+    path: RoutePath.camp_layout,
+    element: <CampLayout />,
+    authOnly: true,
   },
   [AppRoutes.CAMPERS]: {
     path: RoutePath.campers,
