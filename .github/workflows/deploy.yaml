@@ -10,9 +10,9 @@ on:
         default: 'dev'
     secrets:
       AWS_ACCESS_KEY_ID:
-        required: true
+        default: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY:
-        required: true
+        default: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   workflow_call:
     inputs: # could be ${{ github.event.inputs.env }} or ${{inputs.env}}
       env:
