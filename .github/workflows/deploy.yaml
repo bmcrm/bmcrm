@@ -1,6 +1,18 @@
 name: DEPLOY
 
 on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Target deploy environment'
+        type: string
+        required: false
+        default: 'dev'
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
   workflow_call:
     inputs: # could be ${{ github.event.inputs.env }} or ${{inputs.env}}
       env:
