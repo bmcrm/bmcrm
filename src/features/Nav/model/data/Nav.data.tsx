@@ -33,5 +33,6 @@ export const generateNavList = (campID: string): NavLinkType[] => [
     path: RoutePath.camp_layout,
     text: 'Camp Layout',
     hidden: true,
+    disabled: true,
   },
 ];
