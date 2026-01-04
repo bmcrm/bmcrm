@@ -12,11 +12,11 @@ import sedanTexture from '@shared/assets/images/camp-layout/sedan.png';
 export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan';
 
 export const ITEM_DIMENSIONS: Record<CampItemType, [number, number, number]> = {
-  RV: [10, 10, 30], // Width, Height, Length
-  Tent: [10, 5, 10],
-  Trailer: [10, 10, 53],
-  Pickup: [10, 6, 18],
-  Sedan: [10, 5, 15],
+  RV: [10, 2, 30], // Width, Height, Length
+  Tent: [10, 2, 10],
+  Trailer: [10, 2, 53],
+  Pickup: [10, 2, 18],
+  Sedan: [10, 2, 15],
 };
 
 // Keep colors for selection/border or fallback

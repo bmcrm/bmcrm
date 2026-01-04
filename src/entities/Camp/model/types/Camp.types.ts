@@ -36,3 +36,11 @@ export interface ICamp {
   camp_description: string;
   campers_notes?: CampersNotes;
 }
+
+export interface ICampLayout {
+  camp_id: string;
+  layout_schema: string;
+  created_at?: number;
+  updated_at?: number;
+  tco: string;
+}

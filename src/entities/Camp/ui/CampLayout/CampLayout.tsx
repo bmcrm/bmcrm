@@ -6,6 +6,11 @@ import { GridPlane } from './Scene/GridPlane';
 import { CampItem, ITEM_DIMENSIONS } from './Scene/CampItem';
 import { UIOverlay } from './Scene/UIOverlay';
 import styles from './CampLayout.module.scss';
+import { useCreateCampLayout } from '@entities/Camp/hooks/useCreateCampLayout';
+import { useGetCampLayout } from '@entities/Camp/hooks/useGetCampLayout';
+import { useDeleteCampLayout } from '@entities/Camp/hooks/useDeleteCampLayout';
+import { Modal } from '@shared/ui/Modal';
+import { Button, ButtonTheme } from '@shared/ui/Button';
 
 export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan';
 
@@ -67,7 +72,26 @@ const getRotatedDimensions = (dimensions: [number, number, number], rotation: [n
 };
 
 export const CampLayout = () => {
-  const [items, setItems] = useState<PlacedItem[]>([]);
+  const { mutate: deleteCampLayout } = useDeleteCampLayout();
+  const { mutate: createCampLayout } = useCreateCampLayout();
+  const { data: campLayoutData } = useGetCampLayout();
+
+  const [items, setItems] = useState<PlacedItem[]>(() => {
+    if (campLayoutData?.layout_schema) {
+      try {
+        return JSON.parse(campLayoutData.layout_schema);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    setItems(campLayoutData?.layout_schema ? JSON.parse(campLayoutData.layout_schema) : []);
+  }, [campLayoutData]);
+
+  const [isDeleteAgreed, setIsDeleteAgreed] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [dragMode, setDragMode] = useState<CampItemType | null>(null);
   const [hoverPosition, setHoverPosition] = useState<[number, number, number] | null>(null);
@@ -292,37 +316,18 @@ export const CampLayout = () => {
 
   const handleSave = () => {
     const data = JSON.stringify(items);
-    localStorage.setItem('campScene', data);
-    console.log('=== SCENE SAVED TO LOCAL STORAGE ===');
-    console.log(data);
+    // Also call the API to save to backend
+    createCampLayout({ layout: data });
   };
 
   const handleClear = () => {
-    if (confirm('Are you sure you want to clear the entire scene?')) {
-      setItems([]);
-      setSelectedId(null);
-    }
+    deleteCampLayout();
+    setIsDeleteAgreed(false);
+    setSelectedId(null);
   };
-
-  // Load from local storage on init
-  useState(() => {
-    const saved = localStorage.getItem('campScene');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const migrated = parsed.map((item: any) => ({
-            ...item,
-            name: item.name || item.type,
-          }));
-          setItems(migrated);
-        }
-      } catch (e) {
-        console.error('Failed to load scene', e);
-      }
-    }
-  });
+  const handleDeleteScene = () => {
+    setIsDeleteAgreed(true);
+  };
 
   // Handle Escape key to cancel selection/drag
   useEffect(() => {
@@ -356,7 +361,7 @@ export const CampLayout = () => {
         onRotate={handleRotateSelected}
         onDelete={handleDeleteSelected}
         onSave={handleSave}
-        onClear={handleClear}
+        onClear={handleDeleteScene}
         hasItems={items.length > 0}
       />
 
@@ -404,6 +409,19 @@ export const CampLayout = () => {
 
         <OrbitControls makeDefault enabled={!draggedItemId} maxPolarAngle={Math.PI / 3} />
       </Canvas>
+      {isDeleteAgreed && (
+        <Modal isOpen={isDeleteAgreed} onClose={close}>
+          <div className={styles.deleteModal}>
+            <p>Are you sure you want to delete the entire camp layout?</p>
+            <div className={styles.deleteModalButtons}>
+              <Button onClick={handleClear}>Yes, Delete</Button>
+              <Button className={styles.cancelButton} theme={ButtonTheme.OUTLINE} onClick={() => setIsDeleteAgreed(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

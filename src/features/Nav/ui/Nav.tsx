@@ -27,7 +27,6 @@ const Nav = memo((props: NavProps) => {
   const {
     tokens: { decodedIDToken },
   } = userState();
-  console.log(decodedIDToken);
 
   const mods: Mods = {
     [styles.open]: isOpen,

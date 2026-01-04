@@ -67,7 +67,6 @@ const DetailsForm = memo((props: DetailsFormProps) => {
         useEffect(() => {
           setIsDirty(dirty);
         }, [dirty]);
-        console.log(values);
 
         return (
           <Form

@@ -5,5 +5,23 @@
 }
 
 .canvas {
-  background: #87CEEB;
+  background: #87ceeb;
+}
+
+.deleteModal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.deleteModalButtons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.cancelButton {
+  color: black;
+  &:hover {
+    color: white;
+  }
 }
