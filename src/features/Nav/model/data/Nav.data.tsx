@@ -2,7 +2,7 @@ import { RoutePath } from '@app/providers/AppRouter';
 import type { NavLinkType } from '@shared/ui/CustomNavLink';
 import CampIcon from '@shared/assets/icons/camp_monocolor.svg';
 
-export const generateNavList = (campID: string): NavLinkType[] => ([
+export const generateNavList = (campID: string): NavLinkType[] => [
   {
     path: `${RoutePath.camp_overview}${campID}`,
     text: 'Camp',
@@ -29,4 +29,10 @@ export const generateNavList = (campID: string): NavLinkType[] => ([
     path: RoutePath.inventory,
     text: 'Inventory',
   },
-]);
+  {
+    path: RoutePath.camp_layout,
+    text: 'Camp Layout',
+    hidden: true,
+    disabled: true,
+  },
+];

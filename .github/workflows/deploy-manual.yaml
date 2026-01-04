@@ -1,27 +1,14 @@
-name: DEPLOY
+name: DEPLOY MANUAL
 
 on:
   workflow_dispatch:
-    inputs: # could be ${{ github.event.inputs.env }} or ${{inputs.env}}
+    inputs:
       env:
         description: 'Target deploy environment'
         type: choice
         required: true
         default: 'dev'
         options: ['dev', 'prod']
-
-  workflow_call:
-    inputs: # could be ${{ github.event.inputs.env }} or ${{inputs.env}}
-      env:
-        description: 'Target deploy environment'
-        type: string
-        required: false
-        default: 'dev'
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
 
 jobs:
   setup-and-deploy:
