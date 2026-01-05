@@ -117,6 +117,7 @@ const CampItemComponent = ({
 
   return (
     <group
+      name={id}
       position={[position[0], position[1], position[2]]}
       rotation={new THREE.Euler(...rotation)}
       onClick={handleClick}

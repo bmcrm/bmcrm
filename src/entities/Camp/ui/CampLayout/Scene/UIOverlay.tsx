@@ -13,6 +13,7 @@ interface UIOverlayProps {
   onDelete: () => void;
   onSave: () => void;
   onClear: () => void;
+  onOpenSettings: () => void;
   hasItems: boolean;
 }
 
@@ -27,46 +28,84 @@ export const UIOverlay: React.FC<UIOverlayProps> = ({
   onDelete,
   onSave,
   onClear,
+  onOpenSettings,
   hasItems
 }) => {
-  // Store the name at the start of editing to restore it if user clears and blurs
   const initialNameRef = useRef<string>("");
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isInspectorOpen, setIsInspectorOpen] = React.useState(false);
+
+  React.useEffect(() => {
+      if (selectedItem) {
+          const isMobile = window.innerWidth <= 768;
+          if (!isMobile) {
+             setIsInspectorOpen(true);
+          } else {
+             setIsInspectorOpen(false);
+          }
+          setIsMenuOpen(false); 
+      } else {
+          setIsInspectorOpen(false);
+      }
+  }, [selectedItem?.id]); 
 
   return (
     <div className={styles.container}>
       
-      {/* LEFT PANEL: Selection */}
-      <div className={`${styles.panel} ${styles.left}`}>
+      <button 
+        className={styles.mobileToggle} 
+        onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+            setIsInspectorOpen(false); 
+        }}
+        aria-label="Toggle Menu"
+      >
+        {isMenuOpen ? '✖' : '📦'}
+      </button>
+
+      <div className={`${styles.panel} ${styles.left} ${isMenuOpen ? styles.mobileOpen : ''}`}>
         <h2 className={styles.title}>
             Camp Objects
         </h2>
-        <div className={styles.buttonGroup}>
-            {availableItems.map((type) => (
-            <button
-                key={type}
-                onClick={() => onAddItem(type)}
-                className={`${styles.button} ${dragMode === type ? styles.active : ''}`}
+        <div className={styles.controlsRow}>
+            <select 
+                className={styles.select}
+                value={dragMode || ""} 
+                onChange={(e) => {
+                    if (e.target.value) onAddItem(e.target.value as CampItemType);
+                    else onAddItem(null as any);
+                    setIsMenuOpen(false); 
+                }}
             >
-                {type}
-                <span className={styles.icon}>
-                    {type === "RV" ? "🚌" : 
-                     type === "Tent" ? "⛺" : 
-                     type === "Trailer" ? "🚛" : 
-                     type === "Pickup" ? "🛻" : "🚗"}
-                </span>
-            </button>
-            ))}
+                <option value="" disabled>Select Object...</option>
+                {availableItems.map((type) => (
+                    <option key={type} value={type}>
+                        {type} {type === "RV" ? "🚌" : 
+                         type === "Tent" ? "⛺" : 
+                         type === "Trailer" ? "🚛" : 
+                         type === "Pickup" ? "🛻" : "🚗"}
+                    </option>
+                ))}
+            </select>
         </div>
         
         {hasItems && (
         <>
             <div className={styles.divider} />
+
+            <button
+                onClick={onOpenSettings}
+                className={`${styles.button} ${styles.settings}`}
+                style={{ fontSize: '0.9em', display: 'flex', alignItems: 'center', gap: '5px' }}
+            >
+                ⚙️ Defaults
+            </button>
             
             <button 
                 onClick={onSave}
                 className={`${styles.button} ${styles.save}`}
             >
-                💾 Save Layout
+                💾 Save
             </button>
 
             <button 
@@ -85,9 +124,22 @@ export const UIOverlay: React.FC<UIOverlayProps> = ({
         )}
       </div>
 
+        {selectedItem && (
+             <button 
+                className={`${styles.mobileToggle} ${styles.rightToggle}`} 
+                onClick={() => {
+                    setIsInspectorOpen(!isInspectorOpen);
+                    setIsMenuOpen(false);
+                }}
+                aria-label="Toggle Inspector"
+            >
+                {isInspectorOpen ? '✖' : '✏️'}
+            </button>
+        )}
+
       {/* RIGHT PANEL: Inspector */}
       {selectedItem && (
-        <div className={`${styles.panel} ${styles.right}`}>
+        <div className={`${styles.panel} ${styles.right} ${isInspectorOpen ? styles.mobileOpen : ''}`}>
             <h2 className={styles.title}>
                 Inspector
             </h2>
@@ -100,11 +152,9 @@ export const UIOverlay: React.FC<UIOverlayProps> = ({
                         value={selectedItem.name} 
                         onChange={(e) => onNameChange(e.target.value)}
                         onFocus={() => {
-                            // Remember the current name when we start editing
                             initialNameRef.current = selectedItem.name;
                         }}
                         onBlur={(e) => {
-                            // If user cleared the name completely, restore reference
                             if (e.target.value.trim() === "") {
                                 onNameChange(initialNameRef.current);
                             }
