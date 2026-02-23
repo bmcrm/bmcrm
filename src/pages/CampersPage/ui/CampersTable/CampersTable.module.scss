@@ -75,6 +75,19 @@
 		}
 		&.wrap {
 			flex-wrap: wrap;
+
+			@media (hover: hover) {
+				.table__actions {
+					opacity: 0;
+					visibility: hidden;
+					transition: opacity 0.2s ease, visibility 0.2s ease;
+				}
+
+				&:hover .table__actions {
+					opacity: 1;
+					visibility: visible;
+				}
+			}
 		}
 	}
 
