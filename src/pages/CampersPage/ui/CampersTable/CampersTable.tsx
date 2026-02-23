@@ -69,7 +69,7 @@ const CampersTable = ({ campers }: CampersTableProps) => {
                 {firstName} {lastName}
               </p>
               {(canControl || currentUser) && (
-                <div className={classNames(styles.table__row, {}, ['ml-a'])}>
+                <div className={classNames(styles.table__row, {}, ['ml-a', styles.table__actions])}>
                   <Button
                     size={ButtonSize.TEXT}
                     className={styles.table__btn}
