@@ -44,7 +44,7 @@ export const CampDefaultSizesModal = ({
       setDefaults(ITEM_DIMENSIONS);
   }
 
-  const types = Object.keys(defaults) as CampItemType[];
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -56,23 +56,49 @@ export const CampDefaultSizesModal = ({
             <div className={styles.header}>Width (ft)</div>
             <div className={styles.header}>Length (ft)</div>
 
-            {types.map((type) => (
+            {/* Vehicles Section */}
+            <div className={styles.sectionHeader} style={{ gridColumn: '1 / -1', marginTop: '10px', fontSize: '1.1em', fontWeight: 'bold', borderBottom: '1px solid #444', paddingBottom: '5px' }}>Vehicles</div>
+            {['RV', 'Trailer', 'Pickup', 'Sedan'].map((type) => (
                 <div key={type} className={styles.row}>
-                    <div className={styles.label}>{type}</div>
+                    <div className={styles.label}>{type === "RV" ? "🚌 RV" : type === "Trailer" ? "🚛 Trailer" : type === "Pickup" ? "🛻 Pickup" : "🚗 Sedan"}</div>
                     <div className={styles.inputGroup}>
                         <input
                             type="number"
                             className={styles.input}
-                            value={defaults[type][0]}
-                            onChange={(e) => handleChange(type, 0, e.target.value)}
+                            value={defaults[type as CampItemType][0]}
+                            onChange={(e) => handleChange(type as CampItemType, 0, e.target.value)}
                         />
                     </div>
                     <div className={styles.inputGroup}>
                         <input
                             type="number"
                             className={styles.input}
-                            value={defaults[type][2]}
-                            onChange={(e) => handleChange(type, 2, e.target.value)}
+                            value={defaults[type as CampItemType][2]}
+                            onChange={(e) => handleChange(type as CampItemType, 2, e.target.value)}
+                        />
+                    </div>
+                </div>
+            ))}
+
+            {/* Infrastructure Section */}
+            <div className={styles.sectionHeader} style={{ gridColumn: '1 / -1', marginTop: '10px', fontSize: '1.1em', fontWeight: 'bold', borderBottom: '1px solid #444', paddingBottom: '5px' }}>Infrastructure</div>
+             {['Tent', 'Geodesic Dome', 'Shade Structure', 'Bikes Parking', 'Fuel Depot', 'Firelane'].map((type) => (
+                <div key={type} className={styles.row}>
+                    <div className={styles.label}>{type}</div>
+                    <div className={styles.inputGroup}>
+                        <input
+                            type="number"
+                            className={styles.input}
+                            value={defaults[type as CampItemType][0]}
+                            onChange={(e) => handleChange(type as CampItemType, 0, e.target.value)}
+                        />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <input
+                            type="number"
+                            className={styles.input}
+                            value={defaults[type as CampItemType][2]}
+                            onChange={(e) => handleChange(type as CampItemType, 2, e.target.value)}
                         />
                     </div>
                 </div>

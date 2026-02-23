@@ -12,10 +12,9 @@ import { useDeleteCampLayout } from '@entities/Camp/hooks/useDeleteCampLayout';
 import { Modal } from '@shared/ui/Modal';
 import { Button, ButtonTheme } from '@shared/ui/Button';
 import { CampDefaultSizesModal } from '@features/CampDefaultSizesModal/ui/CampDefaultSizesModal';
-import { TransformGizmo } from './Scene/TransformGizmo';
-import * as THREE from 'three';
 
-export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan';
+
+export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan' | 'Geodesic Dome' | 'Shade Structure' | 'Bikes Parking' | 'Fuel Depot' | 'Firelane';
 
 export interface PlacedItem {
   id: string;
@@ -26,13 +25,17 @@ export interface PlacedItem {
   dimensions: [number, number, number]; // [width, height, length]
 }
 
-const AVAILABLE_ITEMS: CampItemType[] = ['RV', 'Tent', 'Trailer', 'Pickup', 'Sedan'];
+const AVAILABLE_ITEMS: CampItemType[] = [
+    'RV', 'Tent', 'Trailer', 'Pickup', 'Sedan', 
+    'Geodesic Dome', 'Shade Structure', 'Bikes Parking', 'Fuel Depot', 'Firelane'
+];
 
 const GRID_SIZE = 100;
 const GRID_CELL_SIZE = 10;
 const GRID_HALF_SIZE = GRID_SIZE / 2;
 
-
+// Helper to check standard AABB collision
+// Assuming Y is 0 for all on ground, we only check X and Z.
 const checkAABB = (
   posA: [number, number, number],
   dimA: [number, number, number],
@@ -58,8 +61,13 @@ const checkAABB = (
   return intersectX && intersectZ;
 };
 
+// Helper to get effective dimensions based on rotation (90 degree steps)
 const getRotatedDimensions = (dimensions: [number, number, number], rotation: [number, number, number]): [number, number, number] => {
+  // Check if rotated 90 or 270 degrees (roughly) around Y
+  // Our rotation is [0, PI/2 * n, 0]
+  // Math.PI / 2 is approx 1.57.
   const yRot = rotation[1] % Math.PI;
+  // If roughly PI/2 (1.57), swap.
   const isRotated90 = Math.abs(yRot - Math.PI / 2) < 0.1 || Math.abs(yRot + Math.PI / 2) < 0.1;
 
   if (isRotated90) {
@@ -87,7 +95,12 @@ export const CampLayout = () => {
   const [defaultSizes, setDefaultSizes] = useState<typeof ITEM_DIMENSIONS>(() => {
       try {
           const stored = localStorage.getItem('campDefaultSizes');
-          return stored ? JSON.parse(stored) : ITEM_DIMENSIONS;
+          if (stored) {
+              const parsed = JSON.parse(stored);
+              // Merge with ITEM_DIMENSIONS to ensure new keys are present
+              return { ...ITEM_DIMENSIONS, ...parsed };
+          }
+          return ITEM_DIMENSIONS;
       } catch {
           return ITEM_DIMENSIONS;
       }
@@ -157,7 +170,7 @@ export const CampLayout = () => {
     let snappedPos = getSnappedPosition(point);
 
     if (dragMode) {
-      const dims = defaultSizes[dragMode] as [number, number, number];
+      const dims = ITEM_DIMENSIONS[dragMode] as [number, number, number];
       const effDims = getRotatedDimensions(dims, [0, 0, 0]);
 
       snappedPos = getBoundedPosition(snappedPos, effDims);
@@ -193,7 +206,7 @@ export const CampLayout = () => {
       if (!isHoverValid) return;
 
       let snappedPos = getSnappedPosition(point);
-      const dimensions = defaultSizes[dragMode] as [number, number, number];
+      const dimensions = ITEM_DIMENSIONS[dragMode] as [number, number, number];
       const effDims = getRotatedDimensions(dimensions, [0, 0, 0]);
       snappedPos = getBoundedPosition(snappedPos, effDims);
 
@@ -337,56 +350,6 @@ export const CampLayout = () => {
     setIsDeleteAgreed(true);
   };
 
-  const handleSaveDefaultSizes = (newDefaults: typeof ITEM_DIMENSIONS) => {
-      setDefaultSizes(newDefaults);
-      localStorage.setItem('campDefaultSizes', JSON.stringify(newDefaults));
-  };
-
-  const handleScaleEnd = (scale: THREE.Vector3) => {
-    if (selectedId) {
-        setItems(prevItems => {
-            const item = prevItems.find(i => i.id === selectedId);
-            if (!item) return prevItems;
-
-            // Apply scale multiplier to current dimensions
-            const newDims = [
-                item.dimensions[0] * scale.x,
-                item.dimensions[1] * scale.y,
-                item.dimensions[2] * scale.z
-            ] as [number, number, number];
-            
-            // 1. Minimum Size Constraint
-            // Must be at least GRID_CELL_SIZE (10) or user specified minimum
-            // Requirement: 1/10 of grid width. 
-            if (newDims[0] < GRID_CELL_SIZE || newDims[2] < GRID_CELL_SIZE) {
-                // Too small, revert/ignore
-                return prevItems;
-            }
-
-            // Recalculate bounds if needed (to keep center or corner fixed? TransformControls scales from center)
-            // TransformControls usually scales around center, so position remains same unless we want corner-scaling.
-            // But if dimensions change, we might need to clamp to grid boundary.
-            const boundedPos = getBoundedPosition(item.position, newDims);
-
-            // 2. Collision Detection
-            // We must simulate the item with new dimensions and position
-            // We pass the new dimensions and rotation to validatePosition
-            if (!validatePosition(boundedPos, newDims, item.rotation, selectedId)) {
-                // Collision detected, revert/ignore
-                return prevItems;
-            }
-
-            // All checks passed
-            return prevItems.map(i => {
-                if (i.id === selectedId) {
-                    return { ...i, dimensions: newDims, position: boundedPos };
-                }
-                return i;
-            });
-        });
-    }
-  };
-
   // Handle Escape key to cancel selection/drag
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -439,15 +402,6 @@ export const CampLayout = () => {
 
         <GridPlane size={100} divisions={10} onPlaneClick={handlePlaneClick} onPlaneHover={handlePlaneHover} />
 
-        {selectedId && !dragMode && !draggedItemId && (
-            <TransformGizmo 
-                id={selectedId} 
-                onScaleEnd={handleScaleEnd} 
-                currentDimensions={items.find(i => i.id === selectedId)?.dimensions}
-                minSize={10} // 1/10 of grid (GRID_CELL_SIZE)
-            />
-        )}
-
         <Suspense fallback={null}>
           {/* Placed Items */}
           {items.map(item => (
@@ -463,7 +417,16 @@ export const CampLayout = () => {
           ))}
 
           {/* Ghost Item */}
-          {dragMode && hoverPosition && (
+        {/* {selectedId && !dragMode && !draggedItemId && (
+            <TransformGizmo 
+                id={selectedId} 
+                onScaleEnd={handleScaleEnd} 
+                currentDimensions={items.find(i => i.id === selectedId)?.dimensions}
+                minSize={10}
+            />
+        )} */}
+
+        {dragMode && hoverPosition && (
             <CampItem
               id='ghost'
               type={dragMode}
@@ -490,12 +453,15 @@ export const CampLayout = () => {
           </div>
         </Modal>
       )}
-      <CampDefaultSizesModal 
-        isOpen={isDefaultSizesModalOpen}
-        onClose={() => setIsDefaultSizesModalOpen(false)}
-        currentDefaults={defaultSizes}
-        onSave={handleSaveDefaultSizes}
-      />
+        <CampDefaultSizesModal 
+            isOpen={isDefaultSizesModalOpen}
+            onClose={() => setIsDefaultSizesModalOpen(false)}
+            currentDefaults={defaultSizes}
+            onSave={(newDefaults: typeof ITEM_DIMENSIONS) => {
+                setDefaultSizes(newDefaults);
+                localStorage.setItem('campDefaultSizes', JSON.stringify(newDefaults));
+            }}
+        />
     </div>
   );
 };

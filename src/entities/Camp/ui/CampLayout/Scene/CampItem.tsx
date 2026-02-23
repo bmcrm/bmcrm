@@ -8,8 +8,13 @@ import tentTexture from '@shared/assets/images/camp-layout/tent.png';
 import trailerTexture from '@shared/assets/images/camp-layout/trailer.png';
 import pickupTexture from '@shared/assets/images/camp-layout/pickup.png';
 import sedanTexture from '@shared/assets/images/camp-layout/sedan.png';
+import domeTexture from '@shared/assets/images/camp-layout/geodesic_dome.png';
+import shadeTexture from '@shared/assets/images/camp-layout/shade_structure.png';
+import bikesTexture from '@shared/assets/images/camp-layout/bikes_parking.png';
+import fuelTexture from '@shared/assets/images/camp-layout/fuel_depot.png';
+import firelaneTexture from '@shared/assets/images/camp-layout/firelane.png';
 
-export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan';
+export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan' | 'Geodesic Dome' | 'Shade Structure' | 'Bikes Parking' | 'Fuel Depot' | 'Firelane';
 
 export const ITEM_DIMENSIONS: Record<CampItemType, [number, number, number]> = {
   RV: [10, 2, 30], // Width, Height, Length
@@ -17,6 +22,11 @@ export const ITEM_DIMENSIONS: Record<CampItemType, [number, number, number]> = {
   Trailer: [10, 2, 53],
   Pickup: [10, 2, 18],
   Sedan: [10, 2, 15],
+  'Geodesic Dome': [24, 12, 24],
+  'Shade Structure': [10, 10, 10],
+  'Bikes Parking': [10, 2, 10],
+  'Fuel Depot': [10, 2, 10],
+  'Firelane': [5, 0.2, 5], // As requested, though 5x5 is small for a road section
 };
 
 // Keep colors for selection/border or fallback
@@ -26,6 +36,11 @@ export const ITEM_COLORS: Record<CampItemType, string> = {
   Trailer: '#E0E0E0',
   Pickup: '#2196F3',
   Sedan: '#9C27B0',
+  'Geodesic Dome': '#FFFFFF',
+  'Shade Structure': '#D2B48C', // Tan
+  'Bikes Parking': '#607D8B',
+  'Fuel Depot': '#F44336', // Red
+  'Firelane': '#FF5722',
 };
 
 const ITEM_TEXTURE_URLS: Record<CampItemType, string> = {
@@ -34,6 +49,11 @@ const ITEM_TEXTURE_URLS: Record<CampItemType, string> = {
   Trailer: trailerTexture,
   Pickup: pickupTexture,
   Sedan: sedanTexture,
+  'Geodesic Dome': domeTexture,
+  'Shade Structure': shadeTexture,
+  'Bikes Parking': bikesTexture,
+  'Fuel Depot': fuelTexture,
+  'Firelane': firelaneTexture,
 };
 
 interface CampItemProps {
@@ -134,6 +154,14 @@ const CampItemComponent = ({
         <planeGeometry args={[length, width]} />
         <meshBasicMaterial map={texture} transparent opacity={textureOpacity} color={textureColor} side={THREE.DoubleSide} />
       </mesh>
+      
+      {/* Fuel Depot Clearance Ring (10ft extra radius visualization) - Only during placement */}
+      {type === 'Fuel Depot' && isGhost && (
+          <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[Math.max(width, length) / 2, Math.max(width, length) / 2 + 10, 32]} />
+              <meshBasicMaterial color="red" transparent opacity={0.2} side={THREE.DoubleSide} />
+          </mesh>
+      )}
 
       {!isGhost && (
         <Billboard position={[0, height + 3, 0]} follow={true} lockX={false} lockY={false} lockZ={false}>
