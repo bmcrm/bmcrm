@@ -82,12 +82,20 @@ export const CampLayout = () => {
   const { mutate: createCampLayout, isPending: isCreatePending } = useCreateCampLayout();
   const { data: campLayoutData, isLoading: isCampLayoutLoading } = useGetCampLayout();
 
-  const isAnyLoading = isCampLayoutLoading || isCreatePending || isDeletePending;
-
   const [items, setItems] = useState<PlacedItem[]>(() => {
+    try {
+      const stored = localStorage.getItem('campLayoutScene');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch {
+    }
+
     if (campLayoutData?.layout_schema) {
       try {
-        return JSON.parse(campLayoutData.layout_schema);
+        const parsed = JSON.parse(campLayoutData.layout_schema);
+        localStorage.setItem('campLayoutScene', campLayoutData.layout_schema);
+        return parsed;
       } catch {
         return [];
       }
@@ -100,7 +108,6 @@ export const CampLayout = () => {
           const stored = localStorage.getItem('campDefaultSizes');
           if (stored) {
               const parsed = JSON.parse(stored);
-              // Merge with ITEM_DIMENSIONS to ensure new keys are present
               return { ...ITEM_DIMENSIONS, ...parsed };
           }
           return ITEM_DIMENSIONS;
@@ -112,8 +119,19 @@ export const CampLayout = () => {
   const [isDefaultSizesModalOpen, setIsDefaultSizesModalOpen] = useState(false);
 
   useEffect(() => {
-    setItems(campLayoutData?.layout_schema ? JSON.parse(campLayoutData.layout_schema) : []);
+    if (campLayoutData?.layout_schema) {
+      try {
+        const parsed = JSON.parse(campLayoutData.layout_schema);
+        setItems(parsed);
+        localStorage.setItem('campLayoutScene', campLayoutData.layout_schema);
+      } catch {
+      }
+    }
   }, [campLayoutData]);
+
+  useEffect(() => {
+    localStorage.setItem('campLayoutScene', JSON.stringify(items));
+  }, [items]);
 
   const [isDeleteAgreed, setIsDeleteAgreed] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -346,7 +364,14 @@ export const CampLayout = () => {
 
   const handleClear = () => {
     deleteCampLayout(undefined, {
-      onError: () => setItems([]),
+      onError: () => {
+        setItems([]);
+        localStorage.removeItem('campLayoutScene');
+      },
+      onSuccess: () => {
+        setItems([]);
+        localStorage.removeItem('campLayoutScene');
+      }
     });
     setIsDeleteAgreed(false);
     setSelectedId(null);
@@ -367,7 +392,8 @@ export const CampLayout = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (isCampLayoutLoading) {
+  // Use a softer loading state since we have local storage fallback
+  if (isCampLayoutLoading && items.length === 0) {
     return (
       <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Loader />
