@@ -11,8 +11,11 @@ import { useGetCampLayout } from '@entities/Camp/hooks/useGetCampLayout';
 import { useDeleteCampLayout } from '@entities/Camp/hooks/useDeleteCampLayout';
 import { Modal } from '@shared/ui/Modal';
 import { Button, ButtonTheme } from '@shared/ui/Button';
+import { Loader } from '@shared/ui/Loader';
+import { CampDefaultSizesModal } from '@features/CampDefaultSizesModal/ui/CampDefaultSizesModal';
 
-export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan';
+
+export type CampItemType = 'RV' | 'Tent' | 'Trailer' | 'Pickup' | 'Sedan' | 'Geodesic Dome' | 'Shade Structure' | 'Bikes Parking' | 'Fuel Depot' | 'Firelane';
 
 export interface PlacedItem {
   id: string;
@@ -23,7 +26,10 @@ export interface PlacedItem {
   dimensions: [number, number, number]; // [width, height, length]
 }
 
-const AVAILABLE_ITEMS: CampItemType[] = ['RV', 'Tent', 'Trailer', 'Pickup', 'Sedan'];
+const AVAILABLE_ITEMS: CampItemType[] = [
+    'RV', 'Tent', 'Trailer', 'Pickup', 'Sedan', 
+    'Geodesic Dome', 'Shade Structure', 'Bikes Parking', 'Fuel Depot'
+];
 
 const GRID_SIZE = 100;
 const GRID_CELL_SIZE = 10;
@@ -72,14 +78,24 @@ const getRotatedDimensions = (dimensions: [number, number, number], rotation: [n
 };
 
 export const CampLayout = () => {
-  const { mutate: deleteCampLayout } = useDeleteCampLayout();
-  const { mutate: createCampLayout } = useCreateCampLayout();
-  const { data: campLayoutData } = useGetCampLayout();
+  const { mutate: deleteCampLayout, isPending: isDeletePending } = useDeleteCampLayout();
+  const { mutate: createCampLayout, isPending: isCreatePending } = useCreateCampLayout();
+  const { data: campLayoutData, isLoading: isCampLayoutLoading } = useGetCampLayout();
 
   const [items, setItems] = useState<PlacedItem[]>(() => {
+    try {
+      const stored = localStorage.getItem('campLayoutScene');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch {
+    }
+
     if (campLayoutData?.layout_schema) {
       try {
-        return JSON.parse(campLayoutData.layout_schema);
+        const parsed = JSON.parse(campLayoutData.layout_schema);
+        localStorage.setItem('campLayoutScene', campLayoutData.layout_schema);
+        return parsed;
       } catch {
         return [];
       }
@@ -87,9 +103,35 @@ export const CampLayout = () => {
     return [];
   });
 
+  const [defaultSizes, setDefaultSizes] = useState<typeof ITEM_DIMENSIONS>(() => {
+      try {
+          const stored = localStorage.getItem('campDefaultSizes');
+          if (stored) {
+              const parsed = JSON.parse(stored);
+              return { ...ITEM_DIMENSIONS, ...parsed };
+          }
+          return ITEM_DIMENSIONS;
+      } catch {
+          return ITEM_DIMENSIONS;
+      }
+  });
+
+  const [isDefaultSizesModalOpen, setIsDefaultSizesModalOpen] = useState(false);
+
   useEffect(() => {
-    setItems(campLayoutData?.layout_schema ? JSON.parse(campLayoutData.layout_schema) : []);
+    if (campLayoutData?.layout_schema) {
+      try {
+        const parsed = JSON.parse(campLayoutData.layout_schema);
+        setItems(parsed);
+        localStorage.setItem('campLayoutScene', campLayoutData.layout_schema);
+      } catch {
+      }
+    }
   }, [campLayoutData]);
+
+  useEffect(() => {
+    localStorage.setItem('campLayoutScene', JSON.stringify(items));
+  }, [items]);
 
   const [isDeleteAgreed, setIsDeleteAgreed] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -321,7 +363,16 @@ export const CampLayout = () => {
   };
 
   const handleClear = () => {
-    deleteCampLayout();
+    deleteCampLayout(undefined, {
+      onError: () => {
+        setItems([]);
+        localStorage.removeItem('campLayoutScene');
+      },
+      onSuccess: () => {
+        setItems([]);
+        localStorage.removeItem('campLayoutScene');
+      }
+    });
     setIsDeleteAgreed(false);
     setSelectedId(null);
   };
@@ -341,6 +392,15 @@ export const CampLayout = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Use a softer loading state since we have local storage fallback
+  if (isCampLayoutLoading && items.length === 0) {
+    return (
+      <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div
       className={styles.container}
@@ -351,6 +411,23 @@ export const CampLayout = () => {
         setSelectedId(null);
       }}
     >
+      {(isCreatePending || isDeletePending) && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          zIndex: 1000,
+        }}>
+          <Loader />
+        </div>
+      )}
+
       <UIOverlay
         availableItems={AVAILABLE_ITEMS}
         dragMode={dragMode}
@@ -362,6 +439,7 @@ export const CampLayout = () => {
         onDelete={handleDeleteSelected}
         onSave={handleSave}
         onClear={handleDeleteScene}
+        onOpenSettings={() => setIsDefaultSizesModalOpen(true)}
         hasItems={items.length > 0}
       />
 
@@ -395,14 +473,23 @@ export const CampLayout = () => {
           ))}
 
           {/* Ghost Item */}
-          {dragMode && hoverPosition && (
+        {/* {selectedId && !dragMode && !draggedItemId && (
+            <TransformGizmo 
+                id={selectedId} 
+                onScaleEnd={handleScaleEnd} 
+                currentDimensions={items.find(i => i.id === selectedId)?.dimensions}
+                minSize={10}
+            />
+        )} */}
+
+        {dragMode && hoverPosition && (
             <CampItem
               id='ghost'
               type={dragMode}
               position={hoverPosition}
               isGhost={true}
               isInvalid={!isHoverValid}
-              dimensions={ITEM_DIMENSIONS[dragMode] as [number, number, number]}
+              dimensions={defaultSizes[dragMode] as [number, number, number]}
             />
           )}
         </Suspense>
@@ -422,6 +509,15 @@ export const CampLayout = () => {
           </div>
         </Modal>
       )}
+        <CampDefaultSizesModal 
+            isOpen={isDefaultSizesModalOpen}
+            onClose={() => setIsDefaultSizesModalOpen(false)}
+            currentDefaults={defaultSizes}
+            onSave={(newDefaults: typeof ITEM_DIMENSIONS) => {
+                setDefaultSizes(newDefaults);
+                localStorage.setItem('campDefaultSizes', JSON.stringify(newDefaults));
+            }}
+        />
     </div>
   );
 };
