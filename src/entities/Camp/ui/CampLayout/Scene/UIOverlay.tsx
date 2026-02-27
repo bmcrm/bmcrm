@@ -80,10 +80,7 @@ export const UIOverlay: React.FC<UIOverlayProps> = ({
                 <option value="" disabled>Select Object...</option>
                 {availableItems.map((type) => (
                     <option key={type} value={type}>
-                        {type} {type === "RV" ? "🚌" : 
-                         type === "Tent" ? "⛺" : 
-                         type === "Trailer" ? "🚛" : 
-                         type === "Pickup" ? "🛻" : "🚗"}
+                        {type}
                     </option>
                 ))}
             </select>

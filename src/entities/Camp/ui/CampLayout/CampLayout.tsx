@@ -27,7 +27,7 @@ export interface PlacedItem {
 
 const AVAILABLE_ITEMS: CampItemType[] = [
     'RV', 'Tent', 'Trailer', 'Pickup', 'Sedan', 
-    'Geodesic Dome', 'Shade Structure', 'Bikes Parking', 'Fuel Depot', 'Firelane'
+    'Geodesic Dome', 'Shade Structure', 'Bikes Parking', 'Fuel Depot'
 ];
 
 const GRID_SIZE = 100;
