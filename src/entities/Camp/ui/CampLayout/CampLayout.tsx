@@ -11,6 +11,7 @@ import { useGetCampLayout } from '@entities/Camp/hooks/useGetCampLayout';
 import { useDeleteCampLayout } from '@entities/Camp/hooks/useDeleteCampLayout';
 import { Modal } from '@shared/ui/Modal';
 import { Button, ButtonTheme } from '@shared/ui/Button';
+import { Loader } from '@shared/ui/Loader';
 import { CampDefaultSizesModal } from '@features/CampDefaultSizesModal/ui/CampDefaultSizesModal';
 
 
@@ -77,9 +78,11 @@ const getRotatedDimensions = (dimensions: [number, number, number], rotation: [n
 };
 
 export const CampLayout = () => {
-  const { mutate: deleteCampLayout } = useDeleteCampLayout();
-  const { mutate: createCampLayout } = useCreateCampLayout();
-  const { data: campLayoutData } = useGetCampLayout();
+  const { mutate: deleteCampLayout, isPending: isDeletePending } = useDeleteCampLayout();
+  const { mutate: createCampLayout, isPending: isCreatePending } = useCreateCampLayout();
+  const { data: campLayoutData, isLoading: isCampLayoutLoading } = useGetCampLayout();
+
+  const isAnyLoading = isCampLayoutLoading || isCreatePending || isDeletePending;
 
   const [items, setItems] = useState<PlacedItem[]>(() => {
     if (campLayoutData?.layout_schema) {
@@ -342,7 +345,9 @@ export const CampLayout = () => {
   };
 
   const handleClear = () => {
-    deleteCampLayout();
+    deleteCampLayout(undefined, {
+      onError: () => setItems([]),
+    });
     setIsDeleteAgreed(false);
     setSelectedId(null);
   };
@@ -362,6 +367,14 @@ export const CampLayout = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  if (isCampLayoutLoading) {
+    return (
+      <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div
       className={styles.container}
@@ -372,6 +385,23 @@ export const CampLayout = () => {
         setSelectedId(null);
       }}
     >
+      {(isCreatePending || isDeletePending) && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          zIndex: 1000,
+        }}>
+          <Loader />
+        </div>
+      )}
+
       <UIOverlay
         availableItems={AVAILABLE_ITEMS}
         dragMode={dragMode}
