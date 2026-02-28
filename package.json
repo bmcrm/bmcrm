@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:unit": "jest --config ./config/jest/jest.config.ts",
-    "test:pw": "NODE_OPTIONS='--no-experimental-strip-types' playwright test -c ./config/playwright/playwright.config.ts"
+    "test:pw": "playwright test -c ./config/playwright/playwright.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.730.0",

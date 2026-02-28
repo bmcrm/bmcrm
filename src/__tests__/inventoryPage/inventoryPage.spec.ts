@@ -32,7 +32,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		await page.goto(URLS.INVENTORY);
 		await expect(page).toHaveURL(URLS.INVENTORY);
 
-		const addItemButton = page.locator('button', { hasText: 'Add!' });
+		const addItemButton = page.locator('button', { hasText: 'Add inventory' });
 		await expect(addItemButton).toBeVisible();
 		await addItemButton.click();
 
@@ -45,7 +45,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 		await page.waitForTimeout(1000);
 		await expect(page.locator('text=Item created successfully!')).toBeVisible();
 
-		const editItemButton = page.locator('button[aria-label="Edit item button"]');
+		const editItemButton = page.locator('button[aria-label="Edit item button"]').first();
 		await expect(editItemButton).toBeVisible();
 		await editItemButton.click();
 		await expect(form).toBeVisible();
@@ -58,7 +58,7 @@ test.describe('Check inventory page, create, edit and remove inventory item', ()
 
 		await page.keyboard.press('Escape');
 
-		await page.locator('button[aria-label="Delete item button"]').click();
+		await page.locator('button[aria-label="Delete item button"]').first().click();
 		const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
 		await expect(confirmDeleteButton).toBeVisible();
 		await confirmDeleteButton.click();
