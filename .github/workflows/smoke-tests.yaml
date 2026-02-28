@@ -1,0 +1,66 @@
+name: SMOKE TESTS
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Target environment'
+        type: choice
+        required: true
+        default: 'dev'
+        options: ['dev']
+  workflow_call:
+    inputs:
+      env:
+        description: 'Target environment'
+        type: string
+        required: false
+        default: 'dev'
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: false
+      AWS_SECRET_ACCESS_KEY:
+        required: false
+
+jobs:
+  run-smoke-tests:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
+    env:
+      AWS_REGION: us-east-1
+      NODE_OPTIONS: "--no-experimental-strip-types"
+    steps:
+      - name: Set AWS Credentials directly into ENV
+        env:
+          CALLER_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          CALLER_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PROD_AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          PROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          DEV_AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          DEV_AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          if [ -n "$CALLER_AWS_ACCESS_KEY_ID" ]; then
+            echo "AWS_ACCESS_KEY_ID=$CALLER_AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$CALLER_AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+          elif [ "${{ inputs.env }}" == "prod" ]; then
+            echo "AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+          else
+            echo "AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+            echo "AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npm run test:pw
