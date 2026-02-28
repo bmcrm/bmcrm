@@ -50,11 +50,12 @@ jobs:
           echo "SENTRY_AUTH_TOKEN=$(aws ssm get-parameter --name /webapp/sentry_auth_token | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
           echo "VITE_SENTRY_DSN=$(aws ssm get-parameter --name /webapp/sentry_dsn | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
           echo "VITE_BMCRM_ENV=${{inputs.env}}" >> "$GITHUB_ENV"
+          echo "VITE_MODELS_CLOUDFRONT_BASE_URL=$(aws ssm get-parameter --name /models/cloudfront_base_url | jq '.Parameter.Value' -r)" >> "$GITHUB_ENV"
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 

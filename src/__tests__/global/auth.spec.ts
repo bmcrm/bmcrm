@@ -49,6 +49,7 @@ test.describe('Testing login and register flow', () => {
     await page.fill('input[name="password"]', password);
     await page.click('label[aria-label="Accept terms"]');
     await page.click('button[type="submit"]');
+    await page.waitForTimeout(2000);
 
     await expect(page.locator('text=Account Verification')).toBeVisible();
 

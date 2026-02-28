@@ -33,7 +33,11 @@ test.describe('Check campers page and edit user', () => {
 		await page.goto(URLS.CAMPERS);
 		await expect(page).toHaveURL(URLS.CAMPERS);
 
-		const editCamperButton = page.locator('button[aria-label="Edit camper button"]');
+		const row = page.locator('tbody tr').first();
+		const nameCell = row.locator('td').nth(0);
+		await nameCell.hover();
+
+		const editCamperButton = row.locator('button[aria-label="Edit camper button"]');
 		await expect(editCamperButton).toBeVisible();
 		await editCamperButton.click();
 
@@ -61,7 +65,7 @@ test.describe('Check campers page and edit user', () => {
 
 		await page.keyboard.press('Escape');
 
-		await expect(page.locator('text=Test User')).toBeVisible();
+		await expect(page.locator('text=Test User').first()).toBeVisible();
 	});
 
 	test('Login, create and delete camper', async ({ page }) => {
@@ -77,13 +81,18 @@ test.describe('Check campers page and edit user', () => {
 		const form = page.locator('form');
 		await expect(form).toBeVisible();
 
-		await fillCreateCamperForm(page);
+		const { firstName, lastName } = await fillCreateCamperForm(page);
+		const fullName = `${firstName} ${lastName}`;
 		await customWaitForResponse({ page, endpoint: '/campers' });
 		await page.waitForTimeout(500);
 
-		await expect(page.locator('td', { hasText: 'prospect' })).toBeVisible();
+		await expect(page.locator('td', { hasText: fullName }).first()).toBeVisible();
 
-		const deleteCamperButton = page.locator('button[aria-label="Delete camper button"]');
+		const newCamperRow = page.locator('tr', { hasText: fullName }).first();
+		const newCamperNameCell = newCamperRow.locator('td').nth(0);
+		await newCamperNameCell.hover();
+
+		const deleteCamperButton = newCamperRow.locator('button[aria-label="Delete camper button"]');
 		await expect(deleteCamperButton).toBeVisible();
 		await deleteCamperButton.click();
 		const confirmDeleteButton = page.locator('button', { hasText: 'YES, DELETE' });
@@ -93,6 +102,6 @@ test.describe('Check campers page and edit user', () => {
 		await customWaitForResponse({ page, endpoint: '/campers' });
 		await page.waitForTimeout(500);
 
-		await expect(page.locator('td', { hasText: 'prospect' })).toHaveCount(0);
+		await expect(page.locator('td', { hasText: fullName })).toHaveCount(0);
 	});
 });

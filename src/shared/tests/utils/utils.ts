@@ -249,6 +249,8 @@ export const fillCreateCamperForm = async (page: Page) => {
   await page.fill('input[name="last_name"]', lastName);
 
   await page.click('button[type="submit"]');
+
+  return { firstName, lastName, email };
 };
 
 export const resetCamperDetailsForm = async (page: Page) => {
@@ -400,6 +402,8 @@ export const fillSettingsAccountForm = async (page: Page) => {
   const { sentence } = generateFakeData();
   const { sentence: sentence_2 } = generateFakeData();
 
+  await page.waitForTimeout(5000);
+  await expect(page.locator('input[name="first_name"]')).toBeVisible({ timeout: 30000 });
   await page.fill('input[name="first_name"]', firstName);
   await page.fill('input[name="last_name"]', lastName);
   await page.fill('input[name="playa_name"]', playaName);
@@ -449,23 +453,28 @@ export const resetSettingsAccountForm = async (page: Page) => {
 
 export const fillSettingsCampForm = async (page: Page) => {
   const { campName, city, summary } = generateFuzzData();
-  const { link } = generateFakeData();
+  const { link, sentence } = generateFakeData();
 
   await page.fill('input[name="camp_name"]', campName);
   await page.fill('input[name="city"]', city);
   await page.fill('input[name="camp_website"]', link);
-  await page.fill('textarea[name="camp_description"]', summary);
-  if (summary) {
-    await page.click('button[type="submit"]');
-  }
+  const description = summary || sentence;
+  await page.waitForTimeout(1000);
+  await page.fill('textarea[name="camp_description"]', description);
+
+  // Wait for any form loaders to disappear
+  await page.locator('._form-loader_1vnna_1').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => { });
+  await page.click('button[type="submit"]');
 };
 
 export const resetSettingsCampForm = async (page: Page) => {
   await page.fill('input[name="camp_name"]', defaultCampData.name);
   await page.fill('input[name="city"]', defaultCampData.city);
   await page.fill('input[name="camp_website"]', defaultCampData.link);
-  await page.fill('textarea[name="camp_description"]', '');
+  await page.waitForTimeout(1000);
+  await page.fill('textarea[name="camp_description"]', 'default description');
 
+  await page.locator('._form-loader_1vnna_1').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => { });
   await page.click('button[type="submit"]');
 };
 

@@ -58,6 +58,7 @@ test.describe('Check camp overview page', () => {
 
 		await page.click('label[aria-label="Accept terms"]');
 		await page.click('button[type="submit"]');
+		await page.waitForTimeout(2000);
 
 		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
 		await expect(page.locator('[aria-label="Error message"]')).not.toBeVisible();
