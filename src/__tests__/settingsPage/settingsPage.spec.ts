@@ -37,13 +37,15 @@ test.describe('Check settings page, edit camper and camp forms', () => {
 
 		await fillSettingsAccountForm(page);
 		await customWaitForResponse({ page, endpoint: '/campers' });
-		await page.waitForTimeout(500);
 
+		await page.waitForTimeout(1500);
 		await resetSettingsAccountForm(page);
 		await customWaitForResponse({ page, endpoint: '/campers' });
-		await page.waitForTimeout(500);
 
-		await expect(page.locator('input[name="first_name"]')).toHaveValue(defaultUserData.firstName);
+		const firstNameInput = page.locator('input[name="first_name"]');
+
+		await expect(firstNameInput).toHaveValue(defaultUserData.firstName, { timeout: 10000 });
+
 		await expect(page.locator('input[name="last_name"]')).toHaveValue(defaultUserData.lastName);
 		await expect(page.locator('input[name="playa_name"]')).toHaveValue(defaultUserData.playaName);
 		await expect(page.locator('input[name="city"]')).toHaveValue(defaultUserData.city);

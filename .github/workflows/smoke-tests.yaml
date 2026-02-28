@@ -28,7 +28,6 @@ jobs:
     environment: ${{ inputs.env }}
     env:
       AWS_REGION: us-east-1
-      NODE_OPTIONS: "--no-experimental-strip-types"
     steps:
       - name: Set AWS Credentials directly into ENV
         env:
@@ -64,3 +63,5 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:pw
+        env:
+          NODE_OPTIONS: "--no-experimental-strip-types"
