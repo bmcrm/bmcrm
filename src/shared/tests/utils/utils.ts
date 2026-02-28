@@ -135,13 +135,19 @@ export const login = async (page: Page, URLS: Record<string, string>, TEST_PARAM
   await expect(page).toHaveURL(URLS.CAMPERS);
 };
 
-export const customWaitForResponse = ({ page, endpoint }: { page: Page; endpoint: string }) =>
-  page.waitForResponse(
-    response =>
-      response.url().includes(endpoint) &&
-      ['GET', 'PATCH', 'POST', 'DELETE', 'PUT'].includes(response.request().method()) &&
-      [200, 201, 202, 204, 304].includes(response.status())
+export const customWaitForResponse = async ({ page, endpoint }: { page: Page; endpoint: string }) => {
+  const response = await page.waitForResponse(
+    response => response.url().includes(endpoint) && response.request().method() !== 'OPTIONS',
+    { timeout: 30000 }
   );
+
+  const status = response.status();
+  if (![200, 201, 202, 204, 304].includes(status)) {
+    throw new Error(`Endpoint ${endpoint} returned error status: ${status}. URL: ${response.url()}`);
+  }
+
+  return response;
+};
 
 export const generateFuzzData = () => {
   const campName = fc.sample(fc.string({ minLength: 3, maxLength: 32 }), 1)[0];
