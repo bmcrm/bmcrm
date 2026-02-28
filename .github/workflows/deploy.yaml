@@ -68,3 +68,13 @@ jobs:
         run: |
           aws s3 sync dist/ s3://${{ env.WEBAPP_S3_BUCKET }} --delete
           aws cloudfront create-invalidation --distribution-id ${{ env.WEBAPP_CDN_DISTRIBUTION_ID }} --paths "/*"
+
+  smoke-tests:
+    if: inputs.env == 'dev'
+    needs: [setup-and-deploy]
+    uses: bmcrm/bmcrm/.github/workflows/smoke-tests.yaml@main
+    with:
+      env: ${{ inputs.env }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

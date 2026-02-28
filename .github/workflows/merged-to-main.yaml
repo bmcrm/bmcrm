@@ -13,33 +13,3 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-
-  smoke-tests-dev:
-    needs: [deploy-to-dev]
-    runs-on: ubuntu-latest
-    environment: dev
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: us-east-1
-      NODE_OPTIONS: "--no-experimental-strip-types"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npm run test:pw
-
-  deploy-to-prod:
-    needs: [smoke-tests-dev]
-    uses: bmcrm/bmcrm/.github/workflows/deploy.yaml@main
-    with:
-      env: prod
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
