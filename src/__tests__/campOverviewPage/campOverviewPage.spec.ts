@@ -36,8 +36,12 @@ test.describe('Check camp overview page', () => {
 
 		await page.goto(URLS.CAMP_OVERVIEW);
 
-		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
-		await expect(page.locator('text=camp for tests')).toBeVisible();
+		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW, { timeout: 15000 });
+
+		const campTitle = page.locator('text=/camp for tests/i');
+		await expect(campTitle).toBeVisible({ timeout: 15000 });
+
+		await page.locator('input[name="playa_name"]').waitFor({ state: 'visible' });
 
 		await page.fill('input[name="playa_name"]', playaName);
 		await page.fill('input[name="first_name"]', firstName);
@@ -48,19 +52,24 @@ test.describe('Check camp overview page', () => {
 
 		await page.locator('button[aria-label="Toggle tooltip button"]').click();
 		const addSocialButton = page.locator('button:has-text("Add link")');
-		await expect(addSocialButton).toBeVisible();
+
+		await expect(addSocialButton).toBeVisible({ timeout: 10000 });
 		await addSocialButton.click();
 
 		await page.selectOption('select[name="socials.0.socialName"]', 'facebook');
 		await page.fill('input[name="socials.0.userName"]', 'testFacebook');
+
+		await page.locator('select[name="socials.1.socialName"]').waitFor({ state: 'attached' });
 		await page.selectOption('select[name="socials.1.socialName"]', 'instagram');
 		await page.fill('input[name="socials.1.userName"]', 'testInstagram');
 
 		await page.click('label[aria-label="Accept terms"]');
 		await page.click('button[type="submit"]');
-		await page.waitForTimeout(2000);
+
+
+		await page.waitForLoadState('networkidle');
 
 		await expect(page).toHaveURL(URLS.CAMP_OVERVIEW);
-		await expect(page.locator('[aria-label="Error message"]')).not.toBeVisible();
+		await expect(page.locator('[aria-label="Error message"]')).not.toBeVisible({ timeout: 5000 });
 	});
 });

@@ -38,6 +38,7 @@ test.describe('Check settings page, edit camper and camp forms', () => {
 		await fillSettingsAccountForm(page);
 		await customWaitForResponse({ page, endpoint: '/campers' });
 
+		await page.waitForTimeout(1500);
 		await resetSettingsAccountForm(page);
 		await customWaitForResponse({ page, endpoint: '/campers' });
 
